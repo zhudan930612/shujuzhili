@@ -4,6 +4,7 @@ flowchart TD
         direction TB
         SRC_A["备案系统同步<br/>（增值功能，能通则通）"] --> SYNC_PROC["更新到后台管理系统<br/>（项目列表页展示）"]
         SRC_B["后台手动创建<br/>（保底功能，必须实现）<br/>数据来源：保险公司订单/自行维护"] --> SYNC_PROC
+        SYNC_PROC --> SYNC_PUSH["推送项目列表至小程序"]
     end
 
     subgraph 采集端 ["📱 巡查员小程序采集"]
