@@ -1,14 +1,9 @@
 %%{init: {'theme':'mc'}}%%
 flowchart TD
-    subgraph SYNC ["备案系统数据同步"]
+    subgraph 项目来源 ["📋 项目来源"]
         direction TB
-        SYNC_SRC["备案系统"] --> SYNC_CFG{"同步配置"}
-        SYNC_CFG -->|"自动：每日凌晨 2:00"| SYNC_AUTO["自动同步任务"]
-        SYNC_CFG -->|"手动：后台触发"| SYNC_MANU["人工同步"]
-        SYNC_AUTO --> SYNC_PROC["更新到后台管理系统<br/>（项目列表页展示）"]
-        SYNC_MANU --> SYNC_PROC
-        SYNC_PROC --> SYNC_PUSH["推送项目列表至小程序"]
-        SYNC_PROC -.->|"失败告警"| SYNC_ERR["异常处理/人工介入"]
+        SRC_A["备案系统同步<br/>（增值功能，能通则通）"] --> SYNC_PROC["更新到后台管理系统<br/>（项目列表页展示）"]
+        SRC_B["后台手动创建<br/>（保底功能，必须实现）<br/>数据来源：保险公司订单/自行维护"] --> SYNC_PROC
     end
 
     subgraph 采集端 ["📱 巡查员小程序采集"]
@@ -73,7 +68,7 @@ flowchart TD
 
     H -.->|"训练侧使用"| M["S8 AI训练与部署"]
 
-    style SYNC fill:#e8f5e9
+    style 项目来源 fill:#e8f5e9
     style 采集端 fill:#e1f5fe
     style PLT fill:#f5f5f5
     style LOOP fill:#fff3e0
