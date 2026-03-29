@@ -3,7 +3,9 @@
     "allow": [
       "Bash(:)",
       "WebFetch(domain:developers.weixin.qq.com)",
-      "Bash(.)"
+      "Bash(.)",
+      "Bash(: \"-*.md\")",
+      "Bash(: 2,)"
     ]
   }
 }
