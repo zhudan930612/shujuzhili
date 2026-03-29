@@ -8,7 +8,9 @@
       "Bash(: 2,)",
       "Bash(python:*)",
       "Bash(del:*)",
-      "mcp__ide__executeCode"
+      "mcp__ide__executeCode",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"chore: 统一文档换行符为 LF:*)"
     ]
   }
 }
