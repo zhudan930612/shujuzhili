@@ -14,6 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 |------|------|
 | `数据治理平台-上下文.md` | 业务背景、战略定位、价值链分析和风险评估 |
 | `流程图决策.md` | 产品设计决策、UI/UX设计规范、流程设计 |
+| `知识库体系设计.md` | 隐患识别报告的知识库架构（隐患库、法律法规库、案例库等） |
 | `数据治理平台-Mermaid.mmd` | 系统架构流程图（Mermaid语法） |
 
 ## 核心概念
