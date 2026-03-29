@@ -5,7 +5,10 @@
       "WebFetch(domain:developers.weixin.qq.com)",
       "Bash(.)",
       "Bash(: \"-*.md\")",
-      "Bash(: 2,)"
+      "Bash(: 2,)",
+      "Bash(python:*)",
+      "Bash(del:*)",
+      "mcp__ide__executeCode"
     ]
   }
 }
