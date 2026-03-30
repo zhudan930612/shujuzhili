@@ -10,7 +10,8 @@
       "Bash(del:*)",
       "mcp__ide__executeCode",
       "Bash(git add:*)",
-      "Bash(git commit -m \"chore: 统一文档换行符为 LF:*)"
+      "Bash(git commit -m \"chore: 统一文档换行符为 LF:*)",
+      "Bash(python3:*)"
     ]
   }
 }
