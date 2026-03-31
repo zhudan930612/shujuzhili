@@ -1,1 +1,146 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>项目管理-项目详情页</title><link rel="stylesheet" href="./assets/prototype.css" /></head><body><div class="frame"><div class="drawer-label">需求说明</div><header class="topbar"><div class="brand-box"><div class="brand-text">小型工程全域全量<br />安全监管平台</div><div class="terminal-text">运<br />营<br />端</div></div><nav class="nav"><div class="nav-item">⌂ 首页</div><div class="nav-item active">▣ 项目管理</div><div class="nav-item">◎ 巡查管理</div><div class="nav-item">◫ 知识库管理</div><div class="nav-item">⚙ 系统管理</div></nav><div class="user-box"><div class="avatar"></div><div>超级管理员</div><div>⌄</div></div></header><div class="main"><aside class="sidebar"><div class="menu-item active">▣ 项目管理</div><div class="menu-item">◎ 巡查记录管理</div><div class="menu-item">◫ 知识库管理</div></aside><main class="workspace"><div class="crumb">☰ 项目管理 〉 项目详情页</div><section class="content-panel" data-view-scope><div class="page-header" style="padding:0 0 18px;"><div><div class="page-title">← 项目详情</div><div class="page-subtitle">详情页只读展示项目基础信息与项目维度巡查聚合数据。</div></div></div><div class="tab-switch" style="padding:0 0 20px;"><button class="tab-chip active" data-view-button="basic">基本信息</button><button class="tab-chip" data-view-button="inspection">巡查数据</button></div><div data-view-panel="basic" class="active"><div class="info-grid"><section class="section-card"><h3>项目信息</h3><div class="section-body"><div class="kv-list"><div class="kv-label">项目编号</div><div>X-20260329-0002</div><div class="kv-label">项目名称</div><div>前海时代广场</div><div class="kv-label">施工类型</div><div>小型工程</div><div class="kv-label">项目地址</div><div>深圳市南山区XX路XX号</div><div class="kv-label">施工时间</div><div>2026.03.15 - 2026.05.20</div><div class="kv-label">关联保险公司</div><div>YY保险</div></div></div></section><section class="section-card"><h3>单位信息</h3><div class="section-body"><div class="kv-list"><div class="kv-label">施工单位</div><div>XX建设集团</div><div class="kv-label">负责人</div><div>王工　13800138000</div></div></div></section></div><section class="section-card"><h3>备注信息</h3><div class="section-body"><div class="subtle-note">特殊情况说明，如保险公司特殊要求、项目注意事项等。</div></div></section></div><div data-view-panel="inspection"><div class="split-layout"><div class="timeline"><div class="timeline-item active"><div class="timeline-time">2026-03-28 14:30</div><div class="timeline-meta">来源：后台上传<br />巡查人：张三<br />上传人：李四<br />12张</div></div><div class="timeline-item"><div class="timeline-time">2026-03-15 09:00</div><div class="timeline-meta">来源：小程序上传<br />巡查人：李四<br />上传人：李四<br />8张</div></div><div class="timeline-item"><div class="timeline-time">2026-03-10 16:30</div><div class="timeline-meta">来源：后台上传<br />巡查人：张三<br />上传人：王五<br />15张</div></div></div><div><div class="gallery-block"><div class="thumb-grid"><div class="thumb">图1</div><div class="thumb">图2</div><div class="thumb">图3</div><div class="thumb">图4</div><div class="thumb">图5</div></div></div><div class="gallery-block"><div class="thumb-grid"><div class="thumb">图6</div><div class="thumb">图7</div><div class="thumb">图8</div><div class="thumb">图9</div><div class="thumb">图10</div></div></div><div class="gallery-block"><div class="thumb-grid"><div class="thumb">图11</div><div class="thumb">图12</div><div class="thumb">图13</div><div class="thumb">图14</div><div class="thumb">图15</div></div></div></div></div></div></section></main></div><aside class="drawer"><div class="drawer-head"><div><div class="drawer-title">项目详情页说明</div><div class="drawer-subtitle">基础信息和巡查数据通过 Tab 切换查看。</div></div></div><div class="drawer-body"><section class="note"><div class="note-index">01 基本信息</div><h3>只读展示项目核心信息</h3><p>头部无编辑按钮，详情页只承担查看，不在此页直接修改项目。</p></section><section class="note"><div class="note-index">02 巡查数据</div><h3>按项目维度聚合巡查记录</h3><p>左侧为文本导航，右侧为图片分组，支持只读浏览，不提供上传、编辑、删除等主管理操作。</p></section></div></aside></div><script src="./assets/prototype.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>项目管理-项目详情页</title>
+  <link rel="stylesheet" href="./assets/prototype.css" />
+</head>
+<body>
+  <div class="frame">
+    <div class="drawer-label">需求说明</div>
+    <header class="topbar">
+      <div class="brand-box">
+        <div class="brand-text">小型工程全域全量<br />安全监管平台</div>
+        <div class="terminal-text">运<br />营<br />端</div>
+      </div>
+      <nav class="nav">
+        <div class="nav-item">⌂ 首页</div>
+        <div class="nav-item active">▣ 项目管理</div>
+        <div class="nav-item">◎ 巡查管理</div>
+        <div class="nav-item">◫ 知识库管理</div>
+        <div class="nav-item">⚙ 系统管理</div>
+      </nav>
+      <div class="user-box">
+        <div class="avatar"></div>
+        <div>超级管理员</div>
+        <div>⌄</div>
+      </div>
+    </header>
+    <div class="main">
+      <aside class="sidebar">
+        <div class="menu-item active">▣ 项目管理</div>
+        <div class="menu-item">◎ 巡查记录管理</div>
+        <div class="menu-item">◫ 知识库管理</div>
+      </aside>
+      <main class="workspace">
+        <div class="crumb">☰ 项目管理 〉 项目详情页</div>
+        <section class="content-panel" data-view-scope>
+          <div class="page-header" style="padding: 0 0 18px;">
+            <div>
+              <div class="page-title">← 项目详情</div>
+              <div class="page-subtitle">详情页只读展示项目基础信息与项目维度巡查聚合数据。</div>
+            </div>
+          </div>
+          <div class="tab-switch" style="padding: 0 0 20px;">
+            <button class="tab-chip active" data-view-button="basic">基本信息</button>
+            <button class="tab-chip" data-view-button="inspection">巡查数据</button>
+          </div>
+          <div data-view-panel="basic" class="active">
+            <div class="info-grid">
+              <section class="section-card">
+                <h3>项目信息</h3>
+                <div class="section-body">
+                  <div class="kv-list">
+                    <div class="kv-label">项目编号</div><div>X-20260329-0002</div>
+                    <div class="kv-label">项目名称</div><div>前海时代广场</div>
+                    <div class="kv-label">施工类型</div><div>小型工程</div>
+                    <div class="kv-label">项目地址</div><div>深圳市南山区XX路XX号</div>
+                    <div class="kv-label">施工时间</div><div>2026.03.15 - 2026.05.20</div>
+                    <div class="kv-label">关联保险公司</div><div>YY保险</div>
+                    <div class="kv-label">创建人</div><div>张三</div>
+                    <div class="kv-label">创建时间</div><div>2026-03-23 10:00:00</div>
+                    <div class="kv-label">更新人</div><div>李四</div>
+                    <div class="kv-label">更新时间</div><div>2026-03-28 14:30:00</div>
+                  </div>
+                </div>
+              </section>
+              <section class="section-card">
+                <h3>单位信息</h3>
+                <div class="section-body">
+                  <div class="kv-list">
+                    <div class="kv-label">施工单位</div><div>XX建设集团</div>
+                    <div class="kv-label">负责人</div><div>王工　13800138000</div>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <section class="section-card">
+              <h3>备注信息</h3>
+              <div class="section-body">
+                <div class="subtle-note">特殊情况说明，如保险公司特殊要求、项目注意事项等。</div>
+              </div>
+            </section>
+          </div>
+          <div data-view-panel="inspection">
+            <div class="split-layout">
+              <div class="timeline">
+                <div class="timeline-item active">
+                  <div class="timeline-time">2026-03-28 14:30</div>
+                  <div class="timeline-meta">来源：后台上传<br />巡查人：张三<br />上传人：李四<br />12张</div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-time">2026-03-15 09:00</div>
+                  <div class="timeline-meta">来源：小程序上传<br />巡查人：李四<br />上传人：李四<br />8张</div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-time">2026-03-10 16:30</div>
+                  <div class="timeline-meta">来源：后台上传<br />巡查人：张三<br />上传人：王五<br />15张</div>
+                </div>
+              </div>
+              <div>
+                <div class="gallery-block">
+                  <div class="thumb-grid">
+                    <div class="thumb">图1</div><div class="thumb">图2</div><div class="thumb">图3</div><div class="thumb">图4</div><div class="thumb">图5</div>
+                  </div>
+                </div>
+                <div class="gallery-block">
+                  <div class="thumb-grid">
+                    <div class="thumb">图6</div><div class="thumb">图7</div><div class="thumb">图8</div><div class="thumb">图9</div><div class="thumb">图10</div>
+                  </div>
+                </div>
+                <div class="gallery-block">
+                  <div class="thumb-grid">
+                    <div class="thumb">图11</div><div class="thumb">图12</div><div class="thumb">图13</div><div class="thumb">图14</div><div class="thumb">图15</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <aside class="drawer">
+      <div class="drawer-head">
+        <div>
+          <div class="drawer-title">项目详情页说明</div>
+          <div class="drawer-subtitle">基础信息和巡查数据通过 Tab 切换查看。</div>
+        </div>
+      </div>
+      <div class="drawer-body">
+        <section class="note">
+          <div class="note-index">01 基本信息</div>
+          <h3>只读展示项目核心信息</h3>
+          <p>项目详情页补齐创建人与更新时间等元信息，仍然不在该页直接修改项目。</p>
+        </section>
+        <section class="note">
+          <div class="note-index">02 巡查数据</div>
+          <h3>项目维度只读聚合</h3>
+          <p>左侧为巡查记录文本导航，右侧仅展示图片分组，不提供上传、编辑、删除等主管理操作。</p>
+        </section>
+      </div>
+    </aside>
+  </div>
+  <script src="./assets/prototype.js"></script>
+</body>
+</html>

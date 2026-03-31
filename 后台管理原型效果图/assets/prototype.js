@@ -7,8 +7,12 @@ document.querySelectorAll(".drawer-label").forEach((label) => {
 });
 
 document.querySelectorAll("[data-view-scope]").forEach((scope) => {
-  const buttons = scope.querySelectorAll("[data-view-button]");
-  const panels = scope.querySelectorAll("[data-view-panel]");
+  const buttons = Array.from(scope.querySelectorAll("[data-view-button]")).filter(
+    (button) => button.closest("[data-view-scope]") === scope,
+  );
+  const panels = Array.from(scope.querySelectorAll("[data-view-panel]")).filter(
+    (panel) => panel.closest("[data-view-scope]") === scope,
+  );
 
   buttons.forEach((button) => {
     button.addEventListener("click", () => {

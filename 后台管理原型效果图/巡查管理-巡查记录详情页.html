@@ -1,1 +1,109 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>巡查管理-巡查记录详情页</title><link rel="stylesheet" href="./assets/prototype.css" /></head><body><div class="frame"><div class="drawer-label">需求说明</div><header class="topbar"><div class="brand-box"><div class="brand-text">小型工程全域全量<br />安全监管平台</div><div class="terminal-text">运<br />营<br />端</div></div><nav class="nav"><div class="nav-item">⌂ 首页</div><div class="nav-item">▣ 项目管理</div><div class="nav-item active">◎ 巡查管理</div><div class="nav-item">◫ 知识库管理</div><div class="nav-item">⚙ 系统管理</div></nav><div class="user-box"><div class="avatar"></div><div>超级管理员</div><div>⌄</div></div></header><div class="main"><aside class="sidebar"><div class="menu-item active">◎ 巡查记录管理</div><div class="menu-item">▣ 项目管理</div><div class="menu-item">◫ 知识库管理</div></aside><main class="workspace"><div class="crumb">☰ 巡查管理 〉 巡查记录详情页</div><section class="content-panel" data-view-scope><div class="page-header" style="padding:0 0 18px;"><div><div class="page-title">← 巡查记录详情</div><div class="page-subtitle">支持详情态与批量管理态切换；生成后的记录不允许追加图片。</div></div><div class="state-switch"><button class="state-button active" data-view-button="detail">详情态</button><button class="state-button" data-view-button="batch">批量管理态</button></div></div><div data-view-panel="detail" class="active"><section class="section-card"><h3>基础信息</h3><div class="section-body"><div class="kv-list"><div class="kv-label">项目编号</div><div>X-20260329-0002</div><div class="kv-label">项目名称</div><div>前海时代广场</div><div class="kv-label">施工类型</div><div>小型工程</div><div class="kv-label">项目地址</div><div>深圳市南山区XX路XX号</div><div class="kv-label">来源</div><div>后台上传</div><div class="kv-label">巡查人</div><div>张三</div><div class="kv-label">上传人</div><div>李四</div><div class="kv-label">巡查时间</div><div>2026-03-28 14:30:00</div><div class="kv-label">上传时间</div><div>2026-03-28 14:36:12</div></div></div></section><section class="section-card"><h3>图片列表　<span class="link">[批量管理]</span></h3><div class="section-body"><div class="thumb-grid"><div class="thumb">图1</div><div class="thumb">图2</div><div class="thumb">图3</div><div class="thumb">图4</div><div class="thumb">图5</div><div class="thumb">图6</div><div class="thumb">图7</div><div class="thumb">图8</div><div class="thumb">图9</div><div class="thumb">图10</div></div></div></section><div class="page-actions"><button class="btn btn-ghost">上一条</button><button class="btn btn-ghost">下一条</button></div></div><div data-view-panel="batch"><section class="section-card"><h3>图片列表　<span class="link">[取消]</span>　<span class="link">[保存]</span></h3><div class="section-body"><div class="thumb-grid"><div class="thumb"><span class="remove">×</span>图1</div><div class="thumb"><span class="remove">×</span>图2</div><div class="thumb"><span class="remove">×</span>图3</div><div class="thumb"><span class="remove">×</span>图4</div><div class="thumb"><span class="remove">×</span>图5</div><div class="thumb"><span class="remove">×</span>图6</div><div class="thumb"><span class="remove">×</span>图7</div><div class="thumb"><span class="remove">×</span>图8</div></div></div></section></div></section></main></div><aside class="drawer"><div class="drawer-head"><div><div class="drawer-title">巡查记录详情说明</div><div class="drawer-subtitle">页面右下角保留上一条/下一条；删图通过图片区局部入口完成。</div></div></div><div class="drawer-body"><section class="note"><div class="note-index">01 详情态</div><h3>查看基础信息与图片</h3><p>详情态展示项目、来源、巡查人、上传人和时间信息，底部提供上一条/下一条切换。</p></section><section class="note"><div class="note-index">02 批量管理态</div><h3>局部管理图片删除</h3><p>点击图片列表区右侧批量管理进入该状态，每张图片右上角显示删除操作，保存后统一提交结果。</p></section><section class="note"><div class="note-index">03 边界控制</div><h3>不允许追加或替换图片</h3><p>巡查记录生成后保持上传会话边界稳定，仅保留删图能力用于纠错。</p></section></div></aside></div><script src="./assets/prototype.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>巡查管理-巡查记录详情页</title>
+  <link rel="stylesheet" href="./assets/prototype.css" />
+</head>
+<body>
+  <div class="frame">
+    <div class="drawer-label">需求说明</div>
+    <header class="topbar">
+      <div class="brand-box">
+        <div class="brand-text">小型工程全域全量<br />安全监管平台</div>
+        <div class="terminal-text">运<br />营<br />端</div>
+      </div>
+      <nav class="nav">
+        <div class="nav-item">⌂ 首页</div>
+        <div class="nav-item">▣ 项目管理</div>
+        <div class="nav-item active">◎ 巡查管理</div>
+        <div class="nav-item">◫ 知识库管理</div>
+        <div class="nav-item">⚙ 系统管理</div>
+      </nav>
+      <div class="user-box">
+        <div class="avatar"></div>
+        <div>超级管理员</div>
+        <div>⌄</div>
+      </div>
+    </header>
+    <div class="main">
+      <aside class="sidebar">
+        <div class="menu-item active">◎ 巡查记录管理</div>
+        <div class="menu-item">▣ 项目管理</div>
+        <div class="menu-item">◫ 知识库管理</div>
+      </aside>
+      <main class="workspace">
+        <div class="crumb">☰ 巡查管理 〉 巡查记录详情页</div>
+        <section class="content-panel" data-view-scope>
+          <div class="page-header" style="padding: 0 0 18px;">
+            <div>
+              <div class="page-title">← 巡查记录详情</div>
+              <div class="page-subtitle">生成后的巡查记录仅支持删图纠错，不允许追加图片。</div>
+            </div>
+            <div class="state-switch">
+              <button class="state-button active" data-view-button="detail">详情态</button>
+              <button class="state-button" data-view-button="batch">批量管理态</button>
+            </div>
+          </div>
+          <div data-view-panel="detail" class="active">
+            <section class="section-card">
+              <h3>基础信息</h3>
+              <div class="section-body">
+                <div class="kv-list">
+                  <div class="kv-label">项目编号</div><div>X-20260329-0002</div>
+                  <div class="kv-label">项目名称</div><div>前海时代广场</div>
+                  <div class="kv-label">施工类型</div><div>小型工程</div>
+                  <div class="kv-label">项目地址</div><div>深圳市南山区XX路XX号</div>
+                  <div class="kv-label">来源</div><div>后台上传</div>
+                  <div class="kv-label">巡查人</div><div>张三</div>
+                  <div class="kv-label">巡查时间</div><div>2026-03-28 14:30:00</div>
+                  <div class="kv-label">创建人</div><div>李四</div>
+                  <div class="kv-label">创建时间</div><div>2026-03-28 14:36:12</div>
+                  <div class="kv-label">更新人</div><div>王五</div>
+                  <div class="kv-label">更新时间</div><div>2026-03-29 09:20:18</div>
+                </div>
+              </div>
+            </section>
+            <section class="section-card">
+              <h3>图片列表（12张）　<span class="link">[批量管理]</span></h3>
+              <div class="section-body">
+                <div class="thumb-grid">
+                  <div class="thumb">图1</div><div class="thumb">图2</div><div class="thumb">图3</div><div class="thumb">图4</div><div class="thumb">图5</div>
+                  <div class="thumb">图6</div><div class="thumb">图7</div><div class="thumb">图8</div><div class="thumb">图9</div><div class="thumb">图10</div>
+                </div>
+              </div>
+            </section>
+            <div class="page-actions"><button class="btn btn-ghost">上一条</button><button class="btn btn-ghost">下一条</button></div>
+          </div>
+          <div data-view-panel="batch">
+            <section class="section-card">
+              <h3>图片列表（12张）　<span class="link">[取消]</span>　<span class="link">[保存]</span></h3>
+              <div class="section-body">
+                <div class="thumb-grid">
+                  <div class="thumb"><span class="remove">×</span>图1</div><div class="thumb"><span class="remove">×</span>图2</div><div class="thumb"><span class="remove">×</span>图3</div><div class="thumb"><span class="remove">×</span>图4</div>
+                  <div class="thumb"><span class="remove">×</span>图5</div><div class="thumb"><span class="remove">×</span>图6</div><div class="thumb"><span class="remove">×</span>图7</div><div class="thumb"><span class="remove">×</span>图8</div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+    <aside class="drawer">
+      <div class="drawer-head">
+        <div>
+          <div class="drawer-title">巡查记录详情说明</div>
+          <div class="drawer-subtitle">页面右下角只保留上一条/下一条；删图通过图片区局部入口完成。</div>
+        </div>
+      </div>
+      <div class="drawer-body">
+        <section class="note"><div class="note-index">01 详情态</div><h3>查看基础信息与图片</h3><p>详情态展示项目、来源、巡查人、巡查时间和创建更新信息，不再单独展示上传人和上传时间。</p></section>
+        <section class="note"><div class="note-index">02 批量管理态</div><h3>局部管理图片删除</h3><p>点击图片区标题行的批量管理进入该状态；取消和保存同样放在图片区标题行，不回到底部操作区。</p></section>
+        <section class="note"><div class="note-index">03 边界控制</div><h3>不允许追加或替换图片</h3><p>巡查记录生成后保持上传会话边界稳定，仅保留删图能力用于纠错与追溯。</p></section>
+      </div>
+    </aside>
+  </div>
+  <script src="./assets/prototype.js"></script>
+</body>
+</html>
