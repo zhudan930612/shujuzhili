@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>系统管理-字典管理</title>
+  <title>系统管理-隐患二级类型字典效果图</title>
   <link rel="stylesheet" href="./assets/prototype.css" />
   <style>
     .dictionary-shell {
@@ -186,7 +186,7 @@
         <div class="menu-item">◫ 操作日志</div>
       </aside>
       <main class="workspace">
-        <div class="crumb">☰ 系统管理 〉 字典管理</div>
+        <div class="crumb">☰ 系统管理 〉 字典管理 〉 隐患二级类型字典</div>
         <section class="surface" data-view-scope style="position: relative; padding: 20px 24px 18px; min-height: 930px;">
           <div class="page-header" style="padding: 0 0 18px; margin: 0;">
             <div>
@@ -209,23 +209,23 @@
               <div class="dictionary-shell">
                 <aside class="dictionary-aside">
                   <div class="dictionary-aside-title">字典分类导航</div>
-                  <div class="dictionary-nav-item active"><span>行业域字典</span><small>3项</small></div>
+                  <div class="dictionary-nav-item"><span>行业域字典</span><small>3项</small></div>
                   <div class="dictionary-nav-item"><span>法规类型字典</span><small>4项</small></div>
-                  <div class="dictionary-nav-item"><span>隐患二级类型字典</span><small>12项</small></div>
+                  <div class="dictionary-nav-item active"><span>隐患二级类型字典</span><small>12项</small></div>
                   <div class="dictionary-nav-item"><span>隐患三级类型字典</span><small>28项</small></div>
                 </aside>
                 <div class="dictionary-content">
                   <div class="dictionary-content-head">
                     <div class="dictionary-current">
-                      <div class="dictionary-current-title">行业域字典</div>
-                      <div class="dictionary-current-subtitle">维护行业名称与两字母代码，供隐患库和法规库复用。</div>
+                      <div class="dictionary-current-title">隐患二级类型字典</div>
+                      <div class="dictionary-current-subtitle">维护各行业域下的事故类型，供隐患库一级分类下拉与编码规则复用。</div>
                     </div>
                   </div>
                   <div class="dictionary-helper">
-                    <div class="dictionary-helper-card"><strong>编码规则</strong><span>建议使用 2-4 位大写字母，如 `JZ`、`WH`。</span></div>
-                    <div class="dictionary-helper-card"><strong>唯一性</strong><span>行业域编码、行业域名称全局唯一。</span></div>
-                    <div class="dictionary-helper-card"><strong>状态控制</strong><span>已被引用的字典项只允许停用，不允许删除。</span></div>
-                    <div class="dictionary-helper-card"><strong>拖动排序</strong><span>长按列表中的拖动手柄，可调整字典项显示顺序。</span></div>
+                    <div class="dictionary-helper-card"><strong>编码规则</strong><span>每个二级类型都必须归属于一个行业域，如建筑施工、危险化学品。</span></div>
+                    <div class="dictionary-helper-card"><strong>唯一性</strong><span>同一行业域下，编码唯一、名称唯一。</span></div>
+                    <div class="dictionary-helper-card"><strong>状态控制</strong><span>编辑时所属行业域不可修改，避免影响已引用的隐患结构归属。</span></div>
+                    <div class="dictionary-helper-card"><strong>拖动排序</strong><span>长按列表中的拖动手柄，可调整事故类型显示顺序。</span></div>
                   </div>
                   <div class="table-wrap" style="padding: 0;">
                     <table class="dictionary-list-table">
@@ -248,9 +248,9 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr><td>JZ</td><td>建筑施工</td><td>-</td><td><span class="status">启用</span></td><td>隐患库、法规库共用</td><td><span class="drag-handle">拖动</span>　<span class="link">编辑 删除 停用 详情</span></td></tr>
-                        <tr><td>WH</td><td>危险化学品</td><td>-</td><td><span class="status">启用</span></td><td>危险化学品行业使用</td><td><span class="drag-handle">拖动</span>　<span class="link">编辑 删除 停用 详情</span></td></tr>
-                        <tr><td>JT</td><td>交通运输</td><td>-</td><td><span class="status off">停用</span></td><td>当前未在业务中启用</td><td><span class="drag-handle">拖动</span>　<span class="link">编辑 删除 启用 详情</span></td></tr>
+                        <tr><td>FALL</td><td>高坠</td><td>建筑施工</td><td><span class="status">启用</span></td><td>高处坠落相关事故类型</td><td><span class="drag-handle">拖动</span>　<span class="link">编辑 删除 停用 详情</span></td></tr>
+                        <tr><td>STRIKE</td><td>物体打击</td><td>建筑施工</td><td><span class="status">启用</span></td><td>物体坠落、抛掷、打击场景</td><td><span class="drag-handle">拖动</span>　<span class="link">编辑 删除 停用 详情</span></td></tr>
+                        <tr><td>ELEC</td><td>触电</td><td>建筑施工</td><td><span class="status">启用</span></td><td>临时用电、配电设施相关</td><td><span class="drag-handle">拖动</span>　<span class="link">编辑 删除 停用 详情</span></td></tr>                        <tr><td>COLLAPSE</td><td>坍塌</td><td>建筑施工</td><td><span class="status off">停用</span></td><td>当前未在业务中启用</td><td><span class="drag-handle">拖动</span>　<span class="link">编辑 删除 启用 详情</span></td></tr>
                       </tbody>
                     </table>
                   </div>
@@ -404,15 +404,17 @@
     <aside class="drawer">
       <div class="drawer-head"><div><div class="drawer-title">字典管理说明</div><div class="drawer-subtitle">系统管理下统一维护知识库相关字典。</div></div></div>
       <div class="drawer-body">
-        <section class="note"><div class="note-index">01 管理范围</div><h3>4 类核心字典</h3><p>当前纳入行业域、法规类型、隐患二级类型和隐患三级类型四类字典项，统一在系统管理中维护。</p></section>
-        <section class="note"><div class="note-index">02 列表结构</div><h3>左侧分类，右侧列表</h3><p>左侧为字典分类导航，右侧为当前字典列表、筛选区和分页区，保持后台列表页统一骨架。</p></section>
-        <section class="note"><div class="note-index">03 业务约束</div><h3>字典分类固定，字典项支持新增与维护</h3><p>字典分类导航由系统固定；分类下字典项支持后台新增、编辑、删除、启用/停用和拖动排序。已被业务数据引用的字典项不允许物理删除，只允许停用。</p></section>
+        <section class="note"><div class="note-index">01 管理范围</div><h3>4 类核心字典</h3><p>当前页聚焦隐患二级类型字典，展示事故类型字典的列表、新增、编辑和详情效果图。</p></section>
+        <section class="note"><div class="note-index">02 列表结构</div><h3>左侧分类，右侧列表</h3><p>左侧定位到隐患二级类型字典，右侧展示事故类型字典项列表、分页和对应弹窗。</p></section>
+        <section class="note"><div class="note-index">03 业务约束</div><h3>字典分类固定，字典项支持新增与维护</h3><p>隐患二级类型按行业域维护；新增时可选所属行业域，编辑时所属行业域只读。已被隐患库引用的字典项不允许物理删除，仅允许停用。</p></section>
       </div>
     </aside>
   </div>
   <script src="./assets/prototype.js"></script>
 </body>
 </html>
+
+
 
 
 
