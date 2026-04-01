@@ -11,7 +11,8 @@
       "mcp__ide__executeCode",
       "Bash(git add:*)",
       "Bash(git commit -m \"chore: 统一文档换行符为 LF:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(curl -sL https://raw.githubusercontent.com/obra/superpowers/main/README.md)"
     ]
   }
 }

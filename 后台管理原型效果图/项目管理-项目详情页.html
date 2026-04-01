@@ -5,7 +5,289 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>项目管理-项目详情页</title>
   <link rel="stylesheet" href="./assets/prototype.css" />
-</head>
+  <style>
+    [data-view-panel] {
+      display: none;
+    }
+    [data-view-panel].active {
+      display: block;
+    }
+    .project-basic-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.7fr) minmax(320px, 0.95fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .project-hero {
+      border: 1px solid #dfe7f2;
+      background: #fff;
+      box-shadow: 0 10px 24px rgba(20, 48, 88, 0.04);
+      padding: 18px 24px;
+      margin-bottom: 16px;
+    }
+    .project-code {
+      font-size: 13px;
+      color: #6a7c91;
+      letter-spacing: .02em;
+      margin-bottom: 8px;
+    }
+    .project-hero-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .project-name {
+      margin: 0 0 8px;
+      font-size: 22px;
+      line-height: 1.18;
+      font-weight: 700;
+      color: #163758;
+    }
+    .project-address {
+      font-size: 14px;
+      color: #607287;
+      line-height: 1.7;
+    }
+    .project-badges {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      max-width: 320px;
+    }
+    .info-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .info-badge.type {
+      border: 1px solid #d6e4f5;
+      background: #f8fbff;
+      color: #255487;
+    }
+    .info-badge.status {
+      border: 1px solid #bfe8d5;
+      background: #effaf4;
+      color: #1f8f60;
+    }
+    .project-info-card,
+    .project-meta-card,
+    .project-remark-card {
+      border: 1px solid #e3ebf5;
+      background: #fff;
+      box-shadow: 0 8px 20px rgba(18, 44, 82, 0.03);
+    }
+    .project-info-card .section-body {
+      padding: 18px 22px;
+    }
+    .project-info-grid {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr) 96px minmax(0, 1fr);
+      gap: 16px 22px;
+      align-items: start;
+    }
+    .project-kv-label {
+      color: #6b7e93;
+    }
+    .project-kv-value {
+      color: #1d3552;
+      font-weight: 400;
+      word-break: break-word;
+    }
+    .project-bottom-grid {
+      display: grid;
+      grid-template-columns: minmax(320px, 0.88fr) minmax(0, 1.12fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .project-meta-card,
+    .project-remark-card {
+      padding: 18px 20px;
+    }
+    .project-meta-title,
+    .project-remark-title {
+      margin: 0 0 14px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #203753;
+    }
+    .project-meta-grid {
+      display: grid;
+      grid-template-columns: 88px minmax(0, 1fr);
+      gap: 12px 16px;
+      align-items: start;
+    }
+    .project-remark-text {
+      font-size: 14px;
+      line-height: 1.85;
+      color: #607388;
+      min-height: 24px;
+    }
+    .project-detail-header {
+      padding: 0 0 14px !important;
+      margin-bottom: 18px;
+      border-bottom: none;
+      align-items: center;
+    }
+    .project-detail-titlebar {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      color: #23415f;
+    }
+    .project-detail-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #395673;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 500;
+    }
+    .project-detail-divider {
+      width: 1px;
+      height: 18px;
+      background: #d8e3ef;
+    }
+    .project-detail-current {
+      color: #193b68;
+      font-size: 16px;
+      line-height: 1;
+      font-weight: 700;
+    }    .project-inspection-layout {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.project-inspection-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.project-inspection-item {
+  margin: 0;
+}
+.project-inspection-card {
+  width: 100%;
+  text-align: left;
+  border: 1px solid #dbe6f2;
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px 18px;
+  box-shadow: 0 8px 18px rgba(18, 44, 82, 0.04);
+  transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease, transform .2s ease;
+  cursor: pointer;
+}
+.project-inspection-card:hover {
+  border-color: #c8daf1;
+  box-shadow: 0 10px 22px rgba(18, 44, 82, 0.06);
+}
+.project-inspection-item.active .project-inspection-card {
+  border-color: #9cc2f1;
+  background: linear-gradient(180deg, #fafdff 0%, #f2f8ff 100%);
+  box-shadow: 0 14px 28px rgba(47, 132, 231, 0.12);
+  transform: translateY(-1px);
+  position: relative;
+}
+.project-inspection-item.active .project-inspection-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(47, 132, 231, 0.18);
+  border-radius: 10px;
+  pointer-events: none;
+}
+.project-inspection-item.active .project-inspection-time {
+  color: #174a86;
+}
+.project-inspection-item.active .project-inspection-person {
+  color: #29588d;
+}
+.project-inspection-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.project-inspection-time {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f3e63;
+  letter-spacing: .2px;
+  margin: 0;
+}
+.project-inspection-chevron {
+  color: #9ab0c9;
+  font-size: 16px;
+  line-height: 1;
+}
+.project-inspection-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #60768f;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.project-inspection-person {
+  color: #38587b;
+}
+.project-inspection-source {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #f3f8ff;
+  border: 1px solid #d7e5f7;
+  color: #446889;
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+}
+.project-inspection-item.active .project-inspection-source {
+  background: #eaf3ff;
+  border-color: #bfd8f7;
+  color: #2f6fb8;
+}
+.project-inspection-gallery {
+  max-height: 640px;
+  overflow-y: auto;
+  padding-right: 6px;
+  scroll-behavior: smooth;
+}
+.project-inspection-gallery::-webkit-scrollbar {
+  width: 8px;
+}
+.project-inspection-gallery::-webkit-scrollbar-thumb {
+  background: #d8e2ef;
+  border-radius: 999px;
+}
+.project-inspection-section {
+  scroll-margin-top: 12px;
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px dashed #d7e2ef;
+}
+.project-inspection-section:last-child {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+.project-inspection-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #274666;
+  margin: 0 0 12px;
+}
+  </style></head>
 <body>
   <div class="frame">
     <div class="drawer-label">需求说明</div>
@@ -35,11 +317,13 @@
       </aside>
       <main class="workspace">
         <div class="crumb">☰ 项目管理 〉 项目详情页</div>
+        <section class="surface tabbar"><div class="tab">项目管理</div></section>
         <section class="content-panel" data-view-scope>
-          <div class="page-header" style="padding: 0 0 18px;">
-            <div>
-              <div class="page-title">← 项目详情</div>
-              <div class="page-subtitle">详情页只读展示项目基础信息与项目维度巡查聚合数据。</div>
+          <div class="page-header project-detail-header">
+            <div class="project-detail-titlebar">
+              <div class="project-detail-back">〈 <span>返回</span></div>
+              <div class="project-detail-divider"></div>
+              <div class="project-detail-current">项目详情</div>
             </div>
           </div>
           <div class="tab-switch" style="padding: 0 0 20px;">
@@ -47,73 +331,113 @@
             <button class="tab-chip" data-view-button="inspection">巡查数据</button>
           </div>
           <div data-view-panel="basic" class="active">
-            <div class="info-grid">
-              <section class="section-card">
-                <h3>项目信息</h3>
-                <div class="section-body">
-                  <div class="kv-list">
-                    <div class="kv-label">项目编号</div><div>X-20260329-0002</div>
-                    <div class="kv-label">项目名称</div><div>前海时代广场</div>
-                    <div class="kv-label">施工类型</div><div>小型工程</div>
-                    <div class="kv-label">项目地址</div><div>深圳市南山区XX路XX号</div>
-                    <div class="kv-label">施工时间</div><div>2026.03.15 - 2026.05.20</div>
-                    <div class="kv-label">关联保险公司</div><div>YY保险</div>
-                    <div class="kv-label">创建人</div><div>张三</div>
-                    <div class="kv-label">创建时间</div><div>2026-03-23 10:00:00</div>
-                    <div class="kv-label">更新人</div><div>李四</div>
-                    <div class="kv-label">更新时间</div><div>2026-03-28 14:30:00</div>
-                  </div>
+            <div class="project-hero">
+              <div class="project-code">项目编号 · X-20260329-0002</div>
+              <div class="project-hero-head">
+                <div>
+                  <h2 class="project-name">前海时代广场</h2>
+                  
                 </div>
-              </section>
-              <section class="section-card">
-                <h3>单位信息</h3>
-                <div class="section-body">
-                  <div class="kv-list">
-                    <div class="kv-label">施工单位</div><div>XX建设集团</div>
-                    <div class="kv-label">负责人</div><div>王工　13800138000</div>
-                  </div>
+                <div class="project-badges">
+                  <span class="info-badge type">小型工程</span>
+                  <span class="info-badge status">已巡查</span>
                 </div>
-              </section>
+              </div>
             </div>
-            <section class="section-card">
-              <h3>备注信息</h3>
+            <section class="section-card project-info-card">
+              <h3>项目信息</h3>
               <div class="section-body">
-                <div class="subtle-note">特殊情况说明，如保险公司特殊要求、项目注意事项等。</div>
+                <div class="project-info-grid">
+                  <div class="project-kv-label">施工时间</div><div class="project-kv-value">2026.03.15 - 2026.05.20</div>
+                  <div class="project-kv-label">施工单位</div><div class="project-kv-value">深圳建工集团</div>
+                  <div class="project-kv-label">施工地址</div><div class="project-kv-value">深圳市南山区科苑南路2888号</div>
+                  <div class="project-kv-label">负责人</div><div class="project-kv-value">王工</div>
+                  <div class="project-kv-label">关联保险公司</div><div class="project-kv-value">人保财险</div>
+                  <div class="project-kv-label">联系电话</div><div class="project-kv-value">13800138000</div>
+                </div>
               </div>
             </section>
+            <div class="project-bottom-grid">
+              <section class="project-meta-card">
+                <h3 class="project-meta-title">管理信息</h3>
+                <div class="project-meta-grid">
+                  <div class="project-kv-label">创建人</div><div class="project-kv-value">张三</div>
+                  <div class="project-kv-label">创建时间</div><div class="project-kv-value">2026-03-23 10:00:00</div>
+                  <div class="project-kv-label">更新人</div><div class="project-kv-value">李四</div>
+                  <div class="project-kv-label">更新时间</div><div class="project-kv-value">2026-03-28 14:30:00</div>
+                </div>
+              </section>
+              <section class="project-remark-card">
+                <h3 class="project-remark-title">备注信息</h3>
+                <div class="project-remark-text">特殊情况说明，如保险公司特殊要求、项目注意事项等。</div>
+              </section>
+            </div>
           </div>
           <div data-view-panel="inspection">
-            <div class="split-layout">
-              <div class="timeline">
-                <div class="timeline-item active">
-                  <div class="timeline-time">2026-03-28 14:30</div>
-                  <div class="timeline-meta">来源：后台上传<br />巡查人：张三<br />上传人：李四<br />12张</div>
+            <div class="project-inspection-layout">
+              <div class="project-inspection-nav">
+                <div class="project-inspection-item active">
+                  <button class="project-inspection-card" type="button" data-inspection-target="record-1">
+                    <div class="project-inspection-head">
+                      <div class="project-inspection-time">2026-03-28 14:30</div>
+                      <span class="project-inspection-chevron">›</span>
+                    </div>
+                    <div class="project-inspection-meta">
+                      <div class="project-inspection-person">巡查人：张三</div>
+                      <span class="project-inspection-source">后台上传</span>
+                    </div>
+                  </button>
                 </div>
-                <div class="timeline-item">
-                  <div class="timeline-time">2026-03-15 09:00</div>
-                  <div class="timeline-meta">来源：小程序上传<br />巡查人：李四<br />上传人：李四<br />8张</div>
+                <div class="project-inspection-item">
+                  <button class="project-inspection-card" type="button" data-inspection-target="record-2">
+                    <div class="project-inspection-head">
+                      <div class="project-inspection-time">2026-03-15 09:00</div>
+                      <span class="project-inspection-chevron">›</span>
+                    </div>
+                    <div class="project-inspection-meta">
+                      <div class="project-inspection-person">巡查人：李四</div>
+                      <span class="project-inspection-source">小程序上传</span>
+                    </div>
+                  </button>
                 </div>
-                <div class="timeline-item">
-                  <div class="timeline-time">2026-03-10 16:30</div>
-                  <div class="timeline-meta">来源：后台上传<br />巡查人：张三<br />上传人：王五<br />15张</div>
+                <div class="project-inspection-item">
+                  <button class="project-inspection-card" type="button" data-inspection-target="record-3">
+                    <div class="project-inspection-head">
+                      <div class="project-inspection-time">2026-03-10 16:30</div>
+                      <span class="project-inspection-chevron">›</span>
+                    </div>
+                    <div class="project-inspection-meta">
+                      <div class="project-inspection-person">巡查人：张三</div>
+                      <span class="project-inspection-source">后台上传</span>
+                    </div>
+                  </button>
                 </div>
               </div>
-              <div>
-                <div class="gallery-block">
-                  <div class="thumb-grid">
-                    <div class="thumb">图1</div><div class="thumb">图2</div><div class="thumb">图3</div><div class="thumb">图4</div><div class="thumb">图5</div>
+              <div class="project-inspection-gallery" data-inspection-gallery>
+                <section class="project-inspection-section" id="record-1">
+                  <h4 class="project-inspection-section-title">2026-03-28 14:30</h4>
+                  <div class="gallery-block">
+                    <div class="thumb-grid">
+                      <div class="thumb">图1</div><div class="thumb">图2</div><div class="thumb">图3</div><div class="thumb">图4</div><div class="thumb">图5</div>
+                    </div>
                   </div>
-                </div>
-                <div class="gallery-block">
-                  <div class="thumb-grid">
-                    <div class="thumb">图6</div><div class="thumb">图7</div><div class="thumb">图8</div><div class="thumb">图9</div><div class="thumb">图10</div>
+                </section>
+                <section class="project-inspection-section" id="record-2">
+                  <h4 class="project-inspection-section-title">2026-03-15 09:00</h4>
+                  <div class="gallery-block">
+                    <div class="thumb-grid">
+                      <div class="thumb">图6</div><div class="thumb">图7</div><div class="thumb">图8</div><div class="thumb">图9</div><div class="thumb">图10</div>
+                    </div>
                   </div>
-                </div>
-                <div class="gallery-block">
-                  <div class="thumb-grid">
-                    <div class="thumb">图11</div><div class="thumb">图12</div><div class="thumb">图13</div><div class="thumb">图14</div><div class="thumb">图15</div>
+                </section>
+                <section class="project-inspection-section" id="record-3">
+                  <h4 class="project-inspection-section-title">2026-03-10 16:30</h4>
+                  <div class="gallery-block">
+                    <div class="thumb-grid">
+                      <div class="thumb">图11</div><div class="thumb">图12</div><div class="thumb">图13</div><div class="thumb">图14</div><div class="thumb">图15</div>
+                    </div>
                   </div>
-                </div>
+                </section>
               </div>
             </div>
           </div>
@@ -131,7 +455,7 @@
         <section class="note">
           <div class="note-index">01 基本信息</div>
           <h3>只读展示项目核心信息</h3>
-          <p>项目详情页补齐创建人与更新时间等元信息，仍然不在该页直接修改项目。</p>
+          <p>顶部仅保留项目主标识与状态标签；详细业务信息、管理信息和备注分别落在独立信息卡中。</p>
         </section>
         <section class="note">
           <div class="note-index">02 巡查数据</div>
@@ -142,5 +466,35 @@
     </aside>
   </div>
   <script src="./assets/prototype.js"></script>
+<script>
+  (() => {
+    const gallery = document.querySelector('[data-inspection-gallery]');
+    const items = Array.from(document.querySelectorAll('[data-inspection-target]'));
+    if (!gallery || items.length === 0) return;
+
+    items.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const target = document.getElementById(btn.dataset.inspectionTarget);
+        if (!target) return;
+        items.forEach((node) => node.closest('.project-inspection-item')?.classList.remove('active'));
+        btn.closest('.project-inspection-item')?.classList.add('active');
+        gallery.scrollTo({ top: target.offsetTop - 6, behavior: 'smooth' });
+      });
+    });
+  })();
+</script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+

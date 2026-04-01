@@ -20,7 +20,7 @@
         <div class="crumb">☰ 知识库管理 〉 隐患批量导入</div>
         <section class="content-panel">
           <div class="page-header" style="padding: 0 0 18px;"><div><div class="page-title">← 隐患批量导入</div><div class="page-subtitle">按行业域、事故类型、检查点位和具体隐患四级结构批量导入隐患标准。</div></div></div>
-          <div class="stepper"><div class="step active" data-step="1">下载模板</div><div class="step-line"></div><div class="step active" data-step="2">填写数据</div><div class="step-line"></div><div class="step active" data-step="3">上传文件</div><div class="step-line"></div><div class="step" data-step="4">预览校验</div><div class="step-line"></div><div class="step" data-step="5">确认导入</div></div>
+          <div class="stepper"><div class="step active" data-step="1">下载模板</div><div class="step-line"></div><div class="step active" data-step="2">填写数据</div><div class="step-line"></div><div class="step active" data-step="3">上传文件</div><div class="step-line"></div><div class="step" data-step="4">预览校验</div><div class="step-line"></div><div class="step" data-step="5">确定导入</div></div>
           <div class="summary-strip"><div class="summary-box"><div class="summary-number">9列</div><div class="summary-label">模板字段</div></div><div class="summary-box"><div class="summary-number">4级</div><div class="summary-label">结构维度</div></div><div class="summary-box"><div class="summary-number">2种</div><div class="summary-label">导入写法</div></div></div>
           <section class="section-card"><h3>模板字段</h3><div class="section-body"><table><thead><tr><th style="width:120px;">列名</th><th style="width:80px;">必填</th><th style="width:220px;">格式示例</th><th>说明</th></tr></thead><tbody><tr><td>行业域</td><td>是</td><td>JZ / 建筑施工</td><td>支持填写行业域代码或对应中文名称</td></tr><tr><td>一级分类</td><td>是</td><td>FALL / 高坠</td><td>支持填写事故类型代码或对应中文名称，且必须匹配行业域</td></tr><tr><td>二级分类</td><td>是</td><td>EDGE / 临边洞口</td><td>支持填写检查点位代码或对应中文名称，且必须匹配行业域 + 一级分类</td></tr><tr><td>隐患名称</td><td>是</td><td>防护栏杆高度不足</td><td>四级具体隐患名称</td></tr><tr><td>隐患描述</td><td>是</td><td>防护栏杆高度不足（低于1.2m）</td><td>标准化隐患描述</td></tr><tr><td>隐患等级</td><td>是</td><td>重大</td><td>重大 / 较大 / 一般</td></tr><tr><td>整改措施</td><td>是</td><td>加高栏杆至1.2m以上</td><td>标准化整改步骤</td></tr><tr><td>整改期限</td><td>是</td><td>立即整改</td><td>立即整改 / 限期整改</td></tr><tr><td>备注</td><td>否</td><td>特殊情况说明</td><td>补充信息</td></tr></tbody></table></div></section>
           <section class="section-card"><h3>上传与预校验</h3><div class="section-body"><div class="upload-box"><div class="upload-dropzone" style="height:160px;"><div>点击上传 / 拖拽上传 Excel 文件</div><div>当前示例：隐患导入模板.xlsx</div></div></div><div class="notice" style="margin-top:16px;">导入时根据行业域、一级分类和二级分类自动生成隐患编码，不需要在 Excel 中填写编码列。预览阶段会同时校验文件内重复和系统现有数据冲突。</div></div></section>
@@ -36,3 +36,4 @@
   <script src="./assets/prototype.js"></script>
 </body>
 </html>
+
