@@ -82,7 +82,7 @@
                     </div>
                   </div>
                   <div class="dictionary-helper">
-                    <div class="dictionary-helper-card"><strong>编码规则</strong><span>项目编码前缀统一使用 2 位大写字母，如 `JZ`、`GC`、`ZY`。</span></div>
+                    <div class="dictionary-helper-card"><strong>编码规则</strong><span>项目编码前缀统一使用 2 位大写字母，如 `JZ`、`GC`、`LX`。</span></div>
                     <div class="dictionary-helper-card"><strong>唯一性</strong><span>施工类型名称全局唯一，编码前缀全局唯一。</span></div>
                     <div class="dictionary-helper-card"><strong>状态控制</strong><span>该字典直接影响项目编号前缀，默认不建议停用预置三项。</span></div>
                     <div class="dictionary-helper-card"><strong>业务联动</strong><span>项目手动创建与批量导入时，均按该字典映射生成项目编号。</span></div>
@@ -101,7 +101,7 @@
                       <tbody>
                         <tr><td>JZ</td><td>家装</td><td>-</td><td><span class="status">启用</span></td><td>用于家装项目编号前缀</td><td><span class="drag-handle">拖动</span>　<span class="link">编辑 删除 停用 详情</span></td></tr>
                         <tr><td>GC</td><td>小型工程</td><td>-</td><td><span class="status">启用</span></td><td>用于小型工程项目编号前缀</td><td><span class="drag-handle">拖动</span>　<span class="link">编辑 删除 停用 详情</span></td></tr>
-                        <tr><td>ZY</td><td>零星作业</td><td>-</td><td><span class="status">启用</span></td><td>用于零星作业项目编号前缀</td><td><span class="drag-handle">拖动</span>　<span class="link">编辑 删除 停用 详情</span></td></tr>
+                        <tr><td>LX</td><td>零星作业</td><td>-</td><td><span class="status">启用</span></td><td>用于零星作业项目编号前缀</td><td><span class="drag-handle">拖动</span>　<span class="link">编辑 删除 停用 详情</span></td></tr>
                       </tbody>
                     </table>
                   </div>
@@ -117,10 +117,10 @@
                 <div class="modal-head"><span>新增项目编码类型</span><span>×</span></div>
                 <div class="modal-body">
                   <div class="form-grid">
-                    <div class="field-label">编码前缀 *</div><input class="control" type="text" value="ZY" />
+                    <div class="field-label">编码前缀 *</div><input class="control" type="text" value="LX" />
                     <div class="field-label">名称 *</div><input class="control" type="text" value="零星作业" />
                     <div class="field-label">状态 *</div><select class="control select-control"><option selected>启用</option><option>停用</option></select>
-                    <div class="field-label">备注</div><textarea class="control" style="min-height:96px;padding:10px 12px;">用于零星作业项目编号前缀维护，保存后按 ZY-YYYYMMDD-XXXX 生成项目编码。</textarea>
+                    <div class="field-label">备注</div><textarea class="control" style="min-height:96px;padding:10px 12px;">用于零星作业项目编号前缀维护，保存后按 LX-YYYYMMDD-XXXX 生成项目编码。</textarea>
                   </div>
                 </div>
                 <div class="modal-foot"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">保存</button></div>
