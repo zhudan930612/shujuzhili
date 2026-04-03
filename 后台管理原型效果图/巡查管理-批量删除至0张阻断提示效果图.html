@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>巡查管理-批量删除至0张阻断提示效果图</title>
+  <link rel="stylesheet" href="./assets/prototype.css" />
+  <style>
+    .record-detail-header {
+      padding: 0 0 18px !important;
+      margin-bottom: 18px;
+      border-bottom: none;
+      align-items: center;
+    }
+    .record-detail-titlebar {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      color: #23415f;
+    }
+    .record-detail-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #395673;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 500;
+    }
+    .record-detail-divider {
+      width: 1px;
+      height: 18px;
+      background: #d8e3ef;
+    }
+    .record-detail-current {
+      color: #193b68;
+      font-size: 16px;
+      line-height: 1;
+      font-weight: 700;
+    }
+    .record-left-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .record-left-stack > .upload-column {
+      width: 100%;
+    }
+    .record-left-stack .upload-column-body {
+      min-height: auto;
+    }
+    .record-info-grid {
+      display: grid;
+      grid-template-columns: 120px minmax(0,1fr);
+      gap: 14px 18px;
+      align-items: center;
+    }
+    .record-info-grid .field-label {
+      margin: 0;
+    }
+    .record-info-grid .readonly {
+      min-height: 22px;
+      display: flex;
+      align-items: center;
+      padding: 0;
+      border: none;
+      background: transparent;
+      color: #1f3957;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .record-media-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: 8px;
+    }
+    .record-media-actions .link {
+      font-size: 13px;
+      color: var(--brand);
+      cursor: pointer;
+    }
+    .record-detail-panel .upload-media-body .upload-column-body {
+      min-height: 520px;
+    }
+    .toast {
+      position: fixed;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      background: #fff;
+      border: 1px solid #f3d0d0;
+      border-radius: 8px;
+      box-shadow: 0 6px 20px rgba(16, 33, 58, 0.12);
+      color: #1f3957;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .toast-icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #c33b3b;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .toast-text {
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <div class="drawer-label">需求说明</div>
+    <header class="topbar">
+      <div class="brand-box">
+        <div class="brand-text">小型工程全域全量<br />安全监管平台</div>
+        <div class="terminal-text">运<br />营<br />端</div>
+      </div>
+      <nav class="nav">
+        <div class="nav-item">⌂ 首页</div>
+        <div class="nav-item">▣ 项目管理</div>
+        <div class="nav-item active">◎ 巡查管理</div>
+        <div class="nav-item">◫ 知识库管理</div>
+        <div class="nav-item">⚙ 系统管理</div>
+      </nav>
+      <div class="user-box">
+        <div class="avatar"></div>
+        <div>超级管理员</div>
+        <div>⌄</div>
+      </div>
+    </header>
+    <div class="main">
+      <aside class="sidebar">
+        <div class="menu-item active">◎ 巡查记录管理</div>
+        <div class="menu-item">▣ 项目管理</div>
+        <div class="menu-item">◫ 知识库管理</div>
+      </aside>
+      <main class="workspace">
+        <div class="crumb">☰ 巡查管理 〉 巡查记录详情页</div>
+
+        <div class="toast">
+          <span class="toast-icon">!</span>
+          <span class="toast-text">巡查记录至少保留 1 张图片，如需清空请使用「删除记录」</span>
+        </div>
+
+        <section class="content-panel record-detail-panel" data-view-scope style="position:relative;padding-bottom:88px;min-height:0;">
+          <div class="page-header record-detail-header" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+            <div class="record-detail-titlebar">
+              <div class="record-detail-back">〈 <span>返回</span></div>
+              <div class="record-detail-divider"></div>
+              <div class="record-detail-current">巡查记录详情</div>
+            </div>
+          </div>
+
+          <div data-view-panel="batch" class="active">
+            <div class="upload-two-column">
+              <div class="upload-column record-left-stack">
+                <section class="upload-column">
+                  <div class="upload-column-head"><div class="upload-column-title">基础信息</div></div>
+                  <div class="upload-column-body">
+                    <div class="record-info-grid">
+                      <div class="field-label">项目编号</div><div class="readonly">GC-20260329-0002</div>
+                      <div class="field-label">项目名称</div><div class="readonly">前海时代广场</div>
+                      <div class="field-label">施工类型</div><div class="readonly">小型工程</div>
+                      <div class="field-label">项目地址</div><div class="readonly">深圳市南山区科苑南路2888号</div>
+                      <div class="field-label">来源</div><div class="readonly">后台上传</div>
+                      <div class="field-label">巡查人</div><div class="readonly">张三</div>
+                      <div class="field-label">巡查时间</div><div class="readonly">2026-03-28 14:30:00</div>
+                    </div>
+                  </div>
+                </section>
+                <section class="upload-column">
+                  <div class="upload-column-head"><div class="upload-column-title">系统信息</div></div>
+                  <div class="upload-column-body">
+                    <div class="record-info-grid">
+                      <div class="field-label">创建人</div><div class="readonly">李四</div>
+                      <div class="field-label">创建时间</div><div class="readonly">2026-03-28 14:36:12</div>
+                      <div class="field-label">更新人</div><div class="readonly">王五</div>
+                      <div class="field-label">更新时间</div><div class="readonly">2026-03-29 09:20:18</div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <section class="upload-column upload-media-body">
+                <div class="upload-column-head">
+                  <div class="upload-column-title">图片列表（0张）<span class="record-media-actions"><span class="link">[取消]</span><span class="link">[保存]</span></span></div>
+                </div>
+                <div class="upload-column-body">
+                  <div class="upload-box" style="min-height:220px;display:flex;align-items:center;justify-content:center;color:#8a9caf;">
+                    暂无可展示图片
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <aside class="drawer">
+      <div class="drawer-head">
+        <div>
+          <div class="drawer-title">批量删除阻断提示说明</div>
+          <div class="drawer-subtitle">当批量删除后剩余图片为 0 张时，保存操作被阻断，并在页面顶部以 Toast 提示。</div>
+        </div>
+      </div>
+      <div class="drawer-body">
+        <section class="note"><div class="note-index">01 场景</div><h3>全部删除后点击保存</h3><p>批量管理态下用户将所有图片标记为删除，点击保存时触发阻断。</p></section>
+        <section class="note"><div class="note-index">02 阻断策略</div><h3>不弹出确认，顶部 Toast 提示</h3><p>由于巡查记录生成时必须至少有 1 张图片，系统不允许保存后产生 0 张图的空壳记录。</p></section>
+        <section class="note"><div class="note-index">03 引导路径</div><h3>引导使用删除记录</h3><p>提示用户如需清空整条记录，应返回详情态并点击底部的「删除记录」按钮。</p></section>
+      </div>
+    </aside>
+  </div>
+  <script src="./assets/prototype.js"></script>
+</body>
+</html>
