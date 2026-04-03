@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --bg: #eef3f8;
   --panel: #ffffff;
   --line: #dde6f0;
@@ -250,6 +250,29 @@ a {
   position: relative;
 }
 
+.page-module-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 32px;
+  padding: 0 28px;
+  background: linear-gradient(180deg, #e7f2ff 0%, #d9ebff 100%);
+  color: var(--brand);
+  font-size: 14px;
+  font-weight: 600;
+  position: relative;
+}
+.page-module-pill::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -1px;
+  width: 20px;
+  height: 3px;
+  margin-left: -10px;
+  background: var(--brand);
+  border-radius: 999px;
+}
 .tab::after {
   content: "";
   position: absolute;
@@ -1414,6 +1437,8 @@ tbody tr:nth-child(even) {
 .law-list-table td:last-child {
   white-space: nowrap;
 }
+
+
 
 
 
