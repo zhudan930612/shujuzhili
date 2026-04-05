@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
@@ -121,7 +121,6 @@
 </head>
 <body>
   <div class="frame">
-    <div class="drawer-label">需求说明</div>
     <header class="topbar">
       <div class="brand-box">
         <div class="brand-text">小型工程全域全量<br />安全监管平台</div>
@@ -207,20 +206,8 @@
         </section>
       </main>
     </div>
-    <aside class="drawer">
-      <div class="drawer-head">
-        <div>
-          <div class="drawer-title">批量删除阻断提示说明</div>
-          <div class="drawer-subtitle">当批量删除后剩余图片为 0 张时，保存操作被阻断，并在页面顶部以 Toast 提示。</div>
-        </div>
-      </div>
-      <div class="drawer-body">
-        <section class="note"><div class="note-index">01 场景</div><h3>全部删除后点击保存</h3><p>批量管理态下用户将所有图片标记为删除，点击保存时触发阻断。</p></section>
-        <section class="note"><div class="note-index">02 阻断策略</div><h3>不弹出确认，顶部 Toast 提示</h3><p>由于巡查记录生成时必须至少有 1 张图片，系统不允许保存后产生 0 张图的空壳记录。</p></section>
-        <section class="note"><div class="note-index">03 引导路径</div><h3>引导使用删除记录</h3><p>提示用户如需清空整条记录，应返回详情态并点击底部的「删除记录」按钮。</p></section>
-      </div>
-    </aside>
   </div>
   <script src="./assets/prototype.js"></script>
 </body>
 </html>
+
