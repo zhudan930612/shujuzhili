@@ -28,3 +28,24 @@
 - `data-prototype-default="list"`：指定默认状态。
 - `data-prototype-panel-scope="#page-id"`：指定状态面板查询范围（默认全页面）。
 - `data-prototype-draggable="false"`：关闭拖拽能力。
+
+## 原型布局组件（公共组件）
+- 公共脚本：`prototype-layout.js`
+- 作用：统一注入顶部导航和左侧菜单，避免每个页面重复维护相同结构。
+
+### 页面接入方式
+1. 给 `.frame` 添加布局配置属性：
+   - `data-layout-module="project|inspection|knowledge|system|overview"`
+   - `data-layout-top-active="..."`
+   - `data-layout-side-preset="..."`
+   - `data-layout-side-active="..."`
+2. 在页面保留占位节点：
+   - `<header class="topbar"></header>`
+   - `<aside class="sidebar"></aside>`
+3. 页面底部引入：
+   - `<script src="./assets/prototype.js"></script>`
+   - `<script src="./assets/prototype-layout.js"></script>`
+
+### 预设说明
+- 侧栏预设按模块集中维护在 `prototype-layout.js`：`project / inspection / knowledge / system / overview`。
+- 页面仅传 key，不再重复写导航和菜单 DOM。

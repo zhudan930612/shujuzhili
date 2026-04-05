@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
@@ -289,31 +289,10 @@
 }
   </style></head>
 <body>
-  <div class="frame">
-    <header class="topbar">
-      <div class="brand-box">
-        <div class="brand-text">小型工程全域全量<br />安全监管平台</div>
-        <div class="terminal-text">运<br />营<br />端</div>
-      </div>
-      <nav class="nav">
-        <div class="nav-item">⌂ 首页</div>
-        <div class="nav-item active">▣ 项目管理</div>
-        <div class="nav-item">◎ 巡查管理</div>
-        <div class="nav-item">◫ 知识库管理</div>
-        <div class="nav-item">⚙ 系统管理</div>
-      </nav>
-      <div class="user-box">
-        <div class="avatar"></div>
-        <div>超级管理员</div>
-        <div>⌄</div>
-      </div>
-    </header>
+  <div class="frame" data-layout-module="project" data-layout-top-active="project" data-layout-side-preset="project" data-layout-side-active="project">
+    <header class="topbar"></header>
     <div class="main">
-      <aside class="sidebar">
-        <div class="menu-item active">▣ 项目管理</div>
-        <div class="menu-item">◎ 巡查记录管理</div>
-        <div class="menu-item">◫ 知识库管理</div>
-      </aside>
+      <aside class="sidebar"></aside>
       <main class="workspace">
         <div class="crumb">☰ 项目管理 〉 项目详情页</div>
         <section class="surface tabbar"><div class="tab">项目管理</div></section>
@@ -445,6 +424,7 @@
     </div>
   </div>
   <script src="./assets/prototype.js"></script>
+  <script src="./assets/prototype-layout.js"></script>
 <script>
   (() => {
     const gallery = document.querySelector('[data-inspection-gallery]');
