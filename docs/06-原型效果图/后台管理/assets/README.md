@@ -29,6 +29,12 @@
 - `data-prototype-panel-scope="#page-id"`：指定状态面板查询范围（默认全页面）。
 - `data-prototype-draggable="false"`：关闭拖拽能力。
 
+### 巡查管理状态键示例
+- `巡查管理-上传巡查记录页.html`：
+  - `empty` / `uploaded` / `save-confirm`
+- `巡查管理-巡查记录详情页.html`：
+  - `detail` / `batch` / `delete-confirm` / `delete-blocked`
+
 ## 原型布局组件（公共组件）
 - 公共脚本：`prototype-layout.js`
 - 作用：统一注入顶部导航和左侧菜单，避免每个页面重复维护相同结构。
