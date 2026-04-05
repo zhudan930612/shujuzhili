@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
@@ -21,6 +21,9 @@
       background: rgba(10, 18, 32, 0.78);
       box-shadow: 0 18px 40px rgba(8, 15, 28, 0.26);
       backdrop-filter: blur(8px);
+      touch-action: none;
+      user-select: none;
+      cursor: move;
     }
     .prototype-state-bar button {
       border: 1px solid rgba(157, 178, 206, 0.35);
@@ -434,6 +437,57 @@
           window.scrollTo({ top: 0, behavior: "smooth" });
         });
       });
+
+      let dragging = false;
+      let pointerId = null;
+      let offsetX = 0;
+      let offsetY = 0;
+
+      function clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+      }
+
+      switchRoot.addEventListener("pointerdown", (event) => {
+        if (event.button !== 0) return;
+        if (event.target.closest("button")) return;
+
+        const rect = switchRoot.getBoundingClientRect();
+        dragging = true;
+        pointerId = event.pointerId;
+        offsetX = event.clientX - rect.left;
+        offsetY = event.clientY - rect.top;
+
+        switchRoot.style.left = rect.left + "px";
+        switchRoot.style.top = rect.top + "px";
+        switchRoot.style.right = "auto";
+        switchRoot.style.bottom = "auto";
+        switchRoot.setPointerCapture(pointerId);
+      });
+
+      switchRoot.addEventListener("pointermove", (event) => {
+        if (!dragging || event.pointerId !== pointerId) return;
+
+        const rect = switchRoot.getBoundingClientRect();
+        const maxLeft = Math.max(window.innerWidth - rect.width, 0);
+        const maxTop = Math.max(window.innerHeight - rect.height, 0);
+        const nextLeft = clamp(event.clientX - offsetX, 0, maxLeft);
+        const nextTop = clamp(event.clientY - offsetY, 0, maxTop);
+
+        switchRoot.style.left = nextLeft + "px";
+        switchRoot.style.top = nextTop + "px";
+      });
+
+      function stopDragging(event) {
+        if (!dragging || event.pointerId !== pointerId) return;
+        dragging = false;
+        if (switchRoot.hasPointerCapture(pointerId)) {
+          switchRoot.releasePointerCapture(pointerId);
+        }
+        pointerId = null;
+      }
+
+      switchRoot.addEventListener("pointerup", stopDragging);
+      switchRoot.addEventListener("pointercancel", stopDragging);
     })();
   </script>
 </body>
