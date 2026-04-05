@@ -37,6 +37,7 @@ html,
 body {
   margin: 0;
   min-width: 1920px;
+  overflow-x: hidden;
   background: linear-gradient(180deg, #f5f8fc 0%, #eef3f8 100%);
   color: var(--text);
   font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;

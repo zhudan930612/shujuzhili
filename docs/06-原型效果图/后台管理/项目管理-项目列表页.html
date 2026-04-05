@@ -60,6 +60,16 @@
       justify-content: flex-end;
       padding-right: 16px;
     }
+    .prototype-stage[data-prototype-panel="delete-confirm"] .content-panel,
+    .prototype-stage[data-prototype-panel="delete-blocked"] .content-panel {
+      background: transparent;
+      box-shadow: none;
+      padding: 0;
+    }
+    .prototype-stage[data-prototype-panel="delete-confirm"] .content-panel > .modal-stage,
+    .prototype-stage[data-prototype-panel="delete-blocked"] .content-panel > .modal-stage {
+      height: 100%;
+    }
     .radio-group.real-radio {
             display: flex;
             gap: 20px;
@@ -81,7 +91,7 @@
   </style>
 </head>
 <body>
-  <div class="prototype-state-bar" id="project-state-switch">
+  <div class="prototype-state-bar" id="project-state-switch" data-prototype-switch>
     <button class="active" type="button" data-prototype-button="list">列表态</button>
     <button type="button" data-prototype-button="create">新增弹窗</button>
     <button type="button" data-prototype-button="edit">编辑弹窗</button>
@@ -419,79 +429,10 @@
   </div>
 
   <script src="./assets/prototype.js"></script>
-  <script>
-    (function () {
-      const switchRoot = document.getElementById("project-state-switch");
-      if (!switchRoot) return;
-
-      const buttons = switchRoot.querySelectorAll("[data-prototype-button]");
-      const panels = document.querySelectorAll("[data-prototype-panel]");
-
-      buttons.forEach((button) => {
-        button.addEventListener("click", () => {
-          const target = button.dataset.prototypeButton;
-          buttons.forEach((item) => item.classList.toggle("active", item === button));
-          panels.forEach((panel) => {
-            panel.classList.toggle("active", panel.dataset.prototypePanel === target);
-          });
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-      });
-
-      let dragging = false;
-      let pointerId = null;
-      let offsetX = 0;
-      let offsetY = 0;
-
-      function clamp(value, min, max) {
-        return Math.min(Math.max(value, min), max);
-      }
-
-      switchRoot.addEventListener("pointerdown", (event) => {
-        if (event.button !== 0) return;
-        if (event.target.closest("button")) return;
-
-        const rect = switchRoot.getBoundingClientRect();
-        dragging = true;
-        pointerId = event.pointerId;
-        offsetX = event.clientX - rect.left;
-        offsetY = event.clientY - rect.top;
-
-        switchRoot.style.left = rect.left + "px";
-        switchRoot.style.top = rect.top + "px";
-        switchRoot.style.right = "auto";
-        switchRoot.style.bottom = "auto";
-        switchRoot.setPointerCapture(pointerId);
-      });
-
-      switchRoot.addEventListener("pointermove", (event) => {
-        if (!dragging || event.pointerId !== pointerId) return;
-
-        const rect = switchRoot.getBoundingClientRect();
-        const maxLeft = Math.max(window.innerWidth - rect.width, 0);
-        const maxTop = Math.max(window.innerHeight - rect.height, 0);
-        const nextLeft = clamp(event.clientX - offsetX, 0, maxLeft);
-        const nextTop = clamp(event.clientY - offsetY, 0, maxTop);
-
-        switchRoot.style.left = nextLeft + "px";
-        switchRoot.style.top = nextTop + "px";
-      });
-
-      function stopDragging(event) {
-        if (!dragging || event.pointerId !== pointerId) return;
-        dragging = false;
-        if (switchRoot.hasPointerCapture(pointerId)) {
-          switchRoot.releasePointerCapture(pointerId);
-        }
-        pointerId = null;
-      }
-
-      switchRoot.addEventListener("pointerup", stopDragging);
-      switchRoot.addEventListener("pointercancel", stopDragging);
-    })();
-  </script>
+  <script src="./assets/prototype-switcher.js"></script>
 </body>
 </html>
+
 
 
 
