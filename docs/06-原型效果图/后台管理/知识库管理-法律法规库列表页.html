@@ -41,6 +41,13 @@
     }
     .prototype-stage { display: none; }
     .prototype-stage.active { display: block; }
+    .prototype-stage[data-prototype-panel="list"] .pagination {
+      justify-content: flex-end;
+      padding-right: 16px;
+    }
+    .prototype-stage .modal-foot {
+      justify-content: flex-end;
+    }
   </style>
 </head>
 <body>
@@ -70,7 +77,7 @@
           <section class="card fill">
             <div class="card-head"><div class="card-title">法规列表</div><div class="actions"><button class="btn btn-primary">＋ 新增法规</button><button class="btn btn-ghost">⬆ 批量导入</button><button class="btn btn-ghost">⬇ 下载模板</button></div></div>
             <div class="table-wrap"><table class="law-list-table"><colgroup><col style="width:12%;" /><col style="width:8%;" /><col style="width:11%;" /><col style="width:15%;" /><col style="width:9%;" /><col style="width:20%;" /><col style="width:8%;" /><col style="width:6%;" /><col style="width:11%;" /></colgroup><thead><tr><th>条款编码</th><th>适用行业</th><th>法规编号</th><th>法规名称</th><th>条款编号</th><th>条款内容</th><th>法规类型</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td>JZ-JGJ-0001</td><td>建筑施工</td><td>JGJ80-2016</td><td>建筑施工高处作业安全技术规范</td><td>第4.1.2条</td><td>防护栏杆高度不得低于1.2m</td><td>行业标准</td><td><span class="status">启用</span></td><td><span class="link">编辑 复制 停用 详情</span></td></tr><tr><td>JZ-JGJ-0002</td><td>建筑施工</td><td>JGJ59-2011</td><td>建筑施工安全检查标准</td><td>第3.0.2条</td><td>高处作业人员必须按规定佩戴防护用品</td><td>行业标准</td><td><span class="status">启用</span></td><td><span class="link">编辑 复制 停用 详情</span></td></tr><tr><td>ALL-GB-0001</td><td>通用</td><td>GB30871-2022</td><td>生产作业安全技术规范</td><td>第6.2.3条</td><td>临边作业防护措施应满足规范要求</td><td>国家标准</td><td><span class="status off">停用</span></td><td><span class="link">编辑 复制 启用 详情</span></td></tr></tbody></table></div>
-            <div class="pagination"><span>共42条</span><span class="page-size">20条/页 <span>⌄</span></span><span>〈</span><span class="current">1</span><span>前往</span><span class="page-input">1</span><span>页</span><span>〉</span></div>
+            <div class="pagination"><span>共42条</span><select class="control select-control" style="width:110px;"><option>10条/页</option><option selected>20条/页</option><option>50条/页</option><option>100条/页</option></select><span>〈</span><span class="current">1</span><span>前往</span><select class="control select-control" style="width:72px;"><option selected>1</option><option>2</option><option>3</option></select><span>页</span><span>〉</span></div>
           </section>
         </main>
       </div>
@@ -134,3 +141,4 @@
   <script src="./assets/prototype-switcher.js"></script>
 </body>
 </html>
+

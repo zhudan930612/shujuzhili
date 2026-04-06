@@ -41,6 +41,20 @@
     }
     .prototype-stage { display: none; }
     .prototype-stage.active { display: block; }
+    .prototype-stage[data-prototype-panel="create"] .page-actions,
+    .prototype-stage[data-prototype-panel="detail"] .page-actions,
+    .prototype-stage[data-prototype-panel="edit"] .page-actions,
+    .prototype-stage[data-prototype-panel="copy"] .page-actions {
+      position: fixed;
+      right: 24px;
+      bottom: 20px;
+      z-index: 20;
+      margin-top: 0;
+      justify-content: flex-end;
+    }
+    .prototype-stage[data-prototype-panel="relation"] .modal-foot {
+      justify-content: flex-end;
+    }
   </style>
 </head>
 <body>
@@ -284,3 +298,7 @@
   <script src="./assets/prototype-switcher.js"></script>
 </body>
 </html>
+
+
+
+
