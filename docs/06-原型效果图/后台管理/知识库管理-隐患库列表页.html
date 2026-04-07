@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>知识库管理-隐患库列表页</title>
+  <link rel="stylesheet" href="./assets/prototype.css" />
+  <style>
+    .pagination {
+      justify-content: flex-end;
+      padding-right: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="frame" data-layout-module="knowledge" data-layout-top-active="knowledge" data-layout-side-preset="knowledge" data-layout-side-active="hazard">
+    <header class="topbar"></header>
+    <div class="main">
+      <aside class="sidebar"></aside>
+      <main class="workspace">
+        <div class="crumb">☰ 知识库管理 〉 隐患库列表页</div>
+        <section class="surface tabbar"><div class="tab">隐患库管理</div></section>
+        <section class="surface filters">
+          <input class="control search-control" type="text" placeholder="搜索编码/名称/描述" />
+          <select class="control select-control w170"><option selected>行业域</option><option>建筑施工</option><option>危险化学品</option><option>交通运输</option></select>
+          <select class="control select-control w170"><option selected>一级分类</option><option>高坠</option><option>触电</option><option>机械伤害</option></select>
+          <select class="control select-control w170"><option selected>二级分类</option><option>临边洞口</option><option>脚手架</option><option>配电箱</option></select>
+          <select class="control select-control w150"><option selected>等级</option><option>重大</option><option>较大</option><option>一般</option></select>
+          <select class="control select-control w150"><option selected>状态</option><option>启用</option><option>停用</option></select>
+          <button class="btn btn-primary">🔍 查询</button><button class="btn btn-ghost">↻ 重置</button>
+        </section>
+        <section class="card fill">
+          <div class="card-head"><div class="card-title">隐患列表</div><div class="actions"><button class="btn btn-primary">＋ 新增隐患</button><button class="btn btn-ghost">⬆ 批量导入</button><button class="btn btn-ghost">⬇ 下载模板</button></div></div>
+          <div class="table-wrap">
+            <table class="hazard-list-table">
+              <colgroup>
+                <col style="width:14%;" />
+                <col style="width:8%;" />
+                <col style="width:8%;" />
+                <col style="width:8%;" />
+                <col style="width:10%;" />
+                <col style="width:6%;" />
+                <col style="width:14%;" />
+                <col style="width:8%;" />
+                <col style="width:5%;" />
+                <col style="width:6%;" />
+                <col style="width:13%;" />
+              </colgroup>
+              <thead><tr><th>隐患编码 ↕</th><th>行业域 ↕</th><th>一级分类 ↕</th><th>二级分类 ↕</th><th>隐患名称 ↕</th><th>等级 ↕</th><th>整改措施</th><th>整改期限 ↕</th><th>法规数 ↕</th><th>状态 ↕</th><th>操作</th></tr></thead>
+              <tbody>
+                <tr><td>JZ-FALL-EDGE-0001</td><td>建筑施工</td><td>高坠</td><td>临边洞口</td><td>防护栏杆高度不足</td><td>重大</td><td>立即加装合规防护栏杆并补齐踢脚板</td><td>立即整改</td><td><span class="link">2条</span></td><td><span class="status">启用</span></td><td><span class="link">编辑 复制 停用 详情</span></td></tr>
+                <tr><td>JZ-FALL-EDGE-0002</td><td>建筑施工</td><td>高坠</td><td>临边洞口</td><td>洞口未设置盖板</td><td>重大</td><td>在洞口处加装固定盖板并设置警示标识</td><td>立即整改</td><td><span class="link">1条</span></td><td><span class="status">启用</span></td><td><span class="link">编辑 复制 停用 详情</span></td></tr>
+                <tr><td>JZ-FALL-SCAFFOLD-0001</td><td>建筑施工</td><td>高坠</td><td>脚手架</td><td>脚手架立杆间距过大</td><td>较大</td><td>调整立杆间距至规范要求并复核整体稳定性</td><td>限期整改</td><td><span class="link">3条</span></td><td><span class="status off">停用</span></td><td><span class="link">编辑 复制 启用 详情</span></td></tr>
+                <tr><td>JZ-ELEC-ELECBOX-0001</td><td>建筑施工</td><td>触电</td><td>配电箱</td><td>漏电保护缺失</td><td>重大</td><td>安装漏电保护断路器并完成试跳验证</td><td>立即整改</td><td><span class="link">2条</span></td><td><span class="status">启用</span></td><td><span class="link">编辑 复制 停用 详情</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination"><span>共86条</span><select class="control select-control" style="width:110px;"><option selected>20条/页</option><option>10条/页</option><option>50条/页</option></select><span>〈</span><span class="current">1</span><span>前往</span><select class="control select-control" style="width:72px;"><option selected>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select><span>页</span><span>〉</span></div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="./assets/prototype.js"></script>
+  <script src="./assets/prototype-layout.js"></script>
+</body>
+</html>
+

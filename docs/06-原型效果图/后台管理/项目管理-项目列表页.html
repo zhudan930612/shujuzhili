@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>项目管理-项目列表页</title>
+  <link rel="stylesheet" href="./assets/prototype.css" />
+  <style>
+    .prototype-state-bar {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 9999;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      max-width: 520px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(151, 170, 194, 0.35);
+      background: rgba(10, 18, 32, 0.78);
+      box-shadow: 0 18px 40px rgba(8, 15, 28, 0.26);
+      backdrop-filter: blur(8px);
+      touch-action: none;
+      user-select: none;
+      cursor: move;
+    }
+    .prototype-state-bar button {
+      border: 1px solid rgba(157, 178, 206, 0.35);
+      background: rgba(255, 255, 255, 0.08);
+      color: #eef4ff;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .prototype-state-bar button.active {
+      background: linear-gradient(135deg, #3c89ff, #2d6cdf);
+      border-color: rgba(255, 255, 255, 0.24);
+      color: #fff;
+    }
+    .prototype-stage { display: none; }
+        .prototype-stage.active { display: block; }
+    /* 项目管理单页收敛后的局部覆盖：仅修正该页展示，不影响全局母版 */
+    .prototype-stage .modal-foot {
+      justify-content: flex-end;
+    }
+    .prototype-stage[data-prototype-panel="list"] .project-list-table th:last-child,
+    .prototype-stage[data-prototype-panel="list"] .project-list-table td:last-child,
+    .prototype-stage[data-prototype-panel="list"] .project-list-table td:last-child .link {
+      white-space: nowrap;
+      word-break: normal;
+    }
+    .prototype-stage[data-prototype-panel="list"] .project-list-table td:last-child .link {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .prototype-stage[data-prototype-panel="list"] .pagination {
+      justify-content: flex-end;
+      padding-right: 16px;
+    }
+    .prototype-stage[data-prototype-panel="delete-confirm"] .content-panel,
+    .prototype-stage[data-prototype-panel="delete-blocked"] .content-panel {
+      background: transparent;
+      box-shadow: none;
+      padding: 0;
+    }
+    .prototype-stage[data-prototype-panel="delete-confirm"] .content-panel > .modal-stage,
+    .prototype-stage[data-prototype-panel="delete-blocked"] .content-panel > .modal-stage {
+      height: 100%;
+    }
+    .radio-group.real-radio {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            font-size: 14px;
+            color: #3d5067
+        }
+
+        .radio-group.real-radio label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer
+        }
+
+        .radio-group.real-radio input {
+            margin: 0
+        }
+  </style>
+</head>
+<body>
+  <div class="prototype-state-bar" id="project-state-switch" data-prototype-switch>
+    <button class="active" type="button" data-prototype-button="list">列表态</button>
+    <button type="button" data-prototype-button="create">新增弹窗</button>
+    <button type="button" data-prototype-button="edit">编辑弹窗</button>
+    <button type="button" data-prototype-button="delete-confirm">删除确认</button>
+    <button type="button" data-prototype-button="delete-blocked">删除受限</button>
+  </div>
+
+  <div class="prototype-stage active" data-prototype-panel="list">
+<div class="frame" data-layout-module="project" data-layout-top-active="project" data-layout-side-preset="project" data-layout-side-active="project"><header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace"><div class="crumb">☰ 项目管理 〉 项目列表页</div><section class="surface tabbar"><div class="tab">项目管理</div></section><section class="surface filters"><input class="control search-control" type="text" placeholder="搜索项目编号/名称/地址" /><select class="control select-control w170"><option selected>施工类型</option><option>家装</option><option>小型工程</option><option>零星作业</option></select><select class="control select-control w150"><option selected>状态</option><option>未巡查</option><option>已巡查</option></select><select class="control select-control w170"><option selected>保险公司</option><option>平安产险</option><option>人保财险</option><option>太平洋产险</option></select><div class="date-range-picker">
+  <input class="control date-range-control" type="text" value="2026-03-01 至 2026-03-31" readonly />
+  <div class="date-range-panel">
+    <div class="date-range-title">选择日期范围</div>
+    <div class="date-range-fields">
+      <input class="control" type="date" value="2026-03-01" data-role="start" />
+      <input class="control" type="date" value="2026-03-31" data-role="end" />
+    </div>
+    <div class="date-range-actions">
+      <button class="btn btn-ghost" type="button" data-action="cancel">取消</button>
+      <button class="btn btn-primary" type="button" data-action="apply">确定</button>
+    </div>
+  </div>
+</div><button class="btn btn-primary">🔍 查询</button><button class="btn btn-ghost">↻ 重置</button></section><section class="card fill"><div class="card-head"><div class="card-title">项目列表</div><div class="actions"><button class="btn btn-primary">＋ 新增项目</button><button class="btn btn-ghost">⬆ 批量导入</button><select class="control select-control" style="width: 140px;"><option selected>1 - 1</option><option>1 - 20</option><option>21 - 40</option></select><button class="btn btn-ghost">⇪ 导出</button></div></div><div class="table-wrap"><table class="project-list-table"><colgroup><col style="width:14%;" /><col style="width:16%;" /><col style="width:9%;" /><col style="width:17%;" /><col style="width:9%;" /><col style="width:13%;" /><col style="width:8%;" /><col style="width:7%;" /><col style="width:7%;" /></colgroup><thead><tr><th>项目编号</th><th>项目名称</th><th>施工类型</th><th>施工时间</th><th>状态</th><th>最近巡查时间</th><th>巡查人</th><th>保险公司</th><th>操作</th></tr></thead><tbody><tr><td>JZ-20260329-0001</td><td>万科云城三期12栋</td><td>家装</td><td>2026.03.01 ~ 2026.06.30</td><td><span class="status off">未巡查</span></td><td>--</td><td>--</td><td>平安产险</td><td><span class="link">查看 编辑 删除</span></td></tr><tr><td>GC-20260329-0002</td><td>前海时代广场 📝</td><td>小型工程</td><td>2026.03.15 ~ 2026.05.20</td><td><span class="status">已巡查</span></td><td>2026-03-28 14:30</td><td>张三</td><td>人保财险</td><td><span class="link">查看 编辑 删除</span></td></tr><tr><td>ZY-20260328-0015</td><td>华润城二期8栋</td><td>零星作业</td><td>2026.03.10 ~ 2026.04.10</td><td><span class="status">已巡查</span></td><td>2026-03-28 10:15</td><td>李四</td><td>平安产险</td><td><span class="link">查看 编辑 删除</span></td></tr><tr><td>GC-20260328-0014</td><td>招商花园城5栋</td><td>小型工程</td><td>2026.03.20 ~ 2026.06.20</td><td><span class="status off">未巡查</span></td><td>--</td><td>--</td><td>太平洋产险</td><td><span class="link">查看 编辑 删除</span></td></tr><tr><td>JZ-20260328-0013</td><td>中海锦城 📝</td><td>家装</td><td>2026.03.05 ~ 2026.05.05</td><td><span class="status">已巡查</span></td><td>2026-03-27 16:45</td><td>王五</td><td>平安产险</td><td><span class="link">查看 编辑 删除</span></td></tr></tbody></table></div><div class="pagination"><span>共128条</span><select class="control select-control" style="width: 112px;"><option>10条/页</option><option selected>20条/页</option><option>50条/页</option><option>100条/页</option></select><span>〈</span><span class="current">1</span><span>前往</span><span class="page-input">1</span><span>页</span><span>〉</span></div></section></main></div></div>
+  </div>
+
+  <div class="prototype-stage" data-prototype-panel="create">
+<div class="frame" data-layout-module="project" data-layout-top-active="project" data-layout-side-preset="project" data-layout-side-active="project">
+        <header class="topbar"></header>
+        <div class="main">
+            <aside class="sidebar"></aside>
+            <main class="workspace">
+                <div class="crumb">☰ 项目管理 〉 新增项目弹窗</div>
+                <section class="modal-stage">
+                    <div class="modal">
+                        <div class="modal-head"><span>新增项目</span><span>×</span></div>
+                        <div class="modal-body">
+                            <div class="form-grid">
+                                <div class="field-label">项目名称 *</div>
+                                <div class="input">万科云城三期12栋</div>
+                                <div class="field-label">施工类型 *</div>
+                                <div class="radio-group real-radio"><label><input type="radio"
+                                            name="construction_type" />家装</label><label><input type="radio"
+                                            name="construction_type" checked />小型工程</label><label><input type="radio"
+                                            name="construction_type" />零星作业</label></div>
+                                <div class="field-label">项目地址 *</div>
+                                <div class="input">深圳市南山区科苑南路2888号</div>
+                                <div class="field-label">施工时间 *</div>
+                                <div class="date-range-picker"><input class="control date-range-control" type="text"
+                                        value="2026-03-01 至 2026-06-30" readonly />
+                                    <div class="date-range-panel">
+                                        <div class="date-range-title">选择日期范围</div>
+                                        <div class="date-range-fields"><input class="control" type="date"
+                                                value="2026-03-01" data-role="start" /><input class="control"
+                                                type="date" value="2026-06-30" data-role="end" /></div>
+                                        <div class="date-range-actions"><button class="btn btn-ghost" type="button"
+                                                data-action="cancel">取消</button><button class="btn btn-primary"
+                                                type="button" data-action="apply">确定</button></div>
+                                    </div>
+                                </div>
+                                <div class="field-label">关联保险公司 *</div><select class="control select-control">
+                                    <option>平安产险</option>
+                                    <option selected>人保财险</option>
+                                    <option>太平洋产险</option>
+                                    <option>平安保险</option>
+                                </select>
+                                <div class="field-label">施工单位</div><select class="control select-control">
+                                    <option>请选择施工单位</option>
+                                    <option selected>深圳建工集团</option>
+                                    <option>深圳建工集团</option>
+                                    <option>中建三局华南公司</option>
+                                    <option>华润建筑工程有限公司</option>
+                                </select>
+                                <div class="field-label">负责人姓名 / 电话</div>
+                                <div class="inline-fields">
+                                    <div class="input">王工</div>
+                                    <div class="input">13800138000</div>
+                                </div>
+                                <div class="field-label">备注</div>
+                                <div class="textarea">特殊情况说明，仅后台可见</div>
+                            </div>
+                        </div>
+                        <div class="modal-foot"><button class="btn btn-ghost">取消</button><button
+                                class="btn btn-primary">保存</button></div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+  </div>
+
+  <div class="prototype-stage" data-prototype-panel="edit">
+<div class="frame" data-layout-module="project" data-layout-top-active="project" data-layout-side-preset="project" data-layout-side-active="project">
+        <header class="topbar"></header>
+        <div class="main">
+            <aside class="sidebar"></aside>
+            <main class="workspace">
+                <div class="crumb">☰ 项目管理 〉 编辑项目弹窗</div>
+                <section class="modal-stage">
+                    <div class="modal">
+                        <div class="modal-head"><span>编辑项目</span><span>×</span></div>
+                        <div class="modal-body">
+                            <div class="form-grid">
+                                <div class="field-label">项目编号</div>
+                                <div class="readonly">GC-20260329-0002</div>
+                                <div class="field-label">项目名称 *</div>
+                                <div class="input">前海时代广场</div>
+                                <div class="field-label">施工类型</div>
+                                <div class="readonly">小型工程</div>
+                                <div class="field-label">项目地址</div>
+                                <div class="readonly">深圳市南山区科苑南路2888号</div>
+                                <div class="field-label">施工时间 *</div>
+                                <div class="date-range-picker"><input class="control date-range-control" type="text"
+                                        value="2026-03-15 至 2026-05-20" readonly />
+                                    <div class="date-range-panel">
+                                        <div class="date-range-title">选择日期范围</div>
+                                        <div class="date-range-fields"><input class="control" type="date"
+                                                value="2026-03-15" data-role="start" /><input class="control"
+                                                type="date" value="2026-05-20" data-role="end" /></div>
+                                        <div class="date-range-actions"><button class="btn btn-ghost" type="button"
+                                                data-action="cancel">取消</button><button class="btn btn-primary"
+                                                type="button" data-action="apply">确定</button></div>
+                                    </div>
+                                </div>
+                                <div class="field-label">关联保险公司</div>
+                                <div class="readonly">人保财险</div>
+                                <div class="field-label">施工单位</div>
+                                <div class="readonly">深圳建工集团</div>
+                                <div class="field-label">负责人姓名 / 电话</div>
+                                <div class="inline-fields">
+                                    <div class="input">王工</div>
+                                    <div class="input">13800138000</div>
+                                </div>
+                                <div class="field-label">备注</div>
+                                <div class="textarea">特殊情况说明...</div>
+                            </div>
+                        </div>
+                        <div class="modal-foot"><button class="btn btn-ghost">取消</button><button
+                                class="btn btn-primary">保存</button></div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+  </div>
+
+  <div class="prototype-stage" data-prototype-panel="delete-confirm">
+<div class="frame" data-layout-module="project" data-layout-top-active="project" data-layout-side-preset="project" data-layout-side-active="project">
+    <header class="topbar"></header>
+    <div class="main">
+      <aside class="sidebar"></aside>
+      <main class="workspace">
+        <div class="crumb">☰ 项目管理 〉 项目删除弹窗</div>
+        <section class="content-panel" data-view-scope>
+<div class="modal-stage active" data-view-panel="free">
+            <div class="modal medium">
+              <div class="modal-head"><span>确认删除项目？</span><span>×</span></div>
+              <div class="modal-body">
+                <div class="danger-box">
+                  <div style="line-height:2;">
+                    <div>项目名称：万科云城三期12栋</div>
+                    <div>项目编号：GC-20260329-0002</div>
+                    <div>状态：未巡查</div>
+                  </div>
+                  <div style="margin-top:14px; color:#c33b3b;">⚠ 删除后该项目将从列表中移除，且不可恢复。</div>
+                </div>
+              </div>
+              <div class="modal-foot">
+                <button class="btn btn-ghost">取消</button>
+                <button class="btn btn-danger">确认删除</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-stage" data-view-panel="blocked">
+            <div class="modal medium">
+              <div class="modal-head"><span>无法删除项目</span><span>×</span></div>
+              <div class="modal-body">
+                <div class="danger-box">
+                  <div style="line-height:2;">
+                    <div>项目名称：万科云城三期12栋</div>
+                    <div>项目编号：GC-20260329-0002</div>
+                    <div>状态：已巡查</div>
+                  </div>
+                  <div style="margin-top:14px; color:#c33b3b;">⚠ 该项目存在 3 条巡查记录，共 35 张巡查图片。</div>
+                  <div style="margin-top:8px; color:#5f7085;">请先删除关联的巡查数据后，再删除本项目。</div>
+                </div>
+              </div>
+              <div class="modal-foot">
+                <button class="btn btn-ghost">取消</button>
+                <button class="btn btn-primary">查看巡查记录</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  </div>
+
+  <div class="prototype-stage" data-prototype-panel="delete-blocked">
+<div class="frame" data-layout-module="project" data-layout-top-active="project" data-layout-side-preset="project" data-layout-side-active="project">
+    <header class="topbar"></header>
+    <div class="main">
+      <aside class="sidebar"></aside>
+      <main class="workspace">
+        <div class="crumb">☰ 项目管理 〉 项目删除弹窗</div>
+        <section class="content-panel" data-view-scope>
+<div class="modal-stage" data-view-panel="free">
+            <div class="modal medium">
+              <div class="modal-head"><span>确认删除项目？</span><span>×</span></div>
+              <div class="modal-body">
+                <div class="danger-box">
+                  <div style="line-height:2;">
+                    <div>项目名称：万科云城三期12栋</div>
+                    <div>项目编号：GC-20260329-0002</div>
+                    <div>状态：未巡查</div>
+                  </div>
+                  <div style="margin-top:14px; color:#c33b3b;">⚠ 删除后该项目将从列表中移除，且不可恢复。</div>
+                </div>
+              </div>
+              <div class="modal-foot">
+                <button class="btn btn-ghost">取消</button>
+                <button class="btn btn-danger">确认删除</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-stage active" data-view-panel="blocked">
+            <div class="modal medium">
+              <div class="modal-head"><span>无法删除项目</span><span>×</span></div>
+              <div class="modal-body">
+                <div class="danger-box">
+                  <div style="line-height:2;">
+                    <div>项目名称：万科云城三期12栋</div>
+                    <div>项目编号：GC-20260329-0002</div>
+                    <div>状态：已巡查</div>
+                  </div>
+                  <div style="margin-top:14px; color:#c33b3b;">⚠ 该项目存在 3 条巡查记录，共 35 张巡查图片。</div>
+                  <div style="margin-top:8px; color:#5f7085;">请先删除关联的巡查数据后，再删除本项目。</div>
+                </div>
+              </div>
+              <div class="modal-foot">
+                <button class="btn btn-ghost">取消</button>
+                <button class="btn btn-primary">查看巡查记录</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  </div>
+
+  <script src="./assets/prototype.js"></script>
+  <script src="./assets/prototype-layout.js"></script>
+  <script src="./assets/prototype-switcher.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+

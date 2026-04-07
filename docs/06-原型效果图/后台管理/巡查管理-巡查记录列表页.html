@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>巡查管理-巡查记录列表页</title>
+  <link rel="stylesheet" href="./assets/prototype.css" />
+</head>
+<body>
+  <div class="frame" data-layout-module="inspection" data-layout-top-active="inspection" data-layout-side-preset="inspection" data-layout-side-active="inspection">
+    <header class="topbar"></header>
+    <div class="main">
+      <aside class="sidebar"></aside>
+      <main class="workspace">
+        <div class="crumb">☰ 巡查管理 〉 巡查记录列表页</div>
+        <section class="surface tabbar"><div class="tab">巡查记录管理</div></section>
+        <section class="surface filters">
+          <input class="control search-control" type="text" placeholder="搜索项目编号/名称/地址" />
+          <select class="control select-control w170"><option selected>施工类型</option><option>家装</option><option>小型工程</option><option>零星作业</option></select>
+          <select class="control select-control w150"><option selected>巡查人</option><option>张三</option><option>李四</option><option>王五</option></select>
+          <select class="control select-control w150"><option selected>来源</option><option>后台上传</option><option>移动端上传</option></select>
+          <div class="date-range-picker">
+            <input class="control date-range-control" type="text" value="2026-03-01 至 2026-03-31" readonly />
+            <div class="date-range-panel">
+              <div class="date-range-title">选择日期范围</div>
+              <div class="date-range-fields">
+                <input class="control" type="date" value="2026-03-01" data-role="start" />
+                <input class="control" type="date" value="2026-03-31" data-role="end" />
+              </div>
+              <div class="date-range-actions">
+                <button class="btn btn-ghost" type="button" data-action="cancel">取消</button>
+                <button class="btn btn-primary" type="button" data-action="apply">确定</button>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary">🔍 查询</button>
+          <button class="btn btn-ghost">↻ 重置</button>
+        </section>
+        <section class="card fill">
+          <div class="card-head">
+            <div class="card-title">巡查记录列表</div>
+            <div class="actions"><button class="btn btn-primary">＋ 上传巡查记录</button></div>
+          </div>
+          <div class="table-wrap">
+            <table class="inspection-list-table">
+              <colgroup>
+                <col style="width:13%;" />
+                <col style="width:15%;" />
+                <col style="width:10%;" />
+                <col style="width:17%;" />
+                <col style="width:10%;" />
+                <col style="width:11%;" />
+                <col style="width:8%;" />
+                <col style="width:8%;" />
+                <col style="width:8%;" />
+                <col style="width:10%;" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>项目编号</th>
+                  <th>项目名称</th>
+                  <th>施工类型</th>
+                  <th>项目地址</th>
+                  <th>来源</th>
+                  <th>巡查时间</th>
+                  <th>巡查人</th>
+                  <th>上传人</th>
+                  <th>图片数量</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>GC-20260329-0002</td><td>前海时代广场</td><td>小型工程</td><td>深圳市南山区科苑南路2888号</td><td>后台上传</td><td>2026-03-28</td><td>张三</td><td>李四</td><td>12张</td><td><span class="link">查看</span></td></tr>
+                <tr><td>JZ-20260315-0011</td><td>万科云城三期</td><td>家装</td><td>深圳市宝安区创业一路1002号</td><td>移动端上传</td><td>2026-03-15</td><td>李四</td><td>李四</td><td>8张</td><td><span class="link">查看</span></td></tr>
+                <tr><td>LX-20260310-0008</td><td>华润城二期8栋</td><td>零星作业</td><td>深圳市福田区福华三路118号</td><td>后台上传</td><td>2026-03-10</td><td>张三</td><td>王五</td><td>15张</td><td><span class="link">查看</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <span>共56条</span><span class="page-size">20条/页 <span>⌄</span></span><span>〈</span><span class="current">1</span><span>前往</span><span class="page-input">1</span><span>页</span><span>〉</span>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="./assets/prototype.js"></script>
+  <script src="./assets/prototype-layout.js"></script>
+  <script id="inspection-pagination-upgrade">
+    (function () {
+      var pagination = document.querySelector('.pagination');
+      if (!pagination) return;
+
+      pagination.style.justifyContent = 'flex-end';
+      pagination.style.paddingRight = '16px';
+
+      var legacyPageSize = pagination.querySelector('.page-size');
+      if (legacyPageSize) {
+        var select = document.createElement('select');
+        select.className = 'control select-control';
+        select.style.width = '112px';
+
+        [
+          { text: '10条/页', selected: false },
+          { text: '20条/页', selected: true },
+          { text: '50条/页', selected: false },
+          { text: '100条/页', selected: false }
+        ].forEach(function (item) {
+          var option = document.createElement('option');
+          option.textContent = item.text;
+          if (item.selected) option.selected = true;
+          select.appendChild(option);
+        });
+
+        legacyPageSize.replaceWith(select);
+      }
+    })();
+  </script>
+</body>
+</html>
+
+
+

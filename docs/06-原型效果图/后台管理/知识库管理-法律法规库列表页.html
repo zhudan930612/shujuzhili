@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>知识库管理-法律法规库列表页</title>
+  <link rel="stylesheet" href="./assets/prototype.css" />
+  <style>
+    .prototype-state-bar {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 9999;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      max-width: 560px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(151, 170, 194, 0.35);
+      background: rgba(10, 18, 32, 0.78);
+      box-shadow: 0 18px 40px rgba(8, 15, 28, 0.26);
+      backdrop-filter: blur(8px);
+      touch-action: none;
+      user-select: none;
+      cursor: move;
+    }
+    .prototype-state-bar button {
+      border: 1px solid rgba(157, 178, 206, 0.35);
+      background: rgba(255, 255, 255, 0.08);
+      color: #eef4ff;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .prototype-state-bar button.active {
+      background: linear-gradient(135deg, #3c89ff, #2d6cdf);
+      border-color: rgba(255, 255, 255, 0.24);
+      color: #fff;
+    }
+    .prototype-stage { display: none; }
+    .prototype-stage.active { display: block; }
+    .prototype-stage[data-prototype-panel="list"] .pagination {
+      justify-content: flex-end;
+      padding-right: 16px;
+    }
+    .prototype-stage .modal-foot {
+      justify-content: flex-end;
+    }
+  </style>
+</head>
+<body>
+  <div class="prototype-state-bar" data-prototype-switch>
+    <button class="active" type="button" data-prototype-button="list">列表态</button>
+    <button type="button" data-prototype-button="create">新增态</button>
+    <button type="button" data-prototype-button="edit">编辑态</button>
+    <button type="button" data-prototype-button="copy">复制态</button>
+    <button type="button" data-prototype-button="detail">详情态</button>
+  </div>
+
+  <div class="prototype-stage active" data-prototype-panel="list">
+    <div class="frame" data-layout-module="knowledge" data-layout-top-active="knowledge" data-layout-side-preset="knowledge" data-layout-side-active="law">
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <div class="crumb">☰ 知识库管理 〉 法律法规库列表页</div>
+          <section class="surface tabbar"><div class="tab">法律法规库</div></section>
+          <section class="surface filters">
+            <input class="control search-control" type="text" placeholder="搜索ID/编号/名称/条款/内容" />
+            <select class="control select-control w170"><option selected>适用行业</option><option>建筑施工</option><option>危险化学品</option><option>通用</option></select>
+            <select class="control select-control w170"><option selected>法规类型</option><option>国家标准</option><option>行业标准</option><option>地方标准</option><option>企业标准</option></select>
+            <select class="control select-control w150"><option selected>状态</option><option>启用</option><option>停用</option></select>
+            <button class="btn btn-primary">🔍 查询</button><button class="btn btn-ghost">↻ 重置</button>
+          </section>
+          <section class="card fill">
+            <div class="card-head"><div class="card-title">法规列表</div><div class="actions"><button class="btn btn-primary">＋ 新增法规</button><button class="btn btn-ghost">⬆ 批量导入</button><button class="btn btn-ghost">⬇ 下载模板</button></div></div>
+            <div class="table-wrap"><table class="law-list-table"><colgroup><col style="width:12%;" /><col style="width:8%;" /><col style="width:11%;" /><col style="width:15%;" /><col style="width:9%;" /><col style="width:20%;" /><col style="width:8%;" /><col style="width:6%;" /><col style="width:11%;" /></colgroup><thead><tr><th>条款编码</th><th>适用行业</th><th>法规编号</th><th>法规名称</th><th>条款编号</th><th>条款内容</th><th>法规类型</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td>JZ-JGJ-0001</td><td>建筑施工</td><td>JGJ80-2016</td><td>建筑施工高处作业安全技术规范</td><td>第4.1.2条</td><td>防护栏杆高度不得低于1.2m</td><td>行业标准</td><td><span class="status">启用</span></td><td><span class="link">编辑 复制 停用 详情</span></td></tr><tr><td>JZ-JGJ-0002</td><td>建筑施工</td><td>JGJ59-2011</td><td>建筑施工安全检查标准</td><td>第3.0.2条</td><td>高处作业人员必须按规定佩戴防护用品</td><td>行业标准</td><td><span class="status">启用</span></td><td><span class="link">编辑 复制 停用 详情</span></td></tr><tr><td>ALL-GB-0001</td><td>通用</td><td>GB30871-2022</td><td>生产作业安全技术规范</td><td>第6.2.3条</td><td>临边作业防护措施应满足规范要求</td><td>国家标准</td><td><span class="status off">停用</span></td><td><span class="link">编辑 复制 启用 详情</span></td></tr></tbody></table></div>
+            <div class="pagination"><span>共42条</span><select class="control select-control" style="width:110px;"><option>10条/页</option><option selected>20条/页</option><option>50条/页</option><option>100条/页</option></select><span>〈</span><span class="current">1</span><span>前往</span><select class="control select-control" style="width:72px;"><option selected>1</option><option>2</option><option>3</option></select><span>页</span><span>〉</span></div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <div class="prototype-stage" data-prototype-panel="create">
+    <div class="frame" data-layout-module="knowledge" data-layout-top-active="knowledge" data-layout-side-preset="knowledge" data-layout-side-active="law">
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <div class="crumb">☰ 知识库管理 〉 法律法规库列表页</div>
+          <section class="modal-stage"><div class="modal"><div class="modal-head"><span>新增法规</span><span>×</span></div><div class="modal-body"><div class="form-grid"><div class="field-label">适用行业 *</div><select class="control select-control"><option selected>请选择</option><option>建筑施工</option><option>危险化学品</option><option>通用</option></select><div class="field-label">法规编号 *</div><input class="control" type="text" value="JGJ80-2016" /><div class="field-label">法规名称 *</div><input class="control" type="text" value="建筑施工高处作业安全技术规范" /><div class="field-label">法规类型 *</div><select class="control select-control"><option>国家标准</option><option selected>行业标准</option><option>地方标准</option><option>企业标准</option></select><div class="field-label">条款编号 *</div><input class="control" type="text" value="第4.1.2条" /><div class="field-label">条款内容 *</div><textarea class="control" style="min-height:88px;padding:10px 12px;">防护栏杆高度不得低于1.2m，并应能承受1kN的水平荷载。</textarea><div class="field-label">状态 *</div><select class="control select-control"><option selected>启用</option><option>停用</option></select><div class="field-label">备注</div><textarea class="control" style="min-height:88px;padding:10px 12px;">其他补充说明</textarea></div></div><div class="modal-foot"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">保存</button></div></div></section>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <div class="prototype-stage" data-prototype-panel="edit">
+    <div class="frame" data-layout-module="knowledge" data-layout-top-active="knowledge" data-layout-side-preset="knowledge" data-layout-side-active="law">
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <div class="crumb">☰ 知识库管理 〉 法律法规库列表页</div>
+          <section class="modal-stage"><div class="modal"><div class="modal-head"><span>编辑法规</span><span>×</span></div><div class="modal-body"><div class="form-grid"><div class="field-label">适用行业 *</div><div class="readonly">建筑施工</div><div class="field-label">法规编号 *</div><div class="readonly">JGJ80-2016</div><div class="field-label">法规名称 *</div><input class="control" type="text" value="建筑施工高处作业安全技术规范" /><div class="field-label">法规类型 *</div><select class="control select-control"><option>国家标准</option><option selected>行业标准</option><option>地方标准</option><option>企业标准</option></select><div class="field-label">条款编号 *</div><input class="control" type="text" value="第4.1.2条" /><div class="field-label">条款内容 *</div><textarea class="control" style="min-height:88px;padding:10px 12px;">防护栏杆高度不得低于1.2m，并应能承受1kN的水平荷载。</textarea><div class="field-label">状态 *</div><select class="control select-control"><option selected>启用</option><option>停用</option></select><div class="field-label">备注</div><textarea class="control" style="min-height:88px;padding:10px 12px;">其他补充说明</textarea></div></div><div class="modal-foot"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">保存</button></div></div></section>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <div class="prototype-stage" data-prototype-panel="copy">
+    <div class="frame" data-layout-module="knowledge" data-layout-top-active="knowledge" data-layout-side-preset="knowledge" data-layout-side-active="law">
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <div class="crumb">☰ 知识库管理 〉 法律法规库列表页</div>
+          <section class="modal-stage"><div class="modal"><div class="modal-head"><span>复制法规</span><span>×</span></div><div class="modal-body"><div class="form-grid"><div class="field-label">适用行业 *</div><select class="control select-control"><option selected>建筑施工</option><option>危险化学品</option><option>通用</option></select><div class="field-label">法规名称 *</div><input class="control" type="text" value="建筑施工高处作业安全技术规范" /><div class="field-label">法规类型 *</div><select class="control select-control"><option>国家标准</option><option selected>行业标准</option><option>地方标准</option><option>企业标准</option></select><div class="field-label">条款编号 *</div><input class="control" type="text" value="第4.1.2条" /><div class="field-label">条款内容 *</div><textarea class="control" style="min-height:88px;padding:10px 12px;">防护栏杆高度不得低于1.2m，并应能承受1kN的水平荷载。</textarea><div class="field-label">状态 *</div><select class="control select-control"><option selected>启用</option><option>停用</option></select><div class="field-label">备注</div><textarea class="control" style="min-height:88px;padding:10px 12px;">复制时默认带出备注信息</textarea></div></div><div class="modal-foot"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">保存</button></div></div></section>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <div class="prototype-stage" data-prototype-panel="detail">
+    <div class="frame" data-layout-module="knowledge" data-layout-top-active="knowledge" data-layout-side-preset="knowledge" data-layout-side-active="law">
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <div class="crumb">☰ 知识库管理 〉 法律法规库列表页</div>
+          <section class="modal-stage"><div class="modal"><div class="modal-head"><span>法规详情</span><span>×</span></div><div class="modal-body"><section class="section-card"><h3>基础信息</h3><div class="section-body"><div class="kv-list"><div class="kv-label">条款编码</div><div>JZ-JGJ-0001</div><div class="kv-label">适用行业</div><div>建筑施工</div><div class="kv-label">法规编号</div><div>JGJ80-2016</div><div class="kv-label">法规名称</div><div>建筑施工高处作业安全技术规范</div><div class="kv-label">法规类型</div><div>行业标准</div><div class="kv-label">状态</div><div>启用</div><div class="kv-label">创建人</div><div>张三</div><div class="kv-label">创建时间</div><div>2026-03-23 10:00:00</div><div class="kv-label">更新人</div><div>李四</div><div class="kv-label">更新时间</div><div>2026-03-28 14:30:00</div></div></div></section><section class="section-card"><h3>条款信息</h3><div class="section-body"><div class="kv-list"><div class="kv-label">条款编号</div><div>第4.1.2条</div><div class="kv-label">条款内容</div><div>防护栏杆高度不得低于1.2m，并应能承受1kN的水平荷载。</div></div></div></section></div><div class="modal-foot"><button class="btn btn-ghost">上一条</button><button class="btn btn-ghost">下一条</button><button class="btn btn-ghost">编辑</button><button class="btn btn-ghost">复制</button><button class="btn btn-primary">停用</button></div></div></section>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <script src="./assets/prototype.js"></script>
+  <script src="./assets/prototype-layout.js"></script>
+  <script src="./assets/prototype-switcher.js"></script>
+</body>
+</html>
+

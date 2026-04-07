@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>项目管理-批量导入项目</title>
+    <link rel="stylesheet" href="./assets/prototype.css" />
+</head>
+
+<body>
+    <div class="frame" data-layout-module="project" data-layout-top-active="project" data-layout-side-preset="project" data-layout-side-active="project">
+        <header class="topbar"></header>
+        <div class="main">
+            <aside class="sidebar"></aside>
+            <main class="workspace">
+                <div class="crumb">☰ 项目管理 〉 批量导入项目</div>
+                <section class="content-panel">
+                    <div class="page-header" style="padding:0 0 20px;">
+                        <div>
+                            <div class="page-title">批量导入项目</div>
+                            <div class="page-subtitle">下载模板 → 填写数据 → 上传文件 → 预览校验 → 确定</div>
+                        </div>
+                    </div>
+                    <div class="stepper">
+                        <div class="step active" data-step="1">下载模板</div>
+                        <div class="step-line"></div>
+                        <div class="step active" data-step="2">上传文件</div>
+                        <div class="step-line"></div>
+                        <div class="step active" data-step="3">预览校验</div>
+                        <div class="step-line"></div>
+                        <div class="step" data-step="4">确定</div>
+                    </div>
+                    <div class="summary-strip">
+                        <div class="summary-box">
+                            <div class="summary-number">48</div>
+                            <div class="summary-label">有效记录</div>
+                        </div>
+                        <div class="summary-box">
+                            <div class="summary-number">3</div>
+                            <div class="summary-label">错误记录</div>
+                        </div>
+                    </div>
+                    <div class="notice">模板列包含项目名称、施工类型、项目地址、施工开始日期、施工结束日期、关联保险公司、施工单位、负责人姓名、负责人电话、备注。项目编号由系统在导入时自动生成。
+                    </div>
+                    <div class="form-card" style="margin-top:18px;">
+                        <div class="page-header" style="padding:0 0 18px;">
+                            <div>
+                                <div class="page-title" style="font-size:20px;">导入文件与校验结果</div>
+                            </div>
+                            <div class="actions"><button class="btn btn-ghost">下载模板</button><button
+                                    class="btn btn-primary">上传Excel</button></div>
+                        </div>
+                        <div class="table-wrap" style="padding:0;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width:90px;">状态</th>
+                                        <th>项目名称</th>
+                                        <th style="width:120px;">施工类型</th>
+                                        <th style="width:180px;">关联保险公司</th>
+                                        <th style="width:220px;">校验结果</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="status">通过</span></td>
+                                        <td>前海时代广场</td>
+                                        <td>小型工程</td>
+                                        <td>人保财险</td>
+                                        <td>无</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="status">通过</span></td>
+                                        <td>万科云城三期12栋</td>
+                                        <td>家装</td>
+                                        <td>平安产险</td>
+                                        <td>无</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="status off">错误</span></td>
+                                        <td>招商花园城5栋</td>
+                                        <td>小型工程</td>
+                                        <td>未匹配</td>
+                                        <td>保险公司【太平洋产险】未在系统中配置</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="status off">错误</span></td>
+                                        <td>中海锦城</td>
+                                        <td>家装</td>
+                                        <td>平安产险</td>
+                                        <td>负责人手机号格式不正确</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="page-actions"><button class="btn btn-ghost">取消</button><button
+                                class="btn btn-primary">确定</button></div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <script src="./assets/prototype.js"></script>
+  <script src="./assets/prototype-layout.js"></script>
+</body>
+
+</html>
