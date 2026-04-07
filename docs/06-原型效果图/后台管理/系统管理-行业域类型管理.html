@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>系统管理-字典管理</title>
+  <title>系统管理-行业域类型管理</title>
   <link rel="stylesheet" href="./assets/prototype.css" />
   <style>
     .dictionary-shell { display:grid; grid-template-columns:240px minmax(0,1fr); min-height:660px; border:1px solid var(--line); background:#fff; }
@@ -25,7 +25,6 @@
     .dictionary-list-table th:last-child, .dictionary-list-table td:last-child { white-space:nowrap; }
     .drag-handle { display:inline-flex; align-items:center; gap:8px; color:#597089; font-weight:600; user-select:none; cursor:grab; }
     .drag-handle::before { content:"⋮⋮"; letter-spacing:2px; color:#9aacbf; font-size:14px; line-height:1; }
-    .dictionary-modal-stage { position:relative; min-height:780px; background:rgba(23,47,84,.16); border:1px solid var(--line); }
         .prototype-state-bar {
       position: fixed;
       top: 16px;
@@ -59,9 +58,20 @@
       border-color: rgba(255, 255, 255, 0.24);
       color: #fff;
     }
-    .prototype-stage { display: none; }
+            .prototype-stage { display: none; }
     .prototype-stage.active { display: block; }
     .prototype-stage .modal-foot { justify-content: flex-end; }
+    .surface[data-view-scope] { position: relative; }
+    .prototype-stage:not([data-prototype-panel="page"]) {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      min-height: 0;
+    }
+    .prototype-stage:not([data-prototype-panel="page"]) .modal-stage {
+      height: 100%;
+      min-height: 100%;
+    }
   </style>
 </head>
 <body>
@@ -75,20 +85,14 @@
     <div class="main">
       <aside class="sidebar"></aside>
       <main class="workspace">
-        <div class="crumb">☰ 系统管理 〉 字典管理 〉 行业域字典</div>
+        <div class="crumb">☰ 系统管理 〉 行业域类型管理 〉 行业域字典</div>
         <section class="surface" data-view-scope style="position: relative; padding: 20px 24px 18px; min-height: 930px;">
-          <div class="page-header" style="padding: 0 0 18px; margin: 0;">
-            <div>
-              <div class="page-title">字典管理</div>
-              <div class="page-subtitle">维护行业域字典，供法规库、隐患库与巡查记录选择行业域时统一复用。</div>
-            </div>
-          </div>
           <div class="prototype-stage active" data-prototype-panel="page">
             <section class="card fill" style="min-height:0;">
-              <div class="card-head"><div class="card-title">字典列表</div><div class="actions"><button class="btn btn-primary">＋ 新增字典项</button></div></div>
+              <div class="card-head"><div class="card-title">行业域类型列表</div><div class="actions"><button class="btn btn-primary">＋ 新增行业域类型</button></div></div>
               <div class="dictionary-shell">
                 <aside class="dictionary-aside">
-                  <div class="dictionary-aside-title">字典分类导航</div>
+                  <div class="dictionary-aside-title">类型分类导航</div>
                   <div class="dictionary-nav-item"><span>项目编码类型字典</span><small>3项</small></div>
                   <div class="dictionary-nav-item active"><span>行业域字典</span><small>3项</small></div>
                   <div class="dictionary-nav-item"><span>法规类型字典</span><small>4项</small></div>
@@ -133,7 +137,7 @@
           </div>
 
           <div class="prototype-stage" data-prototype-panel="create-industry">
-            <section class="dictionary-modal-stage">
+            <section class="modal-stage">
               <div class="modal large">
                 <div class="modal-head"><span>新增行业域</span><span>×</span></div>
                 <div class="modal-body">
@@ -150,7 +154,7 @@
           </div>
 
           <div class="prototype-stage" data-prototype-panel="edit-industry">
-            <section class="dictionary-modal-stage">
+            <section class="modal-stage">
               <div class="modal large">
                 <div class="modal-head"><span>编辑行业域</span><span>×</span></div>
                 <div class="modal-body">
@@ -174,6 +178,14 @@
   <script src="./assets/prototype-layout.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
 
 
 

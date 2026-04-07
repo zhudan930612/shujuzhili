@@ -25,7 +25,6 @@
     .dictionary-list-table th:last-child, .dictionary-list-table td:last-child { white-space:nowrap; }
     .drag-handle { display:inline-flex; align-items:center; gap:8px; color:#597089; font-weight:600; user-select:none; cursor:grab; }
     .drag-handle::before { content:"⋮⋮"; letter-spacing:2px; color:#9aacbf; font-size:14px; line-height:1; }
-    .dictionary-modal-stage { position:relative; min-height:780px; background:rgba(23,47,84,.16); border:1px solid var(--line); }
         .prototype-state-bar {
       position: fixed;
       top: 16px;
@@ -59,9 +58,20 @@
       border-color: rgba(255, 255, 255, 0.24);
       color: #fff;
     }
-    .prototype-stage { display: none; }
+            .prototype-stage { display: none; }
     .prototype-stage.active { display: block; }
     .prototype-stage .modal-foot { justify-content: flex-end; }
+    .surface[data-view-scope] { position: relative; }
+    .prototype-stage:not([data-prototype-panel="page"]) {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      min-height: 0;
+    }
+    .prototype-stage:not([data-prototype-panel="page"]) .modal-stage {
+      height: 100%;
+      min-height: 100%;
+    }
   </style>
 </head>
 <body>
@@ -77,12 +87,6 @@
       <main class="workspace">
         <div class="crumb">☰ 系统管理 〉 字典管理 〉 隐患三级类型字典</div>
         <section class="surface" data-view-scope style="position: relative; padding: 20px 24px 18px; min-height: 930px;">
-          <div class="page-header" style="padding: 0 0 18px; margin: 0;">
-            <div>
-              <div class="page-title">字典管理</div>
-              <div class="page-subtitle">维护各行业域与事故类型下的检查点位，供隐患库二级分类下拉与编码规则复用。</div>
-            </div>
-          </div>
           <div class="prototype-stage active" data-prototype-panel="page">
             <section class="card fill" style="min-height:0;">
               <div class="card-head"><div class="card-title">字典列表</div><div class="actions"><button class="btn btn-primary">＋ 新增字典项</button></div></div>
@@ -134,7 +138,7 @@
           </div>
 
           <div class="prototype-stage" data-prototype-panel="create">
-            <section class="dictionary-modal-stage">
+            <section class="modal-stage">
               <div class="modal large">
                 <div class="modal-head"><span>新增隐患三级类型</span><span>×</span></div>
                 <div class="modal-body">
@@ -153,7 +157,7 @@
           </div>
 
           <div class="prototype-stage" data-prototype-panel="edit">
-            <section class="dictionary-modal-stage">
+            <section class="modal-stage">
               <div class="modal large">
                 <div class="modal-head"><span>编辑隐患三级类型</span><span>×</span></div>
                 <div class="modal-body">
@@ -179,6 +183,14 @@
   <script src="./assets/prototype-layout.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
 
 
 
