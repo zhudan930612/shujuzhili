@@ -88,8 +88,8 @@
         <div class="crumb">☰ 系统管理 〉 行业域类型管理 〉 行业域字典</div>
         <section class="surface" data-view-scope style="position: relative; padding: 20px 24px 18px; min-height: 930px;">
           <div class="prototype-stage active" data-prototype-panel="page">
-            <section class="card fill" style="min-height:0;">
-              <div class="card-head"><div class="card-title">行业域类型列表</div><div class="actions"><button class="btn btn-primary">＋ 新增行业域类型</button></div></div>
+            <section class="proto-list-shell" style="min-height:0;">
+              <div class="proto-list-head"><div class="proto-list-title">行业域类型列表</div><div class="proto-list-tools"><button class="btn btn-primary">＋ 新增行业域类型</button></div></div>
               <div class="dictionary-shell">
                 <aside class="dictionary-aside">
                   <div class="dictionary-aside-title">类型分类导航</div>
@@ -112,7 +112,7 @@
                     <div class="dictionary-helper-card"><strong>状态控制</strong><span>被业务数据引用的行业域仅允许停用，不允许物理删除。</span></div>
                     <div class="dictionary-helper-card"><strong>业务联动</strong><span>法规库、隐患库和巡查记录均通过该字典确定行业域归属。</span></div>
                   </div>
-                  <div class="table-wrap" style="padding:0;">
+                  <div class="proto-table-wrap" style="padding:0;">
                     <table class="dictionary-list-table">
                       <colgroup>
                         <col style="width: 16%;" />
@@ -130,7 +130,7 @@
                       </tbody>
                     </table>
                   </div>
-                  <div class="pagination" style="padding:18px 0 0; justify-content:flex-end;"><span>共3条</span><select class="control select-control page-size-select"><option selected>20条/页</option><option>50条/页</option></select><span>〈</span><span class="current">1</span><span>前往</span><select class="control select-control page-jump-select"><option selected>1页</option></select><span>页</span><span>〉</span></div>
+                  <div class="proto-pagination" style="padding:18px 0 0; justify-content:flex-end;"><span>共3条</span><select class="control select-control proto-page-size-select"><option selected>20条/页</option><option>50条/页</option></select><span>〈</span><span class="proto-page-current">1</span><span>前往</span><select class="control select-control proto-page-jump-select"><option selected>1页</option></select><span>页</span><span>〉</span></div>
                 </div>
               </div>
             </section>
@@ -176,8 +176,13 @@
   <script src="./assets/prototype.js"></script>
   <script src='./assets/prototype-switcher.js'></script>
   <script src="./assets/prototype-layout.js"></script>
+  <script>
+    initProtoPagination();
+    initProtoRowActions();
+  </script>
 </body>
 </html>
+
 
 
 

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
@@ -14,7 +14,7 @@
       <main class="workspace">
         <div class="crumb">☰ 巡查管理 〉 巡查记录列表页</div>
         <section class="surface tabbar"><div class="tab">巡查记录管理</div></section>
-        <section class="surface filters">
+        <section class="proto-filter-bar">
           <input class="control search-control" type="text" placeholder="搜索项目编号/名称/地址" />
           <select class="control select-control w170"><option selected>施工类型</option><option>家装</option><option>小型工程</option><option>零星作业</option></select>
           <select class="control select-control w150"><option selected>巡查人</option><option>张三</option><option>李四</option><option>王五</option></select>
@@ -36,12 +36,12 @@
           <button class="btn btn-primary">🔍 查询</button>
           <button class="btn btn-ghost">↻ 重置</button>
         </section>
-        <section class="card fill">
-          <div class="card-head">
-            <div class="card-title">巡查记录列表</div>
-            <div class="actions"><button class="btn btn-primary">＋ 上传巡查记录</button></div>
+        <section class="proto-list-shell">
+          <div class="proto-list-head">
+            <div class="proto-list-title">巡查记录列表</div>
+            <div class="proto-list-tools"><button class="btn btn-primary">＋ 上传巡查记录</button></div>
           </div>
-          <div class="table-wrap">
+          <div class="proto-table-wrap">
             <table class="inspection-list-table">
               <colgroup>
                 <col style="width:13%;" />
@@ -76,8 +76,20 @@
               </tbody>
             </table>
           </div>
-          <div class="pagination">
-            <span>共56条</span><span class="page-size">20条/页 <span>⌄</span></span><span>〈</span><span class="current">1</span><span>前往</span><span class="page-input">1</span><span>页</span><span>〉</span>
+          <div class="proto-pagination">
+            <span>共56条</span>
+            <select class="control select-control proto-page-size-select">
+              <option>10条/页</option>
+              <option selected>20条/页</option>
+              <option>50条/页</option>
+              <option>100条/页</option>
+            </select>
+            <span class="proto-page-arrow">‹</span>
+            <span class="proto-page-current">1</span>
+            <span>前往</span>
+            <input class="control proto-page-jump-input" type="text" value="1" />
+            <span>页</span>
+            <span class="proto-page-arrow">›</span>
           </div>
         </section>
       </main>
@@ -85,38 +97,13 @@
   </div>
   <script src="./assets/prototype.js"></script>
   <script src="./assets/prototype-layout.js"></script>
-  <script id="inspection-pagination-upgrade">
-    (function () {
-      var pagination = document.querySelector('.pagination');
-      if (!pagination) return;
-
-      pagination.style.justifyContent = 'flex-end';
-      pagination.style.paddingRight = '16px';
-
-      var legacyPageSize = pagination.querySelector('.page-size');
-      if (legacyPageSize) {
-        var select = document.createElement('select');
-        select.className = 'control select-control';
-        select.style.width = '112px';
-
-        [
-          { text: '10条/页', selected: false },
-          { text: '20条/页', selected: true },
-          { text: '50条/页', selected: false },
-          { text: '100条/页', selected: false }
-        ].forEach(function (item) {
-          var option = document.createElement('option');
-          option.textContent = item.text;
-          if (item.selected) option.selected = true;
-          select.appendChild(option);
-        });
-
-        legacyPageSize.replaceWith(select);
-      }
-    })();
+  <script>
+    initProtoPagination();
+    initProtoRowActions();
   </script>
 </body>
 </html>
+
 
 
 

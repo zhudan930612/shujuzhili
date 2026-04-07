@@ -55,3 +55,90 @@
 ### 预设说明
 - 侧栏预设按模块集中维护在 `prototype-layout.js`：`project / inspection / knowledge / system / overview`。
 - 页面仅传 key，不再重复写导航和菜单 DOM。
+
+## Proto 组件接入契约（新增）
+本节为“先建设组件、后替换页面”阶段的统一约定。
+
+### 组件清单
+- `proto-list-shell`：列表页骨架（含标题区、工具区、表格区）。
+- `proto-pagination`：统一分页（默认右下对齐）。
+- `proto-row-actions`：统一操作列（动作顺序与分隔规范）。
+- `proto-state-bar`：统一浮窗状态栏样式。
+- `proto-modal-form`：统一弹窗表单模板（含遮罩、居中、footer 右下按钮）。
+- `proto-input / proto-select / proto-textarea / proto-radio-group / proto-checkbox-group`：统一表单控件。
+
+### 接入结构（最小示例）
+```html
+<section class="proto-list-shell">
+  <div class="proto-list-head">
+    <h3 class="proto-list-title">项目列表</h3>
+    <div class="proto-list-tools"></div>
+  </div>
+  <div class="proto-table-wrap">...</div>
+  <div class="proto-pagination">...</div>
+</section>
+```
+
+```html
+<div class="proto-state-bar" data-prototype-switch>
+  <button class="proto-state-btn active" data-prototype-button="list">列表态</button>
+  <button class="proto-state-btn" data-prototype-button="create">新增弹窗</button>
+</div>
+```
+
+```html
+<section class="proto-modal-form-stage">
+  <div class="proto-modal-form">
+    <div class="proto-modal-head">...</div>
+    <div class="proto-modal-body">
+      <div class="proto-modal-grid">...</div>
+    </div>
+    <div class="proto-modal-foot">...</div>
+  </div>
+</section>
+```
+
+### 可选 JS 初始化
+- `initProtoPagination(root?)`
+- `initProtoRowActions(root?)`
+- 说明：仅在页面使用 `proto-*` 类名时生效，不会改动旧页面现状。
+
+```html
+<script src="./assets/prototype.js"></script>
+<script>
+  initProtoPagination();
+  initProtoRowActions();
+</script>
+```
+
+### 禁止项
+- 禁止在页面内再写“分页右下对齐补丁脚本”。
+- 禁止重复定义浮窗状态栏样式（统一使用 `proto-state-bar`）。
+- 禁止为操作列追加不一致的分隔规则（统一使用 `proto-row-actions`）。
+- 禁止在新页面继续混用零散表单类名（`input/select/textarea` 等应优先使用 `proto-*` 表单控件类）。
+
+### 表单控件最小示例
+```html
+<div class="proto-field-row">
+  <div class="proto-field-label">法规名称 *</div>
+  <input class="proto-input" type="text" placeholder="请输入法规名称" />
+
+  <div class="proto-field-label">法规类型 *</div>
+  <select class="proto-select">
+    <option>国家标准</option>
+    <option selected>行业标准</option>
+  </select>
+
+  <div class="proto-field-label">状态 *</div>
+  <div class="proto-radio-group">
+    <label class="proto-radio"><input type="radio" name="status" checked /> 启用</label>
+    <label class="proto-radio"><input type="radio" name="status" /> 停用</label>
+  </div>
+
+  <div class="proto-field-label">适用范围</div>
+  <div class="proto-checkbox-group">
+    <label class="proto-checkbox"><input type="checkbox" checked /> 建筑施工</label>
+    <label class="proto-checkbox"><input type="checkbox" /> 危险化学品</label>
+  </div>
+</div>
+```

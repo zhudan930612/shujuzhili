@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
@@ -67,17 +67,17 @@
         <main class="workspace">
           <div class="crumb">☰ 知识库管理 〉 法律法规库列表页</div>
           <section class="surface tabbar"><div class="tab">法律法规库</div></section>
-          <section class="surface filters">
+          <section class="proto-filter-bar">
             <input class="control search-control" type="text" placeholder="搜索ID/编号/名称/条款/内容" />
             <select class="control select-control w170"><option selected>适用行业</option><option>建筑施工</option><option>危险化学品</option><option>通用</option></select>
             <select class="control select-control w170"><option selected>法规类型</option><option>国家标准</option><option>行业标准</option><option>地方标准</option><option>企业标准</option></select>
             <select class="control select-control w150"><option selected>状态</option><option>启用</option><option>停用</option></select>
             <button class="btn btn-primary">🔍 查询</button><button class="btn btn-ghost">↻ 重置</button>
           </section>
-          <section class="card fill">
-            <div class="card-head"><div class="card-title">法规列表</div><div class="actions"><button class="btn btn-primary">＋ 新增法规</button><button class="btn btn-ghost">⬆ 批量导入</button><button class="btn btn-ghost">⬇ 下载模板</button></div></div>
-            <div class="table-wrap"><table class="law-list-table"><colgroup><col style="width:12%;" /><col style="width:8%;" /><col style="width:11%;" /><col style="width:15%;" /><col style="width:9%;" /><col style="width:20%;" /><col style="width:8%;" /><col style="width:6%;" /><col style="width:11%;" /></colgroup><thead><tr><th>条款编码</th><th>适用行业</th><th>法规编号</th><th>法规名称</th><th>条款编号</th><th>条款内容</th><th>法规类型</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td>JZ-JGJ-0001</td><td>建筑施工</td><td>JGJ80-2016</td><td>建筑施工高处作业安全技术规范</td><td>第4.1.2条</td><td>防护栏杆高度不得低于1.2m</td><td>行业标准</td><td><span class="status">启用</span></td><td><span class="link">编辑 复制 停用 详情</span></td></tr><tr><td>JZ-JGJ-0002</td><td>建筑施工</td><td>JGJ59-2011</td><td>建筑施工安全检查标准</td><td>第3.0.2条</td><td>高处作业人员必须按规定佩戴防护用品</td><td>行业标准</td><td><span class="status">启用</span></td><td><span class="link">编辑 复制 停用 详情</span></td></tr><tr><td>ALL-GB-0001</td><td>通用</td><td>GB30871-2022</td><td>生产作业安全技术规范</td><td>第6.2.3条</td><td>临边作业防护措施应满足规范要求</td><td>国家标准</td><td><span class="status off">停用</span></td><td><span class="link">编辑 复制 启用 详情</span></td></tr></tbody></table></div>
-            <div class="pagination"><span>共42条</span><select class="control select-control" style="width:110px;"><option>10条/页</option><option selected>20条/页</option><option>50条/页</option><option>100条/页</option></select><span>〈</span><span class="current">1</span><span>前往</span><select class="control select-control" style="width:72px;"><option selected>1</option><option>2</option><option>3</option></select><span>页</span><span>〉</span></div>
+          <section class="proto-list-shell">
+            <div class="proto-list-head"><div class="proto-list-title">法规列表</div><div class="proto-list-tools"><button class="btn btn-primary">＋ 新增法规</button><button class="btn btn-ghost">⬆ 批量导入</button><select class="control select-control" style="width: 140px;"><option selected>1 - 1</option><option>1 - 20</option><option>21 - 40</option></select><button class="btn btn-ghost">⇪ 导出</button></div></div>
+            <div class="proto-table-wrap"><table class="law-list-table"><colgroup><col style="width:12%;" /><col style="width:8%;" /><col style="width:11%;" /><col style="width:15%;" /><col style="width:9%;" /><col style="width:20%;" /><col style="width:8%;" /><col style="width:6%;" /><col style="width:11%;" /></colgroup><thead><tr><th>条款编码</th><th>适用行业</th><th>法规编号</th><th>法规名称</th><th>条款编号</th><th>条款内容</th><th>法规类型</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td>JZ-JGJ-0001</td><td>建筑施工</td><td>JGJ80-2016</td><td>建筑施工高处作业安全技术规范</td><td>第4.1.2条</td><td>防护栏杆高度不得低于1.2m</td><td>行业标准</td><td><span class="status">启用</span></td><td><span class="link">编辑 复制 停用 详情</span></td></tr><tr><td>JZ-JGJ-0002</td><td>建筑施工</td><td>JGJ59-2011</td><td>建筑施工安全检查标准</td><td>第3.0.2条</td><td>高处作业人员必须按规定佩戴防护用品</td><td>行业标准</td><td><span class="status">启用</span></td><td><span class="link">编辑 复制 停用 详情</span></td></tr><tr><td>ALL-GB-0001</td><td>通用</td><td>GB30871-2022</td><td>生产作业安全技术规范</td><td>第6.2.3条</td><td>临边作业防护措施应满足规范要求</td><td>国家标准</td><td><span class="status off">停用</span></td><td><span class="link">编辑 复制 启用 详情</span></td></tr></tbody></table></div>
+            <div class="proto-pagination"><span>共42条</span><select class="control select-control proto-page-size-select"><option>10条/页</option><option selected>20条/页</option><option>50条/页</option><option>100条/页</option></select><span>〈</span><span class="proto-page-current">1</span><span>前往</span><select class="control select-control proto-page-jump-select"><option selected>1</option><option>2</option><option>3</option></select><span>页</span><span>〉</span></div>
           </section>
         </main>
       </div>
@@ -139,6 +139,11 @@
   <script src="./assets/prototype.js"></script>
   <script src="./assets/prototype-layout.js"></script>
   <script src="./assets/prototype-switcher.js"></script>
+  <script>
+    initProtoPagination();
+    initProtoRowActions();
+  </script>
 </body>
 </html>
+
 

@@ -1459,6 +1459,448 @@ tbody tr:nth-child(even) {
   white-space: nowrap;
 }
 
+/* =========================
+   Proto Components (v1)
+   仅新增组件层，不覆盖旧页面现有样式
+   ========================= */
+
+.proto-list-shell {
+  background: #fff;
+  box-shadow: var(--shadow);
+  padding: 18px 0 16px;
+}
+
+.proto-list-shell .proto-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 24px 18px;
+  margin-bottom: 18px;
+}
+
+.proto-list-shell .proto-list-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  color: #1d2d45;
+  font-size: var(--fs-title-sm);
+  font-weight: var(--fw-bold);
+}
+
+.proto-list-shell .proto-list-title::before {
+  content: "";
+  width: 4px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--brand);
+}
+
+.proto-list-shell .proto-list-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.proto-list-shell .proto-list-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 0 24px 18px;
+}
+
+.proto-list-shell .proto-list-filters .search-control {
+  width: 280px;
+}
+
+.proto-list-shell .proto-list-filters .select-control {
+  width: 150px;
+}
+
+.proto-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 24px;
+  margin-bottom: 12px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.proto-filter-bar .search-control {
+  width: 320px;
+}
+
+.proto-filter-bar .proto-input,
+.proto-filter-bar .proto-select {
+  width: 140px;
+  flex: 0 0 auto;
+}
+
+.proto-filter-bar .search-control {
+  width: 320px;
+}
+
+.proto-filter-bar .date-range-control {
+  width: 236px;
+}
+
+.proto-list-shell .proto-table-wrap {
+  padding: 0 24px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.proto-list-shell table {
+  width: 100%;
+  min-width: 1280px;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-size: var(--fs-body);
+}
+
+.proto-list-shell thead th {
+  background: var(--table-head);
+  color: #22344b;
+  font-weight: var(--fw-bold);
+  text-align: left;
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.proto-list-shell tbody td {
+  padding: 12px;
+  color: #405164;
+  border-bottom: 1px solid var(--line-soft);
+  vertical-align: middle;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.proto-list-shell tbody tr:nth-child(even) {
+  background: #fafcff;
+}
+
+.proto-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  padding: 16px 24px 0;
+  color: #5a697c;
+  font-size: 14px;
+}
+
+.proto-pagination .proto-page-size,
+.proto-pagination .proto-page-input {
+  height: 32px;
+  border: 1px solid #d7dfe9;
+  background: #fff;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.proto-pagination .proto-page-size {
+  min-width: 98px;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.proto-pagination .proto-page-current {
+  min-width: 24px;
+  text-align: center;
+  color: var(--brand);
+  font-weight: var(--fw-bold);
+}
+
+.proto-pagination .proto-page-size-select {
+  width: 108px;
+}
+
+.proto-pagination .proto-page-jump-input {
+  width: 56px;
+  text-align: center;
+}
+
+.proto-pagination .proto-page-arrow {
+  color: #7a8ca2;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.proto-row-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  white-space: nowrap;
+}
+
+.proto-row-actions .proto-action {
+  color: var(--brand);
+  font-weight: var(--fw-semibold);
+  text-decoration: none;
+  border: 0;
+  background: transparent;
+  padding: 0 8px;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.proto-row-actions .proto-action:first-child {
+  padding-left: 0;
+}
+
+.proto-row-actions .proto-action + .proto-action {
+  position: relative;
+}
+
+.proto-row-actions .proto-action + .proto-action::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  bottom: 2px;
+  width: 1px;
+  background: #d6e1ef;
+}
+
+.proto-row-actions .proto-action.danger {
+  color: #d75555;
+}
+
+.proto-state-bar {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 9999;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 560px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(151, 170, 194, 0.35);
+  background: rgba(10, 18, 32, 0.78);
+  box-shadow: 0 18px 40px rgba(8, 15, 28, 0.26);
+  backdrop-filter: blur(8px);
+  touch-action: none;
+  user-select: none;
+  cursor: move;
+}
+
+.proto-state-bar .proto-state-btn {
+  border: 1px solid rgba(157, 178, 206, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+  color: #eef4ff;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.proto-state-bar .proto-state-btn.active {
+  background: linear-gradient(135deg, #3c89ff, #2d6cdf);
+  border-color: rgba(255, 255, 255, 0.24);
+  color: #fff;
+}
+
+.proto-modal-form-stage {
+  position: relative;
+  min-height: 780px;
+  background: linear-gradient(180deg, #f4f7fb 0%, #edf2f8 100%);
+  overflow: hidden;
+}
+
+.proto-modal-form-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 23, 39, 0.24);
+}
+
+.proto-modal-form {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 680px;
+  max-width: calc(100% - 48px);
+  background: #fff;
+  box-shadow: 0 24px 54px rgba(23, 49, 85, 0.18);
+  z-index: 1;
+}
+
+.proto-modal-form.large {
+  width: 860px;
+}
+
+.proto-modal-form .proto-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 1px solid #edf2f7;
+  font-size: var(--fs-title-md);
+  font-weight: var(--fw-bold);
+}
+
+.proto-modal-form .proto-modal-body {
+  padding: 20px 22px;
+}
+
+.proto-modal-form .proto-modal-grid {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px 16px;
+  align-items: center;
+}
+
+.proto-modal-form .proto-field-label {
+  color: #5f7186;
+  font-size: 14px;
+}
+
+.proto-modal-form .proto-field-control {
+  min-height: 36px;
+  border: 1px solid #d7dfe9;
+  background: #fff;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #35475d;
+  display: flex;
+  align-items: center;
+}
+
+.proto-modal-form .proto-field-control.textarea {
+  min-height: 88px;
+  align-items: flex-start;
+}
+
+.proto-modal-form .proto-modal-foot {
+  border-top: 1px solid #edf2f7;
+  padding: 16px 22px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* Proto Form Controls */
+.proto-field-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px 16px;
+  align-items: center;
+}
+
+.proto-field-label {
+  color: #5f7186;
+  font-size: 14px;
+}
+
+.proto-input,
+.proto-select,
+.proto-textarea {
+  width: 100%;
+  min-height: 32px;
+  border: 1px solid #d7dfe9;
+  background: #fff;
+  color: #42566b;
+  font-size: 14px;
+  font-family: inherit;
+  padding: 0 12px;
+  outline: none;
+}
+
+.proto-input,
+.proto-select {
+  height: 32px;
+}
+
+.proto-textarea {
+  min-height: 88px;
+  padding: 8px 12px;
+  resize: vertical;
+}
+
+.proto-input::placeholder,
+.proto-textarea::placeholder {
+  color: #95a5b8;
+}
+
+.proto-input:focus,
+.proto-select:focus,
+.proto-textarea:focus {
+  border-color: #2e7de0;
+  box-shadow: 0 0 0 2px rgba(46, 125, 224, 0.12);
+}
+
+.proto-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 32px;
+  background-image: linear-gradient(45deg, transparent 50%, #7d8fa5 50%), linear-gradient(135deg, #7d8fa5 50%, transparent 50%);
+  background-position: calc(100% - 16px) 13px, calc(100% - 11px) 13px;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.proto-radio-group,
+.proto-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  min-height: 32px;
+  align-items: center;
+  font-size: 14px;
+  color: #3d5067;
+}
+
+.proto-radio,
+.proto-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.proto-radio input,
+.proto-checkbox input {
+  margin: 0;
+}
+
+.proto-input[disabled],
+.proto-select[disabled],
+.proto-textarea[disabled] {
+  background: #f7f9fc;
+  color: #90a0b3;
+  cursor: not-allowed;
+}
+
+/* 表单控件默认宽度（可被页面按需覆盖） */
+.proto-field-row .proto-input,
+.proto-field-row .proto-select,
+.proto-field-row .proto-textarea {
+  width: 420px;
+  max-width: 100%;
+}
+
+.proto-field-row .proto-textarea {
+  width: 560px;
+}
+
+/* 需要撑满容器时使用 */
+.proto-control-full {
+  width: 100% !important;
+}
+
 
 
 

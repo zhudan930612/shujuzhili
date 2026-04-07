@@ -82,3 +82,34 @@ document.addEventListener("click", () => {
     picker.classList.remove("open");
   });
 });
+
+function initProtoPagination(root) {
+  const scope = root || document;
+  scope.querySelectorAll(".proto-pagination").forEach((pagination) => {
+    const pageSize =
+      pagination.querySelector(".proto-page-size-select") ||
+      pagination.querySelector(".proto-page-size");
+    const pageInput =
+      pagination.querySelector(".proto-page-jump-input") ||
+      pagination.querySelector(".proto-page-input");
+    if (pageSize && !pageSize.hasAttribute("aria-label")) {
+      pageSize.setAttribute("aria-label", "每页条数");
+    }
+    if (pageInput && !pageInput.hasAttribute("aria-label")) {
+      pageInput.setAttribute("aria-label", "跳转页码");
+    }
+  });
+}
+
+function initProtoRowActions(root) {
+  const scope = root || document;
+  scope.querySelectorAll(".proto-row-actions").forEach((group) => {
+    const actions = Array.from(group.querySelectorAll(".proto-action"));
+    actions.forEach((action, index) => {
+      action.dataset.actionOrder = String(index + 1);
+    });
+  });
+}
+
+window.initProtoPagination = initProtoPagination;
+window.initProtoRowActions = initProtoRowActions;

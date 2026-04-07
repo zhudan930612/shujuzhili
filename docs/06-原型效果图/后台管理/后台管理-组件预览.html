@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>后台管理-组件预览</title>
+  <link rel="stylesheet" href="./assets/prototype.css" />
+  <style>
+    .demo-panel {
+      display: none;
+    }
+    .demo-panel.active {
+      display: block;
+    }
+    .demo-card-note {
+      margin: 0 24px 14px;
+      padding: 10px 12px;
+      border: 1px solid #dce8f6;
+      background: #f6faff;
+      color: #4b6481;
+      font-size: 13px;
+    }
+    .demo-modal-close {
+      font-size: 20px;
+      line-height: 1;
+      color: #6a7d93;
+    }
+  </style>
+</head>
+<body>
+  <div
+    class="proto-state-bar"
+    data-prototype-switch
+    data-prototype-default="list"
+    data-prototype-panel-scope=".workspace"
+  >
+    <button class="proto-state-btn active" type="button" data-prototype-button="list">列表态</button>
+    <button class="proto-state-btn" type="button" data-prototype-button="create">新增弹窗</button>
+    <button class="proto-state-btn" type="button" data-prototype-button="edit">编辑弹窗</button>
+  </div>
+
+  <div class="frame" data-layout-module="overview" data-layout-top-active="system" data-layout-side-preset="overview" data-layout-side-active="system">
+    <header class="topbar"></header>
+    <div class="main">
+      <aside class="sidebar"></aside>
+      <main class="workspace">
+        <div class="crumb">☰ 原型组件 〉 后台管理组件预览</div>
+
+        <section class="demo-panel active" data-prototype-panel="list">
+          <section class="proto-filter-bar">
+            <input class="proto-input search-control" type="text" placeholder="搜索项目编号/名称/地址" />
+            <select class="proto-select">
+              <option selected>施工类型</option>
+              <option>家装</option>
+              <option>小型工程</option>
+              <option>零星作业</option>
+            </select>
+            <select class="proto-select">
+              <option selected>状态</option>
+              <option>已巡查</option>
+              <option>未巡查</option>
+            </select>
+            <select class="proto-select" style="width: 150px;">
+              <option selected>保险公司</option>
+              <option>平安产险</option>
+              <option>人保财险</option>
+              <option>太平洋产险</option>
+            </select>
+            <div class="date-range-picker">
+              <input class="proto-input date-range-control" type="text" value="2026-03-01 至 2026-03-31" readonly />
+              <div class="date-range-panel">
+                <div class="date-range-title">选择日期范围</div>
+                <div class="date-range-fields">
+                  <input class="proto-input" type="date" value="2026-03-01" data-role="start" />
+                  <input class="proto-input" type="date" value="2026-03-31" data-role="end" />
+                </div>
+                <div class="date-range-actions">
+                  <button class="btn btn-ghost" type="button" data-action="cancel">取消</button>
+                  <button class="btn btn-primary" type="button" data-action="apply">确定</button>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary" type="button">🔍 查询</button>
+            <button class="btn btn-ghost" type="button">↻ 重置</button>
+          </section>
+
+          <section class="proto-list-shell">
+            <div class="proto-list-head">
+              <h3 class="proto-list-title">组件一览列表</h3>
+              <div class="proto-list-tools">
+                <button class="btn btn-primary" type="button">＋ 新增项目</button>
+                <button class="btn btn-ghost" type="button">⬆ 批量导入</button>
+                <select class="proto-select" style="width: 140px;">
+                  <option selected>1 - 1</option>
+                  <option>1 - 20</option>
+                  <option>21 - 40</option>
+                </select>
+                <button class="btn btn-ghost" type="button">⇪ 导出</button>
+              </div>
+            </div>
+            <p class="demo-card-note">该示例展示“筛选条在上、列表区域在下”的组件布局口径。</p>
+            <div class="proto-table-wrap">
+              <table>
+                <colgroup>
+                  <col style="width: 24%;" />
+                  <col style="width: 20%;" />
+                  <col style="width: 20%;" />
+                  <col style="width: 14%;" />
+                  <col style="width: 22%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>组件名</th>
+                    <th>职责</th>
+                    <th>状态</th>
+                    <th>版本</th>
+                    <th>操作列规范</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>proto-list-shell</td>
+                    <td>列表页骨架</td>
+                    <td><span class="status">已接入</span></td>
+                    <td>v1</td>
+                    <td>
+                      <div class="proto-row-actions">
+                        <button class="proto-action" type="button">查看</button>
+                        <button class="proto-action" type="button">编辑</button>
+                        <button class="proto-action danger" type="button">删除</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>proto-state-bar</td>
+                    <td>状态浮窗</td>
+                    <td><span class="status">已接入</span></td>
+                    <td>v1</td>
+                    <td>
+                      <div class="proto-row-actions">
+                        <button class="proto-action" type="button">切换态</button>
+                        <button class="proto-action" type="button">拖拽</button>
+                        <button class="proto-action" type="button">验收</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>proto-modal-form</td>
+                    <td>通用弹窗表单</td>
+                    <td><span class="status off">待接入</span></td>
+                    <td>v1</td>
+                    <td>
+                      <div class="proto-row-actions">
+                        <button class="proto-action" type="button">查看</button>
+                        <button class="proto-action" type="button">改造</button>
+                        <button class="proto-action danger" type="button">下线</button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="proto-pagination">
+              <span>共 36 条</span>
+              <select class="proto-select proto-page-size-select">
+                <option>10条/页</option>
+                <option selected>20条/页</option>
+                <option>50条/页</option>
+              </select>
+              <span class="proto-page-arrow">‹</span>
+              <span class="proto-page-current">1</span>
+              <span>前往</span>
+              <input class="proto-input proto-page-jump-input" type="text" value="1" />
+              <span>页</span>
+              <span class="proto-page-arrow">›</span>
+            </div>
+          </section>
+
+          <section class="proto-list-shell" style="margin-top: 14px;">
+            <div class="proto-list-head">
+              <h3 class="proto-list-title">表单控件组件示例</h3>
+            </div>
+            <div class="proto-table-wrap" style="padding-bottom: 20px;">
+              <div class="proto-field-row">
+                <div class="proto-field-label">法规名称 *</div>
+                <input class="proto-input" type="text" placeholder="请输入法规名称" />
+
+                <div class="proto-field-label">法规类型 *</div>
+                <select class="proto-select">
+                  <option>国家标准</option>
+                  <option selected>行业标准</option>
+                  <option>地方标准</option>
+                </select>
+
+                <div class="proto-field-label">条款内容</div>
+                <textarea class="proto-textarea" placeholder="请输入条款内容"></textarea>
+
+                <div class="proto-field-label">状态 *</div>
+                <div class="proto-radio-group">
+                  <label class="proto-radio"><input type="radio" name="demo_status" checked /> 启用</label>
+                  <label class="proto-radio"><input type="radio" name="demo_status" /> 停用</label>
+                </div>
+
+                <div class="proto-field-label">适用行业</div>
+                <div class="proto-checkbox-group">
+                  <label class="proto-checkbox"><input type="checkbox" checked /> 建筑施工</label>
+                  <label class="proto-checkbox"><input type="checkbox" /> 危险化学品</label>
+                  <label class="proto-checkbox"><input type="checkbox" /> 通用</label>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <section class="demo-panel" data-prototype-panel="create">
+          <section class="proto-modal-form-stage">
+            <div class="proto-modal-form">
+              <div class="proto-modal-head">
+                <span>新增行业域</span>
+                <span class="demo-modal-close">×</span>
+              </div>
+              <div class="proto-modal-body">
+                <div class="proto-modal-grid">
+                  <div class="proto-field-label">行业编码 *</div>
+                  <input class="proto-input" type="text" value="IND-001" />
+                  <div class="proto-field-label">行业名称 *</div>
+                  <input class="proto-input" type="text" value="建筑施工" />
+                  <div class="proto-field-label">状态 *</div>
+                  <div class="proto-radio-group">
+                    <label class="proto-radio"><input type="radio" name="create_industry_status" checked /> 启用</label>
+                    <label class="proto-radio"><input type="radio" name="create_industry_status" /> 停用</label>
+                  </div>
+                  <div class="proto-field-label">备注</div>
+                  <textarea class="proto-textarea">用于示例的通用弹窗表单模板。</textarea>
+                </div>
+              </div>
+              <div class="proto-modal-foot">
+                <button class="btn btn-ghost" type="button">取消</button>
+                <button class="btn btn-primary" type="button">保存</button>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <section class="demo-panel" data-prototype-panel="edit">
+          <section class="proto-modal-form-stage">
+            <div class="proto-modal-form large">
+              <div class="proto-modal-head">
+                <span>编辑行业域</span>
+                <span class="demo-modal-close">×</span>
+              </div>
+              <div class="proto-modal-body">
+                <div class="proto-modal-grid">
+                  <div class="proto-field-label">行业编码</div>
+                  <input class="proto-input" type="text" value="IND-002" />
+                  <div class="proto-field-label">行业名称 *</div>
+                  <input class="proto-input" type="text" value="市政工程" />
+                  <div class="proto-field-label">字典说明</div>
+                  <textarea class="proto-textarea">这是大尺寸弹窗模板示例，用于展示复杂表单场景。</textarea>
+                  <div class="proto-field-label">关联类型</div>
+                  <div class="proto-checkbox-group">
+                    <label class="proto-checkbox"><input type="checkbox" checked /> 项目编码类型</label>
+                    <label class="proto-checkbox"><input type="checkbox" checked /> 法规类型</label>
+                    <label class="proto-checkbox"><input type="checkbox" checked /> 隐患类型</label>
+                  </div>
+                </div>
+              </div>
+              <div class="proto-modal-foot">
+                <button class="btn btn-ghost" type="button">取消</button>
+                <button class="btn btn-primary" type="button">保存</button>
+              </div>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="./assets/prototype.js"></script>
+  <script src="./assets/prototype-layout.js"></script>
+  <script src="./assets/prototype-switcher.js"></script>
+  <script>
+    initProtoPagination();
+    initProtoRowActions();
+  </script>
+</body>
+</html>
