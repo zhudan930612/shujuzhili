@@ -55,6 +55,53 @@
     .prototype-stage[data-prototype-panel="relation"] .modal-foot {
       justify-content: flex-end;
     }
+    .link-disabled {
+      color: #8d98ad;
+      cursor: pointer;
+    }
+    .link-readonly {
+      color: #9aa5b8;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .toast {
+      position: fixed;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid #f3d0d0;
+      box-shadow: 0 6px 20px rgba(16, 33, 58, 0.12);
+      color: #1f3957;
+      font-size: 14px;
+      line-height: 1.6;
+      display: none;
+    }
+    .toast.show {
+      display: inline-flex;
+    }
+    .toast-icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #c33b3b;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .toast-text {
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
@@ -90,7 +137,7 @@
                 </div></div>
                 <div class="page-actions"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">保存</button></div>
               </div>
-              <section class="section-card"><h3>已关联法规　<span class="link">[+ 关联]</span></h3><div class="section-body"><div class="empty-state">暂无关联法规，点击右上角“+ 关联”进行添加</div></div></section>
+              <section class="section-card"><h3>已关联法规　<span class="link" data-associate-action="create">[+ 关联]</span></h3><div class="section-body"><div class="empty-state">暂无关联法规，点击右上角“+ 关联”进行添加</div></div></section>
             </div>
           </section>
         </main>
@@ -130,13 +177,13 @@
                 </div></div></section>
                 <div class="page-actions"><button class="btn btn-ghost">上一条</button><button class="btn btn-ghost">下一条</button><button class="btn btn-ghost">编辑</button><button class="btn btn-ghost">复制</button><button class="btn btn-primary">停用</button></div>
               </div>
-              <section class="section-card"><h3>已关联法规　<span class="link">[+ 关联]</span></h3><div class="section-body">
+              <section class="section-card"><h3>已关联法规　<span class="link link-disabled" data-associate-action="detail">[+ 关联]</span></h3><div class="section-body">
                 <table class="hazard-law-table">
-                  <colgroup><col style="width:11%;" /><col style="width:8%;" /><col style="width:11%;" /><col style="width:14%;" /><col style="width:9%;" /><col style="width:18%;" /><col style="width:8%;" /><col style="width:6%;" /><col style="width:9%;" /><col style="width:6%;" /></colgroup>
-                  <thead><tr><th>条款编码</th><th>适用行业</th><th>法规编号</th><th>法规名称</th><th>条款编号</th><th>条款内容</th><th>法规类型</th><th>状态</th><th>关联类型</th><th>操作</th></tr></thead>
+                  <colgroup><col style="width:12%;" /><col style="width:8%;" /><col style="width:12%;" /><col style="width:16%;" /><col style="width:10%;" /><col style="width:20%;" /><col style="width:8%;" /><col style="width:8%;" /><col style="width:6%;" /></colgroup>
+                  <thead><tr><th>条款编码</th><th>适用行业</th><th>法规编号</th><th>法规名称</th><th>条款编号</th><th>条款内容</th><th>法规类型</th><th>关联类型</th><th>操作</th></tr></thead>
                   <tbody>
-                    <tr><td>JZ-JGJ-0001</td><td>建筑施工</td><td>JGJ80-2016</td><td>建筑施工高处作业安全技术规范</td><td>第4.1.2条</td><td>防护栏杆高度不得低于1.2m</td><td>行业标准</td><td><span class="status">启用</span></td><td>主要依据</td><td><span class="link">解除</span></td></tr>
-                    <tr><td>ALL-GB-0002</td><td>通用</td><td>GB30871-2022</td><td>生产作业安全技术规范</td><td>第6.2.3条</td><td>临边作业防护应满足安全要求</td><td>国家标准</td><td><span class="status">启用</span></td><td>参考依据</td><td><span class="link">解除</span></td></tr>
+                    <tr><td>JZ-JGJ-0001</td><td>建筑施工</td><td>JGJ80-2016</td><td>建筑施工高处作业安全技术规范</td><td>第4.1.2条</td><td>防护栏杆高度不得低于1.2m</td><td>行业标准</td><td>主要依据</td><td><span class="link link-readonly">解除</span></td></tr>
+                    <tr><td>ALL-GB-0002</td><td>通用</td><td>GB30871-2022</td><td>生产作业安全技术规范</td><td>第6.2.3条</td><td>临边作业防护应满足安全要求</td><td>国家标准</td><td>参考依据</td><td><span class="link link-readonly">解除</span></td></tr>
                   </tbody>
                 </table>
               </div></section>
@@ -172,13 +219,13 @@
                 </div></div>
                 <div class="page-actions"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">保存</button></div>
               </div>
-              <section class="section-card"><h3>已关联法规　<span class="link">[+ 关联]</span></h3><div class="section-body">
+              <section class="section-card"><h3>已关联法规　<span class="link" data-associate-action="edit">[+ 关联]</span></h3><div class="section-body">
                 <table class="hazard-law-table">
-                  <colgroup><col style="width:11%;" /><col style="width:8%;" /><col style="width:11%;" /><col style="width:14%;" /><col style="width:9%;" /><col style="width:18%;" /><col style="width:8%;" /><col style="width:6%;" /><col style="width:9%;" /><col style="width:6%;" /></colgroup>
-                  <thead><tr><th>条款编码</th><th>适用行业</th><th>法规编号</th><th>法规名称</th><th>条款编号</th><th>条款内容</th><th>法规类型</th><th>状态</th><th>关联类型</th><th>操作</th></tr></thead>
+                  <colgroup><col style="width:12%;" /><col style="width:8%;" /><col style="width:12%;" /><col style="width:16%;" /><col style="width:10%;" /><col style="width:20%;" /><col style="width:8%;" /><col style="width:8%;" /><col style="width:6%;" /></colgroup>
+                  <thead><tr><th>条款编码</th><th>适用行业</th><th>法规编号</th><th>法规名称</th><th>条款编号</th><th>条款内容</th><th>法规类型</th><th>关联类型</th><th>操作</th></tr></thead>
                   <tbody>
-                    <tr><td>JZ-JGJ-0001</td><td>建筑施工</td><td>JGJ80-2016</td><td>建筑施工高处作业安全技术规范</td><td>第4.1.2条</td><td>防护栏杆高度不得低于1.2m</td><td>行业标准</td><td><span class="status">启用</span></td><td>主要依据</td><td><span class="link">解除</span></td></tr>
-                    <tr><td>ALL-GB-0002</td><td>通用</td><td>GB30871-2022</td><td>生产作业安全技术规范</td><td>第6.2.3条</td><td>临边作业防护应满足安全要求</td><td>国家标准</td><td><span class="status">启用</span></td><td>参考依据</td><td><span class="link">解除</span></td></tr>
+                    <tr><td>JZ-JGJ-0001</td><td>建筑施工</td><td>JGJ80-2016</td><td>建筑施工高处作业安全技术规范</td><td>第4.1.2条</td><td>防护栏杆高度不得低于1.2m</td><td>行业标准</td><td>主要依据</td><td><span class="link">解除</span></td></tr>
+                    <tr><td>ALL-GB-0002</td><td>通用</td><td>GB30871-2022</td><td>生产作业安全技术规范</td><td>第6.2.3条</td><td>临边作业防护应满足安全要求</td><td>国家标准</td><td>参考依据</td><td><span class="link">解除</span></td></tr>
                   </tbody>
                 </table>
               </div></section>
@@ -216,14 +263,14 @@
                 <div class="page-actions"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">保存</button></div>
               </div>
               <section class="section-card">
-                <h3>已关联法规　<span class="link">[+ 关联]</span></h3>
+                <h3>已关联法规　<span class="link" data-associate-action="copy">[+ 关联]</span></h3>
                 <div class="section-body">
                   <table class="hazard-law-table">
-                    <colgroup><col style="width:11%;" /><col style="width:8%;" /><col style="width:11%;" /><col style="width:14%;" /><col style="width:9%;" /><col style="width:18%;" /><col style="width:8%;" /><col style="width:6%;" /><col style="width:9%;" /><col style="width:6%;" /></colgroup>
-                    <thead><tr><th>条款编码</th><th>适用行业</th><th>法规编号</th><th>法规名称</th><th>条款编号</th><th>条款内容</th><th>法规类型</th><th>状态</th><th>关联类型</th><th>操作</th></tr></thead>
+                    <colgroup><col style="width:12%;" /><col style="width:8%;" /><col style="width:12%;" /><col style="width:16%;" /><col style="width:10%;" /><col style="width:20%;" /><col style="width:8%;" /><col style="width:8%;" /><col style="width:6%;" /></colgroup>
+                    <thead><tr><th>条款编码</th><th>适用行业</th><th>法规编号</th><th>法规名称</th><th>条款编号</th><th>条款内容</th><th>法规类型</th><th>关联类型</th><th>操作</th></tr></thead>
                     <tbody>
-                      <tr><td>JZ-JGJ-0001</td><td>建筑施工</td><td>JGJ80-2016</td><td>建筑施工高处作业安全技术规范</td><td>第4.1.2条</td><td>防护栏杆高度不得低于1.2m</td><td>行业标准</td><td><span class="status">启用</span></td><td>主要依据</td><td><span class="link">解除</span></td></tr>
-                      <tr><td>ALL-GB-0002</td><td>通用</td><td>GB30871-2022</td><td>生产作业安全技术规范</td><td>第6.2.3条</td><td>临边作业防护应满足安全要求</td><td>国家标准</td><td><span class="status">启用</span></td><td>参考依据</td><td><span class="link">解除</span></td></tr>
+                      <tr><td>JZ-JGJ-0001</td><td>建筑施工</td><td>JGJ80-2016</td><td>建筑施工高处作业安全技术规范</td><td>第4.1.2条</td><td>防护栏杆高度不得低于1.2m</td><td>行业标准</td><td>主要依据</td><td><span class="link">解除</span></td></tr>
+                      <tr><td>ALL-GB-0002</td><td>通用</td><td>GB30871-2022</td><td>生产作业安全技术规范</td><td>第6.2.3条</td><td>临边作业防护应满足安全要求</td><td>国家标准</td><td>参考依据</td><td><span class="link">解除</span></td></tr>
                     </tbody>
                   </table>
                 </div>
@@ -296,6 +343,51 @@
   <script src="./assets/prototype.js"></script>
   <script src="./assets/prototype-layout.js"></script>
   <script src="./assets/prototype-switcher.js"></script>
+  <div class="toast" data-prototype-toast>
+    <span class="toast-icon">!</span>
+    <span class="toast-text" data-prototype-toast-text></span>
+  </div>
+  <script>
+    (function () {
+      var stateButtons = Array.prototype.slice.call(document.querySelectorAll("[data-prototype-button]"));
+      var panels = Array.prototype.slice.call(document.querySelectorAll("[data-prototype-panel]"));
+      var associateButtons = Array.prototype.slice.call(document.querySelectorAll("[data-associate-action]"));
+      var toastEl = document.querySelector("[data-prototype-toast]");
+      var toastTextEl = document.querySelector("[data-prototype-toast-text]");
+      var toastTimer = null;
+
+      function setActivePanel(panelName) {
+        panels.forEach(function (panel) {
+          panel.classList.toggle("active", panel.dataset.prototypePanel === panelName);
+        });
+        stateButtons.forEach(function (button) {
+          button.classList.toggle("active", button.dataset.prototypeButton === panelName);
+        });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function showToast(message) {
+        if (!toastEl || !toastTextEl) return;
+        toastTextEl.textContent = message;
+        toastEl.classList.add("show");
+        if (toastTimer) window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(function () {
+          toastEl.classList.remove("show");
+        }, 1800);
+      }
+
+      associateButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          var mode = button.getAttribute("data-associate-action");
+          if (mode === "detail") {
+            showToast("点击编辑可进行关联法规操作");
+            return;
+          }
+          setActivePanel("relation");
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
 
