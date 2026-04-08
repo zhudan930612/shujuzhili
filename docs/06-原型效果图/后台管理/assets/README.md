@@ -72,6 +72,7 @@
 - `proto-toast`：统一轻提示组件（顶部居中、单条、自动消失）。
 - `proto-detail-card / proto-detail-grid / proto-detail-label / proto-detail-value`：统一基础详情展示卡片。
 - `proto-image-upload / proto-image-grid / proto-image-card`：统一上传图片、缩略图和删除按钮表现层。
+- `page-actions`：统一视口底部悬浮操作栏（固定在工作区右下，内容区需预留底部空间）。
 - `proto-modal-form`：统一弹窗表单模板（含遮罩、居中、footer 右下按钮）。
 - `proto-input / proto-select / proto-textarea / proto-radio-group / proto-checkbox-group`：统一表单控件。
 - `proto-field-row / proto-field-label`：统一表单行布局与标签宽度。
@@ -112,6 +113,16 @@
 <script>
   showProtoToast("保存成功", "success");
 </script>
+```
+
+```html
+<section class="content-panel has-page-actions">
+  ...
+  <div class="page-actions">
+    <button class="btn btn-ghost" type="button">取消</button>
+    <button class="btn btn-primary" type="button">保存</button>
+  </div>
+</section>
 ```
 
 ```html
@@ -188,6 +199,9 @@
 - 页面只允许通过数据属性控制浮窗行为，不允许覆盖基础视觉样式。
 - 禁止为操作列追加不一致的分隔规则（统一使用 `proto-row-actions`）。
 - 禁止在新页面继续混用零散表单类名（`input/select/textarea` 等应优先使用 `proto-*` 表单控件类）。
+- 页面底部按钮统一使用 `page-actions`，展示规则为“视口底部悬浮 + 工作区右下对齐”。
+- 使用 `page-actions` 的内容区必须补 `has-page-actions`，为正文预留底部空间。
+- 禁止再为 `page-actions` 写页面私有的 sticky/fixed/bottom/right 定位补丁。
 
 ### 表单控件最小示例
 ```html

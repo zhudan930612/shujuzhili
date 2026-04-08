@@ -41,13 +41,24 @@
     .record-left-stack {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 18px;
+      border: none;
+      background: transparent;
+      box-shadow: none;
     }
     .record-left-stack > .upload-column {
       width: 100%;
+      border: 1px solid #e8eef5;
+      box-shadow: none;
+      border-radius: 0;
+    }
+    .record-left-stack > .upload-column .upload-column-head {
+      padding: 14px 18px;
+      border-bottom: 1px solid #eef3f8;
     }
     .record-left-stack .upload-column-body {
       min-height: auto;
+      padding: 16px 18px 18px;
     }
     .record-info-grid {
       display: grid;
@@ -124,7 +135,7 @@
       <aside class="sidebar"></aside>
       <main class="workspace">
         <div class="crumb">☰ 巡查管理 〉 巡查记录详情页</div>
-        <section class="content-panel record-detail-panel" data-view-scope style="position:relative;padding-bottom:88px;min-height:0;">
+        <section class="content-panel record-detail-panel has-page-actions" data-view-scope style="position:relative;min-height:0;">
           <div class="page-header record-detail-header" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
             <div class="record-detail-titlebar">
               <div class="record-detail-back">〈 <span>返回</span></div>
@@ -175,7 +186,7 @@
                 </div>
               </section>
             </div>
-            <div class="page-actions" style="position:sticky;right:0;bottom:0;margin-top:20px;justify-content:flex-end;padding:12px 0 0;background:linear-gradient(180deg, rgba(255,255,255,0), #fff 36%);">
+            <div class="page-actions">
               <button class="btn btn-ghost">上一条</button>
               <button class="btn btn-ghost">下一条</button>
               <button class="btn btn-danger" data-open-record-delete-confirm>删除记录</button>
@@ -283,7 +294,7 @@
       <aside class="sidebar"></aside>
       <main class="workspace">
         <div class="crumb">☰ 巡查管理 〉 巡查记录详情页</div>
-        <section class="content-panel record-detail-panel" data-view-scope style="position:relative;padding-bottom:88px;min-height:0;">
+        <section class="content-panel record-detail-panel has-page-actions" data-view-scope style="position:relative;min-height:0;">
           <div class="page-header record-detail-header" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
             <div class="record-detail-titlebar">
               <div class="record-detail-back">〈 <span>返回</span></div>
@@ -334,7 +345,7 @@
                 </div>
               </section>
             </div>
-            <div class="page-actions" style="position:sticky;right:0;bottom:0;margin-top:20px;justify-content:flex-end;padding:12px 0 0;background:linear-gradient(180deg, rgba(255,255,255,0), #fff 36%);">
+            <div class="page-actions">
               <button class="btn btn-ghost">上一条</button>
               <button class="btn btn-ghost">下一条</button>
               <button class="btn btn-danger" data-open-record-delete-confirm>删除记录</button>
@@ -442,65 +453,8 @@
       <aside class="sidebar"></aside>
       <main class="workspace">
         <div class="crumb">☰ 巡查管理 〉 巡查记录详情页</div>
-        <section class="content-panel record-detail-panel" data-view-scope style="position:relative;padding-bottom:88px;min-height:0;">
-          <div class="page-header record-detail-header" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
-            <div class="record-detail-titlebar">
-              <div class="record-detail-back">〈 <span>返回</span></div>
-              <div class="record-detail-divider"></div>
-              <div class="record-detail-current">巡查记录详情</div>
-            </div>
-          </div>
-
-          <div data-view-panel="detail" class="active">
-            <div class="upload-two-column">
-              <div class="upload-column record-left-stack">
-                <section class="upload-column">
-                  <div class="upload-column-head"><div class="upload-column-title">基础信息</div></div>
-                  <div class="upload-column-body">
-                    <div class="record-info-grid">
-                      <div class="field-label">项目编号</div><div class="readonly">GC-20260329-0002</div>
-                      <div class="field-label">项目名称</div><div class="readonly">前海时代广场</div>
-                      <div class="field-label">施工类型</div><div class="readonly">小型工程</div>
-                      <div class="field-label">项目地址</div><div class="readonly">深圳市南山区科苑南路2888号</div>
-                      <div class="field-label">来源</div><div class="readonly">后台上传</div>
-                      <div class="field-label">巡查人</div><div class="readonly">张三</div>
-                      <div class="field-label">巡查时间</div><div class="readonly">2026-03-28 14:30:00</div>
-                    </div>
-                  </div>
-                </section>
-                <section class="upload-column">
-                  <div class="upload-column-head"><div class="upload-column-title">系统信息</div></div>
-                  <div class="upload-column-body">
-                    <div class="record-info-grid">
-                      <div class="field-label">创建人</div><div class="readonly">李四</div>
-                      <div class="field-label">创建时间</div><div class="readonly">2026-03-28 14:36:12</div>
-                      <div class="field-label">更新人</div><div class="readonly">王五</div>
-                      <div class="field-label">更新时间</div><div class="readonly">2026-03-29 09:20:18</div>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <section class="upload-column upload-media-body">
-                <div class="upload-column-head">
-                  <div class="upload-column-title">图片列表（12张）<span class="record-media-actions"><span class="link">[批量管理]</span></span></div>
-                </div>
-                <div class="upload-column-body">
-                  <div class="proto-image-grid">
-                    <div class="proto-image-card">图1</div><div class="proto-image-card">图2</div><div class="proto-image-card">图3</div><div class="proto-image-card">图4</div>
-                    <div class="proto-image-card">图5</div><div class="proto-image-card">图6</div><div class="proto-image-card">图7</div><div class="proto-image-card">图8</div>
-                    <div class="proto-image-card">图9</div><div class="proto-image-card">图10</div><div class="proto-image-card">图11</div><div class="proto-image-card">图12</div>
-                  </div>
-                </div>
-              </section>
-            </div>
-            <div class="page-actions" style="position:sticky;right:0;bottom:0;margin-top:20px;justify-content:flex-end;padding:12px 0 0;background:linear-gradient(180deg, rgba(255,255,255,0), #fff 36%);">
-              <button class="btn btn-ghost">上一条</button>
-              <button class="btn btn-ghost">下一条</button>
-              <button class="btn btn-danger">删除记录</button>
-            </div>
-          </div>
-
-          <section id="recordDeleteConfirm" class="record-save-stage active">
+        <section class="content-panel" data-view-scope style="position:relative; min-height:930px;">
+          <section id="recordDeleteConfirmStage" class="record-save-stage active">
             <div class="modal medium">
               <div class="modal-head"><span>确认删除巡查记录</span><span data-close-record-delete-confirm style="cursor:pointer;">×</span></div>
               <div class="modal-body">
@@ -543,7 +497,7 @@
           </div>
         </div>
 
-        <section class="content-panel record-detail-panel" data-view-scope style="position:relative;padding-bottom:88px;min-height:0;">
+        <section class="content-panel record-detail-panel has-page-actions" data-view-scope style="position:relative;min-height:0;">
           <div class="page-header record-detail-header" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
             <div class="record-detail-titlebar">
               <div class="record-detail-back">〈 <span>返回</span></div>

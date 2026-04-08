@@ -8,16 +8,8 @@
   <style>
     .prototype-stage { display: none; }
     .prototype-stage.active { display: block; }
-    .prototype-stage[data-prototype-panel="create"] .page-actions,
-    .prototype-stage[data-prototype-panel="detail"] .page-actions,
-    .prototype-stage[data-prototype-panel="edit"] .page-actions,
-    .prototype-stage[data-prototype-panel="copy"] .page-actions {
-      position: fixed;
-      right: 24px;
-      bottom: 20px;
-      z-index: 20;
-      margin-top: 0;
-      justify-content: flex-end;
+    .prototype-stage[data-prototype-panel="detail"] .hazard-main-column {
+      gap: 18px;
     }
     .prototype-stage[data-prototype-panel="relation"] .modal-foot {
       justify-content: flex-end;
@@ -49,7 +41,7 @@
         <aside class="sidebar"></aside>
         <main class="workspace">
           <div class="crumb">☰ 知识库管理 〉 隐患子页面</div>
-          <section class="content-panel">
+          <section class="content-panel has-page-actions">
             <div class="page-header" style="padding: 0 0 18px;"><div><div class="page-title">← 新增隐患</div><div class="page-subtitle">新增模式：创建新的隐患标准，保存后系统自动生成隐患编码。</div></div></div>
             <div class="hazard-detail-layout">
               <div class="hazard-main-column">
@@ -64,10 +56,10 @@
                   <div class="field-label">整改期限 *</div><select class="control select-control"><option selected>请选择整改期限</option><option>立即整改</option><option>限期整改</option></select>
                   <div class="field-label">备注</div><textarea class="control" style="min-height:88px;padding:10px 12px;" placeholder="请输入备注"></textarea>
                 </div></div>
-                <div class="page-actions"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">保存</button></div>
               </div>
               <section class="section-card"><h3>已关联法规　<span class="link" data-associate-action="create">[+ 关联]</span></h3><div class="section-body"><div class="empty-state">暂无关联法规，点击右上角“+ 关联”进行添加</div></div></section>
             </div>
+            <div class="page-actions"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">保存</button></div>
           </section>
         </main>
       </div>
@@ -81,7 +73,7 @@
         <aside class="sidebar"></aside>
         <main class="workspace">
           <div class="crumb">☰ 知识库管理 〉 隐患子页面</div>
-          <section class="content-panel">
+          <section class="content-panel has-page-actions">
             <div class="page-header" style="padding: 0 0 18px;"><div><div class="page-title">← 隐患详情</div><div class="page-subtitle">详情模式：用于查看隐患标准、关联法规和连续浏览。</div></div></div>
             <div class="hazard-detail-layout">
               <div class="hazard-main-column">
@@ -114,7 +106,6 @@
                     </div>
                   </div>
                 </section>
-                <div class="page-actions"><button class="btn btn-ghost">上一条</button><button class="btn btn-ghost">下一条</button><button class="btn btn-ghost">编辑</button><button class="btn btn-ghost">复制</button><button class="btn btn-primary">停用</button></div>
               </div>
               <section class="section-card"><h3>已关联法规　<span class="link link-disabled" data-associate-action="detail">[+ 关联]</span></h3><div class="section-body">
                 <table class="hazard-law-table">
@@ -127,6 +118,7 @@
                 </table>
               </div></section>
             </div>
+            <div class="page-actions"><button class="btn btn-ghost">上一条</button><button class="btn btn-ghost">下一条</button><button class="btn btn-ghost">编辑</button><button class="btn btn-ghost">复制</button><button class="btn btn-primary">停用</button></div>
           </section>
         </main>
       </div>
@@ -140,7 +132,7 @@
         <aside class="sidebar"></aside>
         <main class="workspace">
           <div class="crumb">☰ 知识库管理 〉 隐患子页面</div>
-          <section class="content-panel">
+          <section class="content-panel has-page-actions">
             <div class="page-header" style="padding: 0 0 18px;"><div><div class="page-title">← 编辑隐患</div><div class="page-subtitle">编辑模式：结构字段只读，业务字段可编辑。</div></div></div>
             <div class="hazard-detail-layout">
               <div class="hazard-main-column">
@@ -156,7 +148,6 @@
                   <div class="field-label">整改期限 *</div><select class="control select-control"><option selected>立即整改</option><option>限期整改</option></select>
                   <div class="field-label">备注</div><textarea class="control" style="min-height:88px;padding:10px 12px;">其他补充说明</textarea>
                 </div></div>
-                <div class="page-actions"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">保存</button></div>
               </div>
               <section class="section-card"><h3>已关联法规　<span class="link" data-associate-action="edit">[+ 关联]</span></h3><div class="section-body">
                 <table class="hazard-law-table">
@@ -169,6 +160,7 @@
                 </table>
               </div></section>
             </div>
+            <div class="page-actions"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">保存</button></div>
           </section>
         </main>
       </div>
@@ -182,7 +174,7 @@
         <aside class="sidebar"></aside>
         <main class="workspace">
           <div class="crumb">☰ 知识库管理 〉 隐患子页面</div>
-          <section class="content-panel">
+          <section class="content-panel has-page-actions">
             <div class="page-header" style="padding: 0 0 18px;"><div><div class="page-title">← 复制隐患</div><div class="page-subtitle">复制模式：除隐患编码外其余字段预填且可调整。</div></div></div>
             <div class="hazard-detail-layout">
               <div class="hazard-main-column">
@@ -199,7 +191,6 @@
                     <div class="field-label">备注</div><textarea class="control" style="min-height:88px;padding:10px 12px;">由原隐患复制创建，可按新业务场景调整名称和描述。</textarea>
                   </div>
                 </div>
-                <div class="page-actions"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">保存</button></div>
               </div>
               <section class="section-card">
                 <h3>已关联法规　<span class="link" data-associate-action="copy">[+ 关联]</span></h3>
@@ -215,6 +206,7 @@
                 </div>
               </section>
             </div>
+            <div class="page-actions"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">保存</button></div>
           </section>
         </main>
       </div>

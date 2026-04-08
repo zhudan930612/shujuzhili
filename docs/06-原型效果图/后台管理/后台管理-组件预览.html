@@ -225,11 +225,14 @@
     }
     .component-preview-modal {
       position: relative;
-      min-height: auto;
+      min-height: 420px;
       padding: 16px;
       border-radius: 12px;
       background: rgba(44, 57, 74, 0.12);
-      overflow: visible;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .component-preview-modal::before {
       content: "";
@@ -242,13 +245,30 @@
       left: auto;
       top: auto;
       transform: none;
-      margin: 0 auto;
       width: 100%;
       max-width: 460px;
       z-index: 1;
     }
     .component-preview-modal .proto-modal-form.large {
       max-width: 520px;
+    }
+    .component-preview-page-actions {
+      position: relative;
+      min-height: 96px;
+      border: 1px solid #dce8f6;
+      background: linear-gradient(180deg, #fbfdff 0%, #f4f8fc 100%);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .component-preview-page-actions .page-actions {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: 0;
+      padding: 12px 16px;
+      border-top: 1px solid #e5edf6;
+      box-shadow: none;
     }
     .component-preview-toast-stack {
       display: flex;
@@ -439,6 +459,20 @@
                       </div>
                     </td>
                     <td>统一动作顺序、分隔线和危险操作颜色。</td>
+                  </tr>
+                  <tr>
+                    <td>page-actions</td>
+                    <td>页面底部操作栏</td>
+                    <td><span class="proto-table-status" data-variant="success">已组件化</span></td>
+                    <td class="component-preview-cell">
+                      <div class="component-preview-page-actions">
+                        <div class="page-actions">
+                          <button class="btn btn-ghost" type="button">取消</button>
+                          <button class="btn btn-primary" type="button">保存</button>
+                        </div>
+                      </div>
+                    </td>
+                    <td>用于长页面的视口底部悬浮操作栏，固定在工作区右下，并要求内容区预留底部空间。</td>
                   </tr>
                   <tr>
                     <td>prototype-state-bar</td>
@@ -789,6 +823,22 @@
 
           <section class="proto-list-shell" style="margin-top: 14px;">
             <div class="proto-list-head">
+              <h3 class="proto-list-title">page-actions｜已组件化</h3>
+            </div>
+            <div class="proto-table-wrap" style="padding-bottom: 20px;">
+              <p class="demo-card-note" style="margin-bottom: 18px;">展示视口底部悬浮操作栏。真实页面需配合 <code>content-panel has-page-actions</code> 预留底部空间，避免正文被遮挡。</p>
+              <div class="component-preview-page-actions">
+                <div style="padding: 18px 20px; font-size:14px;line-height:1.8;color:#5f7186;">这里模拟长页面正文内容，操作按钮固定在工作区右下角。</div>
+                <div class="page-actions">
+                  <button class="btn btn-ghost" type="button">取消</button>
+                  <button class="btn btn-primary" type="button">保存</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="proto-list-shell" style="margin-top: 14px;">
+            <div class="proto-list-head">
               <h3 class="proto-list-title">prototype-state-bar / proto-row-actions｜已组件化</h3>
             </div>
             <div class="proto-table-wrap" style="padding-bottom: 20px;">
@@ -969,7 +1019,6 @@
           </div>
           <div class="proto-table-wrap" style="padding-bottom: 20px;">
             <div class="component-preview-modal">
-              <section class="proto-modal-form-stage">
             <div class="proto-modal-form">
               <div class="proto-modal-head">
                 <span>新增行业域</span>
@@ -995,7 +1044,6 @@
                 <button class="btn btn-primary" type="button">保存</button>
               </div>
             </div>
-              </section>
             </div>
           </div>
         </section>
@@ -1006,7 +1054,6 @@
           </div>
           <div class="proto-table-wrap" style="padding-bottom: 20px;">
             <div class="component-preview-modal">
-              <section class="proto-modal-form-stage">
             <div class="proto-modal-form large">
               <div class="proto-modal-head">
                 <span>编辑行业域</span>
@@ -1033,7 +1080,6 @@
                 <button class="btn btn-primary" type="button">保存</button>
               </div>
             </div>
-              </section>
             </div>
           </div>
         </section>

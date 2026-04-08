@@ -237,6 +237,7 @@ a {
   flex: 1;
   padding: 10px 12px 16px;
   overflow: hidden;
+  position: relative;
 }
 
 .crumb {
@@ -700,6 +701,10 @@ tbody tr:nth-child(even) {
   height: calc(100% - 42px);
 }
 
+.content-panel.has-page-actions {
+  padding-bottom: 96px;
+}
+
 .info-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1073,9 +1078,17 @@ tbody tr:nth-child(even) {
 
 .page-actions {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 12px;
-  margin-top: 20px;
+  position: fixed;
+  left: 236px;
+  right: 12px;
+  bottom: 0;
+  z-index: 30;
+  padding: 14px 28px 16px;
+  border-top: 1px solid #e5edf6;
+  background: #ffffff;
+  box-shadow: 0 -8px 20px rgba(19, 47, 86, 0.06);
 }
 
 .modal-stage {
@@ -1615,26 +1628,10 @@ tbody tr:nth-child(even) {
   flex: 0;
 }
 
-.hazard-page-panel .page-actions {
-  position: absolute;
-  right: 0;
-  bottom: 40px;
-  margin-top: 0;
-}
-
-
-
-
 .hazard-main-column {
   display: flex;
   flex-direction: column;
 }
-
-.hazard-main-column .page-actions {
-  margin-top: 0;
-}
-
-
 
 .hazard-relation-stage .modal {
   width: 1320px;
