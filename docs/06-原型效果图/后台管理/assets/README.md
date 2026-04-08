@@ -67,7 +67,10 @@
 - `proto-row-actions`：统一操作列（动作顺序与分隔规范）。
 - `prototype-state-bar`：统一浮窗状态栏样式。
 - `proto-state-bar`：浮窗状态栏兼容类名，仅用于存量页面过渡。
+- `proto-tag / proto-status`：统一业务标签与胶囊状态组件。
+- `proto-table-status`：统一表格内紧凑状态组件。
 - `proto-toast`：统一轻提示组件（顶部居中、单条、自动消失）。
+- `proto-image-upload / proto-image-grid / proto-image-card`：统一上传图片、缩略图和删除按钮表现层。
 - `proto-modal-form`：统一弹窗表单模板（含遮罩、居中、footer 右下按钮）。
 - `proto-input / proto-select / proto-textarea / proto-radio-group / proto-checkbox-group`：统一表单控件。
 - `proto-field-row / proto-field-label`：统一表单行布局与标签宽度。
@@ -109,6 +112,41 @@
   showProtoToast("保存成功", "success");
 </script>
 ```
+
+```html
+<div class="badge-row">
+  <span class="proto-tag">小型工程</span>
+  <span class="proto-status" data-variant="success">已巡查</span>
+  <span class="proto-status" data-variant="muted">未巡查</span>
+</div>
+```
+
+```html
+<td><span class="proto-table-status" data-variant="success">启用</span></td>
+<td><span class="proto-table-status" data-variant="muted">停用</span></td>
+<td><span class="proto-table-status" data-variant="error">错误</span></td>
+```
+
+```html
+<div class="proto-image-upload">
+  <div class="proto-image-upload-dropzone">
+    <div class="proto-image-upload-icon">＋</div>
+    <div class="proto-image-upload-text">点击上传 / 拖拽上传</div>
+    <div class="proto-image-upload-note">支持 jpg / png，单张不得超过 5MB</div>
+  </div>
+</div>
+
+<div class="proto-image-grid">
+  <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图1缩略</div>
+  <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图2缩略</div>
+  <div class="proto-image-card upload">＋ 点击上传</div>
+</div>
+```
+
+### 图片组件边界
+- 本次图片组件只负责表现层，不负责上传、删除、确认保存等业务流程。
+- 删除图片能力当前仅表示“删除按钮样式”，不包含删除确认弹窗。
+- 批量管理、上传后不可追加、保存限制等规则仍由业务页面单独表达。
 
 ### 可选 JS 初始化
 - `initProtoPagination(root?)`

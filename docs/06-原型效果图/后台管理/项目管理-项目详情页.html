@@ -56,24 +56,10 @@
       justify-content: flex-end;
       max-width: 320px;
     }
-    .info-badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 7px 14px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-    .info-badge.type {
-      border: 1px solid #d6e4f5;
-      background: #f8fbff;
-      color: #255487;
-    }
-    .info-badge.status {
-      border: 1px solid #bfe8d5;
-      background: #effaf4;
-      color: #1f8f60;
+    .project-badges .proto-tag,
+    .project-badges .proto-status {
+      min-height: 32px;
+      font-size: 13px;
     }
     .project-info-card,
     .project-meta-card,
@@ -317,8 +303,8 @@
                   
                 </div>
                 <div class="project-badges">
-                  <span class="info-badge type">小型工程</span>
-                  <span class="info-badge status">已巡查</span>
+                  <span class="proto-tag">小型工程</span>
+                  <span class="proto-status" data-variant="success">已巡查</span>
                 </div>
               </div>
             </div>

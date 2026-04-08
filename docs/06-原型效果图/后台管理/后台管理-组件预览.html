@@ -26,12 +26,6 @@
       font-size: 13px;
       padding-bottom: 40px;
     }
-    .demo-panel {
-      display: none;
-    }
-    .demo-panel.active {
-      display: block;
-    }
     .demo-card-note {
       margin: 0 24px 14px;
       padding: 10px 12px;
@@ -125,6 +119,86 @@
       padding-top: 12px;
       padding-bottom: 12px;
     }
+    .component-layout-preview {
+      width: 100%;
+      max-width: 560px;
+      border: 1px solid #dce6f1;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #eef3f8;
+      box-shadow: 0 10px 22px rgba(18, 51, 95, 0.06);
+    }
+    .component-layout-preview .topbar {
+      height: 52px;
+      transform-origin: top left;
+    }
+    .component-layout-preview .brand-box {
+      width: 144px;
+      gap: 10px;
+    }
+    .component-layout-preview .brand-text {
+      font-size: 12px;
+      line-height: 1.2;
+    }
+    .component-layout-preview .terminal-text {
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+    .component-layout-preview .nav-item {
+      min-width: 88px;
+      font-size: 12px;
+    }
+    .component-layout-preview .user-box {
+      width: 168px;
+      padding-right: 14px;
+      font-size: 12px;
+      gap: 8px;
+    }
+    .component-layout-preview .avatar {
+      width: 28px;
+      height: 28px;
+    }
+    .component-layout-preview .avatar::before {
+      top: 5px;
+      left: 9px;
+      width: 10px;
+      height: 10px;
+    }
+    .component-layout-preview .avatar::after {
+      left: 6px;
+      bottom: 5px;
+      width: 16px;
+      height: 9px;
+    }
+    .component-layout-preview .layout-preview-main {
+      display: flex;
+      min-height: 138px;
+    }
+    .component-layout-preview .sidebar {
+      width: 128px;
+      padding: 10px 6px;
+    }
+    .component-layout-preview .menu-item {
+      height: 32px;
+      font-size: 12px;
+      padding: 0 10px;
+    }
+    .component-layout-preview .layout-preview-workspace {
+      flex: 1;
+      padding: 12px 14px;
+      background: linear-gradient(180deg, #f5f8fc 0%, #eef3f8 100%);
+    }
+    .component-layout-preview .layout-preview-crumb {
+      font-size: 12px;
+      color: #5f7186;
+      margin-bottom: 10px;
+    }
+    .component-layout-preview .layout-preview-card {
+      height: 78px;
+      border: 1px solid #dde6f0;
+      background: #fff;
+      border-radius: 8px;
+    }
     .component-preview-float {
       display: inline-flex;
       flex-wrap: wrap;
@@ -201,22 +275,10 @@
   </style>
 </head>
 <body>
-  <div
-    class="prototype-state-bar"
-    data-prototype-switch
-    data-prototype-default="list"
-    data-prototype-panel-scope=".preview-workspace"
-  >
-    <button class="active" type="button" data-prototype-button="list">列表态</button>
-    <button type="button" data-prototype-button="create">新增弹窗</button>
-    <button type="button" data-prototype-button="edit">编辑弹窗</button>
-  </div>
-
   <div class="preview-page">
       <main class="preview-workspace">
         <div class="preview-crumb">☰ 原型组件 〉 后台管理组件预览</div>
 
-        <section class="demo-panel active" data-prototype-panel="list">
           <section class="proto-list-shell">
             <div class="proto-list-head">
               <h3 class="proto-list-title">已组件化组件清单</h3>
@@ -244,12 +306,34 @@
                   <tr>
                     <td>topbar / sidebar</td>
                     <td>全局布局组件</td>
-                    <td><span class="status">已组件化</span></td>
+                    <td><span class="proto-table-status" data-variant="success">已组件化</span></td>
                     <td class="component-preview-cell">
-                      <div class="component-preview-box">
-                        <div class="component-preview-inline" style="align-items: stretch;">
-                          <div style="width: 190px; height: 40px; border-radius: 8px; background: linear-gradient(90deg, var(--brand-deeper), var(--brand-deep)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">Topbar</div>
-                          <div style="width: 96px; height: 72px; border-radius: 8px; background:#fff; border:1px solid #dde6ef; color:#23415f; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">Sidebar</div>
+                      <div class="component-layout-preview">
+                        <header class="topbar">
+                          <div class="brand-box">
+                            <div class="brand-text">小型工程全域全量<br />安全监管平台</div>
+                            <div class="terminal-text">运<br />营<br />端</div>
+                          </div>
+                          <nav class="nav">
+                            <div class="nav-item">⌂ 首页</div>
+                            <div class="nav-item active">▣ 项目管理</div>
+                          </nav>
+                          <div class="user-box">
+                            <div class="avatar"></div>
+                            <div class="user-name">超级管理员</div>
+                            <button class="user-dropdown-toggle" type="button">▾</button>
+                          </div>
+                        </header>
+                        <div class="layout-preview-main">
+                          <aside class="sidebar">
+                            <div class="menu-item active">▣ 项目管理</div>
+                            <div class="menu-item">◎ 巡查记录管理</div>
+                            <div class="menu-item">◫ 知识库管理</div>
+                          </aside>
+                          <div class="layout-preview-workspace">
+                            <div class="layout-preview-crumb">☰ 项目管理 〉 项目列表页</div>
+                            <div class="layout-preview-card"></div>
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -258,7 +342,7 @@
                   <tr>
                     <td>proto-filter-bar</td>
                     <td>筛选条容器</td>
-                    <td><span class="status">已组件化</span></td>
+                    <td><span class="proto-table-status" data-variant="success">已组件化</span></td>
                     <td class="component-preview-cell">
                       <div class="component-preview-box">
                         <section class="proto-filter-bar">
@@ -276,7 +360,7 @@
                   <tr>
                     <td>date-range-picker</td>
                     <td>日期范围选择器</td>
-                    <td><span class="status">已组件化</span></td>
+                    <td><span class="proto-table-status" data-variant="success">已组件化</span></td>
                     <td class="component-preview-cell">
                       <div class="component-preview-box">
                         <div class="date-range-picker">
@@ -300,7 +384,7 @@
                   <tr>
                     <td>proto-list-shell</td>
                     <td>列表页骨架</td>
-                    <td><span class="status">已组件化</span></td>
+                    <td><span class="proto-table-status" data-variant="success">已组件化</span></td>
                     <td class="component-preview-cell">
                       <div class="component-preview-shell">
                         <div class="proto-list-head">
@@ -322,7 +406,7 @@
                   <tr>
                     <td>proto-pagination</td>
                     <td>统一分页</td>
-                    <td><span class="status">已组件化</span></td>
+                    <td><span class="proto-table-status" data-variant="success">已组件化</span></td>
                     <td class="component-preview-cell">
                       <div class="component-preview-box">
                         <div class="proto-pagination" style="padding: 0;">
@@ -344,7 +428,7 @@
                   <tr>
                     <td>proto-row-actions</td>
                     <td>操作列规范</td>
-                    <td><span class="status">已组件化</span></td>
+                    <td><span class="proto-table-status" data-variant="success">已组件化</span></td>
                     <td class="component-preview-cell">
                       <div class="component-preview-box">
                         <div class="proto-row-actions">
@@ -359,7 +443,7 @@
                   <tr>
                     <td>prototype-state-bar</td>
                     <td>浮窗状态栏</td>
-                    <td><span class="status">已组件化</span></td>
+                    <td><span class="proto-table-status" data-variant="success">已组件化</span></td>
                     <td class="component-preview-cell">
                       <div class="component-preview-float">
                         <button class="active" type="button">列表态</button>
@@ -370,9 +454,67 @@
                     <td>行为由 <code>prototype-switcher.js</code> 提供，视觉由 <code>prototype.css</code> 统一提供。</td>
                   </tr>
                   <tr>
+                    <td>proto-tag / proto-status</td>
+                    <td>标签 / 状态胶囊</td>
+                    <td><span class="proto-table-status" data-variant="success">已组件化</span></td>
+                    <td class="component-preview-cell">
+                      <div class="component-preview-inline">
+                        <span class="proto-tag">小型工程</span>
+                        <span class="proto-status" data-variant="success">已巡查</span>
+                        <span class="proto-status" data-variant="muted">未巡查</span>
+                      </div>
+                    </td>
+                    <td>用于业务分类标签与状态展示；分类不带圆点，状态带圆点并支持 success / warning / error / muted。</td>
+                  </tr>
+                  <tr>
+                    <td>proto-table-status</td>
+                    <td>表格态状态组件</td>
+                    <td><span class="proto-table-status" data-variant="success">已组件化</span></td>
+                    <td class="component-preview-cell">
+                      <div class="component-preview-inline">
+                        <span class="proto-table-status" data-variant="success">启用</span>
+                        <span class="proto-table-status" data-variant="muted">停用</span>
+                        <span class="proto-table-status" data-variant="error">错误</span>
+                      </div>
+                    </td>
+                    <td>用于表格列内的紧凑状态展示，保留列表密度，不使用胶囊背景。</td>
+                  </tr>
+                  <tr>
+                    <td>proto-image-upload</td>
+                    <td>上传图片区</td>
+                    <td><span class="proto-table-status" data-variant="success">已组件化</span></td>
+                    <td class="component-preview-cell">
+                      <div class="component-preview-box">
+                        <div class="proto-image-upload">
+                          <div class="proto-image-upload-dropzone">
+                            <div class="proto-image-upload-icon">＋</div>
+                            <div class="proto-image-upload-text">点击上传 / 拖拽上传</div>
+                            <div class="proto-image-upload-note">支持 jpg / png，单张不得超过 5MB</div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>用于空态上传图片区域，统一上传入口、主提示和次提示文案样式。</td>
+                  </tr>
+                  <tr>
+                    <td>proto-image-grid / proto-image-card</td>
+                    <td>缩略图与删除按钮</td>
+                    <td><span class="proto-table-status" data-variant="success">已组件化</span></td>
+                    <td class="component-preview-cell">
+                      <div class="component-preview-box">
+                        <div class="proto-image-grid" style="grid-template-columns: repeat(3, 1fr);">
+                          <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图1缩略</div>
+                          <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图2缩略</div>
+                          <div class="proto-image-card upload">＋ 点击上传</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>用于已上传图片缩略图、单张删除入口和继续上传卡片。</td>
+                  </tr>
+                  <tr>
                     <td>proto-toast</td>
                     <td>轻提示组件</td>
-                    <td><span class="status">已组件化</span></td>
+                    <td><span class="proto-table-status" data-variant="success">已组件化</span></td>
                     <td class="component-preview-cell">
                       <div class="component-preview-toast-stack">
                         <div class="proto-toast-stack">
@@ -387,7 +529,7 @@
                   <tr>
                     <td>proto-modal-form</td>
                     <td>通用弹窗表单模板</td>
-                    <td><span class="status">已组件化</span></td>
+                    <td><span class="proto-table-status" data-variant="success">已组件化</span></td>
                     <td class="component-preview-cell">
                       <div class="component-preview-stack">
                         <div class="component-preview-modal">
@@ -427,7 +569,7 @@
                   <tr>
                     <td>proto-input / proto-select / proto-textarea</td>
                     <td>基础表单控件</td>
-                    <td><span class="status">已组件化</span></td>
+                    <td><span class="proto-table-status" data-variant="success">已组件化</span></td>
                     <td class="component-preview-cell">
                       <div class="component-preview-stack">
                         <input class="proto-input" type="text" placeholder="输入框" />
@@ -442,7 +584,7 @@
                   <tr>
                     <td>proto-radio-group / proto-checkbox-group</td>
                     <td>单选/多选控件</td>
-                    <td><span class="status">已组件化</span></td>
+                    <td><span class="proto-table-status" data-variant="success">已组件化</span></td>
                     <td class="component-preview-cell">
                       <div class="component-preview-stack">
                         <div class="proto-radio-group">
@@ -460,7 +602,7 @@
                   <tr>
                     <td>proto-field-row / proto-field-label</td>
                     <td>表单行布局</td>
-                    <td><span class="status">已组件化</span></td>
+                    <td><span class="proto-table-status" data-variant="success">已组件化</span></td>
                     <td class="component-preview-cell">
                       <div class="component-preview-box">
                         <div class="proto-field-row" style="grid-template-columns: 92px minmax(0, 1fr);">
@@ -558,7 +700,7 @@
                   <tr>
                     <td>JZ-20260329-0001</td>
                     <td>万科云城三期12栋</td>
-                    <td><span class="status off">未巡查</span></td>
+                    <td><span class="proto-table-status" data-variant="muted">未巡查</span></td>
                     <td>--</td>
                     <td>
                       <div class="proto-row-actions">
@@ -571,7 +713,7 @@
                   <tr>
                     <td>GC-20260329-0002</td>
                     <td>前海时代广场</td>
-                    <td><span class="status">已巡查</span></td>
+                    <td><span class="proto-table-status" data-variant="success">已巡查</span></td>
                     <td>2026-03-28 14:30</td>
                     <td>
                       <div class="proto-row-actions">
@@ -584,7 +726,7 @@
                   <tr>
                     <td>LX-20260328-0015</td>
                     <td>华润城二期8栋</td>
-                    <td><span class="status">已巡查</span></td>
+                    <td><span class="proto-table-status" data-variant="success">已巡查</span></td>
                     <td>2026-03-28 10:15</td>
                     <td>
                       <div class="proto-row-actions">
@@ -627,12 +769,85 @@
               <h3 class="proto-list-title">prototype-state-bar / proto-row-actions｜已组件化</h3>
             </div>
             <div class="proto-table-wrap" style="padding-bottom: 20px;">
-              <p class="demo-card-note" style="margin-bottom: 18px;">页面顶部的浮窗就是 <code>prototype-state-bar</code> 实时示例。下面单独展示 <code>proto-row-actions</code> 的操作列结构。</p>
-              <div class="proto-row-actions">
-                <button class="proto-action" type="button">查看</button>
-                <button class="proto-action" type="button">编辑</button>
-                <button class="proto-action" type="button">复制</button>
-                <button class="proto-action danger" type="button">删除</button>
+              <p class="demo-card-note" style="margin-bottom: 18px;">本页不再使用页面级浮窗；这里单独展示 <code>prototype-state-bar</code> 与 <code>proto-row-actions</code> 的真实效果。</p>
+              <div class="component-preview-stack">
+                <div class="prototype-state-bar" style="position: static; right: auto; top: auto;">
+                  <button class="active" type="button">列表态</button>
+                  <button type="button">新增弹窗</button>
+                  <button type="button">编辑弹窗</button>
+                </div>
+                <div class="proto-row-actions">
+                  <button class="proto-action" type="button">查看</button>
+                  <button class="proto-action" type="button">编辑</button>
+                  <button class="proto-action" type="button">复制</button>
+                  <button class="proto-action danger" type="button">删除</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="proto-list-shell" style="margin-top: 14px;">
+            <div class="proto-list-head">
+              <h3 class="proto-list-title">proto-tag / proto-status｜已组件化</h3>
+            </div>
+            <div class="proto-table-wrap" style="padding-bottom: 20px;">
+              <p class="demo-card-note" style="margin-bottom: 18px;">展示业务标签与状态胶囊的推荐样式，标签用于分类，状态用于结果与过程状态。</p>
+              <div class="component-preview-inline">
+                <span class="proto-tag">小型工程</span>
+                <span class="proto-tag" data-variant="orange">零星作业</span>
+                <span class="proto-status" data-variant="success">已巡查</span>
+                <span class="proto-status" data-variant="warning">待处理</span>
+                <span class="proto-status" data-variant="error">错误</span>
+                <span class="proto-status" data-variant="muted">未巡查</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="proto-list-shell" style="margin-top: 14px;">
+            <div class="proto-list-head">
+              <h3 class="proto-list-title">proto-table-status｜已组件化</h3>
+            </div>
+            <div class="proto-table-wrap" style="padding-bottom: 20px;">
+              <p class="demo-card-note" style="margin-bottom: 18px;">展示表格列内使用的紧凑状态样式，适用于列表页、导入结果表和字典管理表格。</p>
+              <div class="component-preview-inline">
+                <span class="proto-table-status" data-variant="success">已巡查</span>
+                <span class="proto-table-status" data-variant="success">通过</span>
+                <span class="proto-table-status" data-variant="muted">未巡查</span>
+                <span class="proto-table-status" data-variant="muted">停用</span>
+                <span class="proto-table-status" data-variant="error">错误</span>
+                <span class="proto-table-status" data-variant="warning">待处理</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="proto-list-shell" style="margin-top: 14px;">
+            <div class="proto-list-head">
+              <h3 class="proto-list-title">proto-image-upload｜已组件化</h3>
+            </div>
+            <div class="proto-table-wrap" style="padding-bottom: 20px;">
+              <p class="demo-card-note" style="margin-bottom: 18px;">展示图片上传空态入口，适用于巡查上传、资料上传等页面。</p>
+              <div class="proto-image-upload">
+                <div class="proto-image-upload-dropzone">
+                  <div class="proto-image-upload-icon">＋</div>
+                  <div class="proto-image-upload-text">点击上传 / 拖拽上传</div>
+                  <div class="proto-image-upload-note">支持 jpg / png，单张不得超过 5MB</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="proto-list-shell" style="margin-top: 14px;">
+            <div class="proto-list-head">
+              <h3 class="proto-list-title">proto-image-grid / proto-image-card｜已组件化</h3>
+            </div>
+            <div class="proto-table-wrap" style="padding-bottom: 20px;">
+              <p class="demo-card-note" style="margin-bottom: 18px;">展示已上传图片、删除按钮和继续上传卡片共存态。</p>
+              <div class="proto-image-grid">
+                <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图1缩略</div>
+                <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图2缩略</div>
+                <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图3缩略</div>
+                <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图4缩略</div>
+                <div class="proto-image-card upload">＋ 点击上传</div>
               </div>
             </div>
           </section>
@@ -686,13 +901,17 @@
               </div>
             </div>
           </section>
-        </section>
 
-        <section class="demo-panel" data-prototype-panel="create">
-          <section class="proto-modal-form-stage">
+        <section class="proto-list-shell" style="margin-top: 14px;">
+          <div class="proto-list-head">
+            <h3 class="proto-list-title">proto-modal-form｜已组件化（标准弹窗）</h3>
+          </div>
+          <div class="proto-table-wrap" style="padding-bottom: 20px;">
+            <div class="component-preview-modal">
+              <section class="proto-modal-form-stage">
             <div class="proto-modal-form">
               <div class="proto-modal-head">
-                <span>proto-modal-form｜已组件化（标准弹窗）</span>
+                <span>新增行业域</span>
                 <span class="demo-modal-close">×</span>
               </div>
               <div class="proto-modal-body">
@@ -715,14 +934,21 @@
                 <button class="btn btn-primary" type="button">保存</button>
               </div>
             </div>
-          </section>
+              </section>
+            </div>
+          </div>
         </section>
 
-        <section class="demo-panel" data-prototype-panel="edit">
-          <section class="proto-modal-form-stage">
+        <section class="proto-list-shell" style="margin-top: 14px;">
+          <div class="proto-list-head">
+            <h3 class="proto-list-title">proto-modal-form.large｜已组件化（大尺寸弹窗）</h3>
+          </div>
+          <div class="proto-table-wrap" style="padding-bottom: 20px;">
+            <div class="component-preview-modal">
+              <section class="proto-modal-form-stage">
             <div class="proto-modal-form large">
               <div class="proto-modal-head">
-                <span>proto-modal-form.large｜已组件化（大尺寸弹窗）</span>
+                <span>编辑行业域</span>
                 <span class="demo-modal-close">×</span>
               </div>
               <div class="proto-modal-body">
@@ -746,13 +972,14 @@
                 <button class="btn btn-primary" type="button">保存</button>
               </div>
             </div>
-          </section>
+              </section>
+            </div>
+          </div>
         </section>
       </main>
   </div>
 
   <script src="./assets/prototype.js"></script>
-  <script src="./assets/prototype-switcher.js"></script>
   <script>
     initProtoPagination();
     initProtoRowActions();
@@ -771,3 +998,4 @@
   </script>
 </body>
 </html>
+
