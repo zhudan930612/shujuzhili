@@ -70,6 +70,7 @@
 - `proto-tag / proto-status`：统一业务标签与胶囊状态组件。
 - `proto-table-status`：统一表格内紧凑状态组件。
 - `proto-toast`：统一轻提示组件（顶部居中、单条、自动消失）。
+- `proto-detail-card / proto-detail-grid / proto-detail-label / proto-detail-value`：统一基础详情展示卡片。
 - `proto-image-upload / proto-image-grid / proto-image-card`：统一上传图片、缩略图和删除按钮表现层。
 - `proto-modal-form`：统一弹窗表单模板（含遮罩、居中、footer 右下按钮）。
 - `proto-input / proto-select / proto-textarea / proto-radio-group / proto-checkbox-group`：统一表单控件。
@@ -125,6 +126,24 @@
 <td><span class="proto-table-status" data-variant="success">启用</span></td>
 <td><span class="proto-table-status" data-variant="muted">停用</span></td>
 <td><span class="proto-table-status" data-variant="error">错误</span></td>
+```
+
+```html
+<section class="proto-detail-card">
+  <h3 class="proto-detail-card-title">基础信息</h3>
+  <div class="proto-detail-card-body">
+    <div class="proto-detail-grid">
+      <div class="proto-detail-label">隐患编码</div>
+      <div class="proto-detail-value">JZ-FALL-EDGE-0001</div>
+      <div class="proto-detail-label">行业域</div>
+      <div class="proto-detail-value">建筑施工</div>
+      <div class="proto-detail-label">隐患名称</div>
+      <div class="proto-detail-value">防护栏杆高度不足</div>
+      <div class="proto-detail-label">整改措施</div>
+      <div class="proto-detail-value">加高栏杆至1.2m以上，确保横杆符合要求</div>
+    </div>
+  </div>
+</section>
 ```
 
 ```html

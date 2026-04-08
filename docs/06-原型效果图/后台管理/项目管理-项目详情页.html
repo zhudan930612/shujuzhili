@@ -68,23 +68,6 @@
       background: #fff;
       box-shadow: 0 8px 20px rgba(18, 44, 82, 0.03);
     }
-    .project-info-card .section-body {
-      padding: 18px 22px;
-    }
-    .project-info-grid {
-      display: grid;
-      grid-template-columns: 96px minmax(0, 1fr) 96px minmax(0, 1fr);
-      gap: 16px 22px;
-      align-items: start;
-    }
-    .project-kv-label {
-      color: #6b7e93;
-    }
-    .project-kv-value {
-      color: #1d3552;
-      font-weight: 400;
-      word-break: break-word;
-    }
     .project-bottom-grid {
       display: grid;
       grid-template-columns: minmax(320px, 0.88fr) minmax(0, 1.12fr);
@@ -101,12 +84,6 @@
       font-size: 16px;
       font-weight: 700;
       color: #203753;
-    }
-    .project-meta-grid {
-      display: grid;
-      grid-template-columns: 88px minmax(0, 1fr);
-      gap: 12px 16px;
-      align-items: start;
     }
     .project-remark-text {
       font-size: 14px;
@@ -308,27 +285,29 @@
                 </div>
               </div>
             </div>
-            <section class="section-card project-info-card">
-              <h3>项目信息</h3>
-              <div class="section-body">
-                <div class="project-info-grid">
-                  <div class="project-kv-label">施工时间</div><div class="project-kv-value">2026.03.15 - 2026.05.20</div>
-                  <div class="project-kv-label">施工单位</div><div class="project-kv-value">深圳建工集团</div>
-                  <div class="project-kv-label">施工地址</div><div class="project-kv-value">深圳市南山区科苑南路2888号</div>
-                  <div class="project-kv-label">负责人</div><div class="project-kv-value">王工</div>
-                  <div class="project-kv-label">关联保险公司</div><div class="project-kv-value">人保财险</div>
-                  <div class="project-kv-label">联系电话</div><div class="project-kv-value">13800138000</div>
+            <section class="proto-detail-card project-info-card">
+              <h3 class="proto-detail-card-title">项目信息</h3>
+              <div class="proto-detail-card-body">
+                <div class="proto-detail-grid" style="grid-template-columns: 96px minmax(0, 1fr) 96px minmax(0, 1fr);">
+                  <div class="proto-detail-label">施工时间</div><div class="proto-detail-value">2026.03.15 - 2026.05.20</div>
+                  <div class="proto-detail-label">施工单位</div><div class="proto-detail-value">深圳建工集团</div>
+                  <div class="proto-detail-label">施工地址</div><div class="proto-detail-value">深圳市南山区科苑南路2888号</div>
+                  <div class="proto-detail-label">负责人</div><div class="proto-detail-value">王工</div>
+                  <div class="proto-detail-label">关联保险公司</div><div class="proto-detail-value">人保财险</div>
+                  <div class="proto-detail-label">联系电话</div><div class="proto-detail-value">13800138000</div>
                 </div>
               </div>
             </section>
             <div class="project-bottom-grid">
-              <section class="project-meta-card">
-                <h3 class="project-meta-title">管理信息</h3>
-                <div class="project-meta-grid">
-                  <div class="project-kv-label">创建人</div><div class="project-kv-value">张三</div>
-                  <div class="project-kv-label">创建时间</div><div class="project-kv-value">2026-03-23 10:00:00</div>
-                  <div class="project-kv-label">更新人</div><div class="project-kv-value">李四</div>
-                  <div class="project-kv-label">更新时间</div><div class="project-kv-value">2026-03-28 14:30:00</div>
+              <section class="proto-detail-card project-meta-card">
+                <h3 class="proto-detail-card-title">管理信息</h3>
+                <div class="proto-detail-card-body">
+                  <div class="proto-detail-grid" style="grid-template-columns: 88px minmax(0, 1fr);">
+                    <div class="proto-detail-label">创建人</div><div class="proto-detail-value">张三</div>
+                    <div class="proto-detail-label">创建时间</div><div class="proto-detail-value">2026-03-23 10:00:00</div>
+                    <div class="proto-detail-label">更新人</div><div class="proto-detail-value">李四</div>
+                    <div class="proto-detail-label">更新时间</div><div class="proto-detail-value">2026-03-28 14:30:00</div>
+                  </div>
                 </div>
               </section>
               <section class="project-remark-card">
