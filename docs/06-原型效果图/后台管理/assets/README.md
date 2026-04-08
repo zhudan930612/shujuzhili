@@ -63,7 +63,8 @@
 - `proto-list-shell`：列表页骨架（含标题区、工具区、表格区）。
 - `proto-pagination`：统一分页（默认右下对齐）。
 - `proto-row-actions`：统一操作列（动作顺序与分隔规范）。
-- `proto-state-bar`：统一浮窗状态栏样式。
+- `prototype-state-bar`：统一浮窗状态栏样式。
+- `proto-state-bar`：浮窗状态栏兼容类名，仅用于存量页面过渡。
 - `proto-modal-form`：统一弹窗表单模板（含遮罩、居中、footer 右下按钮）。
 - `proto-input / proto-select / proto-textarea / proto-radio-group / proto-checkbox-group`：统一表单控件。
 
@@ -80,9 +81,9 @@
 ```
 
 ```html
-<div class="proto-state-bar" data-prototype-switch>
-  <button class="proto-state-btn active" data-prototype-button="list">列表态</button>
-  <button class="proto-state-btn" data-prototype-button="create">新增弹窗</button>
+<div class="prototype-state-bar" data-prototype-switch>
+  <button class="active" data-prototype-button="list">列表态</button>
+  <button data-prototype-button="create">新增弹窗</button>
 </div>
 ```
 
@@ -113,7 +114,9 @@
 
 ### 禁止项
 - 禁止在页面内再写“分页右下对齐补丁脚本”。
-- 禁止重复定义浮窗状态栏样式（统一使用 `proto-state-bar`）。
+- 浮窗状态栏基础视觉样式统一由 `prototype.css` 提供。
+- 禁止在页面内联重复定义浮窗状态栏样式（统一使用 `prototype-state-bar`，`proto-state-bar` 仅保留兼容）。
+- 页面只允许通过数据属性控制浮窗行为，不允许覆盖基础视觉样式。
 - 禁止为操作列追加不一致的分隔规则（统一使用 `proto-row-actions`）。
 - 禁止在新页面继续混用零散表单类名（`input/select/textarea` 等应优先使用 `proto-*` 表单控件类）。
 

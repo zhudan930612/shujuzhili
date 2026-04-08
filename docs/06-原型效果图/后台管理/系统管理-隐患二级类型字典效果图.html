@@ -25,39 +25,6 @@
     .dictionary-list-table th:last-child, .dictionary-list-table td:last-child { white-space:nowrap; }
     .drag-handle { display:inline-flex; align-items:center; gap:8px; color:#597089; font-weight:600; user-select:none; cursor:grab; }
     .drag-handle::before { content:"⋮⋮"; letter-spacing:2px; color:#9aacbf; font-size:14px; line-height:1; }
-        .prototype-state-bar {
-      position: fixed;
-      top: 16px;
-      right: 16px;
-      z-index: 9999;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      max-width: 520px;
-      padding: 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(151, 170, 194, 0.35);
-      background: rgba(10, 18, 32, 0.78);
-      box-shadow: 0 18px 40px rgba(8, 15, 28, 0.26);
-      backdrop-filter: blur(8px);
-      touch-action: none;
-      user-select: none;
-      cursor: move;
-    }
-    .prototype-state-bar button {
-      border: 1px solid rgba(157, 178, 206, 0.35);
-      background: rgba(255, 255, 255, 0.08);
-      color: #eef4ff;
-      border-radius: 999px;
-      padding: 8px 14px;
-      font-size: 12px;
-      cursor: pointer;
-    }
-    .prototype-state-bar button.active {
-      background: linear-gradient(135deg, #3c89ff, #2d6cdf);
-      border-color: rgba(255, 255, 255, 0.24);
-      color: #fff;
-    }
             .prototype-stage { display: none; }
     .prototype-stage.active { display: block; }
     .prototype-stage .modal-foot { justify-content: flex-end; }
@@ -185,6 +152,8 @@
   </script>
 </body>
 </html>
+
+
 
 
 

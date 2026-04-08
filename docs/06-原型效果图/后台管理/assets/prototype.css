@@ -1674,7 +1674,8 @@ tbody tr:nth-child(even) {
   color: #d75555;
 }
 
-.proto-state-bar {
+.proto-state-bar,
+.prototype-state-bar {
   position: fixed;
   top: 16px;
   right: 16px;
@@ -1687,14 +1688,14 @@ tbody tr:nth-child(even) {
   border-radius: 14px;
   border: 1px solid rgba(151, 170, 194, 0.35);
   background: rgba(10, 18, 32, 0.78);
-  box-shadow: 0 18px 40px rgba(8, 15, 28, 0.26);
   backdrop-filter: blur(8px);
   touch-action: none;
   user-select: none;
   cursor: move;
 }
 
-.proto-state-bar .proto-state-btn {
+.proto-state-bar .proto-state-btn,
+.prototype-state-bar button {
   border: 1px solid rgba(157, 178, 206, 0.35);
   background: rgba(255, 255, 255, 0.08);
   color: #eef4ff;
@@ -1705,7 +1706,8 @@ tbody tr:nth-child(even) {
   cursor: pointer;
 }
 
-.proto-state-bar .proto-state-btn.active {
+.proto-state-bar .proto-state-btn.active,
+.prototype-state-bar button.active {
   background: linear-gradient(135deg, #3c89ff, #2d6cdf);
   border-color: rgba(255, 255, 255, 0.24);
   color: #fff;
