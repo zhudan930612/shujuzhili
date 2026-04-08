@@ -83,6 +83,52 @@ document.addEventListener("click", () => {
   });
 });
 
+let protoToastTimer = null;
+
+function ensureProtoToastStack() {
+  let stack = document.querySelector('[data-proto-toast-runtime="1"]');
+  if (!stack) {
+    stack = document.createElement("div");
+    stack.className = "proto-toast-stack";
+    stack.dataset.protoToastRuntime = "1";
+    document.body.appendChild(stack);
+  }
+  return stack;
+}
+
+function showProtoToast(message, type = "info") {
+  const stack = ensureProtoToastStack();
+  stack.innerHTML = "";
+
+  const toast = document.createElement("div");
+  toast.className = "proto-toast";
+  toast.dataset.type = type;
+
+  const text = document.createElement("span");
+  text.className = "proto-toast-text";
+  text.textContent = message;
+
+  toast.appendChild(text);
+  stack.appendChild(toast);
+
+  window.requestAnimationFrame(() => {
+    toast.classList.add("show");
+  });
+
+  if (protoToastTimer) {
+    window.clearTimeout(protoToastTimer);
+  }
+
+  protoToastTimer = window.setTimeout(() => {
+    toast.classList.remove("show");
+    window.setTimeout(() => {
+      if (toast.parentNode === stack) {
+        stack.removeChild(toast);
+      }
+    }, 200);
+  }, 2600);
+}
+
 function initProtoPagination(root) {
   const scope = root || document;
   scope.querySelectorAll(".proto-pagination").forEach((pagination) => {
@@ -113,3 +159,4 @@ function initProtoRowActions(root) {
 
 window.initProtoPagination = initProtoPagination;
 window.initProtoRowActions = initProtoRowActions;
+window.showProtoToast = showProtoToast;

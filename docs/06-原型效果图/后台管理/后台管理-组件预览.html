@@ -6,6 +6,26 @@
   <title>后台管理-组件预览</title>
   <link rel="stylesheet" href="./assets/prototype.css" />
   <style>
+    body {
+      padding: 24px;
+    }
+    .preview-page {
+      width: 100%;
+      min-height: calc(100vh - 48px);
+      border: 1px solid #d7e0eb;
+      background: var(--bg);
+      box-shadow: 0 26px 56px rgba(16, 44, 82, 0.12);
+    }
+    .preview-workspace {
+      overflow: visible;
+      padding: 20px 24px 40px;
+    }
+    .preview-crumb {
+      margin-bottom: 12px;
+      color: #5f7186;
+      font-size: 13px;
+      padding-bottom: 40px;
+    }
     .demo-panel {
       display: none;
     }
@@ -25,68 +45,485 @@
       line-height: 1;
       color: #6a7d93;
     }
+    .component-preview-cell {
+      min-width: 320px;
+    }
+    .component-preview-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .component-preview-inline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .component-preview-box {
+      padding: 12px;
+      border: 1px solid #dce8f6;
+      background: #f8fbff;
+      border-radius: 10px;
+    }
+    .component-preview-box .proto-filter-bar {
+      margin: 0;
+      padding: 12px;
+    }
+    .component-preview-box .proto-input.search-control {
+      width: 180px;
+    }
+    .component-preview-box .proto-select {
+      width: 120px;
+    }
+    .component-preview-box .date-range-control {
+      width: 180px;
+    }
+    .component-preview-box .date-range-picker {
+      display: inline-block;
+      min-width: 180px;
+    }
+    .component-preview-box .date-range-panel {
+      left: 0;
+      top: calc(100% + 8px);
+      width: 260px;
+    }
+    .component-preview-shell {
+      border: 1px solid #dce8f6;
+      border-radius: 10px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .component-preview-shell .proto-list-head,
+    .component-preview-shell .proto-table-wrap,
+    .component-preview-shell .proto-pagination {
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+    .component-preview-shell .proto-list-head {
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+    .component-preview-shell .proto-list-title {
+      font-size: 18px;
+    }
+    .component-preview-shell .proto-list-title::before {
+      height: 18px;
+    }
+    .component-preview-shell .proto-table-wrap {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .component-preview-shell table {
+      min-width: 0;
+    }
+    .component-preview-shell thead th,
+    .component-preview-shell tbody td {
+      padding: 10px 12px;
+      font-size: 12px;
+    }
+    .component-preview-shell .proto-pagination {
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+    .component-preview-float {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(151, 170, 194, 0.35);
+      background: rgba(10, 18, 32, 0.78);
+      backdrop-filter: blur(8px);
+    }
+    .component-preview-float button {
+      border: 1px solid rgba(157, 178, 206, 0.35);
+      background: rgba(255, 255, 255, 0.08);
+      color: #eef4ff;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 12px;
+      cursor: default;
+    }
+    .component-preview-float button.active {
+      background: linear-gradient(135deg, #3c89ff, #2d6cdf);
+      border-color: rgba(255, 255, 255, 0.24);
+      color: #fff;
+    }
+    .component-preview-modal {
+      position: relative;
+      min-height: auto;
+      padding: 16px;
+      border-radius: 12px;
+      background: rgba(44, 57, 74, 0.12);
+      overflow: visible;
+    }
+    .component-preview-modal::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(39, 49, 63, 0.18);
+    }
+    .component-preview-modal .proto-modal-form {
+      position: relative;
+      left: auto;
+      top: auto;
+      transform: none;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 460px;
+      z-index: 1;
+    }
+    .component-preview-modal .proto-modal-form.large {
+      max-width: 520px;
+    }
+    .component-preview-toast-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .component-preview-toast-stack .proto-toast-stack {
+      position: static;
+      left: auto;
+      top: auto;
+      transform: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: auto;
+    }
+    .component-preview-toast-stack .proto-toast {
+      position: static;
+      min-width: 240px;
+      max-width: 320px;
+      pointer-events: auto;
+    }
   </style>
 </head>
 <body>
   <div
-    class="proto-state-bar"
+    class="prototype-state-bar"
     data-prototype-switch
     data-prototype-default="list"
-    data-prototype-panel-scope=".workspace"
+    data-prototype-panel-scope=".preview-workspace"
   >
-    <button class="proto-state-btn active" type="button" data-prototype-button="list">列表态</button>
-    <button class="proto-state-btn" type="button" data-prototype-button="create">新增弹窗</button>
-    <button class="proto-state-btn" type="button" data-prototype-button="edit">编辑弹窗</button>
+    <button class="active" type="button" data-prototype-button="list">列表态</button>
+    <button type="button" data-prototype-button="create">新增弹窗</button>
+    <button type="button" data-prototype-button="edit">编辑弹窗</button>
   </div>
 
-  <div class="frame" data-layout-module="overview" data-layout-top-active="system" data-layout-side-preset="overview" data-layout-side-active="system">
-    <header class="topbar"></header>
-    <div class="main">
-      <aside class="sidebar"></aside>
-      <main class="workspace">
-        <div class="crumb">☰ 原型组件 〉 后台管理组件预览</div>
+  <div class="preview-page">
+      <main class="preview-workspace">
+        <div class="preview-crumb">☰ 原型组件 〉 后台管理组件预览</div>
 
         <section class="demo-panel active" data-prototype-panel="list">
-          <section class="proto-filter-bar">
-            <input class="proto-input search-control" type="text" placeholder="搜索项目编号/名称/地址" />
-            <select class="proto-select">
-              <option selected>施工类型</option>
-              <option>家装</option>
-              <option>小型工程</option>
-              <option>零星作业</option>
-            </select>
-            <select class="proto-select">
-              <option selected>状态</option>
-              <option>已巡查</option>
-              <option>未巡查</option>
-            </select>
-            <select class="proto-select" style="width: 150px;">
-              <option selected>保险公司</option>
-              <option>平安产险</option>
-              <option>人保财险</option>
-              <option>太平洋产险</option>
-            </select>
-            <div class="date-range-picker">
-              <input class="proto-input date-range-control" type="text" value="2026-03-01 至 2026-03-31" readonly />
-              <div class="date-range-panel">
-                <div class="date-range-title">选择日期范围</div>
-                <div class="date-range-fields">
-                  <input class="proto-input" type="date" value="2026-03-01" data-role="start" />
-                  <input class="proto-input" type="date" value="2026-03-31" data-role="end" />
-                </div>
-                <div class="date-range-actions">
-                  <button class="btn btn-ghost" type="button" data-action="cancel">取消</button>
-                  <button class="btn btn-primary" type="button" data-action="apply">确定</button>
-                </div>
-              </div>
-            </div>
-            <button class="btn btn-primary" type="button">🔍 查询</button>
-            <button class="btn btn-ghost" type="button">↻ 重置</button>
-          </section>
-
           <section class="proto-list-shell">
             <div class="proto-list-head">
-              <h3 class="proto-list-title">组件一览列表</h3>
+              <h3 class="proto-list-title">已组件化组件清单</h3>
+            </div>
+            <p class="demo-card-note">本页只展示已经沉淀为公共组件的能力；业务页面后续应优先复用这些组件，不再重复拼装相同结构。</p>
+            <div class="proto-table-wrap">
+              <table>
+                <colgroup>
+                  <col style="width: 14%;" />
+                  <col style="width: 15%;" />
+                  <col style="width: 10%;" />
+                  <col style="width: 37%;" />
+                  <col style="width: 24%;" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>组件名</th>
+                    <th>用途</th>
+                    <th>状态</th>
+                    <th>组件展示</th>
+                    <th>说明</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>topbar / sidebar</td>
+                    <td>全局布局组件</td>
+                    <td><span class="status">已组件化</span></td>
+                    <td class="component-preview-cell">
+                      <div class="component-preview-box">
+                        <div class="component-preview-inline" style="align-items: stretch;">
+                          <div style="width: 190px; height: 40px; border-radius: 8px; background: linear-gradient(90deg, var(--brand-deeper), var(--brand-deep)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">Topbar</div>
+                          <div style="width: 96px; height: 72px; border-radius: 8px; background:#fff; border:1px solid #dde6ef; color:#23415f; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">Sidebar</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>属于全局布局组件，单独收敛，不在组件预览页常驻展示。</td>
+                  </tr>
+                  <tr>
+                    <td>proto-filter-bar</td>
+                    <td>筛选条容器</td>
+                    <td><span class="status">已组件化</span></td>
+                    <td class="component-preview-cell">
+                      <div class="component-preview-box">
+                        <section class="proto-filter-bar">
+                          <input class="proto-input search-control" type="text" placeholder="搜索关键词" />
+                          <select class="proto-select">
+                            <option selected>状态</option>
+                            <option>启用</option>
+                          </select>
+                          <button class="btn btn-primary" type="button">查询</button>
+                        </section>
+                      </div>
+                    </td>
+                    <td>统一承载搜索、下拉、日期范围、查询/重置动作。</td>
+                  </tr>
+                  <tr>
+                    <td>date-range-picker</td>
+                    <td>日期范围选择器</td>
+                    <td><span class="status">已组件化</span></td>
+                    <td class="component-preview-cell">
+                      <div class="component-preview-box">
+                        <div class="date-range-picker">
+                          <input class="proto-input date-range-control" type="text" value="2026-03-01 至 2026-03-31" readonly />
+                          <div class="date-range-panel">
+                            <div class="date-range-title">选择日期范围</div>
+                            <div class="date-range-fields">
+                              <input class="proto-input" type="date" value="2026-03-01" data-role="start" />
+                              <input class="proto-input" type="date" value="2026-03-31" data-role="end" />
+                            </div>
+                            <div class="date-range-actions">
+                              <button class="btn btn-ghost" type="button" data-action="cancel">取消</button>
+                              <button class="btn btn-primary" type="button" data-action="apply">确定</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>支持日期面板、开始结束值、取消/确定交互。</td>
+                  </tr>
+                  <tr>
+                    <td>proto-list-shell</td>
+                    <td>列表页骨架</td>
+                    <td><span class="status">已组件化</span></td>
+                    <td class="component-preview-cell">
+                      <div class="component-preview-shell">
+                        <div class="proto-list-head">
+                          <h3 class="proto-list-title">项目列表</h3>
+                          <div class="proto-list-tools">
+                            <button class="btn btn-primary" type="button">新增</button>
+                          </div>
+                        </div>
+                        <div class="proto-table-wrap">
+                          <table>
+                            <thead><tr><th>编号</th><th>名称</th></tr></thead>
+                            <tbody><tr><td>JZ-001</td><td>万科云城</td></tr></tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </td>
+                    <td>统一列表标题、工具区、表格容器与分页布局。</td>
+                  </tr>
+                  <tr>
+                    <td>proto-pagination</td>
+                    <td>统一分页</td>
+                    <td><span class="status">已组件化</span></td>
+                    <td class="component-preview-cell">
+                      <div class="component-preview-box">
+                        <div class="proto-pagination" style="padding: 0;">
+                          <span>共 36 条</span>
+                          <select class="proto-select proto-page-size-select">
+                            <option selected>20条/页</option>
+                          </select>
+                          <span class="proto-page-arrow">‹</span>
+                          <span class="proto-page-current">1</span>
+                          <span>前往</span>
+                          <input class="proto-input proto-page-jump-input" type="text" value="1" />
+                          <span>页</span>
+                          <span class="proto-page-arrow">›</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>统一每页条数、页码、跳页输入和左右箭头样式。</td>
+                  </tr>
+                  <tr>
+                    <td>proto-row-actions</td>
+                    <td>操作列规范</td>
+                    <td><span class="status">已组件化</span></td>
+                    <td class="component-preview-cell">
+                      <div class="component-preview-box">
+                        <div class="proto-row-actions">
+                          <button class="proto-action" type="button">查看</button>
+                          <button class="proto-action" type="button">编辑</button>
+                          <button class="proto-action danger" type="button">删除</button>
+                        </div>
+                      </div>
+                    </td>
+                    <td>统一动作顺序、分隔线和危险操作颜色。</td>
+                  </tr>
+                  <tr>
+                    <td>prototype-state-bar</td>
+                    <td>浮窗状态栏</td>
+                    <td><span class="status">已组件化</span></td>
+                    <td class="component-preview-cell">
+                      <div class="component-preview-float">
+                        <button class="active" type="button">列表态</button>
+                        <button type="button">新增弹窗</button>
+                        <button type="button">编辑弹窗</button>
+                      </div>
+                    </td>
+                    <td>行为由 <code>prototype-switcher.js</code> 提供，视觉由 <code>prototype.css</code> 统一提供。</td>
+                  </tr>
+                  <tr>
+                    <td>proto-toast</td>
+                    <td>轻提示组件</td>
+                    <td><span class="status">已组件化</span></td>
+                    <td class="component-preview-cell">
+                      <div class="component-preview-toast-stack">
+                        <div class="proto-toast-stack">
+                          <div class="proto-toast show" data-type="success"><span class="proto-toast-text">保存成功</span></div>
+                          <div class="proto-toast show" data-type="warning"><span class="proto-toast-text">请先补全必填项</span></div>
+                          <div class="proto-toast show" data-type="error"><span class="proto-toast-text">删除失败，请稍后重试</span></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>顶部居中、单条展示、自动消失，支持 success / warning / error / info。</td>
+                  </tr>
+                  <tr>
+                    <td>proto-modal-form</td>
+                    <td>通用弹窗表单模板</td>
+                    <td><span class="status">已组件化</span></td>
+                    <td class="component-preview-cell">
+                      <div class="component-preview-stack">
+                        <div class="component-preview-modal">
+                          <div class="proto-modal-form">
+                            <div class="proto-modal-head"><span>标准弹窗</span><span>×</span></div>
+                            <div class="proto-modal-body">
+                              <div class="proto-modal-grid">
+                                <div class="proto-field-label">名称 *</div>
+                                <input class="proto-input" type="text" value="建筑施工" />
+                              </div>
+                            </div>
+                            <div class="proto-modal-foot">
+                              <button class="btn btn-ghost" type="button">取消</button>
+                              <button class="btn btn-primary" type="button">保存</button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="component-preview-modal">
+                          <div class="proto-modal-form large">
+                            <div class="proto-modal-head"><span>大尺寸弹窗</span><span>×</span></div>
+                            <div class="proto-modal-body">
+                              <div class="proto-modal-grid">
+                                <div class="proto-field-label">说明</div>
+                                <textarea class="proto-textarea">复杂场景使用 large 变体。</textarea>
+                              </div>
+                            </div>
+                            <div class="proto-modal-foot">
+                              <button class="btn btn-ghost" type="button">取消</button>
+                              <button class="btn btn-primary" type="button">保存</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>统一弹窗头、表单区、底部按钮和大尺寸弹窗形态。</td>
+                  </tr>
+                  <tr>
+                    <td>proto-input / proto-select / proto-textarea</td>
+                    <td>基础表单控件</td>
+                    <td><span class="status">已组件化</span></td>
+                    <td class="component-preview-cell">
+                      <div class="component-preview-stack">
+                        <input class="proto-input" type="text" placeholder="输入框" />
+                        <select class="proto-select">
+                          <option selected>下拉框</option>
+                        </select>
+                        <textarea class="proto-textarea" placeholder="文本域"></textarea>
+                      </div>
+                    </td>
+                    <td>统一输入框、下拉框、文本域的宽度、边框和焦点状态。</td>
+                  </tr>
+                  <tr>
+                    <td>proto-radio-group / proto-checkbox-group</td>
+                    <td>单选/多选控件</td>
+                    <td><span class="status">已组件化</span></td>
+                    <td class="component-preview-cell">
+                      <div class="component-preview-stack">
+                        <div class="proto-radio-group">
+                          <label class="proto-radio"><input type="radio" name="preview_status" checked /> 启用</label>
+                          <label class="proto-radio"><input type="radio" name="preview_status" /> 停用</label>
+                        </div>
+                        <div class="proto-checkbox-group">
+                          <label class="proto-checkbox"><input type="checkbox" checked /> 建筑施工</label>
+                          <label class="proto-checkbox"><input type="checkbox" /> 通用</label>
+                        </div>
+                      </div>
+                    </td>
+                    <td>统一选项间距、对齐方式和文案风格。</td>
+                  </tr>
+                  <tr>
+                    <td>proto-field-row / proto-field-label</td>
+                    <td>表单行布局</td>
+                    <td><span class="status">已组件化</span></td>
+                    <td class="component-preview-cell">
+                      <div class="component-preview-box">
+                        <div class="proto-field-row" style="grid-template-columns: 92px minmax(0, 1fr);">
+                          <div class="proto-field-label">法规名称 *</div>
+                          <input class="proto-input" type="text" value="建筑施工高处作业安全技术规范" />
+                        </div>
+                      </div>
+                    </td>
+                    <td>统一标签宽度、控件排布和默认宽度口径。</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="proto-list-shell" style="margin-top: 14px;">
+            <div class="proto-list-head">
+              <h3 class="proto-list-title">proto-filter-bar / date-range-picker｜已组件化</h3>
+            </div>
+            <p class="demo-card-note">展示 <code>proto-filter-bar + date-range-picker + proto-input/proto-select</code> 的推荐组合方式。</p>
+            <div class="proto-table-wrap" style="padding-bottom: 20px;">
+              <section class="proto-filter-bar" style="margin: 0;">
+                <input class="proto-input search-control" type="text" placeholder="搜索项目编号/名称/地址" />
+                <select class="proto-select">
+                  <option selected>施工类型</option>
+                  <option>家装</option>
+                  <option>小型工程</option>
+                  <option>零星作业</option>
+                </select>
+                <select class="proto-select">
+                  <option selected>状态</option>
+                  <option>已巡查</option>
+                  <option>未巡查</option>
+                </select>
+                <select class="proto-select" style="width: 150px;">
+                  <option selected>保险公司</option>
+                  <option>平安产险</option>
+                  <option>人保财险</option>
+                  <option>太平洋产险</option>
+                </select>
+                <div class="date-range-picker">
+                  <input class="proto-input date-range-control" type="text" value="2026-03-01 至 2026-03-31" readonly />
+                  <div class="date-range-panel">
+                    <div class="date-range-title">选择日期范围</div>
+                    <div class="date-range-fields">
+                      <input class="proto-input" type="date" value="2026-03-01" data-role="start" />
+                      <input class="proto-input" type="date" value="2026-03-31" data-role="end" />
+                    </div>
+                    <div class="date-range-actions">
+                      <button class="btn btn-ghost" type="button" data-action="cancel">取消</button>
+                      <button class="btn btn-primary" type="button" data-action="apply">确定</button>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-primary" type="button">🔍 查询</button>
+                <button class="btn btn-ghost" type="button">↻ 重置</button>
+              </section>
+            </div>
+          </section>
+
+          <section class="proto-list-shell" style="margin-top: 14px;">
+            <div class="proto-list-head">
+              <h3 class="proto-list-title">proto-list-shell｜已组件化</h3>
               <div class="proto-list-tools">
                 <button class="btn btn-primary" type="button">＋ 新增项目</button>
                 <button class="btn btn-ghost" type="button">⬆ 批量导入</button>
@@ -98,31 +535,31 @@
                 <button class="btn btn-ghost" type="button">⇪ 导出</button>
               </div>
             </div>
-            <p class="demo-card-note">该示例展示“筛选条在上、列表区域在下”的组件布局口径。</p>
+            <p class="demo-card-note">该示例展示 <code>proto-list-shell + proto-list-head + proto-list-tools + proto-table-wrap</code> 的标准列表页骨架。</p>
             <div class="proto-table-wrap">
               <table>
                 <colgroup>
                   <col style="width: 24%;" />
-                  <col style="width: 20%;" />
-                  <col style="width: 20%;" />
+                  <col style="width: 22%;" />
                   <col style="width: 14%;" />
+                  <col style="width: 18%;" />
                   <col style="width: 22%;" />
                 </colgroup>
                 <thead>
                   <tr>
-                    <th>组件名</th>
-                    <th>职责</th>
+                    <th>项目编号</th>
+                    <th>项目名称</th>
                     <th>状态</th>
-                    <th>版本</th>
+                    <th>最近巡查时间</th>
                     <th>操作列规范</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>proto-list-shell</td>
-                    <td>列表页骨架</td>
-                    <td><span class="status">已接入</span></td>
-                    <td>v1</td>
+                    <td>JZ-20260329-0001</td>
+                    <td>万科云城三期12栋</td>
+                    <td><span class="status off">未巡查</span></td>
+                    <td>--</td>
                     <td>
                       <div class="proto-row-actions">
                         <button class="proto-action" type="button">查看</button>
@@ -132,53 +569,92 @@
                     </td>
                   </tr>
                   <tr>
-                    <td>proto-state-bar</td>
-                    <td>状态浮窗</td>
-                    <td><span class="status">已接入</span></td>
-                    <td>v1</td>
+                    <td>GC-20260329-0002</td>
+                    <td>前海时代广场</td>
+                    <td><span class="status">已巡查</span></td>
+                    <td>2026-03-28 14:30</td>
                     <td>
                       <div class="proto-row-actions">
-                        <button class="proto-action" type="button">切换态</button>
-                        <button class="proto-action" type="button">拖拽</button>
-                        <button class="proto-action" type="button">验收</button>
+                        <button class="proto-action" type="button">查看</button>
+                        <button class="proto-action" type="button">编辑</button>
+                        <button class="proto-action danger" type="button">删除</button>
                       </div>
                     </td>
                   </tr>
                   <tr>
-                    <td>proto-modal-form</td>
-                    <td>通用弹窗表单</td>
-                    <td><span class="status off">待接入</span></td>
-                    <td>v1</td>
+                    <td>LX-20260328-0015</td>
+                    <td>华润城二期8栋</td>
+                    <td><span class="status">已巡查</span></td>
+                    <td>2026-03-28 10:15</td>
                     <td>
                       <div class="proto-row-actions">
                         <button class="proto-action" type="button">查看</button>
-                        <button class="proto-action" type="button">改造</button>
-                        <button class="proto-action danger" type="button">下线</button>
+                        <button class="proto-action" type="button">编辑</button>
+                        <button class="proto-action danger" type="button">删除</button>
                       </div>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div class="proto-pagination">
-              <span>共 36 条</span>
-              <select class="proto-select proto-page-size-select">
-                <option>10条/页</option>
-                <option selected>20条/页</option>
-                <option>50条/页</option>
-              </select>
-              <span class="proto-page-arrow">‹</span>
-              <span class="proto-page-current">1</span>
-              <span>前往</span>
-              <input class="proto-input proto-page-jump-input" type="text" value="1" />
-              <span>页</span>
-              <span class="proto-page-arrow">›</span>
+          </section>
+
+          <section class="proto-list-shell" style="margin-top: 14px;">
+            <div class="proto-list-head">
+              <h3 class="proto-list-title">proto-pagination｜已组件化</h3>
+            </div>
+            <div class="proto-table-wrap" style="padding-bottom: 20px;">
+              <p class="demo-card-note" style="margin-bottom: 18px;">展示 <code>proto-pagination</code> 的独立使用方式；列表页与弹窗关联表分页都应复用这一口径。</p>
+              <div class="proto-pagination" style="padding: 0;">
+                <span>共 36 条</span>
+                <select class="proto-select proto-page-size-select">
+                  <option>10条/页</option>
+                  <option selected>20条/页</option>
+                  <option>50条/页</option>
+                </select>
+                <span class="proto-page-arrow">‹</span>
+                <span class="proto-page-current">1</span>
+                <span>前往</span>
+                <input class="proto-input proto-page-jump-input" type="text" value="1" />
+                <span>页</span>
+                <span class="proto-page-arrow">›</span>
+              </div>
             </div>
           </section>
 
           <section class="proto-list-shell" style="margin-top: 14px;">
             <div class="proto-list-head">
-              <h3 class="proto-list-title">表单控件组件示例</h3>
+              <h3 class="proto-list-title">prototype-state-bar / proto-row-actions｜已组件化</h3>
+            </div>
+            <div class="proto-table-wrap" style="padding-bottom: 20px;">
+              <p class="demo-card-note" style="margin-bottom: 18px;">页面顶部的浮窗就是 <code>prototype-state-bar</code> 实时示例。下面单独展示 <code>proto-row-actions</code> 的操作列结构。</p>
+              <div class="proto-row-actions">
+                <button class="proto-action" type="button">查看</button>
+                <button class="proto-action" type="button">编辑</button>
+                <button class="proto-action" type="button">复制</button>
+                <button class="proto-action danger" type="button">删除</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="proto-list-shell" style="margin-top: 14px;">
+            <div class="proto-list-head">
+              <h3 class="proto-list-title">proto-toast｜已组件化</h3>
+            </div>
+            <div class="proto-table-wrap" style="padding-bottom: 20px;">
+              <p class="demo-card-note" style="margin-bottom: 18px;">展示最小版轻提示组件。下面按钮可直接触发 success / warning / error / info 四种提示。</p>
+              <div class="component-preview-inline">
+                <button class="btn btn-primary" type="button" data-toast-demo="success">成功提示</button>
+                <button class="btn btn-ghost" type="button" data-toast-demo="info">信息提示</button>
+                <button class="btn btn-ghost" type="button" data-toast-demo="warning">警告提示</button>
+                <button class="btn btn-ghost" type="button" data-toast-demo="error">错误提示</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="proto-list-shell" style="margin-top: 14px;">
+            <div class="proto-list-head">
+              <h3 class="proto-list-title">表单控件与表单行布局｜已组件化</h3>
             </div>
             <div class="proto-table-wrap" style="padding-bottom: 20px;">
               <div class="proto-field-row">
@@ -216,7 +692,7 @@
           <section class="proto-modal-form-stage">
             <div class="proto-modal-form">
               <div class="proto-modal-head">
-                <span>新增行业域</span>
+                <span>proto-modal-form｜已组件化（标准弹窗）</span>
                 <span class="demo-modal-close">×</span>
               </div>
               <div class="proto-modal-body">
@@ -246,7 +722,7 @@
           <section class="proto-modal-form-stage">
             <div class="proto-modal-form large">
               <div class="proto-modal-head">
-                <span>编辑行业域</span>
+                <span>proto-modal-form.large｜已组件化（大尺寸弹窗）</span>
                 <span class="demo-modal-close">×</span>
               </div>
               <div class="proto-modal-body">
@@ -273,15 +749,25 @@
           </section>
         </section>
       </main>
-    </div>
   </div>
 
   <script src="./assets/prototype.js"></script>
-  <script src="./assets/prototype-layout.js"></script>
   <script src="./assets/prototype-switcher.js"></script>
   <script>
     initProtoPagination();
     initProtoRowActions();
+    document.querySelectorAll("[data-toast-demo]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var type = button.getAttribute("data-toast-demo");
+        var messages = {
+          success: "保存成功",
+          info: "已切换到列表态",
+          warning: "请先补全必填项",
+          error: "操作失败，请稍后重试"
+        };
+        showProtoToast(messages[type] || "提示消息", type);
+      });
+    });
   </script>
 </body>
 </html>

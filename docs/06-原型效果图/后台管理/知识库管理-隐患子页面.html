@@ -31,44 +31,6 @@
       cursor: not-allowed;
       pointer-events: none;
     }
-    .toast {
-      position: fixed;
-      top: 70px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 100;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 18px;
-      border-radius: 8px;
-      background: #fff;
-      border: 1px solid #f3d0d0;
-      box-shadow: 0 6px 20px rgba(16, 33, 58, 0.12);
-      color: #1f3957;
-      font-size: 14px;
-      line-height: 1.6;
-      display: none;
-    }
-    .toast.show {
-      display: inline-flex;
-    }
-    .toast-icon {
-      flex-shrink: 0;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: #c33b3b;
-      color: #fff;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      font-weight: 700;
-    }
-    .toast-text {
-      white-space: nowrap;
-    }
   </style>
 </head>
 <body>
@@ -310,18 +272,11 @@
   <script src="./assets/prototype.js"></script>
   <script src="./assets/prototype-layout.js"></script>
   <script src="./assets/prototype-switcher.js"></script>
-  <div class="toast" data-prototype-toast>
-    <span class="toast-icon">!</span>
-    <span class="toast-text" data-prototype-toast-text></span>
-  </div>
   <script>
     (function () {
       var stateButtons = Array.prototype.slice.call(document.querySelectorAll("[data-prototype-button]"));
       var panels = Array.prototype.slice.call(document.querySelectorAll("[data-prototype-panel]"));
       var associateButtons = Array.prototype.slice.call(document.querySelectorAll("[data-associate-action]"));
-      var toastEl = document.querySelector("[data-prototype-toast]");
-      var toastTextEl = document.querySelector("[data-prototype-toast-text]");
-      var toastTimer = null;
 
       function setActivePanel(panelName) {
         panels.forEach(function (panel) {
@@ -333,21 +288,11 @@
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
 
-      function showToast(message) {
-        if (!toastEl || !toastTextEl) return;
-        toastTextEl.textContent = message;
-        toastEl.classList.add("show");
-        if (toastTimer) window.clearTimeout(toastTimer);
-        toastTimer = window.setTimeout(function () {
-          toastEl.classList.remove("show");
-        }, 1800);
-      }
-
       associateButtons.forEach(function (button) {
         button.addEventListener("click", function () {
           var mode = button.getAttribute("data-associate-action");
           if (mode === "detail") {
-            showToast("点击编辑可进行关联法规操作");
+            showProtoToast("点击编辑可进行关联法规操作", "error");
             return;
           }
           setActivePanel("relation");

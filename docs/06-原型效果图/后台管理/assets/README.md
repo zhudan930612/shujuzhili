@@ -60,13 +60,17 @@
 本节为“先建设组件、后替换页面”阶段的统一约定。
 
 ### 组件清单
+- `proto-filter-bar`：统一筛选条容器。
+- `date-range-picker`：统一日期范围选择器。
 - `proto-list-shell`：列表页骨架（含标题区、工具区、表格区）。
 - `proto-pagination`：统一分页（默认右下对齐）。
 - `proto-row-actions`：统一操作列（动作顺序与分隔规范）。
 - `prototype-state-bar`：统一浮窗状态栏样式。
 - `proto-state-bar`：浮窗状态栏兼容类名，仅用于存量页面过渡。
+- `proto-toast`：统一轻提示组件（顶部居中、单条、自动消失）。
 - `proto-modal-form`：统一弹窗表单模板（含遮罩、居中、footer 右下按钮）。
 - `proto-input / proto-select / proto-textarea / proto-radio-group / proto-checkbox-group`：统一表单控件。
+- `proto-field-row / proto-field-label`：统一表单行布局与标签宽度。
 
 ### 接入结构（最小示例）
 ```html
@@ -99,9 +103,17 @@
 </section>
 ```
 
+```html
+<script src="./assets/prototype.js"></script>
+<script>
+  showProtoToast("保存成功", "success");
+</script>
+```
+
 ### 可选 JS 初始化
 - `initProtoPagination(root?)`
 - `initProtoRowActions(root?)`
+- `showProtoToast(message, type?)`
 - 说明：仅在页面使用 `proto-*` 类名时生效，不会改动旧页面现状。
 
 ```html
