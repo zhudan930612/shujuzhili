@@ -116,6 +116,11 @@
     .record-save-stage .modal-foot {
       justify-content: flex-end;
     }
+    .record-floating-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+    }
     .prototype-stage { display: none; }
     .prototype-stage.active { display: block; }
   </style>
@@ -144,151 +149,53 @@
             </div>
             </div>
 
-          <div data-view-panel="detail" class="active">
-            <div class="upload-two-column">
-              <div class="upload-column record-left-stack">
-                <section class="upload-column">
-                  <div class="upload-column-head"><div class="upload-column-title">基础信息</div></div>
-                  <div class="upload-column-body">
-                    <div class="record-info-grid">
-                      <div class="field-label">项目编号</div><div class="readonly">GC-20260329-0002</div>
-                      <div class="field-label">项目名称</div><div class="readonly">前海时代广场</div>
-                      <div class="field-label">施工类型</div><div class="readonly">小型工程</div>
-                      <div class="field-label">项目地址</div><div class="readonly">深圳市南山区科苑南路2888号</div>
-                      <div class="field-label">来源</div><div class="readonly">后台上传</div>
-                      <div class="field-label">巡查人</div><div class="readonly">张三</div>
-                      <div class="field-label">巡查时间</div><div class="readonly">2026-03-28 14:30:00</div>
-                    </div>
-                  </div>
-                </section>
-                <section class="upload-column">
-                  <div class="upload-column-head"><div class="upload-column-title">系统信息</div></div>
-                  <div class="upload-column-body">
-                    <div class="record-info-grid">
-                      <div class="field-label">创建人</div><div class="readonly">李四</div>
-                      <div class="field-label">创建时间</div><div class="readonly">2026-03-28 14:36:12</div>
-                      <div class="field-label">更新人</div><div class="readonly">王五</div>
-                      <div class="field-label">更新时间</div><div class="readonly">2026-03-29 09:20:18</div>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <section class="upload-column upload-media-body">
-                <div class="upload-column-head">
-                  <div class="upload-column-title">图片列表（12张）</div>
-                </div>
+          <div class="upload-two-column">
+            <div class="upload-column record-left-stack">
+              <section class="upload-column">
+                <div class="upload-column-head"><div class="upload-column-title">基础信息</div></div>
                 <div class="upload-column-body">
-                  <div class="proto-image-grid">
-                    <div class="proto-image-card">图1</div><div class="proto-image-card">图2</div><div class="proto-image-card">图3</div><div class="proto-image-card">图4</div>
-                    <div class="proto-image-card">图5</div><div class="proto-image-card">图6</div><div class="proto-image-card">图7</div><div class="proto-image-card">图8</div>
-                    <div class="proto-image-card">图9</div><div class="proto-image-card">图10</div><div class="proto-image-card">图11</div><div class="proto-image-card">图12</div>
+                  <div class="record-info-grid">
+                    <div class="field-label">项目编号</div><div class="readonly">GC-20260329-0002</div>
+                    <div class="field-label">项目名称</div><div class="readonly">前海时代广场</div>
+                    <div class="field-label">施工类型</div><div class="readonly">小型工程</div>
+                    <div class="field-label">项目地址</div><div class="readonly">深圳市南山区科苑南路2888号</div>
+                    <div class="field-label">来源</div><div class="readonly">后台上传</div>
+                    <div class="field-label">巡查人</div><div class="readonly">张三</div>
+                    <div class="field-label">巡查时间</div><div class="readonly">2026-03-28 14:30:00</div>
+                  </div>
+                </div>
+              </section>
+              <section class="upload-column">
+                <div class="upload-column-head"><div class="upload-column-title">系统信息</div></div>
+                <div class="upload-column-body">
+                  <div class="record-info-grid">
+                    <div class="field-label">创建人</div><div class="readonly">李四</div>
+                    <div class="field-label">创建时间</div><div class="readonly">2026-03-28 14:36:12</div>
+                    <div class="field-label">更新人</div><div class="readonly">王五</div>
+                    <div class="field-label">更新时间</div><div class="readonly">2026-03-29 09:20:18</div>
                   </div>
                 </div>
               </section>
             </div>
-            <div class="page-actions">
-              <button class="btn btn-ghost">上一条</button>
-              <button class="btn btn-ghost">下一条</button>
-              <button class="btn btn-primary">编辑</button>
-              <button class="btn btn-danger" data-open-record-delete-confirm>删除记录</button>
-            </div>
+            <section class="upload-column upload-media-body">
+              <div class="upload-column-head">
+                <div class="upload-column-title">图片列表（12张）</div>
+              </div>
+              <div class="upload-column-body">
+                <div class="proto-image-grid">
+                  <div class="proto-image-card">图1</div><div class="proto-image-card">图2</div><div class="proto-image-card">图3</div><div class="proto-image-card">图4</div>
+                  <div class="proto-image-card">图5</div><div class="proto-image-card">图6</div><div class="proto-image-card">图7</div><div class="proto-image-card">图8</div>
+                  <div class="proto-image-card">图9</div><div class="proto-image-card">图10</div><div class="proto-image-card">图11</div><div class="proto-image-card">图12</div>
+                </div>
+              </div>
+            </section>
           </div>
-
-          <div data-view-panel="batch">
-            <div class="upload-two-column">
-              <div class="upload-column record-left-stack">
-                <section class="upload-column">
-                  <div class="upload-column-head"><div class="upload-column-title">项目信息</div></div>
-                  <div class="upload-column-body">
-                    <div class="upload-info-grid">
-                      <div class="field-label">项目编号/名称 *</div>
-                      <input class="control" list="projectOptionsEditInline" type="text" value="前海时代广场 / GC-20260329-0002" />
-                      <datalist id="projectOptionsEditInline">
-                        <option value="前海时代广场 / GC-20260329-0002"></option>
-                        <option value="万科云城三期 / JZ-20260315-0011"></option>
-                        <option value="华润城二期8栋 / LX-20260310-0008"></option>
-                      </datalist>
-                      <div class="field-label">项目编号</div><div class="readonly">GC-20260329-0002</div>
-                      <div class="field-label">项目名称</div><div class="readonly">前海时代广场</div>
-                      <div class="field-label">施工类型</div><div class="readonly">小型工程</div>
-                      <div class="field-label">项目地址</div><div class="readonly">深圳市南山区科苑南路2888号</div>
-                      <div class="field-label">巡查时间 *</div><input class="control" type="datetime-local" value="2026-03-28T14:30" />
-                      <div class="field-label">巡查人 *</div>
-                      <select class="control select-control">
-                        <option selected>张三</option>
-                        <option>李四</option>
-                        <option>王五</option>
-                        <option>赵六</option>
-                      </select>
-                      <div class="field-label">上传人</div><div class="readonly">李四</div>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <section class="upload-column upload-media-body">
-                <div class="upload-column-head">
-                  <div class="upload-column-title">上传图片</div>
-                  <div class="subtle-note">仅支持删除现有图片，不支持追加或替换</div>
-                </div>
-                <div class="upload-column-body">
-                  <div class="proto-image-grid">
-                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图1</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图2</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图3</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图4</div>
-                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图5</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图6</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图7</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图8</div>
-                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图9</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图10</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图11</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图12</div>
-                  </div>
-                  <div class="record-help">点击图片右上角 `×` 删除当前巡查记录下的图片，不提供新增上传入口。</div>
-                </div>
-              </section>
-            </div>
-            <div class="page-actions">
-              <button class="btn btn-ghost">取消</button>
-              <button class="btn btn-primary">保存</button>
-            </div>
+          <div class="page-actions">
+            <button class="btn btn-ghost">上一条</button>
+            <button class="btn btn-ghost">下一条</button>
+            <button class="btn btn-primary">编辑</button>
+            <button class="btn btn-danger">删除记录</button>
           </div>
-          <section class="record-save-stage" id="recordSaveConfirm">
-            <div class="modal medium">
-              <div class="modal-head"><span>确认保存图片删除结果</span><span data-close-record-save-confirm style="cursor:pointer;">×</span></div>
-              <div class="modal-body">
-                <div class="danger-box">
-                  <div style="line-height:2; color:#5f6f86;">
-                    <div>项目名称：前海时代广场</div>
-                    <div>项目地址：深圳市南山区科苑南路2888号</div>
-                    <div>巡查时间：2026-03-28 14:30:00</div>
-                    <div>巡查人：张三</div>
-                    <div>待删除图片：3张</div>
-                  </div>
-                  <div style="margin-top:14px; color:#c33b3b;">⚠ 删除图片后无法恢复，且该巡查记录不支持追加图片，请谨慎操作。</div>
-                  <div style="margin-top:10px; color:#5f6f86;">是否确认保存本次图片删除结果？</div>
-                </div>
-              </div>
-              <div class="modal-foot">
-                <button class="btn btn-ghost" data-close-record-save-confirm>取消</button>
-                <button class="btn btn-danger">确定</button>
-              </div>
-            </div>
-          </section>
-          <section class="record-save-stage" id="recordDeleteConfirm">
-            <div class="modal medium">
-              <div class="modal-head"><span>确认删除巡查记录</span><span data-close-record-delete-confirm style="cursor:pointer;">×</span></div>
-              <div class="modal-body">
-                <div class="danger-box">
-                  <div style="line-height:2; color:#5f6f86;">
-                    <div>项目名称：前海时代广场</div>
-                    <div>项目地址：深圳市南山区科苑南路2888号</div>
-                    <div>巡查时间：2026-03-28 14:30:00</div>
-                    <div>巡查人：张三</div>
-                    <div>图片数量：12张</div>
-                  </div>
-                  <div style="margin-top:14px; color:#c33b3b;">⚠ 确认删除将同时删除当前巡查记录及关联的所有图片，删除后无法恢复，请谨慎操作。</div>
-                  <div style="margin-top:10px; color:#5f6f86;">是否确认删除当前巡查记录？</div>
-                </div>
-              </div>
-              <div class="modal-foot">
-                <button class="btn btn-ghost" data-close-record-delete-confirm>取消</button>
-                <button class="btn btn-danger">确定</button>
-              </div>
-            </div>
-          </section>
         </section>
       </main>
 
@@ -312,150 +219,54 @@
             </div>
             </div>
 
-          <div data-view-panel="detail">
-            <div class="upload-two-column">
-              <div class="upload-column record-left-stack">
-                <section class="upload-column">
-                  <div class="upload-column-head"><div class="upload-column-title">基础信息</div></div>
-                  <div class="upload-column-body">
-                    <div class="record-info-grid">
-                      <div class="field-label">项目编号</div><div class="readonly">GC-20260329-0002</div>
-                      <div class="field-label">项目名称</div><div class="readonly">前海时代广场</div>
-                      <div class="field-label">施工类型</div><div class="readonly">小型工程</div>
-                      <div class="field-label">项目地址</div><div class="readonly">深圳市南山区科苑南路2888号</div>
-                      <div class="field-label">来源</div><div class="readonly">后台上传</div>
-                      <div class="field-label">巡查人</div><div class="readonly">张三</div>
-                      <div class="field-label">巡查时间</div><div class="readonly">2026-03-28 14:30:00</div>
-                    </div>
-                  </div>
-                </section>
-                <section class="upload-column">
-                  <div class="upload-column-head"><div class="upload-column-title">系统信息</div></div>
-                  <div class="upload-column-body">
-                    <div class="record-info-grid">
-                      <div class="field-label">创建人</div><div class="readonly">李四</div>
-                      <div class="field-label">创建时间</div><div class="readonly">2026-03-28 14:36:12</div>
-                      <div class="field-label">更新人</div><div class="readonly">王五</div>
-                      <div class="field-label">更新时间</div><div class="readonly">2026-03-29 09:20:18</div>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <section class="upload-column upload-media-body">
-                <div class="upload-column-head">
-                  <div class="upload-column-title">图片列表（12张）</div>
-                </div>
+          <div class="upload-two-column">
+            <div class="upload-column record-left-stack">
+              <section class="upload-column">
+                <div class="upload-column-head"><div class="upload-column-title">项目信息</div></div>
                 <div class="upload-column-body">
-                  <div class="proto-image-grid">
-                    <div class="proto-image-card">图1</div><div class="proto-image-card">图2</div><div class="proto-image-card">图3</div><div class="proto-image-card">图4</div>
-                    <div class="proto-image-card">图5</div><div class="proto-image-card">图6</div><div class="proto-image-card">图7</div><div class="proto-image-card">图8</div>
-                    <div class="proto-image-card">图9</div><div class="proto-image-card">图10</div><div class="proto-image-card">图11</div><div class="proto-image-card">图12</div>
+                  <div class="upload-info-grid">
+                    <div class="field-label">项目编号/名称 *</div>
+                    <input class="control" list="projectOptionsEditBatch" type="text" value="前海时代广场 / GC-20260329-0002" />
+                    <datalist id="projectOptionsEditBatch">
+                      <option value="前海时代广场 / GC-20260329-0002"></option>
+                      <option value="万科云城三期 / JZ-20260315-0011"></option>
+                      <option value="华润城二期8栋 / LX-20260310-0008"></option>
+                    </datalist>
+                    <div class="field-label">项目编号</div><div class="readonly">GC-20260329-0002</div>
+                    <div class="field-label">项目名称</div><div class="readonly">前海时代广场</div>
+                    <div class="field-label">施工类型</div><div class="readonly">小型工程</div>
+                    <div class="field-label">项目地址</div><div class="readonly">深圳市南山区科苑南路2888号</div>
+                    <div class="field-label">巡查时间 *</div><input class="control" type="datetime-local" value="2026-03-28T14:30" />
+                    <div class="field-label">巡查人 *</div>
+                    <select class="control select-control">
+                      <option selected>张三</option>
+                      <option>李四</option>
+                      <option>王五</option>
+                      <option>赵六</option>
+                    </select>
+                    <div class="field-label">上传人</div><div class="readonly">李四</div>
                   </div>
                 </div>
               </section>
             </div>
-            <div class="page-actions">
-              <button class="btn btn-ghost">上一条</button>
-              <button class="btn btn-ghost">下一条</button>
-              <button class="btn btn-primary">编辑</button>
-              <button class="btn btn-danger" data-open-record-delete-confirm>删除记录</button>
-            </div>
+            <section class="upload-column upload-media-body">
+              <div class="upload-column-head">
+                <div class="upload-column-title">上传图片</div>
+                <div class="subtle-note">仅支持删除现有图片，不支持追加或替换</div>
+              </div>
+              <div class="upload-column-body">
+                <div class="proto-image-grid">
+                  <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图1</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图2</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图3</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图4</div>
+                  <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图5</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图6</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图7</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图8</div>
+                  <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图9</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图10</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图11</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图12</div>
+                </div>
+              </div>
+            </section>
           </div>
-
-          <div data-view-panel="batch" class="active">
-            <div class="upload-two-column">
-              <div class="upload-column record-left-stack">
-                <section class="upload-column">
-                  <div class="upload-column-head"><div class="upload-column-title">项目信息</div></div>
-                  <div class="upload-column-body">
-                    <div class="upload-info-grid">
-                      <div class="field-label">项目编号/名称 *</div>
-                      <input class="control" list="projectOptionsEditBatch" type="text" value="前海时代广场 / GC-20260329-0002" />
-                      <datalist id="projectOptionsEditBatch">
-                        <option value="前海时代广场 / GC-20260329-0002"></option>
-                        <option value="万科云城三期 / JZ-20260315-0011"></option>
-                        <option value="华润城二期8栋 / LX-20260310-0008"></option>
-                      </datalist>
-                      <div class="field-label">项目编号</div><div class="readonly">GC-20260329-0002</div>
-                      <div class="field-label">项目名称</div><div class="readonly">前海时代广场</div>
-                      <div class="field-label">施工类型</div><div class="readonly">小型工程</div>
-                      <div class="field-label">项目地址</div><div class="readonly">深圳市南山区科苑南路2888号</div>
-                      <div class="field-label">巡查时间 *</div><input class="control" type="datetime-local" value="2026-03-28T14:30" />
-                      <div class="field-label">巡查人 *</div>
-                      <select class="control select-control">
-                        <option selected>张三</option>
-                        <option>李四</option>
-                        <option>王五</option>
-                        <option>赵六</option>
-                      </select>
-                      <div class="field-label">上传人</div><div class="readonly">李四</div>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <section class="upload-column upload-media-body">
-                <div class="upload-column-head">
-                  <div class="upload-column-title">上传图片</div>
-                  <div class="subtle-note">仅支持删除现有图片，不支持追加或替换</div>
-                </div>
-                <div class="upload-column-body">
-                  <div class="proto-image-grid">
-                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图1</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图2</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图3</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图4</div>
-                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图5</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图6</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图7</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图8</div>
-                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图9</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图10</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图11</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图12</div>
-                  </div>
-                </div>
-              </section>
-            </div>
-            <div class="page-actions">
-              <button class="btn btn-ghost">取消</button>
-              <button class="btn btn-primary">保存</button>
-            </div>
+          <div class="page-actions">
+            <button class="btn btn-ghost">取消</button>
+            <button class="btn btn-primary" data-open-record-save-confirm>保存</button>
           </div>
-          <section class="record-save-stage" id="recordSaveConfirm">
-            <div class="modal medium">
-              <div class="modal-head"><span>确认保存图片删除结果</span><span data-close-record-save-confirm style="cursor:pointer;">×</span></div>
-              <div class="modal-body">
-                <div class="danger-box">
-                  <div style="line-height:2; color:#5f6f86;">
-                    <div>项目名称：前海时代广场</div>
-                    <div>项目地址：深圳市南山区科苑南路2888号</div>
-                    <div>巡查时间：2026-03-28 14:30:00</div>
-                    <div>巡查人：张三</div>
-                    <div>待删除图片：3张</div>
-                  </div>
-                  <div style="margin-top:14px; color:#c33b3b;">⚠ 删除图片后无法恢复，且该巡查记录不支持追加图片，请谨慎操作。</div>
-                  <div style="margin-top:10px; color:#5f6f86;">是否确认保存本次图片删除结果？</div>
-                </div>
-              </div>
-              <div class="modal-foot">
-                <button class="btn btn-ghost" data-close-record-save-confirm>取消</button>
-                <button class="btn btn-danger">确定</button>
-              </div>
-            </div>
-          </section>
-          <section class="record-save-stage" id="recordDeleteConfirm">
-            <div class="modal medium">
-              <div class="modal-head"><span>确认删除巡查记录</span><span data-close-record-delete-confirm style="cursor:pointer;">×</span></div>
-              <div class="modal-body">
-                <div class="danger-box">
-                  <div style="line-height:2; color:#5f6f86;">
-                    <div>项目名称：前海时代广场</div>
-                    <div>项目地址：深圳市南山区科苑南路2888号</div>
-                    <div>巡查时间：2026-03-28 14:30:00</div>
-                    <div>巡查人：张三</div>
-                    <div>图片数量：12张</div>
-                  </div>
-                  <div style="margin-top:14px; color:#c33b3b;">⚠ 确认删除将同时删除当前巡查记录及关联的所有图片，删除后无法恢复，请谨慎操作。</div>
-                  <div style="margin-top:10px; color:#5f6f86;">是否确认删除当前巡查记录？</div>
-                </div>
-              </div>
-              <div class="modal-foot">
-                <button class="btn btn-ghost" data-close-record-delete-confirm>取消</button>
-                <button class="btn btn-danger">确定</button>
-              </div>
-            </div>
-          </section>
         </section>
       </main>
 
@@ -523,46 +334,44 @@
             </div>
           </div>
 
-          <div data-view-panel="batch" class="active">
-            <div class="upload-two-column">
-              <div class="upload-column record-left-stack">
-                <section class="upload-column">
-                  <div class="upload-column-head"><div class="upload-column-title">基础信息</div></div>
-                  <div class="upload-column-body">
-                    <div class="record-info-grid">
-                      <div class="field-label">项目编号</div><div class="readonly">GC-20260329-0002</div>
-                      <div class="field-label">项目名称</div><div class="readonly">前海时代广场</div>
-                      <div class="field-label">施工类型</div><div class="readonly">小型工程</div>
-                      <div class="field-label">项目地址</div><div class="readonly">深圳市南山区科苑南路2888号</div>
-                      <div class="field-label">来源</div><div class="readonly">后台上传</div>
-                      <div class="field-label">巡查人</div><div class="readonly">张三</div>
-                      <div class="field-label">巡查时间</div><div class="readonly">2026-03-28 14:30:00</div>
-                    </div>
-                  </div>
-                </section>
-                <section class="upload-column">
-                  <div class="upload-column-head"><div class="upload-column-title">系统信息</div></div>
-                  <div class="upload-column-body">
-                    <div class="record-info-grid">
-                      <div class="field-label">创建人</div><div class="readonly">李四</div>
-                      <div class="field-label">创建时间</div><div class="readonly">2026-03-28 14:36:12</div>
-                      <div class="field-label">更新人</div><div class="readonly">王五</div>
-                      <div class="field-label">更新时间</div><div class="readonly">2026-03-29 09:20:18</div>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <section class="upload-column upload-media-body">
-                <div class="upload-column-head">
-                  <div class="upload-column-title">图片列表（0张）<span class="record-media-actions"><span class="link">[取消]</span><span class="link">[保存]</span></span></div>
-                </div>
+          <div class="upload-two-column">
+            <div class="upload-column record-left-stack">
+              <section class="upload-column">
+                <div class="upload-column-head"><div class="upload-column-title">基础信息</div></div>
                 <div class="upload-column-body">
-                  <div class="upload-box" style="min-height:220px;display:flex;align-items:center;justify-content:center;color:#8a9caf;">
-                    暂无可展示图片
+                  <div class="record-info-grid">
+                    <div class="field-label">项目编号</div><div class="readonly">GC-20260329-0002</div>
+                    <div class="field-label">项目名称</div><div class="readonly">前海时代广场</div>
+                    <div class="field-label">施工类型</div><div class="readonly">小型工程</div>
+                    <div class="field-label">项目地址</div><div class="readonly">深圳市南山区科苑南路2888号</div>
+                    <div class="field-label">来源</div><div class="readonly">后台上传</div>
+                    <div class="field-label">巡查人</div><div class="readonly">张三</div>
+                    <div class="field-label">巡查时间</div><div class="readonly">2026-03-28 14:30:00</div>
+                  </div>
+                </div>
+              </section>
+              <section class="upload-column">
+                <div class="upload-column-head"><div class="upload-column-title">系统信息</div></div>
+                <div class="upload-column-body">
+                  <div class="record-info-grid">
+                    <div class="field-label">创建人</div><div class="readonly">李四</div>
+                    <div class="field-label">创建时间</div><div class="readonly">2026-03-28 14:36:12</div>
+                    <div class="field-label">更新人</div><div class="readonly">王五</div>
+                    <div class="field-label">更新时间</div><div class="readonly">2026-03-29 09:20:18</div>
                   </div>
                 </div>
               </section>
             </div>
+            <section class="upload-column upload-media-body">
+              <div class="upload-column-head">
+                <div class="upload-column-title">图片列表（0张）<span class="record-media-actions"><span class="link">[取消]</span><span class="link">[保存]</span></span></div>
+              </div>
+              <div class="upload-column-body">
+                <div class="upload-box" style="min-height:220px;display:flex;align-items:center;justify-content:center;color:#8a9caf;">
+                  暂无可展示图片
+                </div>
+              </div>
+            </section>
           </div>
         </section>
       </main>
@@ -570,9 +379,48 @@
   </div>
   </div>
 
+  <section class="record-save-stage record-floating-modal" id="recordSaveConfirmGlobal">
+    <div class="modal medium">
+      <div class="modal-head"><span>确认保存编辑结果</span><span data-close-record-save-confirm style="cursor:pointer;">×</span></div>
+      <div class="modal-body">
+        <div class="danger-box">
+          <div style="line-height:2; color:#5f6f86;">
+            <div>项目名称：前海时代广场</div>
+            <div>项目地址：深圳市南山区科苑南路2888号</div>
+            <div>巡查时间：2026-03-28 14:30:00</div>
+            <div>巡查人：张三</div>
+            <div>待删除图片：3张</div>
+          </div>
+          <div style="margin-top:14px; color:#c33b3b;">⚠ 保存后将同步更新巡查记录信息，已删除图片无法恢复，请谨慎操作。</div>
+          <div style="margin-top:10px; color:#5f6f86;">是否确认保存本次编辑结果？</div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" data-close-record-save-confirm>取消</button>
+        <button class="btn btn-primary">确认保存</button>
+      </div>
+    </div>
+  </section>
+
   <script src="./assets/prototype.js"></script>
   <script src="./assets/prototype-layout.js"></script>
   <script src="./assets/prototype-switcher.js"></script>
+  <script>
+    document.querySelectorAll("[data-open-record-save-confirm]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const modal = document.getElementById("recordSaveConfirmGlobal");
+        if (modal) modal.classList.add("active");
+      });
+    });
+
+    document.querySelectorAll("[data-close-record-save-confirm]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const modal = button.closest(".record-save-stage");
+        if (modal) modal.classList.remove("active");
+      });
+    });
+
+  </script>
 </body>
 </html>
 
