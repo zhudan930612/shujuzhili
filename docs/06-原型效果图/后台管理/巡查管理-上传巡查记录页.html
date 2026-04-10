@@ -153,7 +153,7 @@
           </div>
           <div class="page-actions">
             <button class="btn btn-ghost">取消</button>
-            <button class="btn btn-primary" data-open-save-confirm>保存</button>
+            <button class="btn btn-primary" data-open-save-empty-warning>保存</button>
           </div>
           <section class="upload-save-stage" id="uploadSaveConfirm">
             <div class="modal medium">
@@ -398,6 +398,30 @@
   <script src="./assets/prototype.js"></script>
   <script src="./assets/prototype-layout.js"></script>
   <script src="./assets/prototype-switcher.js"></script>
+  <script>
+    document.querySelectorAll("[data-open-save-empty-warning]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (typeof window.showProtoToast === "function") {
+          window.showProtoToast("请至少上传1张图片", "error");
+        }
+      });
+    });
+
+    document.querySelectorAll("[data-open-save-confirm]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const scope = button.closest("[data-view-scope]");
+        const modal = scope && scope.querySelector("#uploadSaveConfirm");
+        if (modal) modal.classList.add("active");
+      });
+    });
+
+    document.querySelectorAll("[data-close-save-confirm]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const modal = button.closest(".upload-save-stage");
+        if (modal) modal.classList.remove("active");
+      });
+    });
+  </script>
 </body>
 </html>
 
