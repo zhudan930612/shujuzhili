@@ -68,6 +68,51 @@
     }
     .prototype-stage { display: none; }
     .prototype-stage.active { display: block; }
+    .upload-fail-stage {
+      position: absolute;
+      inset: 0;
+      display: none;
+      z-index: 6;
+    }
+    .upload-fail-stage.active {
+      display: block;
+    }
+    .upload-fail-stage::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(16, 33, 58, 0.18);
+    }
+    .upload-fail-stage .modal {
+      width: 520px;
+      max-width: calc(100% - 48px);
+    }
+    .upload-fail-stage .modal-foot {
+      justify-content: flex-end;
+    }
+    .fail-file-list {
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      overflow: hidden;
+      max-height: 260px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .fail-file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      font-size: 13px;
+    }
+    .fail-file-item:nth-child(2n) { border-right: none; }
+    .fail-file-item:nth-last-child(1),
+    .fail-file-item:nth-last-child(2):nth-child(2n+1) { border-bottom: none; }
+    .fail-file-name { color: var(--text-main, #23415f); }
+    .fail-file-size { color: var(--danger); font-weight: 600; }
   </style>
 </head>
 <body>
@@ -75,6 +120,8 @@
     <button class="active" type="button" data-prototype-button="empty">空状态</button>
     <button type="button" data-prototype-button="uploaded">已上传</button>
     <button type="button" data-prototype-button="save-confirm">保存确认</button>
+    <button type="button" data-prototype-button="upload-fail">部分上传失败</button>
+    <button type="button" data-prototype-button="upload-fail-all">全部上传失败</button>
   </div>
 
   <div class="prototype-stage active" data-prototype-panel="empty">
@@ -121,7 +168,7 @@
             <section class="upload-column upload-media-body">
               <div class="upload-column-head">
                 <div class="upload-column-title">上传图片</div>
-                <div class="subtle-note">支持 jpg / png，单张不得超过 5MB</div>
+                <div class="subtle-note">支持 jpg / png，单张不得超过 10MB</div>
               </div>
               <div class="upload-column-body">
                 <div data-view-panel="empty" class="active">
@@ -227,7 +274,7 @@
             <section class="upload-column upload-media-body">
               <div class="upload-column-head">
                 <div class="upload-column-title">上传图片</div>
-                <div class="subtle-note">支持 jpg / png，单张不得超过 5MB</div>
+                <div class="subtle-note">支持 jpg / png，单张不得超过 10MB</div>
               </div>
               <div class="upload-column-body">
                 <div data-view-panel="empty">
@@ -333,7 +380,7 @@
             <section class="upload-column upload-media-body">
               <div class="upload-column-head">
                 <div class="upload-column-title">上传图片</div>
-                <div class="subtle-note">支持 jpg / png，单张不得超过 5MB</div>
+                <div class="subtle-note">支持 jpg / png，单张不得超过 10MB</div>
               </div>
               <div class="upload-column-body">
                 <div data-view-panel="empty">
@@ -369,7 +416,7 @@
           </div>
           <section class="upload-save-stage active" id="uploadSaveConfirm">
             <div class="modal medium">
-              <div class="modal-head"><span>确认保存巡查记录</span><span data-close-save-confirm style="cursor:pointer;">×</span></div>
+              <div class="modal-head"><span>确认保存巡查记录</span></div>
               <div class="modal-body">
                 <div class="danger-box">
                   <div style="line-height:2; color:#5f6f86;">
@@ -384,11 +431,172 @@
                 </div>
               </div>
               <div class="modal-foot">
-                <button class="btn btn-ghost" data-close-save-confirm>取消</button>
+                <button class="btn btn-ghost">取消</button>
                 <button class="btn btn-primary">确定</button>
               </div>
             </div>
           </section>
+        </section>
+      </main>
+    </div>
+  </div>
+  </div>
+
+  <div class="prototype-stage" data-prototype-panel="upload-fail">
+<div class="frame" data-layout-module="inspection" data-layout-top-active="inspection" data-layout-side-preset="inspection" data-layout-side-active="inspection">
+    <header class="topbar"></header>
+    <div class="main">
+      <aside class="sidebar"></aside>
+      <main class="workspace">
+        <div class="crumb">☰ 巡查管理 〉 上传巡查记录页</div>
+        <section class="surface tabbar"><div class="tab">巡查管理</div></section>
+        <section class="content-panel has-page-actions" data-view-scope style="position:relative;min-height:0;">
+          <div class="page-header project-detail-header" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+            <div class="project-detail-titlebar">
+              <div class="project-detail-back">〈 <span>返回</span></div>
+              <div class="project-detail-divider"></div>
+              <div class="project-detail-current">上传巡查记录</div>
+            </div>
+          </div>
+          <div class="upload-two-column">
+            <section class="upload-column">
+              <div class="upload-column-head"><div class="upload-column-title">项目信息</div></div>
+              <div class="upload-column-body">
+                <div class="upload-info-grid">
+                  <div class="field-label">项目编号/名称 *</div>
+                  <input class="control" type="text" value="前海时代广场 / GC-20260329-0002" />
+                  <div class="field-label">项目编号</div><div class="readonly">GC-20260329-0002</div>
+                  <div class="field-label">项目名称</div><div class="readonly">前海时代广场</div>
+                  <div class="field-label">施工类型</div><div class="readonly">小型工程</div>
+                  <div class="field-label">项目地址</div><div class="readonly">深圳市南山区科苑南路2888号</div>
+                  <div class="field-label">巡查时间 *</div><input class="control" type="datetime-local" value="2026-03-30T14:30" />
+                  <div class="field-label">巡查人 *</div>
+                  <select class="control select-control"><option selected>请选择</option><option>张三</option><option>李四</option><option>王五</option><option>赵六</option></select>
+                  <div class="field-label">备注</div>
+                  <textarea class="control" style="min-height:88px;padding:10px 12px;" placeholder="请输入备注"></textarea>
+                  <div class="field-label">上传人</div><div class="readonly">张三</div>
+                </div>
+              </div>
+            </section>
+            <section class="upload-column upload-media-body">
+              <div class="upload-column-head">
+                <div class="upload-column-title">上传图片</div>
+                <div class="subtle-note">支持 jpg / png，单张不得超过 10MB</div>
+              </div>
+              <div class="upload-column-body">
+                <div data-view-panel="uploaded" class="active">
+                  <div class="upload-media-toolbar">
+                    <div class="subtle-note">已选择 7 张图片，可继续上传或单张删除。</div>
+                  </div>
+                  <div class="proto-image-grid">
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图1缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图2缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图3缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图4缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图5缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图6缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图7缩略</div>
+                    <div class="proto-image-card upload">＋ 点击上传</div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-ghost">取消</button>
+            <button class="btn btn-primary">保存</button>
+          </div>
+          <section class="upload-fail-stage active" id="uploadFailModal">
+            <div class="modal medium">
+              <div class="modal-head"><span>部分图片未能添加</span></div>
+              <div class="modal-body">
+                <div class="notice" style="margin-bottom:16px;">
+                  以下 3 张图片超过 10MB，其余 7 张已添加成功。
+                </div>
+                <div class="fail-file-list">
+                  <div class="fail-file-item">
+                    <span class="fail-file-name">IMG_001.jpg</span>
+                    <span class="fail-file-size">12.3 MB</span>
+                  </div>
+                  <div class="fail-file-item">
+                    <span class="fail-file-name">IMG_005.png</span>
+                    <span class="fail-file-size">15.1 MB</span>
+                  </div>
+                  <div class="fail-file-item">
+                    <span class="fail-file-name">IMG_009.jpg</span>
+                    <span class="fail-file-size">11.8 MB</span>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-foot">
+                <button class="btn btn-primary">我知道了</button>
+              </div>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+  </div>
+  </div>
+
+  <div class="prototype-stage" data-prototype-panel="upload-fail-all">
+<div class="frame" data-layout-module="inspection" data-layout-top-active="inspection" data-layout-side-preset="inspection" data-layout-side-active="inspection">
+    <header class="topbar"></header>
+    <div class="main">
+      <aside class="sidebar"></aside>
+      <main class="workspace">
+        <div class="crumb">☰ 巡查管理 〉 上传巡查记录页</div>
+        <section class="surface tabbar"><div class="tab">巡查管理</div></section>
+        <section class="content-panel has-page-actions" data-view-scope style="position:relative;min-height:0;">
+          <div class="page-header project-detail-header" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+            <div class="project-detail-titlebar">
+              <div class="project-detail-back">〈 <span>返回</span></div>
+              <div class="project-detail-divider"></div>
+              <div class="project-detail-current">上传巡查记录</div>
+            </div>
+          </div>
+          <div class="upload-two-column">
+            <section class="upload-column">
+              <div class="upload-column-head"><div class="upload-column-title">项目信息</div></div>
+              <div class="upload-column-body">
+                <div class="upload-info-grid">
+                  <div class="field-label">项目编号/名称 *</div>
+                  <input class="control" type="text" value="前海时代广场 / GC-20260329-0002" />
+                  <div class="field-label">项目编号</div><div class="readonly">GC-20260329-0002</div>
+                  <div class="field-label">项目名称</div><div class="readonly">前海时代广场</div>
+                  <div class="field-label">施工类型</div><div class="readonly">小型工程</div>
+                  <div class="field-label">项目地址</div><div class="readonly">深圳市南山区科苑南路2888号</div>
+                  <div class="field-label">巡查时间 *</div><input class="control" type="datetime-local" value="2026-03-30T14:30" />
+                  <div class="field-label">巡查人 *</div>
+                  <select class="control select-control"><option selected>请选择</option><option>张三</option><option>李四</option><option>王五</option><option>赵六</option></select>
+                  <div class="field-label">备注</div>
+                  <textarea class="control" style="min-height:88px;padding:10px 12px;" placeholder="请输入备注"></textarea>
+                  <div class="field-label">上传人</div><div class="readonly">张三</div>
+                </div>
+              </div>
+            </section>
+            <section class="upload-column upload-media-body">
+              <div class="upload-column-head">
+                <div class="upload-column-title">上传图片</div>
+                <div class="subtle-note">支持 jpg / png，单张不得超过 10MB</div>
+              </div>
+              <div class="upload-column-body">
+                <div data-view-panel="empty" class="active">
+                  <div class="proto-image-upload">
+                    <div class="proto-image-upload-dropzone">
+                      <div class="proto-image-upload-icon">＋</div>
+                      <div class="proto-image-upload-text">点击上传 / 拖拽上传</div>
+                      <div class="proto-image-upload-note">暂未上传图片</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-ghost">取消</button>
+            <button class="btn btn-primary" disabled style="opacity:.45;cursor:not-allowed;">保存</button>
+          </div>
         </section>
       </main>
     </div>
@@ -421,6 +629,16 @@
         if (modal) modal.classList.remove("active");
       });
     });
+
+    // 切换浮窗「全部上传失败」按钮：切换 panel 后触发 error toast
+    document.querySelector('[data-prototype-button="upload-fail-all"]')
+      .addEventListener("click", () => {
+        setTimeout(() => {
+          if (typeof window.showProtoToast === "function") {
+            window.showProtoToast("上传图片超过10MB，请重新选择符合要求的图片后再上传。", "error");
+          }
+        }, 50);
+      });
   </script>
 </body>
 </html>
