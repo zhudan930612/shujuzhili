@@ -123,7 +123,7 @@
 <body>
   <div class="prototype-state-bar" id="inspection-detail-switch" data-prototype-switch>
     <button class="active" type="button" data-prototype-button="detail">详情态</button>
-    <button type="button" data-prototype-button="batch">批量管理态</button>
+    <button type="button" data-prototype-button="batch">编辑态</button>
     <button type="button" data-prototype-button="delete-confirm">删除确认</button>
     <button type="button" data-prototype-button="delete-blocked">删除受阻</button>
   </div>
@@ -175,7 +175,7 @@
               </div>
               <section class="upload-column upload-media-body">
                 <div class="upload-column-head">
-                  <div class="upload-column-title">图片列表（12张）<span class="record-media-actions"><span class="link">[批量管理]</span></span></div>
+                  <div class="upload-column-title">图片列表（12张）</div>
                 </div>
                 <div class="upload-column-body">
                   <div class="proto-image-grid">
@@ -189,6 +189,7 @@
             <div class="page-actions">
               <button class="btn btn-ghost">上一条</button>
               <button class="btn btn-ghost">下一条</button>
+              <button class="btn btn-primary">编辑</button>
               <button class="btn btn-danger" data-open-record-delete-confirm>删除记录</button>
             </div>
           </div>
@@ -197,34 +198,37 @@
             <div class="upload-two-column">
               <div class="upload-column record-left-stack">
                 <section class="upload-column">
-                  <div class="upload-column-head"><div class="upload-column-title">基础信息</div></div>
+                  <div class="upload-column-head"><div class="upload-column-title">项目信息</div></div>
                   <div class="upload-column-body">
-                    <div class="record-info-grid">
+                    <div class="upload-info-grid">
+                      <div class="field-label">项目编号/名称 *</div>
+                      <input class="control" list="projectOptionsEditInline" type="text" value="前海时代广场 / GC-20260329-0002" />
+                      <datalist id="projectOptionsEditInline">
+                        <option value="前海时代广场 / GC-20260329-0002"></option>
+                        <option value="万科云城三期 / JZ-20260315-0011"></option>
+                        <option value="华润城二期8栋 / LX-20260310-0008"></option>
+                      </datalist>
                       <div class="field-label">项目编号</div><div class="readonly">GC-20260329-0002</div>
                       <div class="field-label">项目名称</div><div class="readonly">前海时代广场</div>
                       <div class="field-label">施工类型</div><div class="readonly">小型工程</div>
                       <div class="field-label">项目地址</div><div class="readonly">深圳市南山区科苑南路2888号</div>
-                      <div class="field-label">来源</div><div class="readonly">后台上传</div>
-                      <div class="field-label">巡查人</div><div class="readonly">张三</div>
-                      <div class="field-label">巡查时间</div><div class="readonly">2026-03-28 14:30:00</div>
-                    </div>
-                  </div>
-                </section>
-                <section class="upload-column">
-                  <div class="upload-column-head"><div class="upload-column-title">系统信息</div></div>
-                  <div class="upload-column-body">
-                    <div class="record-info-grid">
-                      <div class="field-label">创建人</div><div class="readonly">李四</div>
-                      <div class="field-label">创建时间</div><div class="readonly">2026-03-28 14:36:12</div>
-                      <div class="field-label">更新人</div><div class="readonly">王五</div>
-                      <div class="field-label">更新时间</div><div class="readonly">2026-03-29 09:20:18</div>
+                      <div class="field-label">巡查时间 *</div><input class="control" type="datetime-local" value="2026-03-28T14:30" />
+                      <div class="field-label">巡查人 *</div>
+                      <select class="control select-control">
+                        <option selected>张三</option>
+                        <option>李四</option>
+                        <option>王五</option>
+                        <option>赵六</option>
+                      </select>
+                      <div class="field-label">上传人</div><div class="readonly">李四</div>
                     </div>
                   </div>
                 </section>
               </div>
               <section class="upload-column upload-media-body">
                 <div class="upload-column-head">
-                  <div class="upload-column-title">图片列表（12张）<span class="record-media-actions"><span class="link">[取消]</span><span class="link" data-open-record-save-confirm>[保存]</span></span></div>
+                  <div class="upload-column-title">上传图片</div>
+                  <div class="subtle-note">仅支持删除现有图片，不支持追加或替换</div>
                 </div>
                 <div class="upload-column-body">
                   <div class="proto-image-grid">
@@ -232,8 +236,13 @@
                     <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图5</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图6</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图7</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图8</div>
                     <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图9</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图10</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图11</div><div class="proto-image-card"><span class="proto-image-card-delete">×</span>图12</div>
                   </div>
+                  <div class="record-help">点击图片右上角 `×` 删除当前巡查记录下的图片，不提供新增上传入口。</div>
                 </div>
               </section>
+            </div>
+            <div class="page-actions">
+              <button class="btn btn-ghost">取消</button>
+              <button class="btn btn-primary">保存</button>
             </div>
           </div>
           <section class="record-save-stage" id="recordSaveConfirm">
@@ -334,7 +343,7 @@
               </div>
               <section class="upload-column upload-media-body">
                 <div class="upload-column-head">
-                  <div class="upload-column-title">图片列表（12张）<span class="record-media-actions"><span class="link">[批量管理]</span></span></div>
+                  <div class="upload-column-title">图片列表（12张）</div>
                 </div>
                 <div class="upload-column-body">
                   <div class="proto-image-grid">
@@ -348,6 +357,7 @@
             <div class="page-actions">
               <button class="btn btn-ghost">上一条</button>
               <button class="btn btn-ghost">下一条</button>
+              <button class="btn btn-primary">编辑</button>
               <button class="btn btn-danger" data-open-record-delete-confirm>删除记录</button>
             </div>
           </div>
@@ -356,34 +366,37 @@
             <div class="upload-two-column">
               <div class="upload-column record-left-stack">
                 <section class="upload-column">
-                  <div class="upload-column-head"><div class="upload-column-title">基础信息</div></div>
+                  <div class="upload-column-head"><div class="upload-column-title">项目信息</div></div>
                   <div class="upload-column-body">
-                    <div class="record-info-grid">
+                    <div class="upload-info-grid">
+                      <div class="field-label">项目编号/名称 *</div>
+                      <input class="control" list="projectOptionsEditBatch" type="text" value="前海时代广场 / GC-20260329-0002" />
+                      <datalist id="projectOptionsEditBatch">
+                        <option value="前海时代广场 / GC-20260329-0002"></option>
+                        <option value="万科云城三期 / JZ-20260315-0011"></option>
+                        <option value="华润城二期8栋 / LX-20260310-0008"></option>
+                      </datalist>
                       <div class="field-label">项目编号</div><div class="readonly">GC-20260329-0002</div>
                       <div class="field-label">项目名称</div><div class="readonly">前海时代广场</div>
                       <div class="field-label">施工类型</div><div class="readonly">小型工程</div>
                       <div class="field-label">项目地址</div><div class="readonly">深圳市南山区科苑南路2888号</div>
-                      <div class="field-label">来源</div><div class="readonly">后台上传</div>
-                      <div class="field-label">巡查人</div><div class="readonly">张三</div>
-                      <div class="field-label">巡查时间</div><div class="readonly">2026-03-28 14:30:00</div>
-                    </div>
-                  </div>
-                </section>
-                <section class="upload-column">
-                  <div class="upload-column-head"><div class="upload-column-title">系统信息</div></div>
-                  <div class="upload-column-body">
-                    <div class="record-info-grid">
-                      <div class="field-label">创建人</div><div class="readonly">李四</div>
-                      <div class="field-label">创建时间</div><div class="readonly">2026-03-28 14:36:12</div>
-                      <div class="field-label">更新人</div><div class="readonly">王五</div>
-                      <div class="field-label">更新时间</div><div class="readonly">2026-03-29 09:20:18</div>
+                      <div class="field-label">巡查时间 *</div><input class="control" type="datetime-local" value="2026-03-28T14:30" />
+                      <div class="field-label">巡查人 *</div>
+                      <select class="control select-control">
+                        <option selected>张三</option>
+                        <option>李四</option>
+                        <option>王五</option>
+                        <option>赵六</option>
+                      </select>
+                      <div class="field-label">上传人</div><div class="readonly">李四</div>
                     </div>
                   </div>
                 </section>
               </div>
               <section class="upload-column upload-media-body">
                 <div class="upload-column-head">
-                  <div class="upload-column-title">图片列表（12张）<span class="record-media-actions"><span class="link">[取消]</span><span class="link" data-open-record-save-confirm>[保存]</span></span></div>
+                  <div class="upload-column-title">上传图片</div>
+                  <div class="subtle-note">仅支持删除现有图片，不支持追加或替换</div>
                 </div>
                 <div class="upload-column-body">
                   <div class="proto-image-grid">
@@ -393,6 +406,10 @@
                   </div>
                 </div>
               </section>
+            </div>
+            <div class="page-actions">
+              <button class="btn btn-ghost">取消</button>
+              <button class="btn btn-primary">保存</button>
             </div>
           </div>
           <section class="record-save-stage" id="recordSaveConfirm">
