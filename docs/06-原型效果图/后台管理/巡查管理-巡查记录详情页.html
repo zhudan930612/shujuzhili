@@ -80,17 +80,6 @@
       font-size: 14px;
       line-height: 1.6;
     }
-    .record-media-actions {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-left: 8px;
-    }
-    .record-media-actions .link {
-      font-size: 13px;
-      color: var(--brand);
-      cursor: pointer;
-    }
     .record-detail-panel .upload-media-body .upload-column-body {
       min-height: 520px;
     }
@@ -368,14 +357,18 @@
             </div>
             <section class="upload-column upload-media-body">
               <div class="upload-column-head">
-                <div class="upload-column-title">图片列表（0张）<span class="record-media-actions"><span class="link">[取消]</span><span class="link">[保存]</span></span></div>
+                <div class="upload-column-title">图片列表（0张）</div>
               </div>
               <div class="upload-column-body">
                 <div class="upload-box" style="min-height:220px;display:flex;align-items:center;justify-content:center;color:#8a9caf;">
-                  暂无可展示图片
+                  当前已无可保留图片
                 </div>
               </div>
             </section>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-ghost">取消</button>
+            <button class="btn btn-primary" disabled style="opacity:.45;cursor:not-allowed;">保存</button>
           </div>
         </section>
       </main>
