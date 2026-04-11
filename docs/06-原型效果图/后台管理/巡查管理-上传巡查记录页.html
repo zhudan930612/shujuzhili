@@ -84,11 +84,25 @@
       background: rgba(16, 33, 58, 0.18);
     }
     .upload-fail-stage .modal {
-      width: 520px;
+      width: 680px;
       max-width: calc(100% - 48px);
     }
     .upload-fail-stage .modal-foot {
       justify-content: flex-end;
+    }
+    .upload-fail-summary {
+      margin-bottom: 16px;
+      color: #4f647c;
+      line-height: 1.8;
+    }
+    .upload-fail-group + .upload-fail-group {
+      margin-top: 16px;
+    }
+    .upload-fail-group-title {
+      margin-bottom: 8px;
+      color: #23415f;
+      font-size: 14px;
+      font-weight: 600;
     }
     .fail-file-list {
       border: 1px solid var(--line);
@@ -113,6 +127,13 @@
     .fail-file-item:nth-last-child(2):nth-child(2n+1) { border-bottom: none; }
     .fail-file-name { color: var(--text-main, #23415f); }
     .fail-file-size { color: var(--danger); font-weight: 600; }
+    .fail-file-reason { color: #8aa0b6; font-weight: 500; }
+    .proto-image-card.upload.disabled {
+      color: #9cadbf;
+      background: #f3f6fa;
+      border-style: dashed;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
@@ -120,8 +141,10 @@
     <button class="active" type="button" data-prototype-button="empty">空状态</button>
     <button type="button" data-prototype-button="uploaded">已上传</button>
     <button type="button" data-prototype-button="save-confirm">保存确认</button>
-    <button type="button" data-prototype-button="upload-fail">部分上传失败</button>
-    <button type="button" data-prototype-button="upload-fail-all">全部上传失败</button>
+    <button type="button" data-prototype-button="upload-fail-size">大小超限</button>
+    <button type="button" data-prototype-button="upload-fail-count">数量超限</button>
+    <button type="button" data-prototype-button="upload-fail-mixed">混合失败</button>
+    <button type="button" data-prototype-button="upload-limit-full">达到上限</button>
   </div>
 
   <div class="prototype-stage active" data-prototype-panel="empty">
@@ -168,7 +191,7 @@
             <section class="upload-column upload-media-body">
               <div class="upload-column-head">
                 <div class="upload-column-title">上传图片</div>
-                <div class="subtle-note">支持 jpg / png，单张不得超过 10MB</div>
+                <div class="subtle-note">支持 jpg / png，单张不超过 10MB，单条记录最多 50 张</div>
               </div>
               <div class="upload-column-body">
                 <div data-view-panel="empty" class="active">
@@ -182,7 +205,7 @@
                 </div>
                 <div data-view-panel="uploaded">
                   <div class="upload-media-toolbar">
-                    <div class="subtle-note">已选择 8 张图片，可继续上传或单张删除。</div>
+                    <div class="subtle-note">已选择 8 张图片，还可继续上传 42 张或单张删除。</div>
                   </div>
                   <div class="proto-image-grid">
                     <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图1缩略</div>
@@ -274,7 +297,7 @@
             <section class="upload-column upload-media-body">
               <div class="upload-column-head">
                 <div class="upload-column-title">上传图片</div>
-                <div class="subtle-note">支持 jpg / png，单张不得超过 10MB</div>
+                <div class="subtle-note">支持 jpg / png，单张不超过 10MB，单条记录最多 50 张</div>
               </div>
               <div class="upload-column-body">
                 <div data-view-panel="empty">
@@ -288,7 +311,7 @@
                 </div>
                 <div data-view-panel="uploaded" class="active">
                   <div class="upload-media-toolbar">
-                    <div class="subtle-note">已选择 8 张图片，可继续上传或单张删除。</div>
+                    <div class="subtle-note">已选择 8 张图片，还可继续上传 42 张或单张删除。</div>
                   </div>
                   <div class="proto-image-grid">
                     <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图1缩略</div>
@@ -380,7 +403,7 @@
             <section class="upload-column upload-media-body">
               <div class="upload-column-head">
                 <div class="upload-column-title">上传图片</div>
-                <div class="subtle-note">支持 jpg / png，单张不得超过 10MB</div>
+                <div class="subtle-note">支持 jpg / png，单张不超过 10MB，单条记录最多 50 张</div>
               </div>
               <div class="upload-column-body">
                 <div data-view-panel="empty">
@@ -394,7 +417,7 @@
                 </div>
                 <div data-view-panel="uploaded" class="active">
                   <div class="upload-media-toolbar">
-                    <div class="subtle-note">已选择 8 张图片，可继续上传或单张删除。</div>
+                    <div class="subtle-note">已选择 8 张图片，还可继续上传 42 张或单张删除。</div>
                   </div>
                   <div class="proto-image-grid">
                     <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图1缩略</div>
@@ -442,7 +465,7 @@
   </div>
   </div>
 
-  <div class="prototype-stage" data-prototype-panel="upload-fail">
+  <div class="prototype-stage" data-prototype-panel="upload-fail-size">
 <div class="frame" data-layout-module="inspection" data-layout-top-active="inspection" data-layout-side-preset="inspection" data-layout-side-active="inspection">
     <header class="topbar"></header>
     <div class="main">
@@ -481,12 +504,12 @@
             <section class="upload-column upload-media-body">
               <div class="upload-column-head">
                 <div class="upload-column-title">上传图片</div>
-                <div class="subtle-note">支持 jpg / png，单张不得超过 10MB</div>
+                <div class="subtle-note">支持 jpg / png，单张不超过 10MB，单条记录最多 50 张</div>
               </div>
               <div class="upload-column-body">
                 <div data-view-panel="uploaded" class="active">
                   <div class="upload-media-toolbar">
-                    <div class="subtle-note">已选择 7 张图片，可继续上传或单张删除。</div>
+                    <div class="subtle-note">已选择 7 张图片，还可继续上传 43 张或单张删除。</div>
                   </div>
                   <div class="proto-image-grid">
                     <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图1缩略</div>
@@ -510,21 +533,24 @@
             <div class="modal medium">
               <div class="modal-head"><span>部分图片未能添加</span></div>
               <div class="modal-body">
-                <div class="notice" style="margin-bottom:16px;">
-                  以下 3 张图片超过 10MB，其余 7 张已添加成功。
+                <div class="notice upload-fail-summary">
+                  本次选择共 10 张图片，成功添加 7 张；其中 3 张因单张超过大小未添加 未添加。
                 </div>
-                <div class="fail-file-list">
-                  <div class="fail-file-item">
-                    <span class="fail-file-name">IMG_001.jpg</span>
-                    <span class="fail-file-size">12.3 MB</span>
-                  </div>
-                  <div class="fail-file-item">
-                    <span class="fail-file-name">IMG_005.png</span>
-                    <span class="fail-file-size">15.1 MB</span>
-                  </div>
-                  <div class="fail-file-item">
-                    <span class="fail-file-name">IMG_009.jpg</span>
-                    <span class="fail-file-size">11.8 MB</span>
+                <div class="upload-fail-group">
+                  <div class="upload-fail-group-title">单张超过大小未添加（ 3 张）</div>
+                  <div class="fail-file-list">
+                    <div class="fail-file-item">
+                      <span class="fail-file-name">IMG_001.jpg</span>
+                      <span class="fail-file-size">12.3 MB</span>
+                    </div>
+                    <div class="fail-file-item">
+                      <span class="fail-file-name">IMG_005.png</span>
+                      <span class="fail-file-size">15.1 MB</span>
+                    </div>
+                    <div class="fail-file-item">
+                      <span class="fail-file-name">IMG_009.jpg</span>
+                      <span class="fail-file-size">11.8 MB</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -539,7 +565,7 @@
   </div>
   </div>
 
-  <div class="prototype-stage" data-prototype-panel="upload-fail-all">
+  <div class="prototype-stage" data-prototype-panel="upload-fail-count">
 <div class="frame" data-layout-module="inspection" data-layout-top-active="inspection" data-layout-side-preset="inspection" data-layout-side-active="inspection">
     <header class="topbar"></header>
     <div class="main">
@@ -578,16 +604,22 @@
             <section class="upload-column upload-media-body">
               <div class="upload-column-head">
                 <div class="upload-column-title">上传图片</div>
-                <div class="subtle-note">支持 jpg / png，单张不得超过 10MB</div>
+                <div class="subtle-note">支持 jpg / png，单张不超过 10MB，单条记录最多 50 张</div>
               </div>
               <div class="upload-column-body">
-                <div data-view-panel="empty" class="active">
-                  <div class="proto-image-upload">
-                    <div class="proto-image-upload-dropzone">
-                      <div class="proto-image-upload-icon">＋</div>
-                      <div class="proto-image-upload-text">点击上传 / 拖拽上传</div>
-                      <div class="proto-image-upload-note">暂未上传图片</div>
-                    </div>
+                <div data-view-panel="uploaded" class="active">
+                  <div class="upload-media-toolbar">
+                    <div class="subtle-note">已选择 50 张图片，已达到上限，请先删除后再上传。</div>
+                  </div>
+                  <div class="proto-image-grid">
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图1缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图2缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图3缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图4缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图5缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图6缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图7缩略</div>
+                    <div class="proto-image-card upload disabled">已达 50 张上限</div>
                   </div>
                 </div>
               </div>
@@ -595,14 +627,235 @@
           </div>
           <div class="page-actions">
             <button class="btn btn-ghost">取消</button>
-            <button class="btn btn-primary" disabled style="opacity:.45;cursor:not-allowed;">保存</button>
+            <button class="btn btn-primary" data-open-save-confirm>保存</button>
           </div>
+          <section class="upload-fail-stage active" id="uploadCountFailModal">
+            <div class="modal medium">
+              <div class="modal-head"><span>部分图片未能添加</span></div>
+              <div class="modal-body">
+                <div class="notice upload-fail-summary">
+                  本次新选 10 张，成功添加 5 张；其余 5 张因超出数量上限未添加。
+                </div>
+                <div class="upload-fail-group">
+                  <div class="upload-fail-group-title">数量超过上限未添加（5 张）</div>
+                  <div class="fail-file-list">
+                    <div class="fail-file-item">
+                      <span class="fail-file-name">IMG_046.jpg</span>
+                      <span class="fail-file-reason">超出上限</span>
+                    </div>
+                    <div class="fail-file-item">
+                      <span class="fail-file-name">IMG_047.jpg</span>
+                      <span class="fail-file-reason">超出上限</span>
+                    </div>
+                    <div class="fail-file-item">
+                      <span class="fail-file-name">IMG_048.png</span>
+                      <span class="fail-file-reason">超出上限</span>
+                    </div>
+                    <div class="fail-file-item">
+                      <span class="fail-file-name">IMG_049.jpg</span>
+                      <span class="fail-file-reason">超出上限</span>
+                    </div>
+                    <div class="fail-file-item">
+                      <span class="fail-file-name">IMG_050.jpg</span>
+                      <span class="fail-file-reason">超出上限</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-foot">
+                <button class="btn btn-primary">我知道了</button>
+              </div>
+            </div>
+          </section>
         </section>
       </main>
     </div>
   </div>
   </div>
 
+  <div class="prototype-stage" data-prototype-panel="upload-fail-mixed">
+<div class="frame" data-layout-module="inspection" data-layout-top-active="inspection" data-layout-side-preset="inspection" data-layout-side-active="inspection">
+    <header class="topbar"></header>
+    <div class="main">
+      <aside class="sidebar"></aside>
+      <main class="workspace">
+        <div class="crumb">☰ 巡查管理 〉 上传巡查记录页</div>
+        <section class="surface tabbar"><div class="tab">巡查管理</div></section>
+        <section class="content-panel has-page-actions" data-view-scope style="position:relative;min-height:0;">
+          <div class="page-header project-detail-header" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+            <div class="project-detail-titlebar">
+              <div class="project-detail-back">〈 <span>返回</span></div>
+              <div class="project-detail-divider"></div>
+              <div class="project-detail-current">上传巡查记录</div>
+            </div>
+          </div>
+          <div class="upload-two-column">
+            <section class="upload-column">
+              <div class="upload-column-head"><div class="upload-column-title">项目信息</div></div>
+              <div class="upload-column-body">
+                <div class="upload-info-grid">
+                  <div class="field-label">项目编号/名称 *</div>
+                  <input class="control" type="text" value="前海时代广场 / GC-20260329-0002" />
+                  <div class="field-label">项目编号</div><div class="readonly">GC-20260329-0002</div>
+                  <div class="field-label">项目名称</div><div class="readonly">前海时代广场</div>
+                  <div class="field-label">施工类型</div><div class="readonly">小型工程</div>
+                  <div class="field-label">项目地址</div><div class="readonly">深圳市南山区科苑南路2888号</div>
+                  <div class="field-label">巡查时间 *</div><input class="control" type="datetime-local" value="2026-03-30T14:30" />
+                  <div class="field-label">巡查人 *</div>
+                  <select class="control select-control"><option selected>请选择</option><option>张三</option><option>李四</option><option>王五</option><option>赵六</option></select>
+                  <div class="field-label">备注</div>
+                  <textarea class="control" style="min-height:88px;padding:10px 12px;" placeholder="请输入备注"></textarea>
+                  <div class="field-label">上传人</div><div class="readonly">张三</div>
+                </div>
+              </div>
+            </section>
+            <section class="upload-column upload-media-body">
+              <div class="upload-column-head">
+                <div class="upload-column-title">上传图片</div>
+                <div class="subtle-note">支持 jpg / png，单张不超过 10MB，单条记录最多 50 张</div>
+              </div>
+              <div class="upload-column-body">
+                <div data-view-panel="uploaded" class="active">
+                  <div class="upload-media-toolbar">
+                    <div class="subtle-note">已选择 50 张图片，已达到上限，请先删除后再上传。</div>
+                  </div>
+                  <div class="proto-image-grid">
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图1缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图2缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图3缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图4缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图5缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图6缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图7缩略</div>
+                    <div class="proto-image-card upload disabled">已达 50 张上限</div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-ghost">取消</button>
+            <button class="btn btn-primary" data-open-save-confirm>保存</button>
+          </div>
+          <section class="upload-fail-stage active" id="uploadMixedFailModal">
+            <div class="modal medium">
+              <div class="modal-head"><span>部分图片未能添加</span></div>
+              <div class="modal-body">
+                <div class="notice upload-fail-summary">
+                  本次新选 10 张图片，已成功添加 5 张。未添加的 5 张中：3 张单张超过大小未添加，2 张因超出数量上限未添加。
+                </div>
+                <div class="upload-fail-group">
+                  <div class="upload-fail-group-title">
+                    单张超过大小未添加 （3 张）</div>
+                  <div class="fail-file-list">
+                    <div class="fail-file-item">
+                      <span class="fail-file-name">IMG_201.jpg</span>
+                      <span class="fail-file-size">12.6 MB</span>
+                    </div>
+                    <div class="fail-file-item">
+                      <span class="fail-file-name">IMG_203.png</span>
+                      <span class="fail-file-size">14.2 MB</span>
+                    </div>
+                    <div class="fail-file-item">
+                      <span class="fail-file-name">IMG_206.jpg</span>
+                      <span class="fail-file-size">11.1 MB</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="upload-fail-group">
+                  <div class="upload-fail-group-title">数量超过上限未添加（2 张）</div>
+                  <div class="fail-file-list">
+                    <div class="fail-file-item">
+                      <span class="fail-file-name">IMG_208.jpg</span>
+                      <span class="fail-file-reason">超出上限</span>
+                    </div>
+                    <div class="fail-file-item">
+                      <span class="fail-file-name">IMG_209.png</span>
+                      <span class="fail-file-reason">超出上限</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-foot">
+                <button class="btn btn-primary">我知道了</button>
+              </div>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+  </div>
+  </div>
+
+  <div class="prototype-stage" data-prototype-panel="upload-limit-full">
+<div class="frame" data-layout-module="inspection" data-layout-top-active="inspection" data-layout-side-preset="inspection" data-layout-side-active="inspection">
+    <header class="topbar"></header>
+    <div class="main">
+      <aside class="sidebar"></aside>
+      <main class="workspace">
+        <div class="crumb">☰ 巡查管理 〉 上传巡查记录页</div>
+        <section class="surface tabbar"><div class="tab">巡查管理</div></section>
+        <section class="content-panel has-page-actions" data-view-scope style="position:relative;min-height:0;">
+          <div class="page-header project-detail-header" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+            <div class="project-detail-titlebar">
+              <div class="project-detail-back">〈 <span>返回</span></div>
+              <div class="project-detail-divider"></div>
+              <div class="project-detail-current">上传巡查记录</div>
+            </div>
+          </div>
+          <div class="upload-two-column">
+            <section class="upload-column">
+              <div class="upload-column-head"><div class="upload-column-title">项目信息</div></div>
+              <div class="upload-column-body">
+                <div class="upload-info-grid">
+                  <div class="field-label">项目编号/名称 *</div>
+                  <input class="control" type="text" value="前海时代广场 / GC-20260329-0002" />
+                  <div class="field-label">项目编号</div><div class="readonly">GC-20260329-0002</div>
+                  <div class="field-label">项目名称</div><div class="readonly">前海时代广场</div>
+                  <div class="field-label">施工类型</div><div class="readonly">小型工程</div>
+                  <div class="field-label">项目地址</div><div class="readonly">深圳市南山区科苑南路2888号</div>
+                  <div class="field-label">巡查时间 *</div><input class="control" type="datetime-local" value="2026-03-30T14:30" />
+                  <div class="field-label">巡查人 *</div>
+                  <select class="control select-control"><option selected>请选择</option><option>张三</option><option>李四</option><option>王五</option><option>赵六</option></select>
+                  <div class="field-label">备注</div>
+                  <textarea class="control" style="min-height:88px;padding:10px 12px;" placeholder="请输入备注"></textarea>
+                  <div class="field-label">上传人</div><div class="readonly">张三</div>
+                </div>
+              </div>
+            </section>
+            <section class="upload-column upload-media-body">
+              <div class="upload-column-head">
+                <div class="upload-column-title">上传图片</div>
+                <div class="subtle-note">支持 jpg / png，单张不超过 10MB，单条记录最多 50 张</div>
+              </div>
+              <div class="upload-column-body">
+                <div data-view-panel="uploaded" class="active">
+                  <div class="upload-media-toolbar">
+                    <div class="subtle-note">已选择 50 张图片，已达到上限，请先删除后再上传。</div>
+                  </div>
+                  <div class="proto-image-grid">
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图1缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图2缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图3缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图4缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图5缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图6缩略</div>
+                    <div class="proto-image-card"><span class="proto-image-card-delete">×</span>图7缩略</div>
+                    <div class="proto-image-card upload disabled">已达 50 张上限</div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-ghost">取消</button>
+            <button class="btn btn-primary" data-open-save-confirm>保存</button>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  </div>
   <script src="./assets/prototype.js"></script>
   <script src="./assets/prototype-layout.js"></script>
   <script src="./assets/prototype-switcher.js"></script>
@@ -630,15 +883,13 @@
       });
     });
 
-    // 切换浮窗「全部上传失败」按钮：切换 panel 后触发 error toast
-    document.querySelector('[data-prototype-button="upload-fail-all"]')
-      .addEventListener("click", () => {
-        setTimeout(() => {
-          if (typeof window.showProtoToast === "function") {
-            window.showProtoToast("上传图片超过10MB，请重新选择符合要求的图片后再上传。", "error");
-          }
-        }, 50);
+    document.querySelectorAll(".proto-image-card.upload.disabled").forEach((card) => {
+      card.addEventListener("click", () => {
+        if (typeof window.showProtoToast === "function") {
+          window.showProtoToast("已达 50 张上限，请先删除后再上传。", "warning");
+        }
       });
+    });
   </script>
 </body>
 </html>
