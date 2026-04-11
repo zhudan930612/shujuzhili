@@ -89,6 +89,34 @@
 </section>
 ```
 
+### 后台原型修改流程
+修改后台原型页时，默认按以下顺序执行：
+
+1. 先查看 `AGENTS.md` 中后台原型规则。
+2. 再查看本文件中的组件清单与最小结构。
+3. 再查看 `后台管理-组件预览.html` 中是否已有完整组合示例。
+4. 先列“页面元素 → 组件名”映射，再开始修改页面。
+5. 仅当现有组件无法覆盖时，才允许新增页面私有实现，并注明原因。
+
+### 页面元素 → 组件映射模板
+后续每次改后台原型前，建议先套用以下模板完成自检：
+
+```md
+本页组件映射：
+- 筛选区：proto-filter-bar
+- 列表骨架：proto-list-shell
+- 工具区：proto-list-tools
+- 表格区：proto-table-wrap
+- 分页：proto-pagination
+- 页面底部操作栏：page-actions
+- 操作列：proto-row-actions
+- 其他业务特化部分：____（若无则写“无”）
+```
+
+### 高频组合约束
+- 列表导出若使用公共组件，必须按“导出选项 + 导出按钮”整体接入，不能只放一个导出按钮。
+- 特殊状态页中的底部操作按钮仍应优先复用 `page-actions`，不要回塞到标题区、图片区或局部内容区。
+
 ```html
 <div class="prototype-state-bar" data-prototype-switch>
   <button class="active" data-prototype-button="list">列表态</button>
