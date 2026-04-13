@@ -88,6 +88,7 @@ function getProtoCascaderLevels(tree, selectedPath, maxDepth) {
 }
 
 function renderProtoCascader(cascader, selectedPath) {
+  cascader.dataset.protoCascaderPath = JSON.stringify(selectedPath);
   const panel = cascader.querySelector(".proto-cascader-panel");
   if (!panel) return;
 
@@ -166,7 +167,8 @@ document.querySelectorAll("[data-proto-cascader]").forEach((cascader) => {
     const maxDepth = Number(cascader.dataset.cascaderDepth || 4);
     const level = Number(option.dataset.level || 0);
     const label = option.dataset.label || "";
-    const selectedPath = getProtoCascaderValue(cascader).slice(0, level);
+    const currentPath = JSON.parse(cascader.dataset.protoCascaderPath || "[]");
+    const selectedPath = currentPath.slice(0, level);
     if (label !== "请选择") selectedPath[level] = label;
 
     const levels = getProtoCascaderLevels(getProtoCascaderTree(cascader), selectedPath, maxDepth);
@@ -179,7 +181,8 @@ document.querySelectorAll("[data-proto-cascader]").forEach((cascader) => {
       return;
     }
 
-    if (requiredDepth > 0 && selectedPath.length < requiredDepth) {
+    const isLeaf = !node || !node.children;
+    if (!isLeaf && requiredDepth > 0 && selectedPath.length < requiredDepth) {
       showProtoToast("行政区域必须选择到街镇层级", "warning");
       renderProtoCascader(cascader, selectedPath);
       return;

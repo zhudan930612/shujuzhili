@@ -1772,7 +1772,7 @@ tbody tr:nth-child(even) {
 
 .relation-pagination {
   padding: 16px 0 0;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .relation-table-wrap .page-size-select,
