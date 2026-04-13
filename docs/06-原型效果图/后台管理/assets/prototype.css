@@ -470,7 +470,7 @@ a {
   position: absolute;
   top: 38px;
   left: 0;
-  width: 720px;
+  width: 560px;
   min-height: 178px;
   border: 1px solid #d7dfe9;
   background: #fff;
@@ -485,7 +485,7 @@ a {
 }
 
 .proto-cascader-full .proto-cascader-panel {
-  width: 760px;
+  width: 600px;
 }
 
 .proto-filter-bar .proto-cascader {
@@ -497,8 +497,38 @@ a {
 }
 
 .proto-cascader-col {
-  padding: 8px 0;
+  padding: 4px 0;
   border-right: 1px solid #e7eef7;
+}
+
+.proto-cascader-select {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid #aab8c8;
+  flex-shrink: 0;
+  display: inline-block;
+  background: #fff;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: border-color 0.15s, border-width 0.15s;
+}
+
+.proto-cascader-option:hover .proto-cascader-select {
+  border-color: #1476df;
+}
+
+.proto-cascader-option.active .proto-cascader-select {
+  border: 5px solid #1476df;
+}
+
+.proto-cascader-option.active .proto-cascader-select::after {
+  content: none;
+}
+
+.proto-cascader-label {
+  flex: 1;
+  text-align: left;
 }
 
 .proto-cascader-col:last-child {
@@ -2049,6 +2079,20 @@ tbody tr:nth-child(even) {
 .prototype-state-bar button.active {
   background: linear-gradient(135deg, #3c89ff, #2d6cdf);
   border-color: rgba(255, 255, 255, 0.24);
+  color: #fff;
+}
+
+.prototype-state-bar .proto-state-close {
+  border-color: rgba(157, 178, 206, 0.2);
+  background: transparent;
+  color: rgba(238, 244, 255, 0.5);
+  margin-left: 4px;
+  padding: 8px 10px;
+}
+
+.prototype-state-bar .proto-state-close:hover {
+  background: rgba(255, 80, 80, 0.25);
+  border-color: rgba(255, 100, 100, 0.4);
   color: #fff;
 }
 

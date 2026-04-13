@@ -93,6 +93,7 @@ function renderProtoCascader(cascader, selectedPath) {
   if (!panel) return;
 
   const maxDepth = Number(cascader.dataset.cascaderDepth || 4);
+  const allowAnyLevel = cascader.dataset.allowAnyLevel === "true";
   const levels = getProtoCascaderLevels(getProtoCascaderTree(cascader), selectedPath, maxDepth);
   panel.innerHTML = "";
 
@@ -104,7 +105,6 @@ function renderProtoCascader(cascader, selectedPath) {
       const option = document.createElement("button");
       option.className = "proto-cascader-option";
       option.type = "button";
-      option.textContent = node.label;
       option.dataset.level = String(levelIndex);
       option.dataset.label = node.label;
 
@@ -112,7 +112,20 @@ function renderProtoCascader(cascader, selectedPath) {
         option.classList.add("active");
       }
 
-      if (node.children && levelIndex + 1 < maxDepth) {
+      const hasChildren = node.children && levelIndex + 1 < maxDepth;
+
+      if (allowAnyLevel) {
+        const circle = document.createElement("span");
+        circle.className = "proto-cascader-select";
+        option.appendChild(circle);
+      }
+
+      const labelSpan = document.createElement("span");
+      labelSpan.className = "proto-cascader-label";
+      labelSpan.textContent = node.label;
+      option.appendChild(labelSpan);
+
+      if (hasChildren) {
         const arrow = document.createElement("span");
         arrow.textContent = "›";
         option.appendChild(arrow);
@@ -175,15 +188,23 @@ document.querySelectorAll("[data-proto-cascader]").forEach((cascader) => {
     const node = findProtoCascaderNode(levels[level] || [], label);
     const hasNextLevel = node && node.children && level + 1 < maxDepth && label !== "全国";
     const requiredDepth = Number(cascader.dataset.requireDepth || 0);
+    const allowAnyLevel = cascader.dataset.allowAnyLevel === "true";
+    const isSelectCtrl = event.target.classList.contains("proto-cascader-select");
 
     if (hasNextLevel) {
+      if (allowAnyLevel && isSelectCtrl) {
+        setProtoCascaderValue(cascader, selectedPath);
+        cascader.classList.remove("open");
+        renderProtoCascader(cascader, selectedPath);
+        return;
+      }
       renderProtoCascader(cascader, selectedPath);
       return;
     }
 
     const isLeaf = !node || !node.children;
     if (!isLeaf && requiredDepth > 0 && selectedPath.length < requiredDepth) {
-      showProtoToast("行政区域必须选择到街镇层级", "warning");
+      showProtoToast("行政区域必须选择到最深层级", "warning");
       renderProtoCascader(cascader, selectedPath);
       return;
     }

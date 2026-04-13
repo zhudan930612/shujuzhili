@@ -47,6 +47,15 @@
 
     if (initialState) applyState(initialState);
 
+    var closeBtn = document.createElement("button");
+    closeBtn.textContent = "×";
+    closeBtn.className = "proto-state-close";
+    closeBtn.title = "隐藏状态栏";
+    closeBtn.addEventListener("click", function () {
+      root.style.display = "none";
+    });
+    root.appendChild(closeBtn);
+
     buttons.forEach(function (button) {
       button.addEventListener("click", function () {
         applyState(button.dataset.prototypeButton);
