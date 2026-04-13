@@ -427,6 +427,116 @@ a {
   background-repeat: no-repeat;
 }
 
+.proto-cascader {
+  position: relative;
+  flex-shrink: 0;
+  width: 170px;
+}
+
+.proto-cascader-full {
+  width: 100%;
+}
+
+.proto-cascader-control {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-right: 32px;
+  background-image: linear-gradient(45deg, transparent 50%, #7d8fa5 50%), linear-gradient(135deg, #7d8fa5 50%, transparent 50%);
+  background-position: calc(100% - 16px) 13px, calc(100% - 11px) 13px;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  color: #42566b;
+  font-family: inherit;
+  line-height: 30px;
+}
+
+.proto-cascader-value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.proto-cascader-arrow {
+  display: none;
+}
+
+.proto-cascader-panel {
+  position: absolute;
+  top: 38px;
+  left: 0;
+  width: 720px;
+  min-height: 178px;
+  border: 1px solid #d7dfe9;
+  background: #fff;
+  box-shadow: 0 16px 36px rgba(16, 44, 82, 0.14);
+  display: none;
+  z-index: 60;
+}
+
+.proto-cascader.open .proto-cascader-panel {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.proto-cascader-full .proto-cascader-panel {
+  width: 760px;
+}
+
+.proto-filter-bar .proto-cascader {
+  width: 170px;
+}
+
+.proto-filter-bar .proto-cascader .proto-cascader-panel {
+  top: 40px;
+}
+
+.proto-cascader-col {
+  padding: 8px 0;
+  border-right: 1px solid #e7eef7;
+}
+
+.proto-cascader-col:last-child {
+  border-right: none;
+}
+
+.proto-cascader-option {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  min-height: 32px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: #344b65;
+  font-size: 14px;
+  font-family: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.proto-cascader-option.active {
+  color: #1476df;
+  background: #eef6ff;
+}
+
+.proto-cascader-option:hover {
+  color: #1476df;
+  background: #f4f8ff;
+}
+
+.proto-cascader-option.muted {
+  color: #9aa8ba;
+  cursor: default;
+}
+
 .date-range-picker {
   position: relative;
   flex-shrink: 0;

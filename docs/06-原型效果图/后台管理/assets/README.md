@@ -76,6 +76,7 @@
 - `proto-modal-form`：统一弹窗表单模板（含遮罩、居中、footer 右下按钮）。
 - `proto-input / proto-select / proto-textarea / proto-radio-group / proto-checkbox-group`：统一表单控件。
 - `proto-field-row / proto-field-label`：统一表单行布局与标签宽度。
+- `proto-cascader`：统一多级联动选择器，用于行政区域、适用地区等层级字段。
 
 ### 接入结构（最小示例）
 ```html

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
@@ -14,9 +14,9 @@
       <main class="workspace">
         <div class="crumb">☰ 知识库管理 〉 法规批量导入</div>
         <section class="content-panel">
-          <div class="page-header" style="padding: 0 0 18px;"><div><div class="page-title">← 法规批量导入</div><div class="page-subtitle">按适用行业、法规条款信息批量导入法规，条款编码由系统自动生成。</div></div></div>
-          <section class="section-card"><h3>模板字段</h3><div class="section-body"><table><thead><tr><th style="width:120px;">列名</th><th style="width:80px;">必填</th><th style="width:220px;">格式示例</th><th>说明</th></tr></thead><tbody><tr><td>适用行业</td><td>是</td><td>建筑施工 / 通用</td><td>页面展示中文行业名称，系统内部映射行业域代码</td></tr><tr><td>法规编号</td><td>是</td><td>JGJ80-2016</td><td>官方编号</td></tr><tr><td>法规名称</td><td>是</td><td>建筑施工高处作业安全技术规范</td><td>法规完整名称</td></tr><tr><td>条款编号</td><td>是</td><td>第4.1.2条</td><td>具体条款编号</td></tr><tr><td>条款内容</td><td>是</td><td>防护栏杆高度不得低于1.2m...</td><td>条款完整内容</td></tr><tr><td>法规类型</td><td>是</td><td>行业标准</td><td>国家标准 / 行业标准 / 地方标准 / 企业标准</td></tr><tr><td>备注</td><td>否</td><td>特殊情况说明</td><td>补充信息</td></tr></tbody></table></div></section>
-          <section class="section-card"><h3>校验与冲突提示</h3><div class="section-body"><table><thead><tr><th style="width:160px;">校验项</th><th>处理方式</th></tr></thead><tbody><tr><td>适用行业无效</td><td>第6行：适用行业必须是系统支持的行业名称</td></tr><tr><td>文件内重复</td><td>第12行：法规编号【JGJ80-2016】与条款编号【第4.1.2条】在导入文件中重复</td></tr><tr><td>系统现有数据冲突</td><td>第18行：相同适用行业下该法规条款已存在，请确认是否重复导入</td></tr><tr><td>法规类型无效</td><td>第22行：法规类型必须是【国家标准/行业标准/地方标准/企业标准】之一</td></tr></tbody></table><div class="notice" style="margin-top: 16px;">导入预览阶段同时校验“导入文件内重复”和“系统现有数据冲突”；新增保存校验与导入预校验分开处理，不共用同一段提示文案。</div></div></section>
+          <div class="page-header" style="padding: 0 0 18px;"><div><div class="page-title">← 法规批量导入</div><div class="page-subtitle">按适用行业、适用地区、法规条款信息批量导入法规，条款编码由系统自动生成。</div></div></div>
+          <section class="section-card"><h3>模板字段</h3><div class="section-body"><table><thead><tr><th style="width:120px;">列名</th><th style="width:80px;">必填</th><th style="width:220px;">格式示例</th><th>说明</th></tr></thead><tbody><tr><td>适用行业</td><td>是</td><td>建筑施工 / 通用</td><td>页面展示中文行业名称，系统内部映射行业域代码</td></tr><tr><td>适用地区</td><td>否</td><td>全国 / 广东省 / 广东省-深圳市-南山区</td><td>为空默认全国，仅支持全国、省、市、区县</td></tr><tr><td>法规编号</td><td>是</td><td>JGJ80-2016</td><td>官方编号</td></tr><tr><td>法规名称</td><td>是</td><td>建筑施工高处作业安全技术规范</td><td>法规完整名称</td></tr><tr><td>条款编号</td><td>是</td><td>第4.1.2条</td><td>具体条款编号</td></tr><tr><td>条款内容</td><td>是</td><td>防护栏杆高度不得低于1.2m...</td><td>条款完整内容</td></tr><tr><td>法规类型</td><td>是</td><td>行业标准</td><td>国家标准 / 行业标准 / 地方标准 / 企业标准</td></tr><tr><td>备注</td><td>否</td><td>特殊情况说明</td><td>补充信息</td></tr></tbody></table></div></section>
+          <section class="section-card"><h3>校验与冲突提示</h3><div class="section-body"><table><thead><tr><th style="width:160px;">校验项</th><th>处理方式</th></tr></thead><tbody><tr><td>适用行业无效</td><td>第6行：适用行业必须是系统支持的行业名称</td></tr><tr><td>适用地区无效</td><td>第8行：适用地区必须是全国或系统支持的省/市/区县名称</td></tr><tr><td>文件内重复</td><td>第12行：法规编号【JGJ80-2016】与条款编号【第4.1.2条】在导入文件中重复</td></tr><tr><td>系统现有数据冲突</td><td>第18行：相同适用行业、适用地区下该法规条款已存在，请确认是否重复导入</td></tr><tr><td>法规类型无效</td><td>第22行：法规类型必须是【国家标准/行业标准/地方标准/企业标准】之一</td></tr></tbody></table><div class="notice" style="margin-top: 16px;">导入预览阶段同时校验“导入文件内重复”和“系统现有数据冲突”；新增保存校验与导入预校验分开处理，不共用同一段提示文案。</div></div></section>
         </section>
       </main>
     </div>

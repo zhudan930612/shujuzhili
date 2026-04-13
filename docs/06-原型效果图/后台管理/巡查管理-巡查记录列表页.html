@@ -17,6 +17,15 @@
         <section class="proto-filter-bar">
           <input class="control search-control" type="text" placeholder="搜索项目编号/名称/地址" />
           <select class="control select-control w170"><option selected>施工类型</option><option>家装</option><option>小型工程</option><option>零星作业</option></select>
+          <div class="proto-cascader" data-proto-cascader data-placeholder="行政区域">
+            <button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">行政区域</span><span class="proto-cascader-arrow">▾</span></button>
+            <div class="proto-cascader-panel">
+              <div class="proto-cascader-col"><div class="proto-cascader-option active">全国</div><div class="proto-cascader-option">广东省 <span>›</span></div><div class="proto-cascader-option">上海市 <span>›</span></div></div>
+              <div class="proto-cascader-col"><div class="proto-cascader-option active">深圳市 <span>›</span></div><div class="proto-cascader-option">广州市 <span>›</span></div></div>
+              <div class="proto-cascader-col"><div class="proto-cascader-option active">南山区 <span>›</span></div><div class="proto-cascader-option">福田区 <span>›</span></div></div>
+              <div class="proto-cascader-col"><div class="proto-cascader-option active">粤海街道</div><div class="proto-cascader-option">南山街道</div><div class="proto-cascader-option muted">请选择</div></div>
+            </div>
+          </div>
           <select class="control select-control w150"><option selected>巡查人</option><option>张三</option><option>李四</option><option>王五</option></select>
           <select class="control select-control w150"><option selected>来源</option><option>后台上传</option><option>移动端上传</option></select>
           <div class="date-range-picker">

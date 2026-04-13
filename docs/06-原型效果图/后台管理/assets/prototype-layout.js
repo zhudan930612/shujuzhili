@@ -3,6 +3,7 @@
     { key: "home", label: "⌂ 首页" },
     { key: "project", label: "▣ 项目管理" },
     { key: "inspection", label: "◎ 巡查管理" },
+    { key: "user", label: "♙ 用户中心" },
     { key: "knowledge", label: "◫ 知识库管理" },
     { key: "system", label: "⚙ 系统管理" },
   ];
@@ -17,6 +18,9 @@
       { key: "inspection", label: "◎ 巡查记录管理" },
       { key: "project", label: "▣ 项目管理" },
       { key: "knowledge", label: "◫ 知识库管理" },
+    ],
+    user: [
+      { key: "inspector", label: "♙ 巡查人员库" },
     ],
     knowledge: [
       { key: "hazard", label: "▣ 隐患库管理" },
@@ -33,6 +37,7 @@
       { key: "overview", label: "▣ 后台原型总览" },
       { key: "project", label: "▤ 项目管理" },
       { key: "inspection", label: "◎ 巡查管理" },
+      { key: "user", label: "♙ 用户中心" },
       { key: "knowledge", label: "◫ 知识库管理" },
     ],
   };

@@ -26,6 +26,171 @@ document.querySelectorAll("[data-view-scope]").forEach((scope) => {
   });
 });
 
+const protoRegionTree = [
+  {
+    label: "全国",
+  },
+  {
+    label: "广东省",
+    children: [
+      {
+        label: "深圳市",
+        children: [
+          { label: "南山区", children: [{ label: "粤海街道" }, { label: "南山街道" }, { label: "请选择" }] },
+          { label: "福田区", children: [{ label: "福田街道" }, { label: "华强北街道" }, { label: "请选择" }] },
+        ],
+      },
+      {
+        label: "广州市",
+        children: [
+          { label: "天河区", children: [{ label: "天园街道" }, { label: "冼村街道" }, { label: "请选择" }] },
+          { label: "越秀区", children: [{ label: "北京街道" }, { label: "请选择" }] },
+        ],
+      },
+    ],
+  },
+  {
+    label: "上海市",
+    children: [
+      {
+        label: "上海市",
+        children: [
+          { label: "黄浦区", children: [{ label: "南京东路街道" }, { label: "请选择" }] },
+          { label: "青浦区", children: [{ label: "夏阳街道" }, { label: "赵巷镇" }, { label: "请选择" }] },
+        ],
+      },
+    ],
+  },
+];
+
+function findProtoCascaderNode(nodes, label) {
+  return nodes.find((node) => node.label === label);
+}
+
+function getProtoCascaderTree(cascader) {
+  if (cascader.dataset.allowNational === "false") {
+    return protoRegionTree.filter((node) => node.label !== "全国");
+  }
+  return protoRegionTree;
+}
+
+function getProtoCascaderLevels(tree, selectedPath, maxDepth) {
+  const levels = [tree];
+  let nodes = tree;
+  selectedPath.slice(0, maxDepth).forEach((label, index) => {
+    const node = findProtoCascaderNode(nodes, label);
+    if (node && node.children && index + 1 < maxDepth) {
+      levels.push(node.children);
+      nodes = node.children;
+    }
+  });
+  return levels;
+}
+
+function renderProtoCascader(cascader, selectedPath) {
+  const panel = cascader.querySelector(".proto-cascader-panel");
+  if (!panel) return;
+
+  const maxDepth = Number(cascader.dataset.cascaderDepth || 4);
+  const levels = getProtoCascaderLevels(getProtoCascaderTree(cascader), selectedPath, maxDepth);
+  panel.innerHTML = "";
+
+  levels.forEach((nodes, levelIndex) => {
+    const column = document.createElement("div");
+    column.className = "proto-cascader-col";
+
+    nodes.forEach((node) => {
+      const option = document.createElement("button");
+      option.className = "proto-cascader-option";
+      option.type = "button";
+      option.textContent = node.label;
+      option.dataset.level = String(levelIndex);
+      option.dataset.label = node.label;
+
+      if (selectedPath[levelIndex] === node.label) {
+        option.classList.add("active");
+      }
+
+      if (node.children && levelIndex + 1 < maxDepth) {
+        const arrow = document.createElement("span");
+        arrow.textContent = "›";
+        option.appendChild(arrow);
+      }
+
+      column.appendChild(option);
+    });
+
+    panel.appendChild(column);
+  });
+}
+
+function getProtoCascaderValue(cascader) {
+  const text = cascader.querySelector(".proto-cascader-value");
+  if (!text) return [];
+  const value = text.textContent.trim();
+  if (!value || value === "行政区域" || value === "适用地区" || value === "请选择") return [];
+  return value.split("/").map((item) => item.trim()).filter(Boolean);
+}
+
+function setProtoCascaderValue(cascader, selectedPath) {
+  const text = cascader.querySelector(".proto-cascader-value");
+  if (!text) return;
+  if (selectedPath.length === 0) {
+    text.textContent = cascader.dataset.placeholder || "请选择";
+    return;
+  }
+  text.textContent = selectedPath.join(" / ");
+}
+
+document.querySelectorAll("[data-proto-cascader]").forEach((cascader) => {
+  const control = cascader.querySelector(".proto-cascader-control");
+  const panel = cascader.querySelector(".proto-cascader-panel");
+  if (!control || !panel) return;
+
+  renderProtoCascader(cascader, getProtoCascaderValue(cascader));
+
+  control.addEventListener("click", (event) => {
+    event.stopPropagation();
+    document.querySelectorAll(".proto-cascader.open").forEach((item) => {
+      if (item !== cascader) item.classList.remove("open");
+    });
+    renderProtoCascader(cascader, getProtoCascaderValue(cascader));
+    cascader.classList.toggle("open");
+  });
+
+  panel.addEventListener("click", (event) => {
+    event.stopPropagation();
+    const option = event.target.closest(".proto-cascader-option");
+    if (!option) return;
+
+    const maxDepth = Number(cascader.dataset.cascaderDepth || 4);
+    const level = Number(option.dataset.level || 0);
+    const label = option.dataset.label || "";
+    const selectedPath = getProtoCascaderValue(cascader).slice(0, level);
+    if (label !== "请选择") selectedPath[level] = label;
+
+    const levels = getProtoCascaderLevels(getProtoCascaderTree(cascader), selectedPath, maxDepth);
+    const node = findProtoCascaderNode(levels[level] || [], label);
+    const hasNextLevel = node && node.children && level + 1 < maxDepth && label !== "全国";
+    const requiredDepth = Number(cascader.dataset.requireDepth || 0);
+
+    if (hasNextLevel) {
+      renderProtoCascader(cascader, selectedPath);
+      return;
+    }
+
+    if (requiredDepth > 0 && selectedPath.length < requiredDepth) {
+      showProtoToast("行政区域必须选择到街镇层级", "warning");
+      renderProtoCascader(cascader, selectedPath);
+      return;
+    }
+
+    setProtoCascaderValue(cascader, selectedPath);
+    cascader.classList.remove("open");
+    renderProtoCascader(cascader, selectedPath);
+  });
+});
+
 document.querySelectorAll(".date-range-picker").forEach((picker) => {
   const display = picker.querySelector(".date-range-control");
   const panel = picker.querySelector(".date-range-panel");
@@ -78,6 +243,9 @@ document.querySelectorAll(".date-range-picker").forEach((picker) => {
 });
 
 document.addEventListener("click", () => {
+  document.querySelectorAll(".proto-cascader.open").forEach((cascader) => {
+    cascader.classList.remove("open");
+  });
   document.querySelectorAll(".date-range-picker.open").forEach((picker) => {
     picker.classList.remove("open");
   });
