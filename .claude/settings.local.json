@@ -13,7 +13,17 @@
       "Bash(git commit -m \"chore: 统一文档换行符为 LF:*)",
       "Bash(python3:*)",
       "Bash(curl -sL https://raw.githubusercontent.com/obra/superpowers/main/README.md)",
-      "Skill(update-config)"
+      "Skill(update-config)",
+      "Bash(grep -v '^\\\\.\\\\.$')",
+      "Bash(grep -v '^\\\\.$')",
+      "Bash(mv docs/* .)",
+      "Bash(rmdir docs:*)",
+      "Bash(mv docs/00-AI上下文.md .)",
+      "Bash(mv docs/01-上下文.md .)",
+      "Bash(mv docs/02-业务流程.mmd .)",
+      "Bash(mv docs/04-需求池.md .)",
+      "Bash(cp -r docs/06-原型效果图 .)",
+      "Bash(rm -rf docs/06-原型效果图)"
     ]
   }
 }
