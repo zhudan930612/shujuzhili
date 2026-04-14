@@ -20,7 +20,10 @@
       { key: "knowledge", label: "◫ 知识库管理" },
     ],
     user: [
+      { key: "inspection-org", label: "▤ 巡检单位库" },
       { key: "inspector", label: "♙ 巡查人员库" },
+      { key: "insurer", label: "▣ 保险机构库" },
+      { key: "contractor", label: "▣ 施工单位库" },
     ],
     knowledge: [
       { key: "hazard", label: "▣ 隐患库管理" },

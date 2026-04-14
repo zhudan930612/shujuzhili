@@ -142,7 +142,8 @@ function getProtoCascaderValue(cascader) {
   const text = cascader.querySelector(".proto-cascader-value");
   if (!text) return [];
   const value = text.textContent.trim();
-  if (!value || value === "行政区域" || value === "适用地区" || value === "请选择") return [];
+  const placeholder = cascader.dataset.placeholder || "";
+  if (!value || value === placeholder || value === "行政区域" || value === "适用地区" || value === "请选择") return [];
   return value.split("/").map((item) => item.trim()).filter(Boolean);
 }
 

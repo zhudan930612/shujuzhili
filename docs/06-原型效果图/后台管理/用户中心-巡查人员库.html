@@ -8,61 +8,8 @@
   <style>
     .prototype-stage { display: none; }
     .prototype-stage.active { display: block; }
-    .inspector-region-box {
-      min-height: 38px;
-      border: 1px solid #d8e2ef;
-      background: #fff;
-      padding: 8px 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      color: #3d5067;
-      font-size: 14px;
-    }
-    .inspector-region-tag {
-      display: inline-flex;
-      align-items: center;
-      height: 24px;
-      padding: 0 8px;
-      border: 1px solid #bdd4f2;
-      background: #f2f7ff;
-      color: #2b5f9a;
-      border-radius: 4px;
-      white-space: nowrap;
-    }
-    .inspector-region-picker {
-      border: 1px solid #d8e2ef;
-      background: #fff;
-      margin-top: 8px;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      min-height: 168px;
-    }
-    .inspector-region-col {
-      border-right: 1px solid #e7eef7;
-      padding: 10px 0;
-    }
-    .inspector-region-col:last-child { border-right: none; }
-    .inspector-region-option {
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 12px;
-      font-size: 14px;
-      color: #344b65;
-    }
-    .inspector-region-option.active {
-      color: #1476df;
-      background: #eef6ff;
-    }
-    .inspector-region-option.muted { color: #98a6b8; }
-    .inspector-region-note {
-      margin-top: 8px;
-      color: #7a8ba1;
-      font-size: 12px;
-    }
+    .inspector-list-page .proto-list-title::before { content: none; }
+    .proto-list-shell.inspector-list-page table { min-width: 1420px; }
   </style>
 </head>
 <body>
@@ -81,18 +28,20 @@
           <div class="crumb">☰ 用户中心 〉 巡查人员库</div>
           <section class="surface tabbar"><div class="tab">巡查人员库</div></section>
           <section class="proto-filter-bar">
-            <input class="control search-control" type="text" placeholder="搜索巡查人员名称/手机号/所属单位" />
-            <select class="control select-control w170"><option selected>服务区域</option><option>全国</option><option>广东省 / 深圳市 / 南山区 / 粤海街道</option><option>上海市 / 上海市 / 黄浦区</option></select>
-            <select class="control select-control w150"><option selected>状态</option><option>启用</option><option>停用</option></select>
+            <div class="proto-cascader" data-proto-cascader data-allow-any-level="true" data-placeholder="请选择服务区域" style="width: 214px;">
+              <button class="proto-input proto-cascader-control" type="button"><span class="proto-cascader-value">请选择服务区域</span><span class="proto-cascader-arrow">▾</span></button>
+              <div class="proto-cascader-panel"></div>
+            </div>
+            <input class="proto-input search-control" type="text" placeholder="请输入巡检人员名称" style="width: 214px;" />
             <button class="btn btn-primary" type="button">🔍 查询</button>
             <button class="btn btn-ghost" type="button">↻ 重置</button>
           </section>
-          <section class="proto-list-shell">
+          <section class="proto-list-shell inspector-list-page">
             <div class="proto-list-head">
-              <h3 class="proto-list-title">巡查人员列表</h3>
+              <h3 class="proto-list-title">巡检人员列表</h3>
               <div class="proto-list-tools">
                 <button class="btn btn-primary" type="button">＋ 新增</button>
-                <select class="control select-control" style="width: 140px;"><option selected>1 - 2</option><option>1 - 20</option><option>21 - 40</option></select>
+                <select class="proto-select" style="width: 140px;"><option selected>1 - 2</option><option>1 - 20</option><option>21 - 40</option></select>
                 <button class="btn btn-ghost" type="button">⇪ 导出</button>
               </div>
             </div>
@@ -100,25 +49,26 @@
               <table>
                 <colgroup>
                   <col style="width:14%;" />
-                  <col style="width:12%;" />
-                  <col style="width:12%;" />
-                  <col style="width:28%;" />
-                  <col style="width:10%;" />
-                  <col style="width:12%;" />
+                  <col style="width:18%;" />
+                  <col style="width:8%;" />
+                  <col style="width:14%;" />
+                  <col style="width:16%;" />
+                  <col style="width:14%;" />
+                  <col style="width:14%;" />
                   <col style="width:12%;" />
                 </colgroup>
-                <thead><tr><th>巡查人员名称</th><th>手机号</th><th>所属单位</th><th>服务区域</th><th>状态</th><th>创建人</th><th>操作</th></tr></thead>
+                <thead><tr><th>巡检人员名称</th><th>所属单位</th><th>性别</th><th>手机号码</th><th>服务区域</th><th>创建时间</th><th>创建人</th><th>操作</th></tr></thead>
                 <tbody>
-                  <tr><td>CS上海02</td><td>13800000002</td><td>CS上海运营</td><td>上海市 / 上海市 / 黄浦区</td><td><span class="proto-table-status" data-variant="success">启用</span></td><td>CS上海运营</td><td><span class="link">编辑 删除</span></td></tr>
-                  <tr><td>青浦巡检1</td><td>13800000001</td><td>上海青浦运营</td><td>上海市 / 上海市 / 青浦区 / 夏阳街道</td><td><span class="proto-table-status" data-variant="success">启用</span></td><td>上海青浦运营</td><td><span class="link">编辑 删除</span></td></tr>
+                  <tr><td>CS上海02</td><td>CS上海巡检单位01</td><td>女</td><td>15******02　⊘</td><td>上海-上海市-黄浦区</td><td>2026-01-09 15:49:37</td><td>CS上海运营</td><td><div class="proto-row-actions"><button class="proto-action" type="button">编辑</button><button class="proto-action danger" type="button">删除</button></div></td></tr>
+                  <tr><td>青浦巡检1</td><td>上海青浦巡检有限公司</td><td>男</td><td>13******87　⊘</td><td>上海-上海市-青浦区-夏阳...</td><td>2026-01-08 14:19:10</td><td>上海青浦运营</td><td><div class="proto-row-actions"><button class="proto-action" type="button">编辑</button><button class="proto-action danger" type="button">删除</button></div></td></tr>
                 </tbody>
               </table>
             </div>
             <div class="proto-pagination">
-              <span>共2条</span>
-              <select class="control select-control proto-page-size-select"><option selected>20条/页</option><option>50条/页</option></select>
+              <span>共 2 条</span>
+              <select class="proto-select proto-page-size-select"><option selected>20条/页</option><option>50条/页</option></select>
               <span class="proto-page-arrow">‹</span><span class="proto-page-current">1</span><span>前往</span>
-              <input class="control proto-page-jump-input" type="text" value="1" /><span>页</span><span class="proto-page-arrow">›</span>
+              <input class="proto-input proto-page-jump-input" type="text" value="1" /><span>页</span><span class="proto-page-arrow">›</span>
             </div>
           </section>
         </main>
@@ -133,29 +83,26 @@
         <aside class="sidebar"></aside>
         <main class="workspace">
           <div class="crumb">☰ 用户中心 〉 巡查人员库 〉 新增巡查人员</div>
-          <section class="modal-stage">
-            <div class="modal large">
-              <div class="modal-head"><span>添加巡查人员</span><span>×</span></div>
-              <div class="modal-body">
-                <div class="form-grid">
-                  <div class="field-label">巡查人员名称 *</div><input class="control" type="text" placeholder="请输入巡查人员名称" />
-                  <div class="field-label">所属单位</div><select class="control select-control"><option selected>请选择所属单位</option><option>上海青浦运营</option><option>CS上海运营</option></select>
-                  <div class="field-label">性别 *</div><div class="radio-group"><span>● 男</span><span>○ 女</span></div>
-                  <div class="field-label">手机号码 *</div><input class="control" type="text" placeholder="请输入手机号" />
-                  <div class="field-label">服务区域 *</div>
+          <section class="proto-modal-form-stage">
+            <div class="proto-modal-form large">
+              <div class="proto-modal-head"><span>添加巡查人员</span><span>×</span></div>
+              <div class="proto-modal-body">
+                <div class="proto-modal-grid">
+                  <div class="proto-field-label">巡查人员名称 *</div><input class="proto-input" type="text" placeholder="请输入巡查人员名称" />
+                  <div class="proto-field-label">所属单位</div><select class="proto-select"><option selected>请选择所属单位</option><option>上海青浦运营</option><option>CS上海运营</option></select>
+                  <div class="proto-field-label">性别 *</div><div class="proto-radio-group"><label class="proto-radio"><input type="radio" name="create_gender" checked /> 男</label><label class="proto-radio"><input type="radio" name="create_gender" /> 女</label></div>
+                  <div class="proto-field-label">手机号码 *</div><input class="proto-input" type="text" placeholder="请输入手机号" />
+                  <div class="proto-field-label">服务区域 *</div>
                   <div>
-                    <div class="inspector-region-box"><span class="inspector-region-tag">全国</span><span class="inspector-region-tag">广东省 / 深圳市 / 南山区 / 粤海街道</span></div>
-                    <div class="inspector-region-picker">
-                      <div class="inspector-region-col"><div class="inspector-region-option active">全国</div><div class="inspector-region-option">广东省 <span>›</span></div><div class="inspector-region-option">上海市 <span>›</span></div></div>
-                      <div class="inspector-region-col"><div class="inspector-region-option active">深圳市 <span>›</span></div><div class="inspector-region-option">广州市 <span>›</span></div></div>
-                      <div class="inspector-region-col"><div class="inspector-region-option active">南山区 <span>›</span></div><div class="inspector-region-option">福田区 <span>›</span></div></div>
-                      <div class="inspector-region-col"><div class="inspector-region-option active">粤海街道</div><div class="inspector-region-option">南山街道</div><div class="inspector-region-option muted">请选择</div></div>
+                    <div class="proto-cascader proto-cascader-full" data-proto-cascader data-allow-any-level="true" data-placeholder="服务区域">
+                      <button class="proto-input proto-cascader-control" type="button"><span class="proto-cascader-value">全国</span><span class="proto-cascader-arrow">▾</span></button>
+                      <div class="proto-cascader-panel"></div>
                     </div>
-                    <div class="inspector-region-note">选择上级区域时默认包含下级区域，可选择到街镇层级。</div>
+                    <div class="subtle-note">选择任一层级后，默认包含其下级区域。</div>
                   </div>
                 </div>
               </div>
-              <div class="modal-foot"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">确定</button></div>
+              <div class="proto-modal-foot"><button class="btn btn-ghost" type="button">取消</button><button class="btn btn-primary" type="button">确定</button></div>
             </div>
           </section>
         </main>
@@ -170,29 +117,26 @@
         <aside class="sidebar"></aside>
         <main class="workspace">
           <div class="crumb">☰ 用户中心 〉 巡查人员库 〉 编辑巡查人员</div>
-          <section class="modal-stage">
-            <div class="modal large">
-              <div class="modal-head"><span>编辑巡查人员</span><span>×</span></div>
-              <div class="modal-body">
-                <div class="form-grid">
-                  <div class="field-label">巡查人员名称 *</div><input class="control" type="text" value="青浦巡检1" />
-                  <div class="field-label">所属单位</div><select class="control select-control"><option selected>上海青浦运营</option><option>CS上海运营</option></select>
-                  <div class="field-label">性别 *</div><div class="radio-group"><span>● 男</span><span>○ 女</span></div>
-                  <div class="field-label">手机号码 *</div><input class="control" type="text" value="13800000001" />
-                  <div class="field-label">服务区域 *</div>
+          <section class="proto-modal-form-stage">
+            <div class="proto-modal-form large">
+              <div class="proto-modal-head"><span>编辑巡查人员</span><span>×</span></div>
+              <div class="proto-modal-body">
+                <div class="proto-modal-grid">
+                  <div class="proto-field-label">巡查人员名称 *</div><input class="proto-input" type="text" value="青浦巡检1" />
+                  <div class="proto-field-label">所属单位</div><select class="proto-select"><option selected>上海青浦运营</option><option>CS上海运营</option></select>
+                  <div class="proto-field-label">性别 *</div><div class="proto-radio-group"><label class="proto-radio"><input type="radio" name="edit_gender" checked /> 男</label><label class="proto-radio"><input type="radio" name="edit_gender" /> 女</label></div>
+                  <div class="proto-field-label">手机号码 *</div><input class="proto-input" type="text" value="13800000001" />
+                  <div class="proto-field-label">服务区域 *</div>
                   <div>
-                    <div class="inspector-region-box"><span class="inspector-region-tag">上海市 / 上海市 / 青浦区 / 夏阳街道</span></div>
-                    <div class="inspector-region-picker">
-                      <div class="inspector-region-col"><div class="inspector-region-option">全国</div><div class="inspector-region-option">广东省 <span>›</span></div><div class="inspector-region-option active">上海市 <span>›</span></div></div>
-                      <div class="inspector-region-col"><div class="inspector-region-option active">上海市 <span>›</span></div></div>
-                      <div class="inspector-region-col"><div class="inspector-region-option">黄浦区 <span>›</span></div><div class="inspector-region-option active">青浦区 <span>›</span></div></div>
-                      <div class="inspector-region-col"><div class="inspector-region-option active">夏阳街道</div><div class="inspector-region-option">赵巷镇</div></div>
+                    <div class="proto-cascader proto-cascader-full" data-proto-cascader data-allow-any-level="true" data-placeholder="服务区域">
+                      <button class="proto-input proto-cascader-control" type="button"><span class="proto-cascader-value">上海市 / 上海市 / 青浦区 / 夏阳街道</span><span class="proto-cascader-arrow">▾</span></button>
+                      <div class="proto-cascader-panel"></div>
                     </div>
-                    <div class="inspector-region-note">服务区域用于限制该巡查人员可查看和上传的辖区项目数据。</div>
+                    <div class="subtle-note">服务区域用于限制该巡查人员可查看和上传的辖区项目数据。</div>
                   </div>
                 </div>
               </div>
-              <div class="modal-foot"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">确定</button></div>
+              <div class="proto-modal-foot"><button class="btn btn-ghost" type="button">取消</button><button class="btn btn-primary" type="button">确定</button></div>
             </div>
           </section>
         </main>
@@ -205,6 +149,7 @@
   <script src="./assets/prototype-switcher.js"></script>
   <script>
     initProtoPagination();
+    initProtoRowActions();
   </script>
 </body>
 </html>
