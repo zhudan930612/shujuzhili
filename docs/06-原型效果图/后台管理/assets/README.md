@@ -14,7 +14,7 @@
 
 ## 原型状态切换浮窗（公共组件）
 - 公共脚本：`prototype-switcher.js`
-- 作用：统一提供“状态切换 + 浮窗拖动”能力，避免每个页面重复写脚本。
+- 作用：统一提供“状态切换 + 浮窗拖动 + F8 显隐快捷键”能力，避免每个页面重复写脚本。
 
 ### 页面接入方式
 1. 在浮窗根节点添加 `data-prototype-switch`。
@@ -28,6 +28,11 @@
 - `data-prototype-default="list"`：指定默认状态。
 - `data-prototype-panel-scope="#page-id"`：指定状态面板查询范围（默认全页面）。
 - `data-prototype-draggable="false"`：关闭拖拽能力。
+
+### 快捷键与隐藏
+- 默认快捷键：`F8`。
+- 点击浮窗右侧 `×` 只隐藏状态栏自身，不切换当前页面状态面板。
+- 按 `F8` 可切换所有状态栏显示/隐藏；已通过 `×` 隐藏的状态栏也可按 `F8` 恢复。
 
 ### 巡查管理状态键示例
 - `巡查管理-上传巡查记录页.html`：
@@ -77,6 +82,10 @@
 - `proto-input / proto-select / proto-textarea / proto-radio-group / proto-checkbox-group`：统一表单控件。
 - `proto-field-row / proto-field-label`：统一表单行布局与标签宽度。
 - `proto-cascader`：统一多级联动选择器，用于行政区域、适用地区等层级字段。
+  - 项目行政区域：使用 `data-cascader-depth="5"`、`data-require-depth="4"`、`data-selectable-from-depth="4"`，表示省 / 市 / 区县 / 街镇 / 社区五级，最低选择到街镇，社区可选；点击街镇前的圆点可直接选中街镇，点击文字或箭头可继续展开社区。
+  - 巡查人员服务区域：使用 `data-cascader-depth="5"`、`data-allow-any-level="true"`，表示全国 / 省 / 市 / 区县 / 街镇 / 社区任一层级可选。
+  - 法规适用地区：使用 `data-cascader-depth="3"`、`data-allow-any-level="true"`，表示全国 / 省 / 市 / 区县任一层级可选，不支持街镇。
+  - 必选层级提示可通过 `data-require-message` 配置，例如“行政区域必须至少选择到街镇层级”。
 
 ### 接入结构（最小示例）
 ```html

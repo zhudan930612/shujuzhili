@@ -470,7 +470,8 @@ a {
   position: absolute;
   top: 38px;
   left: 0;
-  width: 560px;
+  --proto-cascader-column-width: 112px;
+  width: calc(var(--proto-cascader-columns, 4) * var(--proto-cascader-column-width));
   min-height: 178px;
   border: 1px solid #d7dfe9;
   background: #fff;
@@ -481,11 +482,11 @@ a {
 
 .proto-cascader.open .proto-cascader-panel {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--proto-cascader-columns, 4), var(--proto-cascader-column-width));
 }
 
 .proto-cascader-full .proto-cascader-panel {
-  width: 600px;
+  --proto-cascader-column-width: 120px;
 }
 
 .proto-filter-bar .proto-cascader {
@@ -2094,6 +2095,10 @@ tbody tr:nth-child(even) {
   background: rgba(255, 80, 80, 0.25);
   border-color: rgba(255, 100, 100, 0.4);
   color: #fff;
+}
+
+.prototype-state-hidden {
+  display: none !important;
 }
 
 .proto-modal-form-stage {

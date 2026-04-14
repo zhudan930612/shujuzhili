@@ -36,15 +36,33 @@ const protoRegionTree = [
       {
         label: "深圳市",
         children: [
-          { label: "南山区", children: [{ label: "粤海街道" }, { label: "南山街道" }, { label: "请选择" }] },
-          { label: "福田区", children: [{ label: "福田街道" }, { label: "华强北街道" }, { label: "请选择" }] },
+          {
+            label: "南山区",
+            children: [
+              { label: "粤海街道", children: [{ label: "高新区社区" }, { label: "科技园社区" }] },
+              { label: "南山街道", children: [{ label: "南园社区" }, { label: "北头社区" }] },
+            ],
+          },
+          {
+            label: "福田区",
+            children: [
+              { label: "福田街道", children: [{ label: "福民社区" }, { label: "水围社区" }] },
+              { label: "华强北街道", children: [{ label: "华航社区" }, { label: "通新岭社区" }] },
+            ],
+          },
         ],
       },
       {
         label: "广州市",
         children: [
-          { label: "天河区", children: [{ label: "天园街道" }, { label: "冼村街道" }, { label: "请选择" }] },
-          { label: "越秀区", children: [{ label: "北京街道" }, { label: "请选择" }] },
+          {
+            label: "天河区",
+            children: [
+              { label: "天园街道", children: [{ label: "东晖社区" }, { label: "科韵社区" }] },
+              { label: "冼村街道", children: [{ label: "冼村社区" }, { label: "金城社区" }] },
+            ],
+          },
+          { label: "越秀区", children: [{ label: "北京街道", children: [{ label: "流水井社区" }] }] },
         ],
       },
     ],
@@ -55,8 +73,14 @@ const protoRegionTree = [
       {
         label: "上海市",
         children: [
-          { label: "黄浦区", children: [{ label: "南京东路街道" }, { label: "请选择" }] },
-          { label: "青浦区", children: [{ label: "夏阳街道" }, { label: "赵巷镇" }, { label: "请选择" }] },
+          { label: "黄浦区", children: [{ label: "南京东路街道", children: [{ label: "新桥社区" }] }] },
+          {
+            label: "青浦区",
+            children: [
+              { label: "夏阳街道", children: [{ label: "青湖社区" }, { label: "祥龙社区" }] },
+              { label: "赵巷镇", children: [{ label: "赵巷社区" }, { label: "方夏村社区" }] },
+            ],
+          },
         ],
       },
     ],
@@ -94,7 +118,9 @@ function renderProtoCascader(cascader, selectedPath) {
 
   const maxDepth = Number(cascader.dataset.cascaderDepth || 4);
   const allowAnyLevel = cascader.dataset.allowAnyLevel === "true";
+  const selectableFromDepth = Number(cascader.dataset.selectableFromDepth || 0);
   const levels = getProtoCascaderLevels(getProtoCascaderTree(cascader), selectedPath, maxDepth);
+  panel.style.setProperty("--proto-cascader-columns", String(Math.max(1, Math.min(levels.length, maxDepth))));
   panel.innerHTML = "";
 
   levels.forEach((nodes, levelIndex) => {
@@ -113,8 +139,9 @@ function renderProtoCascader(cascader, selectedPath) {
       }
 
       const hasChildren = node.children && levelIndex + 1 < maxDepth;
+      const canSelectCurrentLevel = selectableFromDepth > 0 && levelIndex + 1 >= selectableFromDepth;
 
-      if (allowAnyLevel) {
+      if (allowAnyLevel || (hasChildren && canSelectCurrentLevel)) {
         const circle = document.createElement("span");
         circle.className = "proto-cascader-select";
         option.appendChild(circle);
@@ -190,10 +217,12 @@ document.querySelectorAll("[data-proto-cascader]").forEach((cascader) => {
     const hasNextLevel = node && node.children && level + 1 < maxDepth && label !== "全国";
     const requiredDepth = Number(cascader.dataset.requireDepth || 0);
     const allowAnyLevel = cascader.dataset.allowAnyLevel === "true";
+    const selectableFromDepth = Number(cascader.dataset.selectableFromDepth || 0);
+    const canSelectCurrentLevel = selectableFromDepth > 0 && level + 1 >= selectableFromDepth;
     const isSelectCtrl = event.target.classList.contains("proto-cascader-select");
 
     if (hasNextLevel) {
-      if (allowAnyLevel && isSelectCtrl) {
+      if ((allowAnyLevel || canSelectCurrentLevel) && isSelectCtrl) {
         setProtoCascaderValue(cascader, selectedPath);
         cascader.classList.remove("open");
         renderProtoCascader(cascader, selectedPath);
@@ -203,9 +232,8 @@ document.querySelectorAll("[data-proto-cascader]").forEach((cascader) => {
       return;
     }
 
-    const isLeaf = !node || !node.children;
-    if (!isLeaf && requiredDepth > 0 && selectedPath.length < requiredDepth) {
-      showProtoToast("行政区域必须选择到最深层级", "warning");
+    if (requiredDepth > 0 && selectedPath.length < requiredDepth) {
+      showProtoToast(cascader.dataset.requireMessage || "行政区域必须选择到最深层级", "warning");
       renderProtoCascader(cascader, selectedPath);
       return;
     }

@@ -41,7 +41,7 @@
                             <div class="summary-label">错误记录</div>
                         </div>
                     </div>
-                    <div class="notice">模板列包含项目名称、施工类型、项目地址、施工开始日期、施工结束日期、关联保险公司、施工单位、负责人姓名、负责人电话、备注。项目编号由系统在导入时自动生成。
+                    <div class="notice">模板列包含项目名称、施工类型、项目地址、省、市、区县、街镇、社区、施工开始日期、施工结束日期、关联保险公司、施工单位、负责人姓名、负责人电话、备注。项目编号由系统在导入时自动生成，行政区域至少填写到街镇，社区选填。
                     </div>
                     <div class="form-card" style="margin-top:18px;">
                         <div class="page-header" style="padding:0 0 18px;">
@@ -59,8 +59,7 @@
                                         <th>项目名称</th>
                                         <th style="width:120px;">施工类型</th>
                                         <th style="width:220px;">项目地址</th>
-                                        <th style="width:140px;">解析到区县</th>
-                                        <th style="width:140px;">街镇选择</th>
+                                        <th style="width:260px;">行政区域</th>
                                         <th style="width:180px;">关联保险公司</th>
                                         <th style="width:220px;">校验结果</th>
                                     </tr>
@@ -71,8 +70,7 @@
                                         <td>前海时代广场</td>
                                         <td>小型工程</td>
                                         <td>深圳市南山区科苑南路2888号</td>
-                                        <td>广东省 / 深圳市 / 南山区</td>
-                                        <td><select class="control select-control"><option selected>粤海街道</option><option>南山街道</option></select></td>
+                                        <td>广东省 / 深圳市 / 南山区 / 粤海街道 / 高新区社区</td>
                                         <td>人保财险</td>
                                         <td>无</td>
                                     </tr>
@@ -80,9 +78,8 @@
                                         <td><span class="proto-table-status" data-variant="success">通过</span></td>
                                         <td>万科云城三期12栋</td>
                                         <td>家装</td>
-                                        <td>深圳市宝安区创业一路1002号</td>
-                                        <td>广东省 / 深圳市 / 宝安区</td>
-                                        <td><select class="control select-control"><option selected>请选择</option><option>新安街道</option></select></td>
+                                        <td>深圳市南山区桃园路1002号</td>
+                                        <td>广东省 / 深圳市 / 南山区 / 南山街道</td>
                                         <td>平安产险</td>
                                         <td>无</td>
                                     </tr>
@@ -92,17 +89,15 @@
                                         <td>小型工程</td>
                                         <td>深圳市南山区蛇口工业七路</td>
                                         <td>广东省 / 深圳市 / 南山区</td>
-                                        <td><select class="control select-control"><option selected>请选择</option><option>蛇口街道</option></select></td>
                                         <td>未匹配</td>
-                                        <td>保险公司【太平洋产险】未在系统中配置</td>
+                                        <td>行政区域必须至少填写到街镇层级；保险公司【太平洋产险】未在系统中配置</td>
                                     </tr>
                                     <tr>
                                         <td><span class="proto-table-status" data-variant="error">错误</span></td>
                                         <td>中海锦城</td>
                                         <td>家装</td>
                                         <td>上海市青浦区公园路</td>
-                                        <td>上海市 / 上海市 / 青浦区</td>
-                                        <td><select class="control select-control"><option selected>夏阳街道</option><option>赵巷镇</option></select></td>
+                                        <td>上海市 / 上海市 / 青浦区 / 夏阳街道</td>
                                         <td>平安产险</td>
                                         <td>负责人手机号格式不正确</td>
                                     </tr>

@@ -1,4 +1,7 @@
 ;(function () {
+  var STATE_BAR_HIDDEN_CLASS = "prototype-state-hidden";
+  var shortcutReady = false;
+
   function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
   }
@@ -52,7 +55,7 @@
     closeBtn.className = "proto-state-close";
     closeBtn.title = "隐藏状态栏";
     closeBtn.addEventListener("click", function () {
-      root.style.display = "none";
+      root.classList.add(STATE_BAR_HIDDEN_CLASS);
     });
     root.appendChild(closeBtn);
 
@@ -118,8 +121,33 @@
     root.dataset.prototypeSwitchReady = "1";
   }
 
+  function toggleAllPrototypeSwitches() {
+    var switches = toArray(document.querySelectorAll("[data-prototype-switch]"));
+    if (!switches.length) return;
+
+    var shouldShow = switches.some(function (root) {
+      return root.classList.contains(STATE_BAR_HIDDEN_CLASS);
+    });
+
+    switches.forEach(function (root) {
+      root.classList.toggle(STATE_BAR_HIDDEN_CLASS, !shouldShow);
+    });
+  }
+
+  function initPrototypeSwitchShortcut() {
+    if (shortcutReady) return;
+    shortcutReady = true;
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key !== "F8") return;
+      event.preventDefault();
+      toggleAllPrototypeSwitches();
+    });
+  }
+
   function initAllPrototypeSwitches() {
     toArray(document.querySelectorAll("[data-prototype-switch]")).forEach(initPrototypeSwitch);
+    initPrototypeSwitchShortcut();
   }
 
   if (document.readyState === "loading") {
@@ -130,4 +158,5 @@
 
   window.initPrototypeSwitch = initPrototypeSwitch;
   window.initAllPrototypeSwitches = initAllPrototypeSwitches;
+  window.toggleAllPrototypeSwitches = toggleAllPrototypeSwitches;
 })();
