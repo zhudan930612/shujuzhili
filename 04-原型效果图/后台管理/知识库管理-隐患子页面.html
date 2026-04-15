@@ -11,8 +11,17 @@
     .prototype-stage[data-prototype-panel="detail"] .hazard-main-column {
       gap: 18px;
     }
-    .prototype-stage[data-prototype-panel="relation"] .modal-foot {
-      justify-content: flex-end;
+    .hazard-relation-stage .relation-modal-head-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hazard-relation-stage .relation-modal-note {
+      padding-left: 12px;
+      border-left: 1px solid #d8e1ef;
+      color: #64748b;
+      font-size: 13px;
+      font-weight: 400;
     }
     .link-disabled {
       color: #8d98ad;
@@ -42,11 +51,11 @@
         <main class="workspace">
           <div class="crumb">☰ 知识库管理 〉 隐患子页面</div>
           <section class="content-panel has-page-actions">
-            <div class="page-header" style="padding: 0 0 18px;"><div><div class="page-title">← 新增隐患</div><div class="page-subtitle">新增模式：创建新的隐患标准，保存后系统自动生成隐患编码。</div></div></div>
+            <div class="page-header" style="padding: 0 0 18px;"><div><div class="project-detail-titlebar"><div class="project-detail-back">〈 <span>返回</span></div><div class="project-detail-divider"></div><div class="project-detail-current">新增隐患</div></div></div></div>
             <div class="hazard-detail-layout">
               <div class="hazard-main-column">
                 <div class="form-card"><div class="form-grid">
-                  <div class="field-label">行业域 *</div><select class="control select-control"><option selected>请选择行业域</option><option>建筑施工</option><option>危险化学品</option><option>通用</option></select>
+                  <div class="field-label">行业域 *</div><select class="control select-control"><option selected>请选择行业域</option><option>建筑施工</option><option>危险化学品</option><option>交通运输</option></select>
                   <div class="field-label">一级分类 *</div><select class="control select-control"><option selected>请选择一级分类</option><option>高坠</option><option>触电</option><option>物体打击</option></select>
                   <div class="field-label">二级分类 *</div><select class="control select-control"><option selected>请选择二级分类</option><option>临边洞口</option><option>脚手架</option><option>配电箱</option></select>
                   <div class="field-label">隐患名称 *</div><input class="control" type="text" placeholder="请输入隐患名称" />
@@ -57,7 +66,7 @@
                   <div class="field-label">备注</div><textarea class="control" style="min-height:88px;padding:10px 12px;" placeholder="请输入备注"></textarea>
                 </div></div>
               </div>
-              <section class="section-card"><h3>已关联法规　<span class="link" data-associate-action="create">[+ 关联]</span></h3><div class="section-body"><div class="empty-state">暂无关联法规，点击右上角“+ 关联”进行添加</div></div></section>
+              <section class="section-card"><h3>已关联法规　<span class="link link-disabled" data-associate-action="create-empty">[+ 关联]</span></h3><div class="section-body"><div class="empty-state">暂无关联法规，点击右上角“+ 关联”进行添加</div></div></section>
             </div>
             <div class="page-actions"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">保存</button></div>
           </section>
@@ -74,7 +83,7 @@
         <main class="workspace">
           <div class="crumb">☰ 知识库管理 〉 隐患子页面</div>
           <section class="content-panel has-page-actions">
-            <div class="page-header" style="padding: 0 0 18px;"><div><div class="page-title">← 隐患详情</div><div class="page-subtitle">详情模式：用于查看隐患标准、关联法规和连续浏览。</div></div></div>
+            <div class="page-header" style="padding: 0 0 18px;"><div><div class="project-detail-titlebar"><div class="project-detail-back">〈 <span>返回</span></div><div class="project-detail-divider"></div><div class="project-detail-current">隐患详情</div></div></div></div>
             <div class="hazard-detail-layout">
               <div class="hazard-main-column">
                 <section class="proto-detail-card">
@@ -133,7 +142,7 @@
         <main class="workspace">
           <div class="crumb">☰ 知识库管理 〉 隐患子页面</div>
           <section class="content-panel has-page-actions">
-            <div class="page-header" style="padding: 0 0 18px;"><div><div class="page-title">← 编辑隐患</div><div class="page-subtitle">编辑模式：结构字段只读，业务字段可编辑。</div></div></div>
+            <div class="page-header" style="padding: 0 0 18px;"><div><div class="project-detail-titlebar"><div class="project-detail-back">〈 <span>返回</span></div><div class="project-detail-divider"></div><div class="project-detail-current">编辑隐患</div></div></div></div>
             <div class="hazard-detail-layout">
               <div class="hazard-main-column">
                 <div class="form-card"><div class="form-grid">
@@ -175,12 +184,12 @@
         <main class="workspace">
           <div class="crumb">☰ 知识库管理 〉 隐患子页面</div>
           <section class="content-panel has-page-actions">
-            <div class="page-header" style="padding: 0 0 18px;"><div><div class="page-title">← 复制隐患</div><div class="page-subtitle">复制模式：除隐患编码外其余字段预填且可调整。</div></div></div>
+            <div class="page-header" style="padding: 0 0 18px;"><div><div class="project-detail-titlebar"><div class="project-detail-back">〈 <span>返回</span></div><div class="project-detail-divider"></div><div class="project-detail-current">复制隐患</div></div></div></div>
             <div class="hazard-detail-layout">
               <div class="hazard-main-column">
                 <div class="form-card">
                   <div class="form-grid">
-                    <div class="field-label">行业域 *</div><select class="control select-control"><option selected>建筑施工</option><option>通用</option><option>市政工程</option></select>
+                    <div class="field-label">行业域 *</div><select class="control select-control" data-copy-industry><option selected>建筑施工</option><option>危险化学品</option><option>交通运输</option></select>
                     <div class="field-label">一级分类 *</div><select class="control select-control"><option selected>高坠</option><option>触电</option><option>物体打击</option></select>
                     <div class="field-label">二级分类 *</div><select class="control select-control"><option selected>临边洞口</option><option>脚手架</option><option>配电箱</option></select>
                     <div class="field-label">隐患名称 *</div><input class="control" type="text" value="防护栏杆高度不足-复制" />
@@ -194,7 +203,7 @@
               </div>
               <section class="section-card">
                 <h3>已关联法规　<span class="link" data-associate-action="copy">[+ 关联]</span></h3>
-                <div class="section-body">
+                <div class="section-body" data-copy-related-laws>
                   <table class="hazard-law-table">
                     <colgroup><col style="width:12%;" /><col style="width:8%;" /><col style="width:12%;" /><col style="width:16%;" /><col style="width:10%;" /><col style="width:20%;" /><col style="width:8%;" /><col style="width:8%;" /><col style="width:6%;" /></colgroup>
                     <thead><tr><th>条款编码</th><th>适用行业</th><th>法规编号</th><th>法规名称</th><th>条款编号</th><th>条款内容</th><th>法规类型</th><th>关联类型</th><th>操作</th></tr></thead>
@@ -221,10 +230,10 @@
         <main class="workspace">
           <div class="crumb">☰ 知识库管理 〉 隐患子页面</div>
           <section class="content-panel">
-            <section class="modal-stage hazard-relation-stage"><div class="modal xlarge"><div class="modal-head"><span>关联法规选择</span><span>×</span></div><div class="modal-body">
+            <section class="modal-stage hazard-relation-stage"><div class="modal xlarge"><div class="modal-head"><div class="relation-modal-head-left"><span>关联法规选择</span><span class="relation-modal-note">仅可关联与当前隐患所属行业域对应的适用行业法规或通用法规，不允许选择其他行业类型法规。</span></div><span>×</span></div><div class="modal-body">
               <div class="filters" style="padding: 0 0 16px;">
                 <input class="control search-control" type="text" placeholder="搜索ID/编号/名称/条款/内容" />
-                <select class="control select-control w170"><option selected>适用行业</option><option>建筑施工</option><option>危险化学品</option><option>通用</option></select>
+                <select class="control select-control w170"><option selected>适用行业</option><option>建筑施工</option><option>通用</option></select>
                 <div class="proto-cascader" data-proto-cascader data-allow-any-level="true" data-cascader-depth="3" data-placeholder="适用地区"><button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">适用地区</span><span class="proto-cascader-arrow">▾</span></button><div class="proto-cascader-panel"><div class="proto-cascader-col"><div class="proto-cascader-option active">全国</div><div class="proto-cascader-option">广东省 <span>›</span></div><div class="proto-cascader-option">上海市 <span>›</span></div></div><div class="proto-cascader-col"><div class="proto-cascader-option active">深圳市 <span>›</span></div><div class="proto-cascader-option">广州市 <span>›</span></div></div><div class="proto-cascader-col"><div class="proto-cascader-option active">南山区</div><div class="proto-cascader-option">福田区</div></div><div class="proto-cascader-col"><div class="proto-cascader-option muted">法规适用地区到区县</div></div></div></div>
                 <select class="control select-control w170"><option selected>法规类型</option><option>国家标准</option><option>行业标准</option><option>地方标准</option><option>企业标准</option></select>
                 <button class="btn btn-primary">🔍 查询</button><button class="btn btn-ghost">↻ 重置</button>
@@ -281,6 +290,8 @@
       var stateButtons = Array.prototype.slice.call(document.querySelectorAll("[data-prototype-button]"));
       var panels = Array.prototype.slice.call(document.querySelectorAll("[data-prototype-panel]"));
       var associateButtons = Array.prototype.slice.call(document.querySelectorAll("[data-associate-action]"));
+      var copyIndustrySelect = document.querySelector("[data-copy-industry]");
+      var copyRelatedLaws = document.querySelector("[data-copy-related-laws]");
 
       function setActivePanel(panelName) {
         panels.forEach(function (panel) {
@@ -299,16 +310,21 @@
             showProtoToast("点击编辑可进行关联法规操作", "error");
             return;
           }
+          if (mode === "create-empty") {
+            showProtoToast("请先选择行业域，再关联法规", "error");
+            return;
+          }
           setActivePanel("relation");
         });
       });
+
+      if (copyIndustrySelect && copyRelatedLaws) {
+        copyIndustrySelect.addEventListener("change", function () {
+          copyRelatedLaws.innerHTML = '<div class="empty-state">暂无关联法规，点击右上角“+ 关联”进行添加</div>';
+          showProtoToast("变更行业域已清空关联法规内容，请重新选择适用法规进行关联操作", "warning");
+        });
+      }
     })();
   </script>
 </body>
 </html>
-
-
-
-
-
-
