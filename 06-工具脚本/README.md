@@ -33,6 +33,11 @@ python 06-工具脚本/check_docs_tests.py
 | `AGENTS.md` 是否承载专题细则 | ERROR |
 | Markdown 相对链接是否有效 | ERROR |
 | `当前需求沟通文档.md` 是否超过 30000 bytes | WARN |
+| 根目录是否存在非预期一级目录 | WARN |
+| 一级目录 README 是否包含基础章节 | WARN |
+| `AGENTS.md` 是否覆盖已有一级目录 | ERROR |
+| 是否引用不存在的根 README | WARN |
+| `任务完成检查.md` 是否引用检查脚本 | ERROR |
 
 ## 维护约定
 - 脚本只读，不自动修改仓库文件。
