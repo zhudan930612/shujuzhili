@@ -85,6 +85,8 @@
 - `proto-tag / proto-status`：统一业务标签与胶囊状态组件。
 - `proto-table-status`：统一表格内紧凑状态组件。
 - `proto-toast`：统一轻提示组件（顶部居中、单条、自动消失）。
+- `project-detail-titlebar / project-detail-back / project-detail-divider / project-detail-current`：统一详情类页面返回标题行，样式与项目详情页保持一致。
+- `modal / modal-foot`：存量弹窗结构，底部按钮默认右下对齐。
 - `proto-detail-card / proto-detail-grid / proto-detail-label / proto-detail-value`：统一基础详情展示卡片。
 - `proto-image-upload / proto-image-grid / proto-image-card`：统一上传图片、缩略图和删除按钮表现层。
 - `page-actions`：统一视口底部悬浮操作栏（固定在工作区右下，内容区需预留底部空间）。

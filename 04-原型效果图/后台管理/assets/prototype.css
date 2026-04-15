@@ -829,6 +829,37 @@ tbody tr:nth-child(even) {
   color: #203249;
 }
 
+.project-detail-titlebar {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  color: #23415f;
+}
+
+.project-detail-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #395673;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.project-detail-divider {
+  width: 1px;
+  height: 18px;
+  background: #d8e3ef;
+}
+
+.project-detail-current {
+  color: #193b68;
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 700;
+}
+
 .page-subtitle {
   margin-top: 6px;
   color: var(--muted);
@@ -1282,7 +1313,7 @@ tbody tr:nth-child(even) {
   padding: 16px 28px;
   border-top: 1px solid #edf2f7;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 14px;
 }
 
@@ -1782,7 +1813,7 @@ tbody tr:nth-child(even) {
 
 
 .hazard-relation-stage .modal-foot {
-  justify-content: center;
+  justify-content: flex-end;
   padding: 16px 28px;
 }
 
@@ -2321,7 +2352,8 @@ tbody tr:nth-child(even) {
 
 .proto-toast {
   min-width: 280px;
-  max-width: 420px;
+  max-width: min(680px, calc(100vw - 48px));
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -2392,7 +2424,8 @@ tbody tr:nth-child(even) {
 }
 
 .proto-toast-text {
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
   font-size: 14px;
   line-height: 1.6;
   color: #1f3957;
