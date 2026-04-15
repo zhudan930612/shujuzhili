@@ -22,8 +22,8 @@
       "Bash(mv docs/01-上下文.md .)",
       "Bash(mv docs/02-业务流程.mmd .)",
       "Bash(mv docs/04-需求池.md .)",
-      "Bash(cp -r docs/06-原型效果图 .)",
-      "Bash(rm -rf docs/06-原型效果图)"
+      "Bash(cp -r docs/04-原型效果图 .)",
+      "Bash(rm -rf docs/04-原型效果图)"
     ]
   }
 }
