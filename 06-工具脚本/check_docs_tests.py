@@ -1,5 +1,7 @@
 import shutil
 import unittest
+from contextlib import redirect_stdout
+from io import StringIO
 from pathlib import Path
 
 import check_docs
@@ -56,6 +58,7 @@ class CheckDocsTests(unittest.TestCase):
         result = check_docs.run_checks(root)
 
         self.assertTrue(any("Broken Markdown link" in item.message for item in result.errors))
+        self.assertTrue(any("AI cannot follow stale context links" in item.why for item in result.errors))
 
     def test_large_discussion_doc_is_warning_only(self):
         root = self.make_root("large_discussion")
@@ -120,6 +123,29 @@ class CheckDocsTests(unittest.TestCase):
         result = check_docs.run_checks(root)
 
         self.assertTrue(any("任务完成检查.md missing check_docs command" in item.message for item in result.errors))
+
+    def test_deprecated_term_issue_has_fix(self):
+        root = self.make_root("deprecated_term_has_fix")
+        self.add_required_files(root)
+        (root / "doc.md").write_text("ASCII 原型\n", encoding="utf-8")
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("PRD ASCII 草图" in item.fix for item in result.errors))
+
+    def test_print_issues_includes_why_and_fix(self):
+        root = self.make_root("print_includes_why")
+        self.add_required_files(root)
+        (root / "doc.md").write_text("ASCII 原型\n", encoding="utf-8")
+        result = check_docs.run_checks(root)
+        output = StringIO()
+
+        with redirect_stdout(output):
+            check_docs.print_issues(result)
+
+        rendered = output.getvalue()
+        self.assertIn("Why:", rendered)
+        self.assertIn("Fix:", rendered)
 
 
 if __name__ == "__main__":

@@ -52,6 +52,7 @@ class Issue:
     path: Path
     line: int | None
     message: str
+    why: str
     fix: str
 
 
@@ -95,6 +96,7 @@ def check_required_files(root: Path, result: CheckResult) -> None:
                     rel_path,
                     None,
                     "Missing required file.",
+                    "Missing harness files prevent AI from following the project workflow.",
                     "Restore required harness file.",
                 )
             )
@@ -114,6 +116,7 @@ def check_agents_length(root: Path, result: CheckResult) -> None:
                 rel_path,
                 None,
                 f"AGENTS.md has {line_count} lines, limit {AGENTS_MAX_LINES}.",
+                "Large top-level instructions increase context load.",
                 "Move topic-specific rules to directory README; keep AGENTS as map.",
             )
         )
@@ -134,6 +137,7 @@ def check_agents_forbidden_details(root: Path, result: CheckResult) -> None:
                         rel_path,
                         line_no,
                         f"Topic detail found in AGENTS.md: {term}",
+                        "Topic details in AGENTS.md make the top-level map harder for AI to scan.",
                         fix,
                     )
                 )
@@ -151,6 +155,7 @@ def check_deprecated_terms(root: Path, result: CheckResult) -> None:
                             rel_path,
                             line_no,
                             f"Deprecated term found: {term}",
+                            "Mixed terminology causes inconsistent future edits.",
                             fix,
                         )
                     )
@@ -175,6 +180,7 @@ def check_markdown_links(root: Path, result: CheckResult) -> None:
                             rel_path,
                             line_no,
                             f"Markdown link points outside repository: {match.group(1)}",
+                            "AI cannot safely follow context links outside the repository record.",
                             "Keep links inside repository or use an explicit external URL.",
                         )
                     )
@@ -187,6 +193,7 @@ def check_markdown_links(root: Path, result: CheckResult) -> None:
                             rel_path,
                             line_no,
                             f"Broken Markdown link: {match.group(1)}",
+                            "AI cannot follow stale context links.",
                             "Correct the relative path or remove stale reference.",
                         )
                     )
@@ -206,6 +213,7 @@ def check_large_discussion_doc(root: Path, result: CheckResult) -> None:
                 rel_path,
                 None,
                 f"Current discussion doc is large: {size} bytes, warning threshold {DISCUSSION_DOC_WARN_BYTES}.",
+                "Large process documents increase context rot risk.",
                 "Move stable rules to PRD; keep process, tradeoffs, summary, links.",
             )
         )
@@ -223,6 +231,7 @@ def check_root_directories(root: Path, result: CheckResult) -> None:
                     Path(path.name),
                     None,
                     f"Unexpected root directory: {path.name}",
+                    "Unexpected root folders make repository navigation less predictable for AI.",
                     "Confirm the directory is needed; otherwise move it under an existing numbered directory.",
                 )
             )
@@ -243,6 +252,7 @@ def check_readme_headings(root: Path, result: CheckResult) -> None:
                         readme.relative_to(root),
                         None,
                         f"README missing heading: {heading}",
+                        "Consistent README sections help AI locate local rules quickly.",
                         "Add the standard README section or explain why this directory needs a different structure.",
                     )
                 )
@@ -262,6 +272,7 @@ def check_agents_directory_entries(root: Path, result: CheckResult) -> None:
                     Path("AGENTS.md"),
                     None,
                     f"AGENTS.md missing root directory entry: {dirname}/",
+                    "AGENTS.md is the top-level map; missing directories hide context from AI.",
                     "Add the root directory to AGENTS.md key files/directories table.",
                 )
             )
@@ -278,6 +289,7 @@ def check_root_readme_references(root: Path, result: CheckResult) -> None:
                         rel_path,
                         line_no,
                         "Root README reference found: ../README.md",
+                        "A missing root README sends AI to a dead navigation path.",
                         "This repository currently uses AGENTS.md as the top-level map; link to AGENTS.md unless a root README is created.",
                     )
                 )
@@ -297,6 +309,7 @@ def check_completion_check_command(root: Path, result: CheckResult) -> None:
                 rel_path,
                 None,
                 "任务完成检查.md missing check_docs command.",
+                "The completion checklist should point AI to the mechanical check command.",
                 f"Add `{CHECK_DOCS_COMMAND}` to the task completion checklist.",
             )
         )
@@ -342,6 +355,7 @@ def print_issues(result: CheckResult) -> None:
         if issue.line is not None:
             location = f"{location}:{issue.line}"
         print(f"{issue.severity}: {location}: {issue.message}")
+        print(f"  Why: {issue.why}")
         print(f"  Fix: {issue.fix}")
 
     if not result.errors and not result.warnings:
