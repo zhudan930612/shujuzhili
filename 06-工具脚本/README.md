@@ -6,6 +6,13 @@
 脚本用于帮助 AI 自查与人工复核，不替代产品判断、PRD 评审或正式验收。
 脚本目标是让 AI 快速发现结构性问题，并给出可执行修复建议。
 
+## Guide / Sensor 边界
+- Guide 是行动前引导，包括 [../AGENTS.md](../AGENTS.md)、目录 README、任务执行协议、PRD、业务上下文。
+- Sensor 是行动后反馈，包括 [check_docs.py](check_docs.py)、[check_docs_tests.py](check_docs_tests.py)、任务完成检查、AI 自查与人工复核。
+- [check_docs.py](check_docs.py) 属于计算性 Sensor，只检查明确结构问题。
+- 业务评审属于推理性 Sensor，不放入脚本硬编码。
+- 工具脚本只做结构性背压，不替代人工确认点。
+
 ## 主要内容
 | 文件 | 用途 |
 |------|------|
