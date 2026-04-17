@@ -399,8 +399,37 @@
   <script src="./assets/prototype-layout.js"></script>
   <script src="./assets/prototype-switcher.js"></script>
   <script>
+    function getCurrentMinuteValue() {
+      const now = new Date();
+      const pad = (value) => String(value).padStart(2, "0");
+      return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    }
+
+    function isInspectionTimeValid(scope) {
+      const input = scope && scope.querySelector('input[type="datetime-local"]');
+      if (!input || !input.value) return true;
+      const selected = new Date(input.value);
+      if (Number.isNaN(selected.getTime())) return true;
+      return selected <= new Date();
+    }
+
+    document.querySelectorAll('input[type="datetime-local"]').forEach((input) => {
+      const refreshMax = () => {
+        input.max = getCurrentMinuteValue();
+      };
+      refreshMax();
+      input.title = "巡查时间不能晚于当前时间";
+      input.addEventListener("focus", refreshMax);
+      input.addEventListener("click", refreshMax);
+    });
+
     document.querySelectorAll("[data-open-record-save-confirm]").forEach((button) => {
       button.addEventListener("click", () => {
+        const scope = button.closest("[data-view-scope]");
+        if (!isInspectionTimeValid(scope)) {
+          showProtoToast("巡查时间不能晚于当前时间", "error");
+          return;
+        }
         const modal = document.getElementById("recordSaveConfirmGlobal");
         if (modal) modal.classList.add("active");
       });
