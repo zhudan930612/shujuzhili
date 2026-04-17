@@ -95,7 +95,7 @@
 - `proto-field-row / proto-field-label`：统一表单行布局与标签宽度。
 - `proto-cascader`：统一多级联动选择器，用于行政区域、适用地区等层级字段。
   - 项目行政区域：使用 `data-cascader-depth="5"`、`data-require-depth="4"`、`data-selectable-from-depth="4"`，表示省 / 市 / 区县 / 街镇 / 社区五级，最低选择到街镇，社区可选；点击街镇前的圆点可直接选中街镇，点击文字或箭头可继续展开社区。
-  - 巡查人员服务区域：使用 `data-cascader-depth="5"`、`data-allow-any-level="true"`，表示全国 / 省 / 市 / 区县 / 街镇 / 社区任一层级可选。
+  - 巡查人员服务区域：使用 `data-cascader-depth="5"`、`data-allow-any-level="true"`，表示全国 / 省 / 市 / 区县 / 街镇 / 社区任一层级可选；业务上支持多区域选择，静态原型可在控件下方用已选区域标签表达多个服务区域。
   - 法规适用地区：使用 `data-cascader-depth="3"`、`data-allow-any-level="true"`，表示全国 / 省 / 市 / 区县任一层级可选，不支持街镇。
   - 必选层级提示可通过 `data-require-message` 配置，例如“行政区域必须至少选择到街镇层级”。
 

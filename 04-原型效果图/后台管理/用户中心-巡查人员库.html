@@ -10,6 +10,8 @@
     .prototype-stage.active { display: block; }
     .inspector-list-page .proto-list-title::before { content: none; }
     .proto-list-shell.inspector-list-page table { min-width: 1420px; }
+    .service-area-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .service-area-tag { border: 1px solid #d6e0ec; border-radius: 4px; background: #f7fafc; color: #40556f; padding: 4px 8px; font-size: 12px; line-height: 1.4; }
   </style>
 </head>
 <body>
@@ -59,8 +61,8 @@
                 </colgroup>
                 <thead><tr><th>巡检人员名称</th><th>所属单位</th><th>性别</th><th>手机号码</th><th>服务区域</th><th>创建时间</th><th>创建人</th><th>操作</th></tr></thead>
                 <tbody>
-                  <tr><td>CS上海02</td><td>CS上海巡检单位01</td><td>女</td><td>15******02　⊘</td><td>上海-上海市-黄浦区</td><td>2026-01-09 15:49:37</td><td>CS上海运营</td><td><div class="proto-row-actions"><button class="proto-action" type="button">编辑</button><button class="proto-action danger" type="button">删除</button></div></td></tr>
-                  <tr><td>青浦巡检1</td><td>上海青浦巡检有限公司</td><td>男</td><td>13******87　⊘</td><td>上海-上海市-青浦区-夏阳街道-青湖社区</td><td>2026-01-08 14:19:10</td><td>上海青浦运营</td><td><div class="proto-row-actions"><button class="proto-action" type="button">编辑</button><button class="proto-action danger" type="button">删除</button></div></td></tr>
+                  <tr><td>CS上海02</td><td>CS上海巡检单位01</td><td>女</td><td>15******02　⊘</td><td>上海-上海市-黄浦区<br />广东-深圳市-南山区</td><td>2026-01-09 15:49:37</td><td>CS上海运营</td><td><div class="proto-row-actions"><button class="proto-action" type="button">编辑</button><button class="proto-action danger" type="button">删除</button></div></td></tr>
+                  <tr><td>青浦巡检1</td><td>上海青浦巡检有限公司</td><td>男</td><td>13******87　⊘</td><td>上海-上海市-青浦区-夏阳街道-青湖社区<br />上海-上海市-黄浦区</td><td>2026-01-08 14:19:10</td><td>上海青浦运营</td><td><div class="proto-row-actions"><button class="proto-action" type="button">编辑</button><button class="proto-action danger" type="button">删除</button></div></td></tr>
                 </tbody>
               </table>
             </div>
@@ -95,10 +97,11 @@
                   <div class="proto-field-label">服务区域 *</div>
                   <div>
                     <div class="proto-cascader proto-cascader-full" data-proto-cascader data-allow-any-level="true" data-cascader-depth="5" data-placeholder="服务区域">
-                      <button class="proto-input proto-cascader-control" type="button"><span class="proto-cascader-value">全国</span><span class="proto-cascader-arrow">▾</span></button>
+                      <button class="proto-input proto-cascader-control" type="button"><span class="proto-cascader-value">广东省 / 深圳市 / 南山区</span><span class="proto-cascader-arrow">▾</span></button>
                       <div class="proto-cascader-panel"></div>
                     </div>
-                    <div class="subtle-note">可选择全国、省、市、区县、街道或社区任一层级，选择上级区域时默认包含其下级区域。</div>
+                    <div class="service-area-tags"><span class="service-area-tag">广东省 / 深圳市 / 南山区</span><span class="service-area-tag">上海市 / 上海市 / 黄浦区</span></div>
+                    <div class="subtle-note">支持选择多个服务区域，用于限定可服务项目范围。</div>
                   </div>
                 </div>
               </div>
@@ -132,7 +135,8 @@
                       <button class="proto-input proto-cascader-control" type="button"><span class="proto-cascader-value">上海市 / 上海市 / 青浦区 / 夏阳街道 / 青湖社区</span><span class="proto-cascader-arrow">▾</span></button>
                       <div class="proto-cascader-panel"></div>
                     </div>
-                    <div class="subtle-note">可选择全国、省、市、区县、街道或社区任一层级，用于限制该巡查人员可查看和上传的辖区项目数据。</div>
+                    <div class="service-area-tags"><span class="service-area-tag">上海市 / 上海市 / 青浦区 / 夏阳街道 / 青湖社区</span><span class="service-area-tag">上海市 / 上海市 / 黄浦区</span></div>
+                    <div class="subtle-note">支持选择多个服务区域，用于限定可服务项目范围。</div>
                   </div>
                 </div>
               </div>
