@@ -23,7 +23,12 @@
       "Bash(mv docs/02-业务流程.mmd .)",
       "Bash(mv docs/04-需求池.md .)",
       "Bash(cp -r docs/04-原型效果图 .)",
-      "Bash(rm -rf docs/04-原型效果图)"
+      "Bash(rm -rf docs/04-原型效果图)",
+      "WebFetch(domain:github.com)",
+      "Bash(git clone *)",
+      "Read(//tmp/**)",
+      "Read(//tmp/andrej-skills/**)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }
