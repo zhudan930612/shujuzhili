@@ -10,6 +10,13 @@
     .prototype-stage.active { display: block; }
     .inspector-list-page .proto-list-title::before { content: none; }
     .proto-list-shell.inspector-list-page table { min-width: 1420px; }
+    .inspector-filter-bar .proto-cascader,
+    .inspector-filter-bar .search-control {
+      width: 240px;
+    }
+    .inspector-filter-bar .proto-cascader-control {
+      width: 100%;
+    }
     .service-area-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
     .service-area-tag { border: 1px solid #d6e0ec; border-radius: 4px; background: #f7fafc; color: #40556f; padding: 4px 8px; font-size: 12px; line-height: 1.4; }
   </style>
@@ -29,12 +36,12 @@
         <main class="workspace">
           <div class="crumb">☰ 用户中心 〉 巡查人员库</div>
           <section class="surface tabbar"><div class="tab">巡查人员库</div></section>
-          <section class="proto-filter-bar">
-            <div class="proto-cascader" data-proto-cascader data-allow-any-level="true" data-cascader-depth="5" data-placeholder="请选择服务区域" style="width: 214px;">
+          <section class="proto-filter-bar inspector-filter-bar">
+            <div class="proto-cascader" data-proto-cascader data-allow-any-level="true" data-cascader-depth="5" data-placeholder="请选择服务区域">
               <button class="proto-input proto-cascader-control" type="button"><span class="proto-cascader-value">请选择服务区域</span><span class="proto-cascader-arrow">▾</span></button>
               <div class="proto-cascader-panel"></div>
             </div>
-            <input class="proto-input search-control" type="text" placeholder="请输入巡检人员名称" style="width: 214px;" />
+            <input class="proto-input search-control" type="text" placeholder="请输入巡查人员名称" />
             <button class="btn btn-primary" type="button">🔍 查询</button>
             <button class="btn btn-ghost" type="button">↻ 重置</button>
           </section>
