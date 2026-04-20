@@ -147,6 +147,29 @@ class CheckDocsTests(unittest.TestCase):
         self.assertIn("Why:", rendered)
         self.assertIn("Fix:", rendered)
 
+    def test_reports_missing_discussion_landing_checklist(self):
+        root = self.make_root("missing_landing_checklist")
+        self.add_required_files(root)
+        workbench = root / "03-工作台"
+        (workbench / "当前需求沟通文档.md").write_text("过程讨论\n", encoding="utf-8")
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("missing 拆回正式文档清单" in item.message for item in result.warnings))
+
+    def test_reports_incomplete_discussion_landing_checklist_columns(self):
+        root = self.make_root("incomplete_landing_checklist")
+        self.add_required_files(root)
+        workbench = root / "03-工作台"
+        (workbench / "当前需求沟通文档.md").write_text(
+            "### 拆回正式文档清单\n\n| 结论/规则 | 状态 |\n|---|---|\n",
+            encoding="utf-8",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("Landing checklist missing columns" in item.message for item in result.warnings))
+
 
 if __name__ == "__main__":
     unittest.main()

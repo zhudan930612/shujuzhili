@@ -30,6 +30,8 @@ EXPECTED_ROOT_DIRS = {
 
 README_REQUIRED_HEADINGS = ["## 目录定位", "## 主要内容"]
 CHECK_DOCS_COMMAND = "python 06-工具脚本/check_docs.py"
+DISCUSSION_LANDING_CHECKLIST_TITLE = "拆回正式文档清单"
+DISCUSSION_LANDING_CHECKLIST_COLUMNS = ["结论/规则", "主定义文档", "影响资产", "状态", "备注"]
 
 DEPRECATED_TERMS = {
     "ASCII 原型": "Use PRD ASCII 草图 or ASCII 草图 for PRD low-fi sketches.",
@@ -83,6 +85,7 @@ def run_checks(root: Path) -> CheckResult:
     check_agents_directory_entries(root, result)
     check_root_readme_references(root, result)
     check_completion_check_command(root, result)
+    check_discussion_landing_checklist(root, result)
 
     return result
 
@@ -311,6 +314,40 @@ def check_completion_check_command(root: Path, result: CheckResult) -> None:
                 "任务完成检查.md missing check_docs command.",
                 "The completion checklist should point AI to the mechanical check command.",
                 f"Add `{CHECK_DOCS_COMMAND}` to the task completion checklist.",
+            )
+        )
+
+
+def check_discussion_landing_checklist(root: Path, result: CheckResult) -> None:
+    rel_path = Path("03-工作台/当前需求沟通文档.md")
+    path = root / rel_path
+    if not path.exists():
+        return
+
+    text = path.read_text(encoding="utf-8")
+    if DISCUSSION_LANDING_CHECKLIST_TITLE not in text:
+        result.add(
+            Issue(
+                "WARN",
+                rel_path,
+                None,
+                f"Current discussion doc missing {DISCUSSION_LANDING_CHECKLIST_TITLE}.",
+                "Process conclusions can stay in chat or discussion docs without landing in source-of-truth files.",
+                "Add a landing checklist with conclusion, source document, affected assets, status, and notes.",
+            )
+        )
+        return
+
+    missing_columns = [column for column in DISCUSSION_LANDING_CHECKLIST_COLUMNS if column not in text]
+    if missing_columns:
+        result.add(
+            Issue(
+                "WARN",
+                rel_path,
+                None,
+                f"Landing checklist missing columns: {', '.join(missing_columns)}.",
+                "Incomplete landing checklists make it hard for AI to verify whether conclusions reached source-of-truth files.",
+                "Use columns: 结论/规则, 主定义文档, 影响资产, 状态, 备注.",
             )
         )
 
