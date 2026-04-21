@@ -170,6 +170,44 @@ class CheckDocsTests(unittest.TestCase):
 
         self.assertTrue(any("Landing checklist missing columns" in item.message for item in result.warnings))
 
+    def test_reports_missing_requirement_output_framework(self):
+        root = self.make_root("missing_requirement_output_framework")
+        self.add_required_files(root)
+        workbench = root / "03-工作台"
+        (workbench / "当前需求沟通文档.md").write_text(
+            "### 拆回正式文档清单\n\n| 结论/规则 | 主定义文档 | 影响资产 | 状态 | 备注 |\n|---|---|---|---|---|\n",
+            encoding="utf-8",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(
+            any("missing ## 需求沟通输出框架" in item.message for item in result.warnings)
+        )
+
+    def test_reports_page_requirement_missing_core_headings(self):
+        root = self.make_root("page_requirement_missing_core_headings")
+        self.add_required_files(root)
+        workbench = root / "03-工作台"
+        (workbench / "任务执行协议.md").write_text(
+            "## 需求沟通输出框架\npython 06-工具脚本/check_docs.py\n",
+            encoding="utf-8",
+        )
+        (workbench / "当前需求沟通文档.md").write_text(
+            "### 拆回正式文档清单\n\n"
+            "| 结论/规则 | 主定义文档 | 影响资产 | 状态 | 备注 |\n"
+            "|---|---|---|---|---|\n\n"
+            "##### Q8-1 标注任务列表\n\n"
+            "###### 功能目标\n",
+            encoding="utf-8",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(
+            any("Page requirement section missing core headings" in item.message for item in result.warnings)
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

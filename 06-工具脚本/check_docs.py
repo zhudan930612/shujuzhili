@@ -32,6 +32,16 @@ README_REQUIRED_HEADINGS = ["## 目录定位", "## 主要内容"]
 CHECK_DOCS_COMMAND = "python 06-工具脚本/check_docs.py"
 DISCUSSION_LANDING_CHECKLIST_TITLE = "拆回正式文档清单"
 DISCUSSION_LANDING_CHECKLIST_COLUMNS = ["结论/规则", "主定义文档", "影响资产", "状态", "备注"]
+REQUIREMENT_OUTPUT_FRAMEWORK_TITLE = "## 需求沟通输出框架"
+PAGE_REQUIREMENT_HEADING_RE = re.compile(r"^#####\s+Q\d+(?:-\d+)?\s+.+")
+PAGE_REQUIREMENT_CORE_HEADINGS = [
+    "功能目标",
+    "使用角色",
+    "入口与权限",
+    "页面结构",
+    "ASCII 草图",
+    "待确认/待研发项",
+]
 
 DEPRECATED_TERMS = {
     "ASCII 原型": "Use PRD ASCII 草图 or ASCII 草图 for PRD low-fi sketches.",
@@ -86,6 +96,7 @@ def run_checks(root: Path) -> CheckResult:
     check_root_readme_references(root, result)
     check_completion_check_command(root, result)
     check_discussion_landing_checklist(root, result)
+    check_requirement_output_framework(root, result)
 
     return result
 
@@ -350,6 +361,58 @@ def check_discussion_landing_checklist(root: Path, result: CheckResult) -> None:
                 "Use columns: 结论/规则, 主定义文档, 影响资产, 状态, 备注.",
             )
         )
+
+
+def check_requirement_output_framework(root: Path, result: CheckResult) -> None:
+    protocol_rel_path = Path("03-工作台/任务执行协议.md")
+    protocol_path = root / protocol_rel_path
+    if protocol_path.exists():
+        protocol_text = protocol_path.read_text(encoding="utf-8")
+        if REQUIREMENT_OUTPUT_FRAMEWORK_TITLE not in protocol_text:
+            result.add(
+                Issue(
+                    "WARN",
+                    protocol_rel_path,
+                    None,
+                    f"任务执行协议.md missing {REQUIREMENT_OUTPUT_FRAMEWORK_TITLE}.",
+                    "Without a fixed requirement output framework, complex demand discussions can become fragmented.",
+                    "Add a requirement output framework with goal, roles, entry, page structure, sketch, and open questions.",
+                )
+            )
+
+    discussion_rel_path = Path("03-工作台/当前需求沟通文档.md")
+    discussion_path = root / discussion_rel_path
+    if not discussion_path.exists():
+        return
+
+    lines = read_lines(discussion_path)
+    page_start_indexes = [
+        index for index, line in enumerate(lines) if PAGE_REQUIREMENT_HEADING_RE.match(line)
+    ]
+
+    for offset, start_index in enumerate(page_start_indexes):
+        end_index = page_start_indexes[offset + 1] if offset + 1 < len(page_start_indexes) else len(lines)
+        section = "\n".join(lines[start_index:end_index])
+        has_framework_heading = any(
+            f"###### {heading}" in section for heading in PAGE_REQUIREMENT_CORE_HEADINGS
+        )
+        if not has_framework_heading:
+            continue
+
+        missing_headings = [
+            heading for heading in PAGE_REQUIREMENT_CORE_HEADINGS if f"###### {heading}" not in section
+        ]
+        if missing_headings:
+            result.add(
+                Issue(
+                    "WARN",
+                    discussion_rel_path,
+                    start_index + 1,
+                    f"Page requirement section missing core headings: {', '.join(missing_headings)}.",
+                    "Page-level requirement discussions should be complete enough to review without chasing scattered chat context.",
+                    "Add the missing headings or mark the section as a lightweight note instead of a page requirement section.",
+                )
+            )
 
 
 def iter_markdown_files(root: Path):
