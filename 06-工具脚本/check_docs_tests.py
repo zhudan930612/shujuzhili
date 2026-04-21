@@ -185,6 +185,27 @@ class CheckDocsTests(unittest.TestCase):
             any("missing ## 需求沟通输出框架" in item.message for item in result.warnings)
         )
 
+    def test_reports_missing_requirement_completeness_checklist(self):
+        root = self.make_root("missing_requirement_completeness_checklist")
+        self.add_required_files(root)
+        workbench = root / "03-工作台"
+        (workbench / "任务执行协议.md").write_text(
+            "## 需求沟通输出框架\npython 06-工具脚本/check_docs.py\n",
+            encoding="utf-8",
+        )
+        (workbench / "当前需求沟通文档.md").write_text(
+            "### 拆回正式文档清单\n\n"
+            "| 结论/规则 | 主定义文档 | 影响资产 | 状态 | 备注 |\n"
+            "|---|---|---|---|---|\n",
+            encoding="utf-8",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(
+            any("missing ## 需求完备性检查清单" in item.message for item in result.warnings)
+        )
+
     def test_reports_page_requirement_missing_core_headings(self):
         root = self.make_root("page_requirement_missing_core_headings")
         self.add_required_files(root)
@@ -206,6 +227,57 @@ class CheckDocsTests(unittest.TestCase):
 
         self.assertTrue(
             any("Page requirement section missing core headings" in item.message for item in result.warnings)
+        )
+
+    def test_reports_confirmed_page_missing_required_headings(self):
+        root = self.make_root("confirmed_page_missing_required_headings")
+        self.add_required_files(root)
+        workbench = root / "03-工作台"
+        (workbench / "任务执行协议.md").write_text(
+            "## 需求沟通输出框架\n## 需求完备性检查清单\npython 06-工具脚本/check_docs.py\n",
+            encoding="utf-8",
+        )
+        (workbench / "当前需求沟通文档.md").write_text(
+            "### 拆回正式文档清单\n\n"
+            "| 结论/规则 | 主定义文档 | 影响资产 | 状态 | 备注 |\n"
+            "|---|---|---|---|---|\n\n"
+            "| Q8-1 | 标注任务列表 | 标注员 | 网格 | 已确认 | - |\n\n"
+            "##### Q8-1 标注任务列表\n\n"
+            "###### 功能目标\n",
+            encoding="utf-8",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(
+            any("Confirmed page missing required headings" in item.message for item in result.warnings)
+        )
+
+    def test_reports_confirmed_page_record_missing_trigger_rules(self):
+        root = self.make_root("confirmed_page_record_missing_trigger_rules")
+        self.add_required_files(root)
+        workbench = root / "03-工作台"
+        (workbench / "任务执行协议.md").write_text(
+            "## 需求沟通输出框架\n## 需求完备性检查清单\npython 06-工具脚本/check_docs.py\n",
+            encoding="utf-8",
+        )
+        (workbench / "当前需求沟通文档.md").write_text(
+            "### 拆回正式文档清单\n\n"
+            "| 结论/规则 | 主定义文档 | 影响资产 | 状态 | 备注 |\n"
+            "|---|---|---|---|---|\n\n"
+            "| Q8-1 | 标注任务列表 | 标注员 | 网格 | 已确认 | - |\n\n"
+            "##### Q8-1 标注任务列表\n\n"
+            "###### 功能目标\n"
+            "###### ASCII 草图\n"
+            "任务记录抽屉\n"
+            "###### 待确认/待研发项\n",
+            encoding="utf-8",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(
+            any("mentions records but has no trigger rules" in item.message for item in result.warnings)
         )
 
 

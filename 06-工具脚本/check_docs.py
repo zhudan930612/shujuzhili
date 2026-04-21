@@ -33,7 +33,9 @@ CHECK_DOCS_COMMAND = "python 06-工具脚本/check_docs.py"
 DISCUSSION_LANDING_CHECKLIST_TITLE = "拆回正式文档清单"
 DISCUSSION_LANDING_CHECKLIST_COLUMNS = ["结论/规则", "主定义文档", "影响资产", "状态", "备注"]
 REQUIREMENT_OUTPUT_FRAMEWORK_TITLE = "## 需求沟通输出框架"
+REQUIREMENT_COMPLETENESS_CHECKLIST_TITLE = "## 需求完备性检查清单"
 PAGE_REQUIREMENT_HEADING_RE = re.compile(r"^#####\s+Q\d+(?:-\d+)?\s+.+")
+CONFIRMED_PAGE_ROW_RE = re.compile(r"^\|\s*(Q\d+(?:-\d+)?)\s*\|.*\|\s*已确认\s*\|")
 PAGE_REQUIREMENT_CORE_HEADINGS = [
     "功能目标",
     "使用角色",
@@ -379,6 +381,17 @@ def check_requirement_output_framework(root: Path, result: CheckResult) -> None:
                     "Add a requirement output framework with goal, roles, entry, page structure, sketch, and open questions.",
                 )
             )
+        if REQUIREMENT_COMPLETENESS_CHECKLIST_TITLE not in protocol_text:
+            result.add(
+                Issue(
+                    "WARN",
+                    protocol_rel_path,
+                    None,
+                    f"任务执行协议.md missing {REQUIREMENT_COMPLETENESS_CHECKLIST_TITLE}.",
+                    "Without a fixed completeness checklist, page discussions can miss data model and cross-role issues.",
+                    "Add a requirement completeness checklist covering business object, role granularity, status ownership, data ownership, triggers, conflicts, downstream flow, permissions, exceptions, traceability, MVP boundary, and sketch consistency.",
+                )
+            )
 
     discussion_rel_path = Path("03-工作台/当前需求沟通文档.md")
     discussion_path = root / discussion_rel_path
@@ -386,6 +399,11 @@ def check_requirement_output_framework(root: Path, result: CheckResult) -> None:
         return
 
     lines = read_lines(discussion_path)
+    confirmed_page_ids = {
+        match.group(1)
+        for line in lines
+        if (match := CONFIRMED_PAGE_ROW_RE.match(line))
+    }
     page_start_indexes = [
         index for index, line in enumerate(lines) if PAGE_REQUIREMENT_HEADING_RE.match(line)
     ]
@@ -393,9 +411,7 @@ def check_requirement_output_framework(root: Path, result: CheckResult) -> None:
     for offset, start_index in enumerate(page_start_indexes):
         end_index = page_start_indexes[offset + 1] if offset + 1 < len(page_start_indexes) else len(lines)
         section = "\n".join(lines[start_index:end_index])
-        has_framework_heading = any(
-            f"###### {heading}" in section for heading in PAGE_REQUIREMENT_CORE_HEADINGS
-        )
+        has_framework_heading = "###### 功能目标" in section
         if not has_framework_heading:
             continue
 
@@ -413,6 +429,39 @@ def check_requirement_output_framework(root: Path, result: CheckResult) -> None:
                     "Add the missing headings or mark the section as a lightweight note instead of a page requirement section.",
                 )
             )
+
+        page_id = lines[start_index].split(maxsplit=2)[1] if len(lines[start_index].split()) >= 2 else ""
+        if page_id in confirmed_page_ids:
+            confirmed_required_headings = ["ASCII 草图", "待确认/待研发项"]
+            missing_confirmed_headings = [
+                heading for heading in confirmed_required_headings if f"###### {heading}" not in section
+            ]
+            if missing_confirmed_headings:
+                result.add(
+                    Issue(
+                        "WARN",
+                        discussion_rel_path,
+                        start_index + 1,
+                        f"Confirmed page missing required headings: {', '.join(missing_confirmed_headings)}.",
+                        "Confirmed page requirements should preserve sketch and open-item boundaries for later PRD split.",
+                        "Add ASCII 草图 and 待确认/待研发项 sections before marking the page confirmed.",
+                    )
+                )
+
+            has_record_requirement = any(
+                term in section for term in ["任务记录抽屉", "记录类型", "记录内容"]
+            )
+            if has_record_requirement and "触发规则" not in section:
+                result.add(
+                    Issue(
+                        "WARN",
+                        discussion_rel_path,
+                        start_index + 1,
+                        "Confirmed page mentions records but has no trigger rules.",
+                        "Record requirements are incomplete if the document does not say when records are created.",
+                        "Add a 触发规则 section/table for record creation, update, and clearing.",
+                    )
+                )
 
 
 def iter_markdown_files(root: Path):
