@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>标注质检-质检工作台</title>
+  <link rel="stylesheet" href="./assets/prototype.css" />
+  <style>
+    .prototype-stage { display: none; }
+    .prototype-stage.active { display: block; }
+    .qc-worktop { height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; border-bottom: 1px solid var(--line); background: #fff; }
+    .qc-actions { display: flex; gap: 10px; }
+    .qc-workspace { height: calc(100% - 50px); display: grid; grid-template-columns: 1fr 350px; background: #edf2f8; }
+    .qc-main { padding: 12px 14px; overflow: hidden; }
+    .mode-tabs { height: 42px; display: flex; gap: 10px; align-items: center; }
+    .mode-tab { height: 32px; padding: 0 22px; display: inline-flex; align-items: center; border: 1px solid #d7e2ee; background: #fff; color: #52687f; font-weight: 700; }
+    .mode-tab.active { background: var(--brand); border-color: var(--brand); color: #fff; }
+    .compare-strip, .source-strip { display: flex; gap: 8px; align-items: center; min-height: 42px; padding: 8px 0; }
+    .canvas { position: relative; height: 780px; border: 1px solid #cfdbea; background: linear-gradient(135deg, #dce8f4, #f8fafc 44%, #bdcbd9); overflow: hidden; }
+    .canvas::before { content: ""; position: absolute; left: 70px; right: 70px; bottom: 84px; height: 88px; background: rgba(71,86,104,0.18); transform: skewX(-12deg); }
+    .ref-box { position: absolute; border: 3px solid #7b61ff; background: rgba(123,97,255,0.08); }
+    .ref-box.b1 { left: 250px; top: 160px; width: 210px; height: 110px; }
+    .ref-box.b2 { left: 285px; top: 180px; width: 205px; height: 105px; border-color: #00a4a6; }
+    .ref-box.b3 { right: 240px; bottom: 210px; width: 190px; height: 138px; border-color: #8f6d3f; }
+    .std-box { position: absolute; right: 285px; top: 250px; width: 220px; height: 140px; border: 3px solid #e85b73; background: rgba(232,91,115,0.12); }
+    .context-pop { position: absolute; left: 470px; top: 118px; padding: 10px 12px; background: #fff; border: 1px solid #dce7f3; box-shadow: var(--shadow); color: #40556d; font-weight: 700; }
+    .source-panel { position: absolute; right: 20px; top: 20px; width: 310px; padding: 14px; background: rgba(255,255,255,0.96); border: 1px solid #dce7f3; box-shadow: var(--shadow); }
+    .source-panel-row { display: flex; justify-content: space-between; margin: 8px 0; color: #52687f; }
+    .standard-panel { border-left: 1px solid #dbe5f0; background: #fff; padding: 14px; overflow: hidden; }
+    .panel-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; color: #1f3e62; font-size: 16px; font-weight: 700; }
+    .std-card { border: 1px solid #dce6f1; background: #fbfdff; padding: 12px; margin-bottom: 12px; }
+    .std-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 700; }
+    .dot { width: 14px; height: 14px; display: inline-block; margin-right: 8px; background: #e85b73; vertical-align: -2px; }
+    .std-meta { display: grid; gap: 8px; color: #52687f; }
+    .std-meta select { width: 100%; }
+    .mini-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .mini-actions span { flex: 1; height: 26px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #d8e3ee; background: #fff; color: #52677e; font-size: 12px; font-weight: 700; }
+    .modal-stage { height: calc(100% - 64px); }
+    .record-drawer { position: absolute; right: 0; top: 64px; bottom: 0; width: 450px; background: rgba(255,255,255,0.96); box-shadow: var(--drawer-shadow); padding: 18px; }
+    .timeline { margin-top: 12px; border-left: 2px solid #d9e5f2; padding-left: 18px; }
+    .timeline-item { margin-bottom: 18px; position: relative; color: #52687f; line-height: 1.7; }
+    .timeline-item::before { content: ""; position: absolute; left: -25px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--brand); }
+  </style>
+</head>
+<body>
+  <div class="prototype-state-bar" data-prototype-switch data-prototype-default="object">
+    <button class="active" type="button" data-prototype-button="object">对象组</button>
+    <button type="button" data-prototype-button="source">来源</button>
+    <button type="button" data-prototype-button="return">退回弹窗</button>
+    <button type="button" data-prototype-button="blocked">入池阻断</button>
+    <button type="button" data-prototype-button="record">任务记录</button>
+  </div>
+
+  <section class="prototype-stage active" data-prototype-panel="object">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;">
+          <div class="qc-worktop"><strong>← 质检工作台</strong><div class="qc-actions"><button class="btn btn-ghost">保存草稿</button><button class="btn btn-primary">确认入池</button><button class="btn btn-ghost">不入池</button><button class="btn btn-ghost">任务记录</button></div></div>
+          <div class="qc-workspace"><div class="qc-main"><div class="mode-tabs"><span class="mode-tab active">对象组</span><span class="mode-tab">来源</span></div><div class="compare-strip"><span class="proto-tag">安全帽 / 白色</span><span class="proto-tag" data-variant="gray">灭火器 / 正常</span><span class="proto-tag" data-variant="gray">脚手架 / 盘扣式</span></div><div class="compare-strip"><span class="proto-tag">候选：张三 白色</span><span class="proto-tag">候选：李四 白色</span><span class="proto-tag">候选：王五 白色</span></div><div class="canvas"><div class="ref-box b1"></div><div class="ref-box b2"></div><div class="std-box"></div><div class="context-pop">当前候选：李四｜安全帽/白色 <button class="btn btn-primary" style="height:26px; padding:0 12px; margin-left:8px;">采纳</button></div></div></div><aside class="standard-panel"><div class="panel-title">标准结果列表 <span class="proto-status" data-variant="warning">草稿</span></div><div class="std-card"><div class="std-head"><span><i class="dot"></i>标准对象1</span><span>⋮</span></div><div class="std-meta"><div>形状：矩形</div><select class="control select-control"><option>安全帽 / 白色</option></select></div><div class="mini-actions"><span>锁定</span><span>可见</span><span>固定</span></div></div></aside></div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="source">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;">
+          <div class="qc-worktop"><strong>← 质检工作台</strong><div class="qc-actions"><button class="btn btn-ghost">保存草稿</button><button class="btn btn-primary">确认入池</button><button class="btn btn-ghost">不入池</button></div></div>
+          <div class="qc-workspace"><div class="qc-main"><div class="mode-tabs"><span class="mode-tab">对象组</span><span class="mode-tab active">来源</span></div><div class="source-strip"><span class="proto-tag">张三 5框</span><span class="proto-tag">李四 7框</span><span class="proto-tag" data-variant="orange">王五 无效</span></div><div class="source-strip"><span class="proto-tag">安全帽 白色 x2</span><span class="proto-tag">安全帽 红色</span><span class="proto-tag">灭火器 损坏</span></div><div class="canvas"><div class="ref-box b1"></div><div class="ref-box b2"></div><div class="ref-box b3"></div><div class="context-pop">当前对象：李四｜安全帽/白色 <button class="btn btn-primary" style="height:26px; padding:0 12px; margin-left:8px;">采纳</button></div><div class="source-panel"><div class="panel-title">来源操作面板</div><div class="source-panel-row"><span>标注人</span><strong>李四</strong></div><div class="source-panel-row"><span>标注对象</span><strong>7 个</strong></div><div class="source-panel-row"><span>已采纳对象</span><strong>1 个</strong></div><button class="btn btn-ghost" disabled style="width:100%; margin-top:10px;">退回该记录</button><p style="color:#8a6a18; line-height:1.7;">该标注记录已有对象被采纳，请先移除相关标准对象后再退回。</p></div></div></div><aside class="standard-panel"><div class="panel-title">标准结果列表</div><div class="std-card"><div class="std-head"><span><i class="dot"></i>标准对象1</span><span>⋮</span></div><div class="std-meta"><select class="control select-control"><option>安全帽 / 白色</option></select></div></div></aside></div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="return">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace"><section class="modal-stage"><div class="modal"><div class="modal-head"><span>退回标注记录</span><span>×</span></div><div class="modal-body"><div class="proto-detail-grid"><div class="proto-detail-label">标注人</div><div class="proto-detail-value">李四</div><div class="proto-detail-label">标注对象</div><div class="proto-detail-value">7 个</div></div><div style="display:grid; gap:10px; margin-top:18px;"><label><input type="radio" checked /> 漏标较多</label><label><input type="radio" /> 框选位置不准确</label><label><input type="radio" /> 类别/属性选择错误</label><label><input type="radio" /> 整体质量不可接受</label></div><textarea class="control" style="width:100%; height:88px; margin-top:16px;" placeholder="请说明返工内容"></textarea></div><div class="modal-foot"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">确认退回</button></div></div></section></main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="blocked">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace"><section class="modal-stage"><div class="modal"><div class="modal-head"><span>无法确认入池</span><span>×</span></div><div class="modal-body"><p class="notice">当前图片存在待返工退回记录，不能确认入池或不入池。请等待相关标注员重新提交，或撤销退回后再裁决。</p></div><div class="modal-foot"><button class="btn btn-primary">我知道了</button></div></div></section></main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="record">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace"><section class="content-panel" style="height:982px; padding:0; overflow:hidden;"><div class="qc-worktop"><strong>← 质检工作台</strong><div class="qc-actions"><button class="btn btn-primary">确认入池</button></div></div><div class="qc-workspace"><div class="qc-main"><div class="canvas"><div class="std-box"></div></div></div><aside class="standard-panel"><div class="panel-title">标准结果列表</div><div class="std-card"><div class="std-head"><span><i class="dot"></i>标准对象1</span></div></div></aside></div></section><aside class="record-drawer"><div class="panel-title">任务记录 <span>×</span></div><div class="timeline"><div class="timeline-item"><strong>保存质检草稿</strong><br />2026-04-23 15:22<br />标准对象：3 个</div><div class="timeline-item"><strong>退回标注记录</strong><br />2026-04-23 15:05<br />退回对象：李四标注记录</div><div class="timeline-item"><strong>进入质检</strong><br />2026-04-23 14:30<br />正常标注结果：3 条</div></div></aside></main></div>
+    </div>
+  </section>
+
+  <script src="./assets/prototype.js"></script>
+  <script src="./assets/prototype-layout.js"></script>
+  <script src="./assets/prototype-switcher.js"></script>
+</body>
+</html>

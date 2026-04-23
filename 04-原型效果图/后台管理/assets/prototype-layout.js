@@ -3,6 +3,7 @@
     { key: "home", label: "⌂ 首页" },
     { key: "project", label: "▣ 项目管理" },
     { key: "inspection", label: "◎ 巡查管理" },
+    { key: "annotation", label: "▧ 标注质检" },
     { key: "user", label: "♙ 用户中心" },
     { key: "knowledge", label: "◫ 知识库管理" },
     { key: "system", label: "⚙ 系统管理" },
@@ -18,6 +19,12 @@
       { key: "inspection", label: "◎ 巡查记录管理" },
       { key: "project", label: "▣ 项目管理" },
       { key: "knowledge", label: "◫ 知识库管理" },
+    ],
+    annotation: [
+      { key: "annotation-task", label: "▧ 标注任务" },
+      { key: "annotation-qc", label: "▤ 质检任务" },
+      { key: "quality-pool", label: "▣ 高质量数据池" },
+      { key: "annotation-category", label: "◫ 标注要素类别库" },
     ],
     user: [
       { key: "inspection-org", label: "▤ 巡检单位库" },
@@ -40,6 +47,7 @@
       { key: "overview", label: "▣ 后台原型总览" },
       { key: "project", label: "▤ 项目管理" },
       { key: "inspection", label: "◎ 巡查管理" },
+      { key: "annotation", label: "▧ 标注质检" },
       { key: "user", label: "♙ 用户中心" },
       { key: "knowledge", label: "◫ 知识库管理" },
     ],

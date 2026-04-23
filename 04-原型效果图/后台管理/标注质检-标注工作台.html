@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>标注质检-标注工作台</title>
+  <link rel="stylesheet" href="./assets/prototype.css" />
+  <style>
+    .prototype-stage { display: none; }
+    .prototype-stage.active { display: block; }
+    .worktop { height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; border-bottom: 1px solid var(--line); background: #fff; }
+    .worktop-title { display: flex; align-items: center; gap: 12px; font-weight: 700; color: #1f3e62; }
+    .worktop-actions { display: flex; gap: 10px; }
+    .annotation-shell { height: calc(100% - 50px); display: grid; grid-template-columns: 64px 1fr 340px; background: #edf2f8; }
+    .toolrail { padding: 10px 8px; border-right: 1px solid #dbe5f0; background: #fff; display: flex; flex-direction: column; gap: 8px; }
+    .toolbtn { min-height: 40px; border: 1px solid #d9e3ee; background: #f8fbff; color: #38536f; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; text-align: center; }
+    .toolbtn.active { background: var(--brand); border-color: var(--brand); color: #fff; }
+    .canvas-area { position: relative; margin: 16px; border: 1px solid #cfdbea; background: #d7e1eb url("./img/biaozhu_img.png") center center / cover no-repeat; overflow: hidden; }
+    .site-floor,
+    .site-wall { display: none; }
+    .box { position: absolute; border: 3px solid #e85b73; background: rgba(232,91,115,0.08); }
+    .box.one { left: 210px; top: 160px; width: 260px; height: 110px; }
+    .box.two { right: 190px; bottom: 190px; width: 220px; height: 140px; border-color: #2f84e7; background: rgba(47,132,231,0.08); }
+    .poly { position: absolute; left: 610px; top: 255px; width: 185px; height: 120px; border: 3px solid #f3a73d; clip-path: polygon(10% 20%, 88% 6%, 100% 66%, 30% 96%); background: rgba(243,167,61,0.16); }
+    .node { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: #fff; border: 2px solid #2f84e7; }
+    .node.n1 { right: 185px; bottom: 325px; }
+    .node.n2 { right: 405px; bottom: 190px; }
+    .magic-tip { position: absolute; left: 88px; top: 18px; padding: 9px 12px; background: rgba(255,255,255,0.92); border: 1px solid #dbe6f2; color: #415a75; font-weight: 700; box-shadow: var(--shadow); }
+    .return-panel { position: absolute; right: 28px; top: 24px; width: 330px; padding: 14px 16px; background: rgba(255,255,255,0.96); border: 1px solid #dce7f3; box-shadow: var(--shadow); color: #3d536c; line-height: 1.8; }
+    .object-panel { border-left: 1px solid #dbe5f0; background: #fff; padding: 14px; overflow: hidden; }
+    .panel-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; color: #1f3e62; font-size: 16px; font-weight: 700; }
+    .project-line { margin-bottom: 12px; color: #65788d; }
+    .object-card { border: 1px solid #dce6f1; background: #fbfdff; padding: 12px; margin-bottom: 12px; }
+    .object-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 700; }
+    .color-dot { width: 14px; height: 14px; display: inline-block; margin-right: 8px; background: #e85b73; vertical-align: -2px; }
+    .color-dot.blue { background: #2f84e7; }
+    .object-meta { display: grid; gap: 8px; color: #52687f; }
+    .object-meta select { width: 100%; }
+    .mini-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .mini-actions span { flex: 1; height: 26px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #d8e3ee; background: #fff; color: #52677e; font-size: 12px; font-weight: 700; }
+    .record-drawer { position: absolute; right: 0; top: 64px; bottom: 0; width: 430px; background: rgba(255,255,255,0.96); box-shadow: var(--drawer-shadow); padding: 18px; }
+    .timeline { margin-top: 12px; border-left: 2px solid #d9e5f2; padding-left: 18px; }
+    .timeline-item { margin-bottom: 18px; position: relative; color: #52687f; line-height: 1.7; }
+    .timeline-item::before { content: ""; position: absolute; left: -25px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--brand); }
+    .modal-stage { height: calc(100% - 64px); }
+    .example-pop { position: absolute; right: 370px; top: 210px; width: 230px; padding: 12px; background: #fff; border: 1px solid #dce7f3; box-shadow: var(--shadow); }
+    .example-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+    .example-img { height: 54px; background: linear-gradient(135deg, #d7e5f5, #f6f9fd); border: 1px solid #d7e2ee; }
+  </style>
+</head>
+<body>
+  <div class="prototype-state-bar" data-prototype-switch data-prototype-default="edit">
+    <button class="active" type="button" data-prototype-button="edit">编辑标注</button>
+    <button type="button" data-prototype-button="returned">质检退回</button>
+    <button type="button" data-prototype-button="record">任务记录</button>
+    <button type="button" data-prototype-button="invalid">标记无效</button>
+    <button type="button" data-prototype-button="example">示例图片浮窗</button>
+  </div>
+
+  <section class="prototype-stage active" data-prototype-panel="edit">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="content-panel" style="height: 982px; padding:0; overflow:hidden;">
+          <div class="worktop"><div class="worktop-title">← 标注工作台</div><div class="worktop-actions"><button class="btn btn-ghost">上一张</button><button class="btn btn-ghost">下一张</button><button class="btn btn-ghost">保存</button><button class="btn btn-primary">提交标注</button><button class="btn btn-danger">标记无效</button><button class="btn btn-ghost">任务记录</button></div></div>
+          <div class="annotation-shell">
+            <div class="toolrail"><div class="toolbtn active">指针</div><div class="toolbtn">旋转</div><div class="toolbtn">魔术棒</div><div class="toolbtn">自动识别*</div><div class="toolbtn">矩形</div><div class="toolbtn">多边形</div><div class="toolbtn">点标注</div></div>
+            <div class="canvas-area"><div class="site-wall"></div><div class="site-floor"></div><div class="box one"></div><div class="box two"></div><div class="poly"></div><span class="node n1"></span><span class="node n2"></span></div>
+            <aside class="object-panel">
+              <div class="panel-title"><span>标注列表</span><span class="proto-tag">待标注</span></div>
+              <div class="project-line">项目类型：住宅装修</div>
+              <div class="object-card"><div class="object-head"><span><i class="color-dot"></i>对象1</span><span>⋮</span></div><div class="object-meta"><div>形状：矩形</div><select class="control select-control"><option>安全帽 / 白色</option></select></div><div class="mini-actions"><span>锁定</span><span>可见</span><span>固定</span></div></div>
+              <div class="object-card"><div class="object-head"><span><i class="color-dot blue"></i>对象2</span><span>⋮</span></div><div class="object-meta"><div>形状：多边形</div><select class="control select-control"><option>请选择</option><option>灭火器 / 正常</option></select></div><div class="mini-actions"><span>解锁</span><span>可见</span><span>固定</span></div></div>
+            </aside>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="returned">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="content-panel" style="height: 982px; padding:0; overflow:hidden;">
+          <div class="worktop"><div class="worktop-title">← 标注工作台</div><div class="worktop-actions"><button class="btn btn-ghost">保存</button><button class="btn btn-primary">重新提交</button><button class="btn btn-ghost">任务记录</button></div></div>
+          <div class="annotation-shell"><div class="toolrail"><div class="toolbtn active">指针</div><div class="toolbtn">矩形</div><div class="toolbtn">多边形</div></div><div class="canvas-area"><div class="site-wall"></div><div class="site-floor"></div><div class="box one"></div><div class="return-panel"><strong>质检退回原因</strong><br />退回人：质检员A<br />原因：框选位置不准确<br />说明：安全帽区域偏大，请调整到物品边界后重新提交。</div></div><aside class="object-panel"><div class="panel-title">标注列表</div><div class="project-line">项目类型：住宅装修</div><div class="object-card"><div class="object-head"><span><i class="color-dot"></i>对象1</span><span>⋮</span></div><div class="object-meta"><div>形状：矩形</div><select class="control select-control"><option>安全帽 / 白色</option></select></div><div class="mini-actions"><span>解锁</span><span>可见</span><span>固定</span></div></div></aside></div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="record">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;"><div class="worktop"><div class="worktop-title">← 标注工作台</div><div class="worktop-actions"><button class="btn btn-ghost">保存</button><button class="btn btn-primary">提交标注</button></div></div><div class="annotation-shell"><div class="toolrail"><div class="toolbtn active">指针</div></div><div class="canvas-area"><div class="site-wall"></div><div class="site-floor"></div><div class="box one"></div></div><aside class="object-panel"><div class="panel-title">标注列表</div><div class="object-card"><div class="object-head"><span><i class="color-dot"></i>对象1</span><span>⋮</span></div><div class="object-meta"><select class="control select-control"><option>安全帽 / 白色</option></select></div></div></aside></div></section>
+        <aside class="record-drawer"><div class="panel-title">任务记录 <span>×</span></div><div class="timeline"><div class="timeline-item"><strong>保存草稿</strong><br />2026-04-23 10:12<br />对象数：2，含待确认类别：否</div><div class="timeline-item"><strong>创建标注任务</strong><br />2026-04-23 09:40<br />图片来源：巡查记录图片</div><div class="timeline-item"><strong>质检退回</strong><br />2026-04-22 18:05<br />原因：框选位置不准确</div></div></aside>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="invalid">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="modal-stage"><div class="modal"><div class="modal-head"><span>标记无效图片</span><span>×</span></div><div class="modal-body"><p class="notice">当前图片将进入无效图片状态，不进入质检、不入池、不导出。</p><div class="proto-checkbox-group" style="display:grid; gap:10px; margin-top:16px;"><label><input type="radio" checked /> 无可标注对象</label><label><input type="radio" /> 图片质量差</label><label><input type="radio" /> 非施工现场</label><label><input type="radio" /> 遮挡严重</label><label><input type="radio" /> 其他</label></div></div><div class="modal-foot"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">确认</button></div></div></section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="example">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;"><div class="worktop"><div class="worktop-title">← 标注工作台</div><div class="worktop-actions"><button class="btn btn-primary">提交标注</button></div></div><div class="annotation-shell"><div class="toolrail"><div class="toolbtn active">指针</div></div><div class="canvas-area"><div class="site-wall"></div><div class="site-floor"></div><div class="box one"></div><div class="example-pop"><strong>示例图片</strong><div class="example-grid"><div class="example-img"></div><div class="example-img"></div><div class="example-img"></div></div></div></div><aside class="object-panel"><div class="panel-title">标注列表</div><div class="object-card"><div class="object-head"><span><i class="color-dot"></i>对象1</span><span>⋮</span></div><select class="control select-control"><option>安全帽 / 白色</option></select></div></aside></div></section>
+      </main></div>
+    </div>
+  </section>
+
+  <script src="./assets/prototype.js"></script>
+  <script src="./assets/prototype-layout.js"></script>
+  <script src="./assets/prototype-switcher.js"></script>
+</body>
+</html>

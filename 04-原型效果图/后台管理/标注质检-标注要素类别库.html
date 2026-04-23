@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>标注质检-标注要素类别库</title>
+  <link rel="stylesheet" href="./assets/prototype.css" />
+  <style>
+    .prototype-stage { display: none; }
+    .prototype-stage.active { display: block; }
+    .attr-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .thumb-row { display: flex; gap: 8px; }
+    .mini-thumb { width: 68px; height: 48px; border: 1px solid #d7e2ee; background: linear-gradient(135deg, #d7e5f5, #f6f9fd); }
+    .attr-block { border: 1px solid #dce6f1; background: #fbfdff; padding: 12px; margin-bottom: 12px; }
+    .attr-block-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 700; color: #243d5c; }
+    .upload-box { height: 72px; border: 1px dashed #b8c9dc; background: #f8fbff; display: flex; align-items: center; justify-content: center; color: #6f8196; font-weight: 700; }
+    .modal-stage { height: calc(100% - 64px); }
+    .modal-body .control { width: 100%; }
+    .category-form-grid { display: grid; grid-template-columns: 120px 1fr; gap: 16px 18px; align-items: center; }
+    .category-form-grid .full { grid-column: 1 / -1; }
+  </style>
+</head>
+<body>
+  <div class="prototype-state-bar" data-prototype-switch data-prototype-default="list">
+    <button class="active" type="button" data-prototype-button="list">列表</button>
+    <button type="button" data-prototype-button="create">新增弹窗</button>
+    <button type="button" data-prototype-button="detail">查看弹窗</button>
+  </div>
+
+  <section class="prototype-stage active" data-prototype-panel="list">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-category">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 标注要素类别库</div>
+        <section class="surface tabbar"><div class="tab">标注要素类别库</div></section>
+        <section class="proto-list-shell">
+          <div class="proto-list-head"><h3 class="proto-list-title">标注要素类别库</h3><div class="proto-list-tools"><button class="btn btn-primary">＋ 新增类别</button></div></div>
+          <div class="proto-filter-bar"><input class="control search-control" placeholder="类别名称" /><select class="control select-control"><option>状态</option><option>启用</option><option>停用</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="proto-table-wrap">
+            <table>
+              <thead><tr><th>类别名称</th><th>属性名称</th><th>状态</th><th>操作</th></tr></thead>
+              <tbody>
+                <tr><td>安全帽</td><td><div class="attr-list"><span class="proto-tag">白色</span><span class="proto-tag">红色</span><span class="proto-tag">黄色</span><span class="proto-tag">蓝色</span></div></td><td><span class="proto-table-status" data-variant="success">启用</span></td><td><span class="link">查看</span> <span class="link">编辑</span> <span class="link">停用</span></td></tr>
+                <tr><td>灭火器</td><td><div class="attr-list"><span class="proto-tag">正常</span><span class="proto-tag">损坏</span></div></td><td><span class="proto-table-status" data-variant="success">启用</span></td><td><span class="link">查看</span> <span class="link">编辑</span> <span class="link">停用</span></td></tr>
+                <tr><td>脚手架</td><td><div class="attr-list"><span class="proto-tag">盘扣式</span><span class="proto-tag">扣件式</span></div></td><td><span class="proto-table-status" data-variant="muted">停用</span></td><td><span class="link">查看</span> <span class="link">编辑</span> <span class="link">启用</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="proto-pagination"><span>共 3 条</span><span class="proto-page-size">20条/页</span><span class="proto-page-current">1</span></div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="create">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-category">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="modal-stage">
+          <div class="modal xlarge">
+            <div class="modal-head"><span>新增标注要素类别</span><span>×</span></div>
+            <div class="modal-body">
+              <div class="category-form-grid">
+                <label>类别名称*</label><input class="control" value="安全帽" />
+                <label>状态*</label><div><label><input type="radio" checked /> 启用</label>　<label><input type="radio" /> 停用</label></div>
+                <div class="full">
+                  <div class="attr-block"><div class="attr-block-head"><span>属性 1</span><span class="proto-status" data-variant="success">启用</span></div><div class="category-form-grid"><label>属性名称*</label><input class="control" value="白色" /><label>上传图片</label><div><div class="upload-box">点击上传 / 拖拽上传，最多 3 张</div><p style="color:#7b8da2;">已上传 0 张</p></div></div></div>
+                  <div class="attr-block"><div class="attr-block-head"><span>属性 2</span><span class="proto-status" data-variant="success">启用</span></div><div class="category-form-grid"><label>属性名称*</label><input class="control" value="红色" /><label>上传图片</label><div class="thumb-row"><div class="mini-thumb"></div><div class="mini-thumb"></div></div></div></div>
+                  <button class="btn btn-ghost" type="button">＋ 添加属性</button>
+                </div>
+              </div>
+            </div>
+            <div class="modal-foot"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">保存</button></div>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="detail">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-category">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="modal-stage">
+          <div class="modal large">
+            <div class="modal-head"><span>标注要素类别详情</span><span>×</span></div>
+            <div class="modal-body">
+              <section class="proto-detail-card"><h3 class="proto-detail-card-title">基础信息</h3><div class="proto-detail-card-body"><div class="proto-detail-grid"><div class="proto-detail-label">类别名称</div><div class="proto-detail-value">安全帽</div><div class="proto-detail-label">状态</div><div class="proto-detail-value"><span class="proto-table-status" data-variant="success">启用</span></div></div></div></section>
+              <section class="proto-detail-card"><h3 class="proto-detail-card-title">属性列表</h3><div class="proto-detail-card-body">
+                <div class="attr-block"><div class="attr-block-head"><span>白色</span><span class="proto-status" data-variant="success">启用</span></div><div class="thumb-row"><div class="mini-thumb"></div><div class="mini-thumb"></div><div class="mini-thumb"></div></div></div>
+                <div class="attr-block"><div class="attr-block-head"><span>红色</span><span class="proto-status" data-variant="success">启用</span></div><div class="thumb-row"><span style="color:#8190a2;">暂无上传图片</span></div></div>
+                <div class="attr-block"><div class="attr-block-head"><span>黄色</span><span class="proto-status" data-variant="muted">停用</span></div><div class="thumb-row"><div class="mini-thumb"></div></div></div>
+              </div></section>
+            </div>
+            <div class="modal-foot"><button class="btn btn-ghost">关闭</button><button class="btn btn-primary">编辑</button></div>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <script src="./assets/prototype.js"></script>
+  <script src="./assets/prototype-layout.js"></script>
+  <script src="./assets/prototype-switcher.js"></script>
+</body>
+</html>

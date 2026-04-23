@@ -56,7 +56,7 @@
 
 ### 页面接入方式
 1. 给 `.frame` 添加布局配置属性：
-   - `data-layout-module="project|inspection|knowledge|system|overview"`
+   - `data-layout-module="project|inspection|annotation|knowledge|system|overview"`
    - `data-layout-top-active="..."`
    - `data-layout-side-preset="..."`
    - `data-layout-side-active="..."`
@@ -68,7 +68,7 @@
    - `<script src="./assets/prototype-layout.js"></script>`
 
 ### 预设说明
-- 侧栏预设按模块集中维护在 `prototype-layout.js`：`project / inspection / knowledge / system / overview`。
+- 侧栏预设按模块集中维护在 `prototype-layout.js`：`project / inspection / annotation / knowledge / system / overview`。
 - 页面仅传 key，不再重复写导航和菜单 DOM。
 
 ## Proto 组件接入契约（新增）

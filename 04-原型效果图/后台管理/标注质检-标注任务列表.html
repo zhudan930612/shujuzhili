@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>标注质检-标注任务列表</title>
+  <link rel="stylesheet" href="./assets/prototype.css" />
+  <style>
+    .prototype-stage { display: none; }
+    .prototype-stage.active { display: block; }
+    .task-stat-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; padding: 18px 28px 4px; }
+    .task-stat-card { min-height: 84px; border: 1px solid #dce8f6; background: #fbfdff; padding: 14px 16px; cursor: pointer; position: relative; }
+    .task-stat-card::before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 4px; background: var(--stat-color, #8ca1b8); }
+    .task-stat-card.active { border-color: var(--stat-color, var(--brand)); background: var(--stat-bg, #eef6ff); box-shadow: inset 0 0 0 1px var(--stat-color, var(--brand)); }
+    .task-stat-card[data-stat="all"] { --stat-color: #5f7f9e; --stat-bg: #f2f7fc; }
+    .task-stat-card[data-stat="todo"] { --stat-color: var(--brand); --stat-bg: #eef6ff; }
+    .task-stat-card[data-stat="done"] { --stat-color: var(--success); --stat-bg: #f2fbf5; }
+    .task-stat-card[data-stat="confirm"] { --stat-color: var(--warning); --stat-bg: #fff9ef; }
+    .task-stat-card[data-stat="returned"] { --stat-color: var(--danger); --stat-bg: #fff4f3; }
+    .task-stat-card[data-stat="invalid"] { --stat-color: #98a6b7; --stat-bg: #f5f7fa; }
+    .task-stat-name { color: #5c7087; font-weight: 700; }
+    .task-stat-num { margin-top: 8px; color: #193b68; font-size: 26px; font-weight: 700; }
+    .image-task-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 4px 28px 18px; }
+    .image-card { border: 1px solid #dce6f1; background: #fff; box-shadow: 0 8px 18px rgba(18,51,95,0.05); cursor: pointer; overflow: hidden; }
+    .image-thumb { aspect-ratio: 1 / 1; position: relative; background: #d7e1eb url("./img/biaozhu_img.png") center center / cover no-repeat; }
+    .image-card-body { padding: 12px 14px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .project-type { color: #243c58; font-weight: 700; }
+    .draft-tag { display: inline-flex; height: 24px; align-items: center; padding: 0 8px; background: #fff9ef; border: 1px solid #f2d8ad; color: #a66a11; font-size: 12px; font-weight: 700; }
+    .empty-panel { margin: 18px 28px; height: 470px; border: 1px dashed #ccd9e8; background: #fbfdff; display: flex; align-items: center; justify-content: center; color: #7a8aa0; font-weight: 700; }
+    .proto-filter-bar .control { min-width: 148px; }
+  </style>
+</head>
+<body>
+  <div class="prototype-state-bar" data-prototype-switch data-prototype-default="all">
+    <button class="active" type="button" data-prototype-button="all">全部</button>
+    <button type="button" data-prototype-button="todo">待标注</button>
+    <button type="button" data-prototype-button="done">已标注</button>
+    <button type="button" data-prototype-button="confirm">待确认类别</button>
+    <button type="button" data-prototype-button="returned">质检退回</button>
+    <button type="button" data-prototype-button="invalid">无效图片</button>
+    <button type="button" data-prototype-button="draft">草稿筛选</button>
+    <button type="button" data-prototype-button="empty">空状态</button>
+  </div>
+
+  <section class="prototype-stage active" data-prototype-panel="all">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <div class="crumb">☰ 标注质检 〉 标注任务列表</div>
+          <section class="surface tabbar"><div class="tab">标注任务</div></section>
+          <section class="proto-list-shell">
+            <div class="proto-list-head">
+              <h3 class="proto-list-title">标注任务列表</h3>
+            </div>
+            <div class="proto-filter-bar">
+              <select class="control select-control"><option>项目类型</option><option>住宅装修</option><option>小型工程</option><option>零星作业</option></select>
+              <select class="control select-control"><option>草稿状态</option><option>有草稿</option><option>无草稿</option></select>
+              <button class="btn btn-primary" type="button">查询</button>
+              <button class="btn btn-ghost" type="button">重置</button>
+            </div>
+            <div class="task-stat-grid">
+              <div class="task-stat-card active" data-stat="all" data-task-target="all"><div class="task-stat-name">全部</div><div class="task-stat-num">128</div></div>
+              <div class="task-stat-card" data-stat="todo" data-task-target="todo"><div class="task-stat-name">待标注</div><div class="task-stat-num">62</div></div>
+              <div class="task-stat-card" data-stat="done" data-task-target="done"><div class="task-stat-name">已标注</div><div class="task-stat-num">41</div></div>
+              <div class="task-stat-card" data-stat="confirm" data-task-target="confirm"><div class="task-stat-name">待确认类别</div><div class="task-stat-num">9</div></div>
+              <div class="task-stat-card" data-stat="returned" data-task-target="returned"><div class="task-stat-name">质检退回</div><div class="task-stat-num">6</div></div>
+              <div class="task-stat-card" data-stat="invalid" data-task-target="invalid"><div class="task-stat-name">无效图片</div><div class="task-stat-num">10</div></div>
+            </div>
+            <div class="image-task-grid">
+              <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">住宅装修</span><span class="draft-tag">有草稿</span></div></article>
+              <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">小型工程</span></div></article>
+              <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">零星作业</span><span class="draft-tag">有草稿</span></div></article>
+              <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">小型工程</span></div></article>
+              <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">住宅装修</span></div></article>
+              <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">零星作业</span></div></article>
+              <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">小型工程</span><span class="draft-tag">有草稿</span></div></article>
+              <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">住宅装修</span></div></article>
+            </div>
+            <div class="proto-pagination">
+              <span>共 128 张</span><span class="proto-page-size">24条/页</span><span>‹</span><span class="proto-page-current">1</span><span>2</span><span>3</span><span>›</span><span>前往</span><input class="proto-page-jump-input" value="1" /><span>页</span>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="todo">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 标注任务列表 〉 待标注</div>
+        <section class="surface tabbar"><div class="tab">待标注</div></section>
+        <section class="proto-list-shell">
+          <div class="proto-list-head"><h3 class="proto-list-title">待标注图片</h3></div>
+          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>草稿状态</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="task-stat-grid">
+            <div class="task-stat-card"><div class="task-stat-name">全部</div><div class="task-stat-num">128</div></div>
+            <div class="task-stat-card active"><div class="task-stat-name">待标注</div><div class="task-stat-num">62</div></div>
+            <div class="task-stat-card"><div class="task-stat-name">已标注</div><div class="task-stat-num">41</div></div>
+            <div class="task-stat-card"><div class="task-stat-name">待确认类别</div><div class="task-stat-num">9</div></div>
+            <div class="task-stat-card"><div class="task-stat-name">质检退回</div><div class="task-stat-num">6</div></div>
+            <div class="task-stat-card"><div class="task-stat-name">无效图片</div><div class="task-stat-num">10</div></div>
+          </div>
+          <div class="image-task-grid">
+            <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">住宅装修</span></div></article>
+            <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">小型工程</span></div></article>
+            <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">零星作业</span></div></article>
+            <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">小型工程</span></div></article>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="draft">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 标注任务列表 〉 草稿筛选</div>
+        <section class="surface tabbar"><div class="tab">有草稿任务</div></section>
+        <section class="proto-list-shell">
+          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option selected>有草稿</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="image-task-grid">
+            <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">住宅装修</span><span class="draft-tag">有草稿</span></div></article>
+            <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">零星作业</span><span class="draft-tag">有草稿</span></div></article>
+            <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">小型工程</span><span class="draft-tag">有草稿</span></div></article>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="empty">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 标注任务列表 〉 空状态</div>
+        <section class="surface tabbar"><div class="tab">标注任务</div></section>
+        <section class="proto-list-shell">
+          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>草稿状态</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="empty-panel">未找到符合条件的图片，请调整筛选条件</div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <script src="./assets/prototype.js"></script>
+  <script src="./assets/prototype-layout.js"></script>
+  <script src="./assets/prototype-switcher.js"></script>
+</body>
+</html>
