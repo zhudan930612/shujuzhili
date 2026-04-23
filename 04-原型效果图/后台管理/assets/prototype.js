@@ -173,6 +173,15 @@ function renderProtoCascader(cascader, selectedPath) {
       labelSpan.textContent = node.label;
       option.appendChild(labelSpan);
 
+      if (cascader.dataset.cascaderSource === "annotation-category" && levelIndex === 1) {
+        option.classList.add("example-hover-option");
+        const examplePop = document.createElement("span");
+        examplePop.className = "example-pop";
+        examplePop.setAttribute("aria-hidden", "true");
+        examplePop.innerHTML = '<span class="example-pop-title">示例图片</span><span class="example-grid"><span class="example-img"></span><span class="example-img"></span><span class="example-img"></span></span>';
+        option.appendChild(examplePop);
+      }
+
       if (hasChildren) {
         const arrow = document.createElement("span");
         arrow.textContent = "›";

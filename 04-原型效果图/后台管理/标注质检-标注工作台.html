@@ -10,6 +10,7 @@
     .prototype-stage.active { display: block; }
     .worktop { height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; border-bottom: 1px solid var(--line); background: #fff; }
     .worktop-title { display: flex; align-items: center; gap: 12px; font-weight: 700; color: #1f3e62; }
+    .worktop-back { border: 0; background: transparent; color: #1f3e62; font-size: 16px; font-weight: 700; cursor: pointer; padding: 0; }
     .worktop-actions { display: flex; gap: 10px; }
     .annotation-shell { height: calc(100% - 50px); display: grid; grid-template-columns: 58px 1fr 340px; background: #edf2f8; }
     .toolrail { padding: 10px 8px; border-right: 1px solid #dbe5f0; background: #fff; display: flex; flex-direction: column; gap: 8px; }
@@ -38,9 +39,22 @@
     .node.n1 { right: 185px; bottom: 325px; }
     .node.n2 { right: 405px; bottom: 190px; }
     .magic-tip { position: absolute; left: 88px; top: 18px; padding: 9px 12px; background: rgba(255,255,255,0.92); border: 1px solid #dbe6f2; color: #415a75; font-weight: 700; box-shadow: var(--shadow); }
-    .return-panel { position: absolute; right: 28px; top: 24px; width: 330px; padding: 14px 16px; background: rgba(255,255,255,0.96); border: 1px solid #dce7f3; box-shadow: var(--shadow); color: #3d536c; line-height: 1.8; }
-    .object-panel { border-left: 1px solid #dbe5f0; background: #fff; padding: 14px; overflow: hidden; }
+    .return-panel { position: absolute; right: 28px; top: 24px; width: 360px; background: rgba(255,255,255,0.98); border: 1px solid #d7e3f0; box-shadow: 0 16px 36px rgba(22,55,90,0.16); color: #3d536c; z-index: 25; }
+    .return-panel.is-hidden { display: none; }
+    .return-panel-head { height: 42px; padding: 0 12px 0 14px; border-bottom: 1px solid #edf2f7; background: #f7fbff; display: flex; align-items: center; justify-content: space-between; cursor: move; user-select: none; color: #1f3e62; font-weight: 800; }
+    .return-panel-close { width: 26px; height: 26px; border: 1px solid #d8e3ee; background: #fff; color: #6f8195; font-size: 16px; line-height: 1; cursor: pointer; }
+    .return-panel-body { padding: 14px 16px 16px; line-height: 1.7; }
+    .return-info-grid { display: grid; grid-template-columns: 74px 1fr; gap: 8px 10px; margin-bottom: 12px; }
+    .return-label { color: #7b8da2; }
+    .return-value { color: #304962; font-weight: 700; }
+    .return-reasons { display: flex; flex-wrap: wrap; gap: 6px; }
+    .return-reason-tag { display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border: 1px solid #f1c8c3; background: #fff4f3; color: #b44335; font-size: 12px; font-weight: 700; }
+    .return-tip { margin-top: 12px; padding-top: 10px; border-top: 1px dashed #d8e3ee; color: #52708d; font-weight: 700; }
+    .return-panel-entry { position: absolute; right: 28px; top: 24px; height: 34px; padding: 0 12px; border: 1px solid #d7e3f0; background: #fff; color: var(--brand); font-weight: 700; box-shadow: var(--shadow); cursor: pointer; z-index: 24; display: none; }
+    .return-panel-entry.is-visible { display: inline-flex; align-items: center; }
+    .object-panel { border-left: 1px solid #dbe5f0; background: #fff; padding: 14px; overflow: visible; }
     .panel-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; color: #1f3e62; font-size: 16px; font-weight: 700; }
+    .proto-status-danger { border-color: #f1c8c3; background: #fff4f3; color: var(--danger); }
     .project-line { margin-bottom: 12px; color: #65788d; }
     .object-card { border: 1px solid #dce6f1; background: #fbfdff; padding: 12px; margin-bottom: 12px; }
     .object-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 700; }
@@ -63,28 +77,52 @@
     .object-meta .proto-cascader-control,
     .object-card > .proto-cascader .proto-cascader-control { width: 100%; }
     .object-meta .proto-cascader-panel,
-    .object-card > .proto-cascader .proto-cascader-panel { --proto-cascader-column-width: 130px; z-index: 40; }
+    .object-card > .proto-cascader .proto-cascader-panel { --proto-cascader-column-width: 130px; z-index: 300; }
     .mini-actions { display: flex; gap: 8px; margin-top: 10px; }
     .mini-actions button { flex: 1; height: 28px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #d8e3ee; background: #fff; color: #52677e; font-size: 15px; font-weight: 700; position: relative; cursor: default; }
     .mini-actions button::after { content: attr(data-tip); position: absolute; top: -34px; left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 5px 8px; background: #fff; border: 1px solid #d8e3ee; color: #38536f; font-size: 12px; box-shadow: var(--shadow); opacity: 0; visibility: hidden; pointer-events: none; z-index: 20; }
     .mini-actions button:hover::after { opacity: 1; visibility: visible; }
-    .record-drawer { position: absolute; right: 0; top: 64px; bottom: 0; width: 430px; background: rgba(255,255,255,0.96); box-shadow: var(--drawer-shadow); padding: 18px; }
-    .timeline { margin-top: 12px; border-left: 2px solid #d9e5f2; padding-left: 18px; }
-    .timeline-item { margin-bottom: 18px; position: relative; color: #52687f; line-height: 1.7; }
-    .timeline-item::before { content: ""; position: absolute; left: -25px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--brand); }
+    .record-drawer { position: absolute; right: 0; top: 64px; bottom: 0; width: 430px; background: rgba(255,255,255,0.98); box-shadow: var(--drawer-shadow); padding: 18px; overflow-y: auto; }
+    .record-drawer .panel-title { position: sticky; top: -18px; z-index: 2; margin: -18px -18px 14px; padding: 16px 18px 14px; background: #fff; border-bottom: 1px solid #edf2f7; }
+    .timeline { margin-top: 12px; margin-left: 0; padding-left: 28px; position: relative; }
+    .timeline::before { content: ""; position: absolute; left: 12px; top: 0; bottom: 0; width: 2px; background: #dce9f7; }
+    .timeline-item { margin-bottom: 28px; position: relative; color: #52687f; line-height: 1.75; padding: 0; background: transparent; }
+    .timeline-item::before { content: ""; position: absolute; left: -20px; top: 8px; width: 10px; height: 10px; border-radius: 50%; background: #2f84e7; }
+    .timeline-title { color: #1f3e62; font-size: 15px; font-weight: 800; margin-bottom: 6px; }
+    .record-row { display: grid; grid-template-columns: 72px 1fr; gap: 4px 8px; font-size: 13px; }
+    .record-label { color: #7b8da2; }
+    .record-value { color: #36516e; font-weight: 700; }
+    .record-note { font-weight: 400; }
     .modal-stage { height: calc(100% - 64px); }
-    .example-pop { position: absolute; right: 370px; top: 210px; width: 230px; padding: 12px; background: #fff; border: 1px solid #dce7f3; box-shadow: var(--shadow); }
-    .example-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
-    .example-img { height: 54px; background: linear-gradient(135deg, #d7e5f5, #f6f9fd); border: 1px solid #d7e2ee; }
+    .unsaved-mask { position: fixed; inset: 0; z-index: 2200; display: none; align-items: center; justify-content: center; background: rgba(12, 35, 62, 0.26); }
+    .unsaved-mask.is-visible { display: flex; }
+    .example-hover-option { position: relative; }
+    .example-pop { display: none; position: absolute; right: calc(100% + 10px); top: -8px; width: 248px; padding: 12px; background: #fff; border: 1px solid #cfe0f3; border-top: 3px solid var(--brand); box-shadow: 0 14px 34px rgba(23, 62, 107, 0.18); color: #334f6f; z-index: 500; }
+    .example-pop::before { content: ""; position: absolute; right: -6px; top: 16px; width: 10px; height: 10px; background: #fff; border-right: 1px solid #dce7f3; border-top: 1px solid #dce7f3; transform: rotate(45deg); }
+    .example-hover-option:hover .example-pop { display: block; }
+    .example-pop-title { display: block; width: 100%; color: #173e6b; font-weight: 800; line-height: 1.2; text-align: left; }
+    .example-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+    .example-img { height: 58px; background: linear-gradient(135deg, #d8e9f8 0%, #f7fbff 100%); border: 1px solid #d1deec; border-radius: 4px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.6); }
+    .example-img:nth-child(2) { background: linear-gradient(135deg, #e8edf4 0%, #ffffff 100%); }
+    .example-img:nth-child(3) { background: linear-gradient(135deg, #dcebf3 0%, #f3f8fd 100%); }
+    .invalid-reason-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 14px; margin-top: 14px; color: #4b5f76; }
+    .invalid-reason-grid label { display: flex; align-items: center; gap: 6px; }
+    .invalid-other { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .invalid-other input[type="text"] { flex: 1; min-width: 160px; height: 30px; padding: 0 8px; border: 1px solid #d8e3ee; font-size: 13px; }
+    .readonly-shell { grid-template-columns: 1fr 340px; }
+    .readonly-object-panel .object-card { background: #fff; }
+    .readonly-object-panel .mini-actions,
+    .readonly-object-panel .object-menu { display: none; }
+    .readonly-field { min-height: 34px; padding: 8px 10px; border: 1px solid #e1e9f2; background: #f7fafd; color: #304962; font-weight: 700; }
   </style>
 </head>
 <body>
   <div class="prototype-state-bar" data-prototype-switch data-prototype-default="edit">
     <button class="active" type="button" data-prototype-button="edit">编辑标注</button>
+    <button type="button" data-prototype-button="readonly">已标注</button>
     <button type="button" data-prototype-button="returned">质检退回</button>
     <button type="button" data-prototype-button="record">任务记录</button>
     <button type="button" data-prototype-button="invalid">标记无效</button>
-    <button type="button" data-prototype-button="example">示例图片浮窗</button>
   </div>
 
   <section class="prototype-stage active" data-prototype-panel="edit">
@@ -92,7 +130,7 @@
       <header class="topbar"></header>
       <div class="main"><aside class="sidebar"></aside><main class="workspace">
         <section class="content-panel" style="height: 982px; padding:0; overflow:hidden;">
-          <div class="worktop"><div class="worktop-title">← 标注工作台</div><div class="worktop-actions"><button class="btn btn-ghost">上一张</button><button class="btn btn-ghost">下一张</button><button class="btn btn-ghost">保存草稿</button><button class="btn btn-primary">提交标注</button><button class="btn btn-danger">标记无效</button><button class="btn btn-ghost">任务记录</button></div></div>
+          <div class="worktop"><div class="worktop-title"><button class="worktop-back js-unsaved-trigger" type="button">← 标注工作台</button></div><div class="worktop-actions"><button class="btn btn-ghost">上一张</button><button class="btn btn-ghost js-unsaved-trigger" type="button">下一张</button><button class="btn btn-ghost">保存草稿</button><button class="btn btn-primary">提交标注</button><button class="btn btn-danger">标记无效</button><button class="btn btn-ghost">任务记录</button></div></div>
           <div class="annotation-shell">
             <div class="toolrail">
               <div class="toolbtn active" data-tip="指针"><span class="tool-icon">↖</span></div>
@@ -116,12 +154,63 @@
     </div>
   </section>
 
+  <section class="prototype-stage" data-prototype-panel="readonly">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="content-panel" style="height: 982px; padding:0; overflow:hidden;">
+          <div class="worktop"><div class="worktop-title">← 标注工作台</div><div class="worktop-actions"><button class="btn btn-ghost">上一张</button><button class="btn btn-ghost">下一张</button><button class="btn btn-ghost">任务记录</button></div></div>
+          <div class="annotation-shell readonly-shell">
+            <div class="canvas-area"><div class="site-wall"></div><div class="site-floor"></div><div class="box one"></div><div class="box two"></div><div class="poly"></div><span class="node n1"></span><span class="node n2"></span></div>
+            <aside class="object-panel readonly-object-panel">
+              <div class="panel-title"><span>标注对象列表</span><span class="proto-tag proto-status-success">已标注</span></div>
+              <div class="project-line">项目类型：住宅装修</div>
+              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span></div><div class="object-meta"><div>形状：矩形</div><div class="readonly-field">安全帽 / 白色</div></div></div>
+              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot blue"></i>对象2</span></div><div class="object-meta"><div>形状：多边形</div><div class="readonly-field">灭火器 / 正常</div></div></div>
+            </aside>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
   <section class="prototype-stage" data-prototype-panel="returned">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
       <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
         <section class="content-panel" style="height: 982px; padding:0; overflow:hidden;">
-          <div class="worktop"><div class="worktop-title">← 标注工作台</div><div class="worktop-actions"><button class="btn btn-ghost">保存草稿</button><button class="btn btn-primary">重新提交</button><button class="btn btn-ghost">任务记录</button></div></div>
-          <div class="annotation-shell"><div class="toolrail"><div class="toolbtn active" data-tip="指针"><span class="tool-icon">↖</span></div><div class="toolbtn" data-tip="矩形"><span class="tool-icon rect"></span></div><div class="toolbtn" data-tip="多边形"><span class="tool-icon poly-icon"></span></div></div><div class="canvas-area"><div class="site-wall"></div><div class="site-floor"></div><div class="box one"></div><div class="return-panel"><strong>质检退回原因</strong><br />退回人：质检员A<br />原因：框选位置不准确<br />说明：安全帽区域偏大，请调整到物品边界后重新提交。</div></div><aside class="object-panel"><div class="panel-title">标注对象列表</div><div class="project-line">项目类型：住宅装修</div><div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="object-meta"><div>形状：矩形</div><div class="proto-cascader proto-cascader-full" data-proto-cascader data-cascader-source="annotation-category" data-cascader-depth="2" data-placeholder="请选择"><button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">安全帽 / 白色</span><span class="proto-cascader-arrow">▾</span></button><div class="proto-cascader-panel"></div></div></div><div class="mini-actions"><button type="button" data-tip="解锁">🔓</button><button type="button" data-tip="可见">👁</button><button type="button" data-tip="固定">📌</button></div></div></aside></div>
+          <div class="worktop"><div class="worktop-title"><button class="worktop-back js-unsaved-trigger" type="button">← 标注工作台</button></div><div class="worktop-actions"><button class="btn btn-ghost">上一张</button><button class="btn btn-ghost js-unsaved-trigger" type="button">下一张</button><button class="btn btn-ghost">保存草稿</button><button class="btn btn-primary">提交标注</button><button class="btn btn-danger">标记无效</button><button class="btn btn-ghost">任务记录</button></div></div>
+          <div class="annotation-shell">
+            <div class="toolrail">
+              <div class="toolbtn active" data-tip="指针"><span class="tool-icon">↖</span></div>
+              <div class="toolbtn" data-tip="旋转"><span class="tool-icon">↻</span></div>
+              <div class="toolbtn" data-tip="魔术棒"><span class="tool-icon wand"></span></div>
+              <div class="toolbtn" data-tip="自动识别"><span class="tool-icon">AI</span></div>
+              <div class="toolbtn" data-tip="矩形"><span class="tool-icon rect"></span></div>
+              <div class="toolbtn" data-tip="多边形"><span class="tool-icon poly-icon"></span></div>
+              <div class="toolbtn" data-tip="点标注"><span class="tool-icon">●</span></div>
+            </div>
+            <div class="canvas-area">
+              <div class="site-wall"></div><div class="site-floor"></div><div class="box one"></div><div class="box two"></div><div class="poly"></div><span class="node n1"></span><span class="node n2"></span>
+              <button class="return-panel-entry" type="button">查看退回原因</button>
+              <div class="return-panel">
+                <div class="return-panel-head"><span>质检退回原因</span><button class="return-panel-close" type="button">×</button></div>
+                <div class="return-panel-body">
+                  <div class="return-info-grid">
+                    <span class="return-label">退回人</span><span class="return-value">质检员A</span>
+                    <span class="return-label">退回时间</span><span class="return-value">2026-04-23 14:32</span>
+                    <span class="return-label">退回原因</span><span class="return-value return-reasons"><span class="return-reason-tag">框选位置不准确</span><span class="return-reason-tag">类别/属性选择错误</span><span class="return-reason-tag">漏标较多</span></span>
+                  </div>
+                  <div class="return-tip">请根据退回原因修改后重新提交标注</div>
+                </div>
+              </div>
+            </div>
+            <aside class="object-panel">
+              <div class="panel-title"><span>标注对象列表</span><span class="proto-tag proto-status-danger">质检退回</span></div>
+              <div class="project-line">项目类型：住宅装修</div>
+              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="object-meta"><div>形状：矩形</div><div class="proto-cascader proto-cascader-full" data-proto-cascader data-cascader-source="annotation-category" data-cascader-depth="2" data-placeholder="请选择"><button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">安全帽 / 白色</span><span class="proto-cascader-arrow">▾</span></button><div class="proto-cascader-panel"></div></div></div><div class="mini-actions"><button type="button" data-tip="锁定">🔒</button><button type="button" data-tip="可见">👁</button><button type="button" data-tip="固定">📌</button></div></div>
+              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot blue"></i>对象2</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="object-meta"><div>形状：多边形</div><div class="proto-cascader proto-cascader-full" data-proto-cascader data-cascader-source="annotation-category" data-cascader-depth="2" data-placeholder="请选择"><button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">请选择</span><span class="proto-cascader-arrow">▾</span></button><div class="proto-cascader-panel"></div></div></div><div class="mini-actions"><button type="button" data-tip="解锁">🔓</button><button type="button" data-tip="可见">👁</button><button type="button" data-tip="固定">📌</button></div></div>
+            </aside>
+          </div>
         </section>
       </main></div>
     </div>
@@ -131,7 +220,38 @@
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
       <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
         <section class="content-panel" style="height:982px; padding:0; overflow:hidden;"><div class="worktop"><div class="worktop-title">← 标注工作台</div><div class="worktop-actions"><button class="btn btn-ghost">保存草稿</button><button class="btn btn-primary">提交标注</button></div></div><div class="annotation-shell"><div class="toolrail"><div class="toolbtn active" data-tip="指针"><span class="tool-icon">↖</span></div></div><div class="canvas-area"><div class="site-wall"></div><div class="site-floor"></div><div class="box one"></div></div><aside class="object-panel"><div class="panel-title">标注对象列表</div><div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="object-meta"><div class="proto-cascader proto-cascader-full" data-proto-cascader data-cascader-source="annotation-category" data-cascader-depth="2" data-placeholder="请选择"><button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">安全帽 / 白色</span><span class="proto-cascader-arrow">▾</span></button><div class="proto-cascader-panel"></div></div></div></div></aside></div></section>
-        <aside class="record-drawer"><div class="panel-title">任务记录 <span>×</span></div><div class="timeline"><div class="timeline-item"><strong>保存草稿</strong><br />2026-04-23 10:12<br />对象数：2，含待确认类别：否</div><div class="timeline-item"><strong>创建标注任务</strong><br />2026-04-23 09:40<br />图片来源：巡查记录图片</div><div class="timeline-item"><strong>质检退回</strong><br />2026-04-22 18:05<br />原因：框选位置不准确</div></div></aside>
+        <aside class="record-drawer">
+          <div class="panel-title"><span>任务记录</span><span>×</span></div>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-title">标记无效</div>
+              <div class="record-row">
+                <span class="record-label">操作人</span><span class="record-value">张三</span>
+                <span class="record-label">操作时间</span><span class="record-value">2026-04-21 10:23</span>
+                <span class="record-label">操作结果</span><span class="record-value">进入无效图片</span>
+                <span class="record-label">说明</span><span class="record-value record-note">原因：图片质量差</span>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-title">保存草稿</div>
+              <div class="record-row">
+                <span class="record-label">操作人</span><span class="record-value">张三</span>
+                <span class="record-label">操作时间</span><span class="record-value">2026-04-21 10:10</span>
+                <span class="record-label">操作结果</span><span class="record-value">保持待标注</span>
+                <span class="record-label">说明</span><span class="record-value record-note">标注对象 2 个</span>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-title">质检退回</div>
+              <div class="record-row">
+                <span class="record-label">操作人</span><span class="record-value">李四</span>
+                <span class="record-label">操作时间</span><span class="record-value">2026-04-20 18:30</span>
+                <span class="record-label">操作结果</span><span class="record-value">进入质检退回</span>
+                <span class="record-label">说明</span><span class="record-value record-note">类别选择不准确</span>
+              </div>
+            </div>
+          </div>
+        </aside>
       </main></div>
     </div>
   </section>
@@ -140,23 +260,122 @@
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
       <header class="topbar"></header>
       <div class="main"><aside class="sidebar"></aside><main class="workspace">
-        <section class="modal-stage"><div class="modal"><div class="modal-head"><span>标记无效图片</span><span>×</span></div><div class="modal-body"><p class="notice">当前图片将进入无效图片状态，不进入质检、不入池、不导出。</p><div class="proto-checkbox-group" style="display:grid; gap:10px; margin-top:16px;"><label><input type="radio" checked /> 无可标注对象</label><label><input type="radio" /> 图片质量差</label><label><input type="radio" /> 非施工现场</label><label><input type="radio" /> 遮挡严重</label><label><input type="radio" /> 其他</label></div></div><div class="modal-foot"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">确认</button></div></div></section>
+        <section class="modal-stage">
+          <div class="modal medium">
+            <div class="modal-head"><span>确认标记无效图片？</span><span>×</span></div>
+            <div class="modal-body">
+              <div class="danger-box">
+                <div style="line-height:2;">
+                </div>
+                <div style="margin-top:14px; color:#c33b3b;">⚠ 标记后将清空当前草稿和已绘制标注对象，该结果仅代表你的本次标注结论，不直接判定图片全局无效。</div>
+                <div class="invalid-reason-grid">
+                  <label><input type="checkbox" checked /> 无可标注对象</label>
+                  <label><input type="checkbox" /> 图片质量差</label>
+                  <label><input type="checkbox" /> 图片损坏/无法加载</label>
+                  <label><input type="checkbox" /> 内容无关</label>
+                  <label><input type="checkbox" /> 非施工现场</label>
+                  <label><input type="checkbox" /> 遮挡严重</label>
+                  <label><input type="checkbox" /> 重复图片</label>
+                  <label><input type="checkbox" /> 截图/拼图/水印干扰</label>
+                  <label class="invalid-other"><input type="checkbox" /> 其他 <input type="text" placeholder="请输入原因" /></label>
+                </div>
+              </div>
+            </div>
+            <div class="modal-foot">
+              <button class="btn btn-ghost">取消</button>
+              <button class="btn btn-danger">确认标记无效</button>
+            </div>
+          </div>
+        </section>
       </main></div>
     </div>
   </section>
 
-  <section class="prototype-stage" data-prototype-panel="example">
-    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
-      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
-        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;"><div class="worktop"><div class="worktop-title">← 标注工作台</div><div class="worktop-actions"><button class="btn btn-primary">提交标注</button></div></div><div class="annotation-shell"><div class="toolrail"><div class="toolbtn active" data-tip="指针"><span class="tool-icon">↖</span></div></div><div class="canvas-area"><div class="site-wall"></div><div class="site-floor"></div><div class="box one"></div><div class="example-pop"><strong>示例图片</strong><div class="example-grid"><div class="example-img"></div><div class="example-img"></div><div class="example-img"></div></div></div></div><aside class="object-panel"><div class="panel-title">标注对象列表</div><div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="proto-cascader proto-cascader-full" data-proto-cascader data-cascader-source="annotation-category" data-cascader-depth="2" data-placeholder="请选择"><button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">安全帽 / 白色</span><span class="proto-cascader-arrow">▾</span></button><div class="proto-cascader-panel"></div></div></div></aside></div></section>
-      </main></div>
+  <div class="unsaved-mask" aria-hidden="true">
+    <div class="modal medium">
+      <div class="modal-head"><span>存在未保存的标注修改</span><span data-unsaved-close>×</span></div>
+      <div class="modal-body">当前标注内容有未保存修改，离开后将丢失。</div>
+      <div class="modal-foot"><button class="btn btn-ghost" type="button" data-unsaved-close>取消</button><button class="btn btn-ghost" type="button" data-unsaved-close>不保存离开</button><button class="btn btn-primary" type="button" data-unsaved-close>保存草稿</button></div>
     </div>
-  </section>
+  </div>
 
   <script src="./assets/prototype.js"></script>
   <script src="./assets/prototype-layout.js"></script>
   <script src="./assets/prototype-switcher.js"></script>
   <script>
+    const unsavedMask = document.querySelector(".unsaved-mask");
+    document.querySelectorAll(".js-unsaved-trigger").forEach((trigger) => {
+      trigger.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (unsavedMask) {
+          unsavedMask.classList.add("is-visible");
+          unsavedMask.setAttribute("aria-hidden", "false");
+        }
+      });
+    });
+    document.querySelectorAll("[data-unsaved-close]").forEach((trigger) => {
+      trigger.addEventListener("click", () => {
+        if (unsavedMask) {
+          unsavedMask.classList.remove("is-visible");
+          unsavedMask.setAttribute("aria-hidden", "true");
+        }
+      });
+    });
+
+    document.querySelectorAll(".return-panel").forEach((panel) => {
+      const canvas = panel.closest(".canvas-area");
+      const head = panel.querySelector(".return-panel-head");
+      const close = panel.querySelector(".return-panel-close");
+      const entry = canvas && canvas.querySelector(".return-panel-entry");
+      let dragging = false;
+      let offsetX = 0;
+      let offsetY = 0;
+
+      const clampPanel = (left, top) => {
+        const canvasRect = canvas.getBoundingClientRect();
+        const maxLeft = canvasRect.width - panel.offsetWidth - 12;
+        const maxTop = canvasRect.height - panel.offsetHeight - 12;
+        panel.style.left = `${Math.max(12, Math.min(left, maxLeft))}px`;
+        panel.style.top = `${Math.max(12, Math.min(top, maxTop))}px`;
+        panel.style.right = "auto";
+      };
+
+      close.addEventListener("click", (event) => {
+        event.stopPropagation();
+        panel.classList.add("is-hidden");
+        if (entry) entry.classList.add("is-visible");
+      });
+
+      if (entry) {
+        entry.addEventListener("click", (event) => {
+          event.stopPropagation();
+          entry.classList.remove("is-visible");
+          panel.classList.remove("is-hidden");
+        });
+      }
+
+      head.addEventListener("mousedown", (event) => {
+        if (event.target.closest(".return-panel-close")) return;
+        dragging = true;
+        const panelRect = panel.getBoundingClientRect();
+        offsetX = event.clientX - panelRect.left;
+        offsetY = event.clientY - panelRect.top;
+        document.body.style.userSelect = "none";
+      });
+
+      document.addEventListener("mousemove", (event) => {
+        if (!dragging) return;
+        const canvasRect = canvas.getBoundingClientRect();
+        clampPanel(event.clientX - canvasRect.left - offsetX, event.clientY - canvasRect.top - offsetY);
+      });
+
+      document.addEventListener("mouseup", () => {
+        if (!dragging) return;
+        dragging = false;
+        document.body.style.userSelect = "";
+      });
+    });
+
     document.querySelectorAll(".object-menu-trigger").forEach((trigger) => {
       trigger.addEventListener("click", (event) => {
         event.stopPropagation();
@@ -178,3 +397,4 @@
   </script>
 </body>
 </html>
+
