@@ -1,21 +1,41 @@
 %%{init: {'theme':'mc'}}%%
 stateDiagram-v2
-  [*] --> SamplePending: 样本进入规划流程
+  [*] --> InspectionUploaded: 巡查记录上传图片
 
-  SamplePending: 样本待分配
-  AnnotationAssigned: 已分配标注任务
-  Annotating: 标注中
+  InspectionUploaded: 巡查记录已上传图片
+  AssignmentManage: 任务分配管理
+  BatchCreated: 创建标注批次
+  MultiAnnotationAssigned: 同一图片分配给多名标注人员
+  AnnotationTodo: 个人任务待标注
+  Annotating: 标注人员标注中
   AnnotationDraft: 标注草稿
-  AnnotationSubmitted: 标注已提交
+  AnnotationSubmitted: 个人标注任务已提交
+  AnnotationInvalid: 个人任务提交无效图片
+  AllAnnotationSubmitted: 是否全部标注完成
+  HasValidAnnotation: 是否存在正常标注
+  AnnotationMerged: 多人标注结果汇总
   QCWaiting: 待质检
+  AllInvalidSample: 全部标注均为无效图片
 
-  SamplePending --> AnnotationAssigned: 建立标注任务
-  AnnotationAssigned --> Annotating: 标注员领取 / 开始标注
+  InspectionUploaded --> AssignmentManage: 进入任务分配管理
+  AssignmentManage --> BatchCreated: 选择图片并指定标注人员
+  BatchCreated --> MultiAnnotationAssigned: 为同一图片生成多名标注人员任务
+  MultiAnnotationAssigned --> AnnotationTodo: 生成多条个人标注任务
+  AnnotationTodo --> Annotating: 标注人员开始标注
   Annotating --> AnnotationDraft: 保存草稿
   AnnotationDraft --> Annotating: 继续编辑
-  Annotating --> AnnotationSubmitted: 提交标注成果
+  Annotating --> AnnotationSubmitted: 提交个人标注成果
+  Annotating --> AnnotationInvalid: 标记无效图片
   AnnotationDraft --> AnnotationSubmitted: 草稿补全后提交
-  AnnotationSubmitted --> QCWaiting: 进入三轮质检队列
+  AnnotationDraft --> AnnotationInvalid: 草稿中标记无效图片
+  AnnotationSubmitted --> AllAnnotationSubmitted: 记录个人提交
+  AnnotationInvalid --> AllAnnotationSubmitted: 记录个人无效提交
+  AllAnnotationSubmitted --> AnnotationTodo: 未全部提交，继续等待其他标注人员
+  AllAnnotationSubmitted --> HasValidAnnotation: 全部提交完成
+  HasValidAnnotation --> AnnotationMerged: 至少一条正常标注
+  HasValidAnnotation --> AllInvalidSample: 全部为无效提交
+  AnnotationMerged --> QCWaiting: 进入一轮质检队列
+  AllInvalidSample --> ExcludedFromTraining: 不进入质检
 
   state "三轮质检状态" as QCFlow {
     [*] --> QC1Waiting
@@ -24,12 +44,12 @@ stateDiagram-v2
     QC1Doing: 一检中
     QC1Scored: 一检已评分
     QC1Passed: 一检通过
-    QC1Returned: 一检退回
+    QC1Returned: 一检退回返工
     QC1Escalated: 一检提交二检
 
     QC1Waiting --> QC1Doing: 一检员开始检查
     QC1Doing --> QC1Scored: 检查漏标 / 误标 / 框选 / 类别并评分
-    QC1Scored --> QC1Returned: 明显不合格
+    QC1Scored --> QC1Returned: 明显不合格，退回标注员返工
     QC1Scored --> QC1Passed: 基础质量合格且无需复核
     QC1Scored --> QC1Escalated: 需一致性复核
 
@@ -64,30 +84,30 @@ stateDiagram-v2
 
   QCWaiting --> QC1Waiting: 生成质检任务
 
-  QC1Returned --> ReturnPending: 生成一检退回
-  QC2Returned --> ReturnPending: 生成二检退回
-  QC3Returned --> ReturnPending: 生成三检退回
+  QC1Returned --> AnnotationReturned: 生成一检退回记录
+  QC2Returned --> AnnotationReturned: 生成二检退回
+  QC3Returned --> AnnotationReturned: 生成三检退回
 
   state "退回返工状态" as ReturnFlow {
-    ReturnPending: 待返工
+    AnnotationReturned: 个人任务质检退回
     ReturnReasonRecorded: 已记录退回原因
     ReworkAssigned: 返工已分配
-    Reworking: 返工中
-    ReworkDraft: 返工草稿
-    ReworkSubmitted: 返工已提交
+    ReworkingPersonal: 标注人员返工中
+    ReworkDraftPersonal: 返工草稿
+    ReworkSubmittedPersonal: 返工已提交
     ReworkCounted: 已累计返工次数与问题类型
 
-    ReturnPending --> ReturnReasonRecorded: 记录退回轮次 / 原因 / 责任标注人
+    AnnotationReturned --> ReturnReasonRecorded: 记录退回轮次 / 原因 / 责任标注人
     ReturnReasonRecorded --> ReworkAssigned: 分配给原标注员或指定标注员
-    ReworkAssigned --> Reworking: 开始返工
-    Reworking --> ReworkDraft: 保存返工草稿
-    ReworkDraft --> Reworking: 继续返工
-    Reworking --> ReworkSubmitted: 重新提交
-    ReworkDraft --> ReworkSubmitted: 草稿补全后重新提交
-    ReworkSubmitted --> ReworkCounted: 记录返工次数和错误类型
+    ReworkAssigned --> ReworkingPersonal: 开始返工
+    ReworkingPersonal --> ReworkDraftPersonal: 保存返工草稿
+    ReworkDraftPersonal --> ReworkingPersonal: 继续返工
+    ReworkingPersonal --> ReworkSubmittedPersonal: 重新提交
+    ReworkDraftPersonal --> ReworkSubmittedPersonal: 草稿补全后重新提交
+    ReworkSubmittedPersonal --> ReworkCounted: 记录返工次数和错误类型
   }
 
-  ReworkCounted --> QCWaiting: 回到质检队列
+  ReworkCounted --> QC1Waiting: 返工提交后重新进入一检
 
   QC1Passed --> TrustedResult: 形成可信标准结果
   QC2Passed --> TrustedResult: 形成可信标准结果
@@ -115,31 +135,6 @@ stateDiagram-v2
     SampleRejected --> RejectReasonRecorded: 记录不可用原因
     RejectReasonRecorded --> ExcludedFromTraining: 排除出高质量数据
   }
-
-  state "标注人员能力考核状态" as PeopleFlow {
-    ScorePending: 待汇总评分
-    ScoreAggregated: 已汇总个人得分
-    ErrorProfiled: 已统计错误类型
-    AbilityProfileUpdated: 已更新能力画像
-    InterventionJudging: 是否需要干预
-    TrainingRequired: 需要培训 / 复盘 / 规则校准
-    PermissionMaintained: 保持正常标注权限
-    PermissionAdjusted: 调整标注权限或任务范围
-
-    ScorePending --> ScoreAggregated: 汇总一检 / 二检 / 三检评分
-    ScoreAggregated --> ErrorProfiled: 统计漏标 / 误标 / 框选 / 类别错误
-    ErrorProfiled --> AbilityProfileUpdated: 形成标注员能力画像
-    AbilityProfileUpdated --> InterventionJudging: 判断是否低于质量阈值
-    InterventionJudging --> TrainingRequired: 低于阈值或高频返工
-    InterventionJudging --> PermissionMaintained: 达标
-    TrainingRequired --> PermissionAdjusted: 培训后仍未达标
-    TrainingRequired --> PermissionMaintained: 培训后达标
-  }
-
-  QC1Scored --> ScorePending: 产生一检评分
-  QC2Scored --> ScorePending: 产生二检评分
-  QC3Scored --> ScorePending: 产生三检评分
-  ReworkCounted --> ScorePending: 产生返工考核记录
 
   TrainingReady --> [*]: 数据质量闭环完成
   ExcludedFromTraining --> [*]: 样本处理完成
