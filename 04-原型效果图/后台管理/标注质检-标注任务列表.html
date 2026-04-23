@@ -8,10 +8,26 @@
   <style>
     .prototype-stage { display: none; }
     .prototype-stage.active { display: block; }
-    .task-stat-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; padding: 18px 28px 4px; }
-    .task-stat-card { min-height: 84px; border: 1px solid #dce8f6; background: #fbfdff; padding: 14px 16px; cursor: pointer; position: relative; }
-    .task-stat-card::before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 4px; background: var(--stat-color, #8ca1b8); }
-    .task-stat-card.active { border-color: var(--stat-color, var(--brand)); background: var(--stat-bg, #eef6ff); box-shadow: inset 0 0 0 1px var(--stat-color, var(--brand)); }
+    .proto-list-shell { display: flex; flex-direction: column; background: transparent; box-shadow: none; padding: 0; gap: 14px; }
+    .proto-list-shell .proto-list-head { order: 3; }
+    .proto-list-shell .proto-list-head,
+    .task-stat-grid,
+    .proto-list-shell .proto-filter-bar {
+      margin: 0;
+      padding-left: 28px;
+      padding-right: 28px;
+      background: #fff;
+    }
+    .proto-list-shell .proto-list-head { margin-top: 0; padding-top: 18px; padding-bottom: 10px; box-shadow: var(--shadow); }
+    .task-stat-grid { order: 1; display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; padding-top: 18px; padding-bottom: 12px; box-shadow: var(--shadow); }
+    .proto-list-shell .proto-filter-bar { order: 2; margin: -14px 0 0; padding-top: 14px; padding-bottom: 16px; border-top: 1px solid #eef3f8; border-left: 0; border-right: 0; border-bottom: 0; box-shadow: var(--shadow); }
+    .image-task-grid { order: 4; margin-top: -14px; background: #fff; box-shadow: var(--shadow); }
+    .empty-panel { order: 4; }
+    .proto-pagination { order: 5; margin-top: -14px; background: #fff; box-shadow: var(--shadow); }
+    .task-stat-card { min-height: 68px; border: 1px solid #dce8f6; background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%); padding: 12px 14px 12px 18px; cursor: pointer; position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .task-stat-card::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 4px; background: var(--stat-color, #8ca1b8); }
+    .task-stat-card::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--stat-color, #8ca1b8); opacity: 0.35; position: absolute; right: 12px; top: 12px; }
+    .task-stat-card.active { border-color: var(--stat-color, var(--brand)); background: var(--stat-bg, #eef6ff); box-shadow: inset 0 0 0 1px var(--stat-color, var(--brand)), 0 8px 18px rgba(18,51,95,0.06); }
     .task-stat-card[data-stat="all"] { --stat-color: #5f7f9e; --stat-bg: #f2f7fc; }
     .task-stat-card[data-stat="todo"] { --stat-color: var(--brand); --stat-bg: #eef6ff; }
     .task-stat-card[data-stat="done"] { --stat-color: var(--success); --stat-bg: #f2fbf5; }
@@ -19,14 +35,14 @@
     .task-stat-card[data-stat="returned"] { --stat-color: var(--danger); --stat-bg: #fff4f3; }
     .task-stat-card[data-stat="invalid"] { --stat-color: #98a6b7; --stat-bg: #f5f7fa; }
     .task-stat-name { color: #5c7087; font-weight: 700; }
-    .task-stat-num { margin-top: 8px; color: #193b68; font-size: 26px; font-weight: 700; }
-    .image-task-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; padding: 4px 28px 18px; }
+    .task-stat-num { color: #193b68; font-size: 24px; font-weight: 700; line-height: 1; padding-right: 10px; }
+    .image-task-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; padding: 18px 28px; }
     .image-card { border: 1px solid #dce6f1; background: #fff; box-shadow: 0 8px 18px rgba(18,51,95,0.05); cursor: pointer; overflow: hidden; }
     .image-thumb { aspect-ratio: 1 / 1; position: relative; background: #d7e1eb url("./img/biaozhu_img.png") center center / cover no-repeat; }
     .image-card-body { padding: 12px 14px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .project-type { color: #243c58; font-weight: 700; }
     .draft-tag { display: inline-flex; height: 24px; align-items: center; padding: 0 8px; background: #fff9ef; border: 1px solid #f2d8ad; color: #a66a11; font-size: 12px; font-weight: 700; }
-    .empty-panel { margin: 18px 28px; height: 470px; border: 1px dashed #ccd9e8; background: #fbfdff; display: flex; align-items: center; justify-content: center; color: #7a8aa0; font-weight: 700; }
+    .empty-panel { margin: 0; height: 470px; border: 1px dashed #ccd9e8; background: #fbfdff; display: flex; align-items: center; justify-content: center; color: #7a8aa0; font-weight: 700; box-shadow: var(--shadow); }
     .proto-filter-bar .control { min-width: 148px; }
   </style>
 </head>
@@ -89,8 +105,8 @@
   <section class="prototype-stage" data-prototype-panel="todo">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
       <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
-        <div class="crumb">☰ 标注质检 〉 标注任务列表 〉 待标注</div>
-        <section class="surface tabbar"><div class="tab">待标注</div></section>
+        <div class="crumb">☰ 标注质检 〉 标注任务列表</div>
+        <section class="surface tabbar"><div class="tab">标注任务</div></section>
         <section class="proto-list-shell">
           <div class="proto-list-head"><h3 class="proto-list-title">待标注图片</h3></div>
           <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>草稿状态</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
@@ -116,8 +132,8 @@
   <section class="prototype-stage" data-prototype-panel="done">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
       <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
-        <div class="crumb">☰ 标注质检 〉 标注任务列表 〉 已标注</div>
-        <section class="surface tabbar"><div class="tab">已标注</div></section>
+        <div class="crumb">☰ 标注质检 〉 标注任务列表</div>
+        <section class="surface tabbar"><div class="tab">标注任务</div></section>
         <section class="proto-list-shell">
           <div class="proto-list-head"><h3 class="proto-list-title">已标注图片</h3></div>
           <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>草稿状态</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
@@ -142,8 +158,8 @@
   <section class="prototype-stage" data-prototype-panel="confirm">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
       <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
-        <div class="crumb">☰ 标注质检 〉 标注任务列表 〉 待确认类别</div>
-        <section class="surface tabbar"><div class="tab">待确认类别</div></section>
+        <div class="crumb">☰ 标注质检 〉 标注任务列表</div>
+        <section class="surface tabbar"><div class="tab">标注任务</div></section>
         <section class="proto-list-shell">
           <div class="proto-list-head"><h3 class="proto-list-title">待确认类别图片</h3></div>
           <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>草稿状态</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
@@ -167,8 +183,8 @@
   <section class="prototype-stage" data-prototype-panel="returned">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
       <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
-        <div class="crumb">☰ 标注质检 〉 标注任务列表 〉 质检退回</div>
-        <section class="surface tabbar"><div class="tab">质检退回</div></section>
+        <div class="crumb">☰ 标注质检 〉 标注任务列表</div>
+        <section class="surface tabbar"><div class="tab">标注任务</div></section>
         <section class="proto-list-shell">
           <div class="proto-list-head"><h3 class="proto-list-title">质检退回图片</h3></div>
           <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>草稿状态</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
@@ -192,8 +208,8 @@
   <section class="prototype-stage" data-prototype-panel="invalid">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
       <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
-        <div class="crumb">☰ 标注质检 〉 标注任务列表 〉 无效图片</div>
-        <section class="surface tabbar"><div class="tab">无效图片</div></section>
+        <div class="crumb">☰ 标注质检 〉 标注任务列表</div>
+        <section class="surface tabbar"><div class="tab">标注任务</div></section>
         <section class="proto-list-shell">
           <div class="proto-list-head"><h3 class="proto-list-title">无效图片</h3></div>
           <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>草稿状态</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
@@ -217,7 +233,7 @@
   <section class="prototype-stage" data-prototype-panel="empty">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
       <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
-        <div class="crumb">☰ 标注质检 〉 标注任务列表 〉 空状态</div>
+        <div class="crumb">☰ 标注质检 〉 标注任务列表</div>
         <section class="surface tabbar"><div class="tab">标注任务</div></section>
         <section class="proto-list-shell">
           <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>草稿状态</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
@@ -229,7 +245,7 @@
             <div class="task-stat-card" data-stat="returned" data-task-target="returned"><div class="task-stat-name">质检退回</div><div class="task-stat-num">0</div></div>
             <div class="task-stat-card" data-stat="invalid" data-task-target="invalid"><div class="task-stat-name">无效图片</div><div class="task-stat-num">0</div></div>
           </div>
-          <div class="empty-panel">未找到符合条件的图片，请调整筛选条件</div>
+          <div class="empty-panel">未找到符合条件的图片</div>
         </section>
       </main></div>
     </div>
