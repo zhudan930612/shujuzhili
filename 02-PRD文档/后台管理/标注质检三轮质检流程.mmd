@@ -27,7 +27,6 @@ stateDiagram-v2
   Annotating --> AnnotationSubmitted: 提交个人标注成果
   Annotating --> AnnotationInvalid: 标记无效图片
   AnnotationDraft --> AnnotationSubmitted: 草稿补全后提交
-  AnnotationDraft --> AnnotationInvalid: 草稿中标记无效图片
   AnnotationSubmitted --> AllAnnotationSubmitted: 记录个人提交
   AnnotationInvalid --> AllAnnotationSubmitted: 记录个人无效提交
   AllAnnotationSubmitted --> AnnotationTodo: 未全部提交，继续等待其他标注人员
@@ -44,49 +43,53 @@ stateDiagram-v2
     QC1Doing: 一检中
     QC1Scored: 一检已评分
     QC1Passed: 一检通过
-    QC1Returned: 一检退回返工
+    QC1Returned: 一检退回标注任务
+    QC1ReturnWaiting: 一检等待返工完成
+    QC1ReworkSubmitted: 被退回任务全部重新提交
+    QC1ReturnedByQC2: 二检退回
     QC1Escalated: 一检提交二检
 
     QC1Waiting --> QC1Doing: 一检员开始检查
-    QC1Doing --> QC1Scored: 检查漏标 / 误标 / 框选 / 类别并评分
-    QC1Scored --> QC1Returned: 明显不合格，退回标注员返工
-    QC1Scored --> QC1Passed: 基础质量合格且无需复核
-    QC1Scored --> QC1Escalated: 需一致性复核
+    QC1Doing --> QC1Scored: 查看多人标注并采纳对象，检查漏标 / 误标 / 框选 / 类别并评分
+    QC1Scored --> QC1Returned: 退回指定或全部标注任务
+    QC1Returned --> QC1ReturnWaiting: 存在待返工任务，不能提交二检
+    QC1ReturnWaiting --> QC1ReworkSubmitted: 全部被退回任务重新提交
+    QC1ReworkSubmitted --> QC1Waiting: 重新进入一检
+    QC1ReturnedByQC2 --> QC1Waiting: 一检重新复核
+    QC1Scored --> QC1Passed: 一检通过
+    QC1Passed --> QC1Escalated: 提交二检
 
     QC2Waiting: 待二检
     QC2Doing: 二检中
     QC2Scored: 二检已评分
     QC2Passed: 二检通过
-    QC2Returned: 二检退回
+    QC2Returned: 二检退回一检复核
     QC2Escalated: 二检提交三检
 
     QC1Escalated --> QC2Waiting: 进入二检队列
     QC2Waiting --> QC2Doing: 二检员开始复核
-    QC2Doing --> QC2Scored: 复核一检结论 / 多人差异 / 争议样本
-    QC2Scored --> QC2Returned: 质量不稳定或返工价值高
-    QC2Scored --> QC2Passed: 质量稳定
-    QC2Scored --> QC2Escalated: 重大争议需终审
+    QC2Doing --> QC2Scored: 整图复核一检结果，不逐项标记，不重新采纳
+    QC2Scored --> QC2Passed: 二检通过
+    QC2Passed --> QC2Escalated: 提交三检
+    QC2Scored --> QC2Returned: 全部退回一检复核
 
     QC3Waiting: 待三检
     QC3Doing: 三检中
     QC3Scored: 三检已评分
     QC3Passed: 三检通过
-    QC3Returned: 三检退回
-    QC3Rejected: 三检剔除
+    QC3NoPool: 三检不入池
 
     QC2Escalated --> QC3Waiting: 进入三检队列
     QC3Waiting --> QC3Doing: 终审员开始仲裁
-    QC3Doing --> QC3Scored: 复核一检 / 二检差异并给出终审评分
-    QC3Scored --> QC3Returned: 仍可返工修复
-    QC3Scored --> QC3Rejected: 样本不可用
+    QC3Doing --> QC3Scored: 终审二检通过结果，不直接修改标注
+    QC3Scored --> QC3NoPool: 不入池
     QC3Scored --> QC3Passed: 终审通过
   }
 
   QCWaiting --> QC1Waiting: 生成质检任务
 
   QC1Returned --> AnnotationReturned: 生成一检退回记录
-  QC2Returned --> AnnotationReturned: 生成二检退回
-  QC3Returned --> AnnotationReturned: 生成三检退回
+  QC2Returned --> QC1ReturnedByQC2: 回到一检复核
 
   state "退回返工状态" as ReturnFlow {
     AnnotationReturned: 个人任务质检退回
@@ -107,34 +110,40 @@ stateDiagram-v2
     ReworkSubmittedPersonal --> ReworkCounted: 记录返工次数和错误类型
   }
 
-  ReworkCounted --> QC1Waiting: 返工提交后重新进入一检
+  ReworkCounted --> QC1ReturnWaiting: 记录返工提交，等待全部返工完成
 
-  QC1Passed --> TrustedResult: 形成可信标准结果
-  QC2Passed --> TrustedResult: 形成可信标准结果
-  QC3Passed --> TrustedResult: 形成可信标准结果
-  QC3Rejected --> SampleRejected: 样本剔除
+  QC3Passed --> TrustedResult: 终审通过标注结果
+  QC3NoPool --> SampleNoPool: 样本不入池
 
   state "高质量数据状态" as DataFlow {
-    TrustedResult: 可信标准结果
-    QualityDataPending: 待沉淀高质量数据
-    QualityDataStored: 已沉淀高质量标注数据
-    TrainingCandidate: 训练 / 评测候选数据
-    TrainingReady: 可用于模型训练与效果评估
+    TrustedResult: 通过质检的标注结果
+    QualityDataPool: 高质量数据池
+    QualityDataView: 查看数据
+    QualityDataFilter: 筛选数据
+    QualityDataExport: 导出数据
 
-    TrustedResult --> QualityDataPending: 汇总最终框 / 类别 / 属性 / 质检结论
-    QualityDataPending --> QualityDataStored: 数据质量校验通过
-    QualityDataStored --> TrainingCandidate: 纳入训练 / 评测候选池
-    TrainingCandidate --> TrainingReady: 数据集筛选或版本发布
+    TrustedResult --> QualityDataPool: 入池
+    QualityDataPool --> QualityDataView: 查看
+    QualityDataPool --> QualityDataFilter: 筛选
+    QualityDataPool --> QualityDataExport: 导出
   }
 
-  state "样本剔除状态" as RejectFlow {
-    SampleRejected: 样本剔除
-    RejectReasonRecorded: 已记录剔除原因
+  state "样本不入池状态" as RejectFlow {
+    SampleNoPool: 样本不入池
+    RejectReasonRecorded: 已记录不入池原因
     ExcludedFromTraining: 不进入训练与评测数据
 
-    SampleRejected --> RejectReasonRecorded: 记录不可用原因
+    SampleNoPool --> RejectReasonRecorded: 记录不入池原因
     RejectReasonRecorded --> ExcludedFromTraining: 排除出高质量数据
   }
 
-  TrainingReady --> [*]: 数据质量闭环完成
+  QualityDataView --> [*]: 数据查看完成
+  QualityDataFilter --> [*]: 数据筛选完成
+  QualityDataExport --> [*]: 数据导出完成
   ExcludedFromTraining --> [*]: 样本处理完成
+
+  classDef listStatus fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  class AnnotationTodo,AnnotationSubmitted,AnnotationInvalid,AnnotationReturned listStatus
+  class QC1Waiting,QC1Passed,QC1Returned,QC1ReturnedByQC2 listStatus
+  class QC2Waiting,QC2Passed,QC2Returned listStatus
+  class QC3Waiting,QC3Passed,QC3NoPool listStatus
