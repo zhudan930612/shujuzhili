@@ -8,24 +8,46 @@
   <style>
     .prototype-stage { display: none; }
     .prototype-stage.active { display: block; }
-    .qc-stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; padding: 18px 28px 4px; }
-    .qc-stat-card { min-height: 84px; border: 1px solid #dce8f6; background: #fbfdff; padding: 14px 16px; }
-    .qc-stat-card.active { border-color: var(--brand); background: #eef6ff; box-shadow: inset 0 3px 0 var(--brand); }
+    .proto-list-shell { display: flex; flex-direction: column; background: transparent; box-shadow: none; padding: 0; gap: 14px; }
+    .proto-list-shell .proto-list-head { order: 3; }
+    .proto-list-shell .proto-list-head,
+    .qc-stat-grid,
+    .proto-list-shell .proto-filter-bar {
+      margin: 0;
+      padding-left: 28px;
+      padding-right: 28px;
+      background: #fff;
+    }
+    .proto-list-shell .proto-list-head { margin-top: 0; padding-top: 18px; padding-bottom: 10px; box-shadow: var(--shadow); }
+    .qc-stat-grid { order: 1; display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; padding-top: 18px; padding-bottom: 12px; box-shadow: var(--shadow); }
+    .proto-list-shell .proto-filter-bar { order: 2; margin: -14px 0 0; padding-top: 14px; padding-bottom: 16px; border-top: 1px solid #eef3f8; border-left: 0; border-right: 0; border-bottom: 0; box-shadow: var(--shadow); }
+    .qc-grid { order: 4; margin-top: -14px; background: #fff; box-shadow: var(--shadow); }
+    .empty-panel { order: 4; }
+    .proto-pagination { order: 5; margin-top: -14px; background: #fff; box-shadow: var(--shadow); }
+    .qc-stat-card { min-height: 68px; border: 1px solid #dce8f6; background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%); padding: 12px 14px 12px 18px; cursor: pointer; position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .qc-stat-card::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 4px; background: var(--stat-color, #8ca1b8); }
+    .qc-stat-card::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--stat-color, #8ca1b8); opacity: 0.35; position: absolute; right: 12px; top: 12px; }
+    .qc-stat-card.active { border-color: var(--stat-color, var(--brand)); background: var(--stat-bg, #eef6ff); box-shadow: inset 0 0 0 1px var(--stat-color, var(--brand)), 0 8px 18px rgba(18,51,95,0.06); }
+    .qc-stat-card[data-stat="all"] { --stat-color: #5f7f9e; --stat-bg: #f2f7fc; }
+    .qc-stat-card[data-stat="pending"] { --stat-color: var(--brand); --stat-bg: #eef6ff; }
+    .qc-stat-card[data-stat="returned"] { --stat-color: var(--danger); --stat-bg: #fff4f3; }
+    .qc-stat-card[data-stat="done"] { --stat-color: var(--success); --stat-bg: #f2fbf5; }
+    .qc-stat-card[data-stat="no-pool"] { --stat-color: #98a6b7; --stat-bg: #f5f7fa; }
     .qc-stat-name { color: #5c7087; font-weight: 700; }
-    .qc-stat-num { margin-top: 8px; color: #193b68; font-size: 26px; font-weight: 700; }
-    .qc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 4px 28px 18px; }
-    .qc-card { border: 1px solid #dce6f1; background: #fff; box-shadow: 0 8px 18px rgba(18,51,95,0.05); overflow: hidden; }
-    .qc-thumb { height: 150px; position: relative; background: linear-gradient(135deg, #dce8f4, #f6f9fd 45%, #c4d2df); }
-    .qc-thumb::before { content: ""; position: absolute; left: 42px; top: 36px; width: 108px; height: 78px; border: 2px solid #2f84e7; background: rgba(47,132,231,0.08); }
-    .qc-thumb::after { content: ""; position: absolute; right: 54px; bottom: 38px; width: 82px; height: 62px; border: 2px solid #f3a73d; background: rgba(243,167,61,0.12); }
-    .qc-body { padding: 12px 14px 14px; }
-    .qc-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 700; color: #223a58; }
-    .qc-meta { display: flex; gap: 8px; flex-wrap: wrap; }
-    .empty-panel { margin: 18px 28px; height: 470px; border: 1px dashed #ccd9e8; background: #fbfdff; display: flex; align-items: center; justify-content: center; color: #7a8aa0; font-weight: 700; }
+    .qc-stat-num { color: #193b68; font-size: 24px; font-weight: 700; line-height: 1; padding-right: 10px; }
+    .qc-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; padding: 18px 28px; }
+    .qc-card { border: 1px solid #dce6f1; background: #fff; box-shadow: 0 8px 18px rgba(18,51,95,0.05); cursor: pointer; overflow: hidden; }
+    .qc-thumb { aspect-ratio: 1 / 1; position: relative; background: #d7e1eb url("./img/biaozhu_img.png") center center / cover no-repeat; }
+    .qc-body { padding: 12px 14px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .qc-title { color: #243c58; font-weight: 700; }
+    .draft-tag { display: inline-flex; height: 24px; align-items: center; padding: 0 8px; background: #fff9ef; border: 1px solid #f2d8ad; color: #a66a11; font-size: 12px; font-weight: 700; }
+    .empty-panel { margin: 0; height: 470px; border: 1px dashed #ccd9e8; background: #fbfdff; display: flex; align-items: center; justify-content: center; color: #7a8aa0; font-weight: 700; box-shadow: var(--shadow); }
+    .proto-filter-bar .control { min-width: 148px; }
   </style>
 </head>
 <body>
   <div class="prototype-state-bar" data-prototype-switch data-prototype-default="pending">
+    <button type="button" data-prototype-button="all">全部</button>
     <button class="active" type="button" data-prototype-button="pending">待质检</button>
     <button type="button" data-prototype-button="returned">退回</button>
     <button type="button" data-prototype-button="done">已质检</button>
@@ -41,13 +63,24 @@
         <section class="surface tabbar"><div class="tab">质检任务</div></section>
         <section class="proto-list-shell">
           <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
-          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option><option>住宅装修</option><option>小型工程</option></select><select class="control select-control"><option>标注轮次</option><option>大于 2 轮</option><option>大于 3 轮</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
-          <div class="qc-stat-grid"><div class="qc-stat-card"><div class="qc-stat-name">全部</div><div class="qc-stat-num">76</div></div><div class="qc-stat-card active"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">38</div></div><div class="qc-stat-card"><div class="qc-stat-name">退回</div><div class="qc-stat-num">8</div></div><div class="qc-stat-card"><div class="qc-stat-name">已质检</div><div class="qc-stat-num">24</div></div><div class="qc-stat-card"><div class="qc-stat-name">不入池</div><div class="qc-stat-num">6</div></div></div>
+          <div class="proto-filter-bar">
+            <select class="control select-control"><option>项目类型</option><option>住宅装修</option><option>小型工程</option><option>零星作业</option></select>
+            <select class="control select-control"><option>标注轮次</option><option>大于 2 轮</option><option>大于 3 轮</option></select>
+            <button class="btn btn-primary">查询</button>
+            <button class="btn btn-ghost">重置</button>
+          </div>
+          <div class="qc-stat-grid">
+            <div class="qc-stat-card" data-stat="all" data-qc-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">76</div></div>
+            <div class="qc-stat-card active" data-stat="pending" data-qc-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">38</div></div>
+            <div class="qc-stat-card" data-stat="returned" data-qc-target="returned"><div class="qc-stat-name">退回</div><div class="qc-stat-num">8</div></div>
+            <div class="qc-stat-card" data-stat="done" data-qc-target="done"><div class="qc-stat-name">已质检</div><div class="qc-stat-num">24</div></div>
+            <div class="qc-stat-card" data-stat="no-pool" data-qc-target="no-pool"><div class="qc-stat-name">不入池</div><div class="qc-stat-num">6</div></div>
+          </div>
           <div class="qc-grid">
-            <article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><div class="qc-title">住宅装修 <span class="proto-tag" data-variant="orange">有草稿</span></div><div class="qc-meta"><span class="proto-tag">3轮标注</span><span class="proto-tag" data-variant="gray">2人提交</span></div></div></article>
-            <article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><div class="qc-title">小型工程</div><div class="qc-meta"><span class="proto-tag">4轮标注</span><span class="proto-tag" data-variant="gray">3人提交</span></div></div></article>
-            <article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><div class="qc-title">零星作业</div><div class="qc-meta"><span class="proto-tag">2轮标注</span><span class="proto-tag" data-variant="gray">2人提交</span></div></div></article>
-            <article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><div class="qc-title">小型工程</div><div class="qc-meta"><span class="proto-tag">5轮标注</span><span class="proto-tag" data-variant="gray">4人提交</span></div></div></article>
+            <article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><span class="qc-title">住宅装修</span><span class="draft-tag">有草稿</span></div></article>
+            <article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><span class="qc-title">小型工程</span></div></article>
+            <article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><span class="qc-title">零星作业</span></div></article>
+            <article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><span class="qc-title">小型工程</span></div></article>
           </div>
           <div class="proto-pagination"><span>共 76 张</span><span class="proto-page-size">24条/页</span><span class="proto-page-current">1</span><span>2</span><span>3</span><span>›</span></div>
         </section>
@@ -55,32 +88,104 @@
     </div>
   </section>
 
+  <section class="prototype-stage" data-prototype-panel="all">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 质检任务列表</div>
+        <section class="surface tabbar"><div class="tab">质检任务</div></section>
+        <section class="proto-list-shell">
+          <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
+          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>标注轮次</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="qc-stat-grid">
+            <div class="qc-stat-card active" data-stat="all" data-qc-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">76</div></div>
+            <div class="qc-stat-card" data-stat="pending" data-qc-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">38</div></div>
+            <div class="qc-stat-card" data-stat="returned" data-qc-target="returned"><div class="qc-stat-name">退回</div><div class="qc-stat-num">8</div></div>
+            <div class="qc-stat-card" data-stat="done" data-qc-target="done"><div class="qc-stat-name">已质检</div><div class="qc-stat-num">24</div></div>
+            <div class="qc-stat-card" data-stat="no-pool" data-qc-target="no-pool"><div class="qc-stat-name">不入池</div><div class="qc-stat-num">6</div></div>
+          </div>
+          <div class="qc-grid">
+            <article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><span class="qc-title">住宅装修</span><span class="draft-tag">有草稿</span></div></article>
+            <article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><span class="qc-title">小型工程</span></div></article>
+            <article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><span class="qc-title">零星作业</span></div></article>
+            <article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><span class="qc-title">小型工程</span></div></article>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
   <section class="prototype-stage" data-prototype-panel="returned">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
-      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace"><div class="crumb">☰ 标注质检 〉 质检任务列表 〉 退回</div><section class="surface tabbar"><div class="tab">退回任务</div></section><section class="proto-list-shell"><div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>标注轮次</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div><div class="qc-stat-grid"><div class="qc-stat-card"><div class="qc-stat-name">全部</div><div class="qc-stat-num">76</div></div><div class="qc-stat-card"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">38</div></div><div class="qc-stat-card active"><div class="qc-stat-name">退回</div><div class="qc-stat-num">8</div></div><div class="qc-stat-card"><div class="qc-stat-name">已质检</div><div class="qc-stat-num">24</div></div><div class="qc-stat-card"><div class="qc-stat-name">不入池</div><div class="qc-stat-num">6</div></div></div><div class="qc-grid"><article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><div class="qc-title">住宅装修 <span class="proto-status" data-variant="warning">部分待返工</span></div><div class="qc-meta"><span class="proto-tag">3轮标注</span><span class="proto-tag" data-variant="gray">1条已退回</span></div></div></article></div></section></main></div>
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 质检任务列表</div>
+        <section class="surface tabbar"><div class="tab">质检任务</div></section>
+        <section class="proto-list-shell">
+          <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
+          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>标注轮次</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="qc-stat-grid"><div class="qc-stat-card" data-stat="all" data-qc-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">76</div></div><div class="qc-stat-card" data-stat="pending" data-qc-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">38</div></div><div class="qc-stat-card active" data-stat="returned" data-qc-target="returned"><div class="qc-stat-name">退回</div><div class="qc-stat-num">8</div></div><div class="qc-stat-card" data-stat="done" data-qc-target="done"><div class="qc-stat-name">已质检</div><div class="qc-stat-num">24</div></div><div class="qc-stat-card" data-stat="no-pool" data-qc-target="no-pool"><div class="qc-stat-name">不入池</div><div class="qc-stat-num">6</div></div></div>
+          <div class="qc-grid"><article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><span class="qc-title">住宅装修</span></div></article></div>
+        </section>
+      </main></div>
     </div>
   </section>
 
   <section class="prototype-stage" data-prototype-panel="done">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
-      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace"><div class="crumb">☰ 标注质检 〉 质检任务列表 〉 已质检</div><section class="surface tabbar"><div class="tab">已质检</div></section><section class="proto-list-shell"><div class="qc-stat-grid"><div class="qc-stat-card"><div class="qc-stat-name">全部</div><div class="qc-stat-num">76</div></div><div class="qc-stat-card"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">38</div></div><div class="qc-stat-card"><div class="qc-stat-name">退回</div><div class="qc-stat-num">8</div></div><div class="qc-stat-card active"><div class="qc-stat-name">已质检</div><div class="qc-stat-num">24</div></div><div class="qc-stat-card"><div class="qc-stat-name">不入池</div><div class="qc-stat-num">6</div></div></div><div class="qc-grid"><article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><div class="qc-title">小型工程 <span class="proto-status" data-variant="success">已入池</span></div><div class="qc-meta"><span class="proto-tag">标准对象 5 个</span><span class="proto-tag" data-variant="gray">质检员A</span></div></div></article></div></section></main></div>
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 质检任务列表</div>
+        <section class="surface tabbar"><div class="tab">质检任务</div></section>
+        <section class="proto-list-shell">
+          <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
+          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>标注轮次</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="qc-stat-grid"><div class="qc-stat-card" data-stat="all" data-qc-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">76</div></div><div class="qc-stat-card" data-stat="pending" data-qc-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">38</div></div><div class="qc-stat-card" data-stat="returned" data-qc-target="returned"><div class="qc-stat-name">退回</div><div class="qc-stat-num">8</div></div><div class="qc-stat-card active" data-stat="done" data-qc-target="done"><div class="qc-stat-name">已质检</div><div class="qc-stat-num">24</div></div><div class="qc-stat-card" data-stat="no-pool" data-qc-target="no-pool"><div class="qc-stat-name">不入池</div><div class="qc-stat-num">6</div></div></div>
+          <div class="qc-grid"><article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><span class="qc-title">小型工程</span></div></article></div>
+        </section>
+      </main></div>
     </div>
   </section>
 
   <section class="prototype-stage" data-prototype-panel="no-pool">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
-      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace"><div class="crumb">☰ 标注质检 〉 质检任务列表 〉 不入池</div><section class="surface tabbar"><div class="tab">不入池</div></section><section class="proto-list-shell"><div class="qc-stat-grid"><div class="qc-stat-card"><div class="qc-stat-name">全部</div><div class="qc-stat-num">76</div></div><div class="qc-stat-card"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">38</div></div><div class="qc-stat-card"><div class="qc-stat-name">退回</div><div class="qc-stat-num">8</div></div><div class="qc-stat-card"><div class="qc-stat-name">已质检</div><div class="qc-stat-num">24</div></div><div class="qc-stat-card active"><div class="qc-stat-name">不入池</div><div class="qc-stat-num">6</div></div></div><div class="qc-grid"><article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><div class="qc-title">零星作业 <span class="proto-status" data-variant="muted">不入池</span></div><div class="qc-meta"><span class="proto-tag" data-variant="gray">原因见任务记录</span></div></div></article></div></section></main></div>
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 质检任务列表</div>
+        <section class="surface tabbar"><div class="tab">质检任务</div></section>
+        <section class="proto-list-shell">
+          <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
+          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>标注轮次</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="qc-stat-grid"><div class="qc-stat-card" data-stat="all" data-qc-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">76</div></div><div class="qc-stat-card" data-stat="pending" data-qc-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">38</div></div><div class="qc-stat-card" data-stat="returned" data-qc-target="returned"><div class="qc-stat-name">退回</div><div class="qc-stat-num">8</div></div><div class="qc-stat-card" data-stat="done" data-qc-target="done"><div class="qc-stat-name">已质检</div><div class="qc-stat-num">24</div></div><div class="qc-stat-card active" data-stat="no-pool" data-qc-target="no-pool"><div class="qc-stat-name">不入池</div><div class="qc-stat-num">6</div></div></div>
+          <div class="qc-grid"><article class="qc-card"><div class="qc-thumb"></div><div class="qc-body"><span class="qc-title">零星作业</span></div></article></div>
+        </section>
+      </main></div>
     </div>
   </section>
 
   <section class="prototype-stage" data-prototype-panel="empty">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
-      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace"><div class="crumb">☰ 标注质检 〉 质检任务列表</div><section class="surface tabbar"><div class="tab">质检任务</div></section><section class="proto-list-shell"><div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>标注轮次</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div><div class="empty-panel">当前暂无待质检图片</div></section></main></div>
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 质检任务列表</div>
+        <section class="surface tabbar"><div class="tab">质检任务</div></section>
+        <section class="proto-list-shell">
+          <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
+          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>标注轮次</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="qc-stat-grid"><div class="qc-stat-card active" data-stat="all" data-qc-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">0</div></div><div class="qc-stat-card" data-stat="pending" data-qc-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">0</div></div><div class="qc-stat-card" data-stat="returned" data-qc-target="returned"><div class="qc-stat-name">退回</div><div class="qc-stat-num">0</div></div><div class="qc-stat-card" data-stat="done" data-qc-target="done"><div class="qc-stat-name">已质检</div><div class="qc-stat-num">0</div></div><div class="qc-stat-card" data-stat="no-pool" data-qc-target="no-pool"><div class="qc-stat-name">不入池</div><div class="qc-stat-num">0</div></div></div>
+          <div class="empty-panel">当前暂无待质检图片</div>
+        </section>
+      </main></div>
     </div>
   </section>
 
   <script src="./assets/prototype.js"></script>
   <script src="./assets/prototype-layout.js"></script>
   <script src="./assets/prototype-switcher.js"></script>
+  <script>
+    document.querySelectorAll("[data-qc-target]").forEach((card) => {
+      card.addEventListener("click", () => {
+        const target = card.dataset.qcTarget;
+        const switchButton = document.querySelector(`[data-prototype-button="${target}"]`);
+        if (switchButton) switchButton.click();
+      });
+    });
+  </script>
 </body>
 </html>

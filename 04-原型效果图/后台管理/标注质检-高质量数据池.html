@@ -8,27 +8,49 @@
   <style>
     .prototype-stage { display: none; }
     .prototype-stage.active { display: block; }
-    .pool-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 18px 28px; }
+    .proto-list-shell { display: flex; flex-direction: column; background: transparent; box-shadow: none; padding: 0; gap: 14px; }
+    .proto-list-shell .proto-list-head,
+    .proto-list-shell .proto-filter-bar {
+      margin: 0;
+      padding-left: 28px;
+      padding-right: 28px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+    .proto-list-shell .proto-list-head { order: 1; padding-top: 18px; padding-bottom: 10px; }
+    .proto-list-shell .proto-filter-bar { order: 2; margin: -14px 0 0; padding-top: 14px; padding-bottom: 16px; border-top: 1px solid #eef3f8; border-left: 0; border-right: 0; border-bottom: 0; }
+    .pool-grid { order: 3; margin-top: -14px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; padding: 18px 28px; background: #fff; box-shadow: var(--shadow); }
+    .proto-pagination { order: 4; margin-top: -14px; background: #fff; box-shadow: var(--shadow); }
     .pool-card { border: 1px solid #dce6f1; background: #fff; box-shadow: 0 8px 18px rgba(18,51,95,0.05); overflow: hidden; cursor: pointer; }
-    .pool-thumb { height: 158px; position: relative; background: linear-gradient(135deg, #dce8f4, #f7fafd 45%, #c5d3df); }
-    .pool-thumb::before { content: ""; position: absolute; left: 48px; top: 38px; width: 112px; height: 78px; border: 2px solid #e85b73; background: rgba(232,91,115,0.1); }
-    .pool-thumb::after { content: ""; position: absolute; right: 52px; bottom: 34px; width: 96px; height: 68px; border: 2px solid #2f84e7; background: rgba(47,132,231,0.1); }
-    .pool-body { padding: 12px 14px 14px; }
-    .pool-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; color: #233d5a; font-weight: 700; }
+    .pool-thumb { aspect-ratio: 1 / 1; position: relative; background: #d7e1eb url("./img/biaozhu_img.png") center center / cover no-repeat; }
+    .pool-body { padding: 12px 14px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .pool-title { color: #233d5a; font-weight: 700; }
     .pool-meta { display: flex; gap: 8px; flex-wrap: wrap; }
-    .detail-shell { height: 982px; display: grid; grid-template-columns: 1fr 350px; background: #edf2f8; }
-    .detail-top { height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; border-bottom: 1px solid var(--line); background: #fff; grid-column: 1 / -1; }
-    .detail-canvas { margin: 16px; border: 1px solid #cfdbea; background: linear-gradient(135deg, #dce8f4, #f8fafc 44%, #bdcbd9); position: relative; }
-    .std-box { position: absolute; border: 3px solid #e85b73; background: rgba(232,91,115,0.1); }
-    .std-box.one { left: 260px; top: 160px; width: 220px; height: 130px; }
-    .std-box.two { right: 240px; bottom: 220px; width: 210px; height: 130px; border-color: #2f84e7; background: rgba(47,132,231,0.1); }
-    .detail-panel { border-left: 1px solid #dbe5f0; background: #fff; padding: 14px; }
-    .panel-title { margin-bottom: 12px; color: #1f3e62; font-size: 16px; font-weight: 700; }
-    .std-card { border: 1px solid #dce6f1; background: #fbfdff; padding: 12px; margin-bottom: 12px; }
-    .std-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: 700; }
-    .dot { width: 14px; height: 14px; display: inline-block; margin-right: 8px; background: #e85b73; vertical-align: -2px; }
-    .dot.blue { background: #2f84e7; }
-    .empty-panel { margin: 18px 28px; height: 470px; border: 1px dashed #ccd9e8; background: #fbfdff; display: flex; align-items: center; justify-content: center; color: #7a8aa0; font-weight: 700; }
+    .empty-panel { order: 3; margin: -14px 0 0; height: 470px; border: 1px dashed #ccd9e8; background: #fbfdff; display: flex; align-items: center; justify-content: center; color: #7a8aa0; font-weight: 700; box-shadow: var(--shadow); }
+    .notice-panel { order: 3; margin: -14px 0 0; padding: 18px 28px; background: #fff; box-shadow: var(--shadow); }
+    .proto-filter-bar .control { min-width: 148px; }
+    .worktop { height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; border-bottom: 1px solid var(--line); background: #fff; }
+    .worktop-title { display: flex; align-items: center; gap: 12px; font-weight: 700; color: #1f3e62; }
+    .worktop-actions { display: flex; gap: 10px; }
+    .annotation-shell { height: calc(100% - 50px); display: grid; grid-template-columns: 1fr 340px; background: #edf2f8; }
+    .canvas-area { position: relative; margin: 16px; border: 1px solid #cfdbea; background: #d7e1eb url("./img/biaozhu_img.png") center center / cover no-repeat; overflow: hidden; }
+    .box { position: absolute; border: 3px solid #e85b73; background: rgba(232,91,115,0.08); }
+    .box.one { left: 210px; top: 160px; width: 260px; height: 110px; }
+    .box.two { right: 190px; bottom: 190px; width: 220px; height: 140px; border-color: #2f84e7; background: rgba(47,132,231,0.08); }
+    .poly { position: absolute; left: 610px; top: 255px; width: 185px; height: 120px; border: 3px solid #f3a73d; clip-path: polygon(10% 20%, 88% 6%, 100% 66%, 30% 96%); background: rgba(243,167,61,0.16); }
+    .node { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: #fff; border: 2px solid #2f84e7; }
+    .node.n1 { right: 185px; bottom: 325px; }
+    .node.n2 { right: 405px; bottom: 190px; }
+    .object-panel { border-left: 1px solid #dbe5f0; background: #fff; padding: 14px; overflow: auto; }
+    .panel-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; color: #1f3e62; font-size: 16px; font-weight: 700; }
+    .project-line { margin-bottom: 12px; color: #65788d; }
+    .object-card { border: 1px solid #dce6f1; background: #fff; padding: 12px; margin-bottom: 12px; }
+    .object-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 700; }
+    .object-title { display: inline-flex; align-items: center; }
+    .color-dot { width: 14px; height: 14px; display: inline-block; margin-right: 8px; background: #e85b73; vertical-align: -2px; }
+    .color-dot.blue { background: #2f84e7; }
+    .object-meta { display: grid; gap: 8px; color: #52687f; }
+    .readonly-field { min-height: 34px; padding: 8px 10px; border: 1px solid #e1e9f2; background: #f7fafd; color: #304962; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -46,13 +68,22 @@
         <div class="crumb">☰ 标注质检 〉 高质量数据池</div>
         <section class="surface tabbar"><div class="tab">高质量数据池</div></section>
         <section class="proto-list-shell">
-          <div class="proto-list-head"><h3 class="proto-list-title">高质量数据池</h3><div class="proto-list-tools"><button class="btn btn-primary">导出当前筛选结果</button></div></div>
-          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option><option>住宅装修</option><option>小型工程</option></select><input class="control date-range-control" value="入池时间" /><select class="control select-control"><option>类别/属性</option><option>安全帽 / 白色</option><option>灭火器 / 损坏</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="proto-list-head">
+            <h3 class="proto-list-title">高质量数据池</h3>
+            <div class="proto-list-tools"><button class="btn btn-primary">导出当前筛选结果</button></div>
+          </div>
+          <div class="proto-filter-bar">
+            <select class="control select-control"><option>项目类型</option><option>住宅装修</option><option>小型工程</option><option>零星作业</option></select>
+            <input class="control date-range-control" value="入池时间" />
+            <select class="control select-control"><option>类别/属性</option><option>安全帽 / 白色</option><option>灭火器 / 损坏</option></select>
+            <button class="btn btn-primary">查询</button>
+            <button class="btn btn-ghost">重置</button>
+          </div>
           <div class="pool-grid">
-            <article class="pool-card"><div class="pool-thumb"></div><div class="pool-body"><div class="pool-title">住宅装修 <span class="proto-status" data-variant="success">已入池</span></div><div class="pool-meta"><span class="proto-tag">对象 5 个</span><span class="proto-tag" data-variant="gray">质检员A</span></div></div></article>
-            <article class="pool-card"><div class="pool-thumb"></div><div class="pool-body"><div class="pool-title">小型工程 <span class="proto-status" data-variant="success">已入池</span></div><div class="pool-meta"><span class="proto-tag">对象 3 个</span><span class="proto-tag" data-variant="gray">质检员B</span></div></div></article>
-            <article class="pool-card"><div class="pool-thumb"></div><div class="pool-body"><div class="pool-title">零星作业 <span class="proto-status" data-variant="success">已入池</span></div><div class="pool-meta"><span class="proto-tag">对象 4 个</span><span class="proto-tag" data-variant="gray">质检员A</span></div></div></article>
-            <article class="pool-card"><div class="pool-thumb"></div><div class="pool-body"><div class="pool-title">小型工程 <span class="proto-status" data-variant="success">已入池</span></div><div class="pool-meta"><span class="proto-tag">对象 6 个</span><span class="proto-tag" data-variant="gray">质检员C</span></div></div></article>
+            <article class="pool-card"><div class="pool-thumb"></div><div class="pool-body"><span class="pool-title">住宅装修</span><span class="proto-tag">对象 5 个</span></div></article>
+            <article class="pool-card"><div class="pool-thumb"></div><div class="pool-body"><span class="pool-title">小型工程</span><span class="proto-tag">对象 3 个</span></div></article>
+            <article class="pool-card"><div class="pool-thumb"></div><div class="pool-body"><span class="pool-title">零星作业</span><span class="proto-tag">对象 4 个</span></div></article>
+            <article class="pool-card"><div class="pool-thumb"></div><div class="pool-body"><span class="pool-title">小型工程</span><span class="proto-tag">对象 6 个</span></div></article>
           </div>
           <div class="proto-pagination"><span>共 86 张</span><span class="proto-page-size">24条/页</span><span class="proto-page-current">1</span><span>2</span><span>3</span><span>›</span></div>
         </section>
@@ -62,19 +93,55 @@
 
   <section class="prototype-stage" data-prototype-panel="detail">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="quality-pool">
-      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace"><section class="content-panel" style="height:982px; padding:0; overflow:hidden;"><div class="detail-shell"><div class="detail-top"><strong>← 标准结果详情</strong><span class="proto-status" data-variant="success">只读</span></div><div class="detail-canvas"><div class="std-box one"></div><div class="std-box two"></div></div><aside class="detail-panel"><div class="panel-title">标准结果</div><div class="std-card"><div class="std-head"><span><i class="dot"></i>对象1</span></div><div>形状：矩形</div><div>类别：安全帽 / 白色</div></div><div class="std-card"><div class="std-head"><span><i class="dot blue"></i>对象2</span></div><div>形状：多边形</div><div>类别：灭火器 / 正常</div></div><section class="proto-detail-card"><h3 class="proto-detail-card-title">入池信息</h3><div class="proto-detail-card-body"><div class="proto-detail-grid"><div class="proto-detail-label">入池人/质检人</div><div class="proto-detail-value">质检员A</div><div class="proto-detail-label">项目类型</div><div class="proto-detail-value">住宅装修</div></div></div></section></aside></div></section></main></div>
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;">
+          <div class="worktop">
+            <div class="worktop-title">← 标准结果详情</div>
+            <div class="worktop-actions"><button class="btn btn-ghost">上一张</button><button class="btn btn-ghost">下一张</button><button class="btn btn-ghost">任务记录</button></div>
+          </div>
+          <div class="annotation-shell">
+            <div class="canvas-area"><div class="box one"></div><div class="box two"></div><div class="poly"></div><span class="node n1"></span><span class="node n2"></span></div>
+            <aside class="object-panel">
+              <div class="panel-title"><span>标准结果列表</span><span class="proto-tag proto-status-success">只读</span></div>
+              <div class="project-line">项目类型：住宅装修</div>
+              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span></div><div class="object-meta"><div>形状：矩形</div><div class="readonly-field">安全帽 / 白色</div></div></div>
+              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot blue"></i>对象2</span></div><div class="object-meta"><div>形状：多边形</div><div class="readonly-field">灭火器 / 正常</div></div></div>
+              <section class="proto-detail-card"><h3 class="proto-detail-card-title">入池信息</h3><div class="proto-detail-card-body"><div class="proto-detail-grid"><div class="proto-detail-label">入池人/质检人</div><div class="proto-detail-value">质检员A</div><div class="proto-detail-label">入池时间</div><div class="proto-detail-value">2026-04-23 15:20</div></div></div></section>
+            </aside>
+          </div>
+        </section>
+      </main></div>
     </div>
   </section>
 
   <section class="prototype-stage" data-prototype-panel="empty">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="quality-pool">
-      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace"><div class="crumb">☰ 标注质检 〉 高质量数据池</div><section class="surface tabbar"><div class="tab">高质量数据池</div></section><section class="proto-list-shell"><div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><input class="control date-range-control" value="入池时间" /><select class="control select-control"><option>类别/属性</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div><div class="empty-panel">未找到符合条件的图片，请调整筛选条件</div></section></main></div>
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 高质量数据池</div>
+        <section class="surface tabbar"><div class="tab">高质量数据池</div></section>
+        <section class="proto-list-shell">
+          <div class="proto-list-head"><h3 class="proto-list-title">高质量数据池</h3><div class="proto-list-tools"><button class="btn btn-primary">导出当前筛选结果</button></div></div>
+          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><input class="control date-range-control" value="入池时间" /><select class="control select-control"><option>类别/属性</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="empty-panel">未找到符合条件的图片，请调整筛选条件</div>
+        </section>
+      </main></div>
     </div>
   </section>
 
   <section class="prototype-stage" data-prototype-panel="export-disabled">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="quality-pool">
-      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace"><div class="crumb">☰ 标注质检 〉 高质量数据池</div><section class="surface tabbar"><div class="tab">高质量数据池</div></section><section class="proto-list-shell"><div class="proto-list-head"><h3 class="proto-list-title">高质量数据池</h3><div class="proto-list-tools"><button class="btn btn-primary" disabled>导出当前筛选结果</button></div></div><div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><input class="control date-range-control" value="入池时间" /><select class="control select-control"><option>类别/属性</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div><div class="notice" style="margin:18px 28px;">当前账号无导出权限，导出按钮禁用。</div></section></main></div>
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 高质量数据池</div>
+        <section class="surface tabbar"><div class="tab">高质量数据池</div></section>
+        <section class="proto-list-shell">
+          <div class="proto-list-head"><h3 class="proto-list-title">高质量数据池</h3><div class="proto-list-tools"><button class="btn btn-primary" disabled>导出当前筛选结果</button></div></div>
+          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><input class="control date-range-control" value="入池时间" /><select class="control select-control"><option>类别/属性</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="notice-panel"><div class="notice">当前账号无导出权限，导出按钮禁用。</div></div>
+        </section>
+      </main></div>
     </div>
   </section>
 
