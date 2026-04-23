@@ -87,11 +87,32 @@ const protoRegionTree = [
   },
 ];
 
+const protoAnnotationCategoryTree = [
+  {
+    label: "安全帽",
+    children: [{ label: "白色" }, { label: "红色" }, { label: "黄色" }],
+  },
+  {
+    label: "灭火器",
+    children: [{ label: "正常" }, { label: "损坏" }],
+  },
+  {
+    label: "脚手架",
+    children: [{ label: "完整" }, { label: "变形" }],
+  },
+  {
+    label: "待确认类别",
+  },
+];
+
 function findProtoCascaderNode(nodes, label) {
   return nodes.find((node) => node.label === label);
 }
 
 function getProtoCascaderTree(cascader) {
+  if (cascader.dataset.cascaderSource === "annotation-category") {
+    return protoAnnotationCategoryTree;
+  }
   if (cascader.dataset.allowNational === "false") {
     return protoRegionTree.filter((node) => node.label !== "全国");
   }

@@ -11,10 +11,22 @@
     .worktop { height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; border-bottom: 1px solid var(--line); background: #fff; }
     .worktop-title { display: flex; align-items: center; gap: 12px; font-weight: 700; color: #1f3e62; }
     .worktop-actions { display: flex; gap: 10px; }
-    .annotation-shell { height: calc(100% - 50px); display: grid; grid-template-columns: 64px 1fr 340px; background: #edf2f8; }
+    .annotation-shell { height: calc(100% - 50px); display: grid; grid-template-columns: 58px 1fr 340px; background: #edf2f8; }
     .toolrail { padding: 10px 8px; border-right: 1px solid #dbe5f0; background: #fff; display: flex; flex-direction: column; gap: 8px; }
-    .toolbtn { min-height: 40px; border: 1px solid #d9e3ee; background: #f8fbff; color: #38536f; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; text-align: center; }
+    .toolbtn { width: 40px; height: 40px; border: 1px solid #d9e3ee; background: #f8fbff; color: #38536f; font-size: 18px; font-weight: 700; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; cursor: default; }
     .toolbtn.active { background: var(--brand); border-color: var(--brand); color: #fff; }
+    .toolbtn::after { content: attr(data-tip); position: absolute; left: 48px; top: 50%; transform: translateY(-50%); white-space: nowrap; min-width: 56px; padding: 6px 9px; border: 1px solid #d8e4f1; background: #fff; color: #38536f; font-size: 12px; font-weight: 700; box-shadow: var(--shadow); opacity: 0; visibility: hidden; pointer-events: none; z-index: 20; }
+    .toolbtn::before { content: ""; position: absolute; left: 42px; top: 50%; transform: translateY(-50%); border-width: 6px 6px 6px 0; border-style: solid; border-color: transparent #d8e4f1 transparent transparent; opacity: 0; visibility: hidden; z-index: 21; }
+    .toolbtn:hover::after,
+    .toolbtn:hover::before { opacity: 1; visibility: visible; }
+    .tool-icon { line-height: 1; }
+    .tool-icon.wand { width: 20px; height: 20px; position: relative; display: inline-block; }
+    .tool-icon.wand::before { content: ""; position: absolute; left: 8px; top: 4px; width: 3px; height: 16px; background: currentColor; transform: rotate(42deg); border-radius: 2px; }
+    .tool-icon.wand::after { content: "✦"; position: absolute; right: -2px; top: -5px; font-size: 12px; line-height: 1; }
+    .tool-icon.rect { width: 22px; height: 14px; display: inline-block; border: 2px solid currentColor; box-sizing: border-box; }
+    .tool-icon.poly-icon { width: 20px; height: 20px; display: inline-block; background: currentColor; clip-path: polygon(50% 3%, 96% 36%, 78% 92%, 22% 92%, 4% 36%); position: relative; }
+    .tool-icon.poly-icon::after { content: ""; position: absolute; inset: 2px; background: #f8fbff; clip-path: polygon(50% 3%, 96% 36%, 78% 92%, 22% 92%, 4% 36%); }
+    .toolbtn.active .tool-icon.poly-icon::after { background: var(--brand); }
     .canvas-area { position: relative; margin: 16px; border: 1px solid #cfdbea; background: #d7e1eb url("./img/biaozhu_img.png") center center / cover no-repeat; overflow: hidden; }
     .site-floor,
     .site-wall { display: none; }
@@ -32,12 +44,30 @@
     .project-line { margin-bottom: 12px; color: #65788d; }
     .object-card { border: 1px solid #dce6f1; background: #fbfdff; padding: 12px; margin-bottom: 12px; }
     .object-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 700; }
+    .object-title { display: inline-flex; align-items: center; }
+    .object-menu { position: relative; }
+    .object-menu-trigger { width: 28px; height: 28px; border: 1px solid transparent; background: transparent; color: #52687f; font-size: 18px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+    .object-menu-trigger:hover,
+    .object-menu.open .object-menu-trigger { border-color: #d8e3ee; background: #fff; color: var(--brand); }
+    .object-menu-pop { display: none; position: absolute; right: 0; top: 32px; width: 96px; padding: 4px; background: #fff; border: 1px solid #d8e3ee; box-shadow: var(--shadow); z-index: 30; }
+    .object-menu.open .object-menu-pop { display: block; }
+    .object-menu-pop button { width: 100%; height: 30px; border: 0; background: #fff; color: #36516e; font-size: 13px; text-align: left; padding: 0 10px; cursor: pointer; }
+    .object-menu-pop button:hover { background: #eef6ff; color: var(--brand); }
+    .object-menu-pop .danger { color: var(--danger); }
     .color-dot { width: 14px; height: 14px; display: inline-block; margin-right: 8px; background: #e85b73; vertical-align: -2px; }
     .color-dot.blue { background: #2f84e7; }
     .object-meta { display: grid; gap: 8px; color: #52687f; }
     .object-meta select { width: 100%; }
+    .object-meta .proto-cascader,
+    .object-card > .proto-cascader { width: 100%; }
+    .object-meta .proto-cascader-control,
+    .object-card > .proto-cascader .proto-cascader-control { width: 100%; }
+    .object-meta .proto-cascader-panel,
+    .object-card > .proto-cascader .proto-cascader-panel { --proto-cascader-column-width: 130px; z-index: 40; }
     .mini-actions { display: flex; gap: 8px; margin-top: 10px; }
-    .mini-actions span { flex: 1; height: 26px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #d8e3ee; background: #fff; color: #52677e; font-size: 12px; font-weight: 700; }
+    .mini-actions button { flex: 1; height: 28px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #d8e3ee; background: #fff; color: #52677e; font-size: 15px; font-weight: 700; position: relative; cursor: default; }
+    .mini-actions button::after { content: attr(data-tip); position: absolute; top: -34px; left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 5px 8px; background: #fff; border: 1px solid #d8e3ee; color: #38536f; font-size: 12px; box-shadow: var(--shadow); opacity: 0; visibility: hidden; pointer-events: none; z-index: 20; }
+    .mini-actions button:hover::after { opacity: 1; visibility: visible; }
     .record-drawer { position: absolute; right: 0; top: 64px; bottom: 0; width: 430px; background: rgba(255,255,255,0.96); box-shadow: var(--drawer-shadow); padding: 18px; }
     .timeline { margin-top: 12px; border-left: 2px solid #d9e5f2; padding-left: 18px; }
     .timeline-item { margin-bottom: 18px; position: relative; color: #52687f; line-height: 1.7; }
@@ -62,15 +92,23 @@
       <header class="topbar"></header>
       <div class="main"><aside class="sidebar"></aside><main class="workspace">
         <section class="content-panel" style="height: 982px; padding:0; overflow:hidden;">
-          <div class="worktop"><div class="worktop-title">← 标注工作台</div><div class="worktop-actions"><button class="btn btn-ghost">上一张</button><button class="btn btn-ghost">下一张</button><button class="btn btn-ghost">保存</button><button class="btn btn-primary">提交标注</button><button class="btn btn-danger">标记无效</button><button class="btn btn-ghost">任务记录</button></div></div>
+          <div class="worktop"><div class="worktop-title">← 标注工作台</div><div class="worktop-actions"><button class="btn btn-ghost">上一张</button><button class="btn btn-ghost">下一张</button><button class="btn btn-ghost">保存草稿</button><button class="btn btn-primary">提交标注</button><button class="btn btn-danger">标记无效</button><button class="btn btn-ghost">任务记录</button></div></div>
           <div class="annotation-shell">
-            <div class="toolrail"><div class="toolbtn active">指针</div><div class="toolbtn">旋转</div><div class="toolbtn">魔术棒</div><div class="toolbtn">自动识别*</div><div class="toolbtn">矩形</div><div class="toolbtn">多边形</div><div class="toolbtn">点标注</div></div>
+            <div class="toolrail">
+              <div class="toolbtn active" data-tip="指针"><span class="tool-icon">↖</span></div>
+              <div class="toolbtn" data-tip="旋转"><span class="tool-icon">↻</span></div>
+              <div class="toolbtn" data-tip="魔术棒"><span class="tool-icon wand"></span></div>
+              <div class="toolbtn" data-tip="自动识别"><span class="tool-icon">AI</span></div>
+              <div class="toolbtn" data-tip="矩形"><span class="tool-icon rect"></span></div>
+              <div class="toolbtn" data-tip="多边形"><span class="tool-icon poly-icon"></span></div>
+              <div class="toolbtn" data-tip="点标注"><span class="tool-icon">●</span></div>
+            </div>
             <div class="canvas-area"><div class="site-wall"></div><div class="site-floor"></div><div class="box one"></div><div class="box two"></div><div class="poly"></div><span class="node n1"></span><span class="node n2"></span></div>
             <aside class="object-panel">
-              <div class="panel-title"><span>标注列表</span><span class="proto-tag">待标注</span></div>
+              <div class="panel-title"><span>标注对象列表</span><span class="proto-tag">待标注</span></div>
               <div class="project-line">项目类型：住宅装修</div>
-              <div class="object-card"><div class="object-head"><span><i class="color-dot"></i>对象1</span><span>⋮</span></div><div class="object-meta"><div>形状：矩形</div><select class="control select-control"><option>安全帽 / 白色</option></select></div><div class="mini-actions"><span>锁定</span><span>可见</span><span>固定</span></div></div>
-              <div class="object-card"><div class="object-head"><span><i class="color-dot blue"></i>对象2</span><span>⋮</span></div><div class="object-meta"><div>形状：多边形</div><select class="control select-control"><option>请选择</option><option>灭火器 / 正常</option></select></div><div class="mini-actions"><span>解锁</span><span>可见</span><span>固定</span></div></div>
+              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="object-meta"><div>形状：矩形</div><div class="proto-cascader proto-cascader-full" data-proto-cascader data-cascader-source="annotation-category" data-cascader-depth="2" data-placeholder="请选择"><button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">安全帽 / 白色</span><span class="proto-cascader-arrow">▾</span></button><div class="proto-cascader-panel"></div></div></div><div class="mini-actions"><button type="button" data-tip="锁定">🔒</button><button type="button" data-tip="可见">👁</button><button type="button" data-tip="固定">📌</button></div></div>
+              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot blue"></i>对象2</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="object-meta"><div>形状：多边形</div><div class="proto-cascader proto-cascader-full" data-proto-cascader data-cascader-source="annotation-category" data-cascader-depth="2" data-placeholder="请选择"><button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">请选择</span><span class="proto-cascader-arrow">▾</span></button><div class="proto-cascader-panel"></div></div></div><div class="mini-actions"><button type="button" data-tip="解锁">🔓</button><button type="button" data-tip="可见">👁</button><button type="button" data-tip="固定">📌</button></div></div>
             </aside>
           </div>
         </section>
@@ -82,8 +120,8 @@
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
       <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
         <section class="content-panel" style="height: 982px; padding:0; overflow:hidden;">
-          <div class="worktop"><div class="worktop-title">← 标注工作台</div><div class="worktop-actions"><button class="btn btn-ghost">保存</button><button class="btn btn-primary">重新提交</button><button class="btn btn-ghost">任务记录</button></div></div>
-          <div class="annotation-shell"><div class="toolrail"><div class="toolbtn active">指针</div><div class="toolbtn">矩形</div><div class="toolbtn">多边形</div></div><div class="canvas-area"><div class="site-wall"></div><div class="site-floor"></div><div class="box one"></div><div class="return-panel"><strong>质检退回原因</strong><br />退回人：质检员A<br />原因：框选位置不准确<br />说明：安全帽区域偏大，请调整到物品边界后重新提交。</div></div><aside class="object-panel"><div class="panel-title">标注列表</div><div class="project-line">项目类型：住宅装修</div><div class="object-card"><div class="object-head"><span><i class="color-dot"></i>对象1</span><span>⋮</span></div><div class="object-meta"><div>形状：矩形</div><select class="control select-control"><option>安全帽 / 白色</option></select></div><div class="mini-actions"><span>解锁</span><span>可见</span><span>固定</span></div></div></aside></div>
+          <div class="worktop"><div class="worktop-title">← 标注工作台</div><div class="worktop-actions"><button class="btn btn-ghost">保存草稿</button><button class="btn btn-primary">重新提交</button><button class="btn btn-ghost">任务记录</button></div></div>
+          <div class="annotation-shell"><div class="toolrail"><div class="toolbtn active" data-tip="指针"><span class="tool-icon">↖</span></div><div class="toolbtn" data-tip="矩形"><span class="tool-icon rect"></span></div><div class="toolbtn" data-tip="多边形"><span class="tool-icon poly-icon"></span></div></div><div class="canvas-area"><div class="site-wall"></div><div class="site-floor"></div><div class="box one"></div><div class="return-panel"><strong>质检退回原因</strong><br />退回人：质检员A<br />原因：框选位置不准确<br />说明：安全帽区域偏大，请调整到物品边界后重新提交。</div></div><aside class="object-panel"><div class="panel-title">标注对象列表</div><div class="project-line">项目类型：住宅装修</div><div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="object-meta"><div>形状：矩形</div><div class="proto-cascader proto-cascader-full" data-proto-cascader data-cascader-source="annotation-category" data-cascader-depth="2" data-placeholder="请选择"><button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">安全帽 / 白色</span><span class="proto-cascader-arrow">▾</span></button><div class="proto-cascader-panel"></div></div></div><div class="mini-actions"><button type="button" data-tip="解锁">🔓</button><button type="button" data-tip="可见">👁</button><button type="button" data-tip="固定">📌</button></div></div></aside></div>
         </section>
       </main></div>
     </div>
@@ -92,7 +130,7 @@
   <section class="prototype-stage" data-prototype-panel="record">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
       <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
-        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;"><div class="worktop"><div class="worktop-title">← 标注工作台</div><div class="worktop-actions"><button class="btn btn-ghost">保存</button><button class="btn btn-primary">提交标注</button></div></div><div class="annotation-shell"><div class="toolrail"><div class="toolbtn active">指针</div></div><div class="canvas-area"><div class="site-wall"></div><div class="site-floor"></div><div class="box one"></div></div><aside class="object-panel"><div class="panel-title">标注列表</div><div class="object-card"><div class="object-head"><span><i class="color-dot"></i>对象1</span><span>⋮</span></div><div class="object-meta"><select class="control select-control"><option>安全帽 / 白色</option></select></div></div></aside></div></section>
+        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;"><div class="worktop"><div class="worktop-title">← 标注工作台</div><div class="worktop-actions"><button class="btn btn-ghost">保存草稿</button><button class="btn btn-primary">提交标注</button></div></div><div class="annotation-shell"><div class="toolrail"><div class="toolbtn active" data-tip="指针"><span class="tool-icon">↖</span></div></div><div class="canvas-area"><div class="site-wall"></div><div class="site-floor"></div><div class="box one"></div></div><aside class="object-panel"><div class="panel-title">标注对象列表</div><div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="object-meta"><div class="proto-cascader proto-cascader-full" data-proto-cascader data-cascader-source="annotation-category" data-cascader-depth="2" data-placeholder="请选择"><button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">安全帽 / 白色</span><span class="proto-cascader-arrow">▾</span></button><div class="proto-cascader-panel"></div></div></div></div></aside></div></section>
         <aside class="record-drawer"><div class="panel-title">任务记录 <span>×</span></div><div class="timeline"><div class="timeline-item"><strong>保存草稿</strong><br />2026-04-23 10:12<br />对象数：2，含待确认类别：否</div><div class="timeline-item"><strong>创建标注任务</strong><br />2026-04-23 09:40<br />图片来源：巡查记录图片</div><div class="timeline-item"><strong>质检退回</strong><br />2026-04-22 18:05<br />原因：框选位置不准确</div></div></aside>
       </main></div>
     </div>
@@ -110,7 +148,7 @@
   <section class="prototype-stage" data-prototype-panel="example">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
       <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
-        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;"><div class="worktop"><div class="worktop-title">← 标注工作台</div><div class="worktop-actions"><button class="btn btn-primary">提交标注</button></div></div><div class="annotation-shell"><div class="toolrail"><div class="toolbtn active">指针</div></div><div class="canvas-area"><div class="site-wall"></div><div class="site-floor"></div><div class="box one"></div><div class="example-pop"><strong>示例图片</strong><div class="example-grid"><div class="example-img"></div><div class="example-img"></div><div class="example-img"></div></div></div></div><aside class="object-panel"><div class="panel-title">标注列表</div><div class="object-card"><div class="object-head"><span><i class="color-dot"></i>对象1</span><span>⋮</span></div><select class="control select-control"><option>安全帽 / 白色</option></select></div></aside></div></section>
+        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;"><div class="worktop"><div class="worktop-title">← 标注工作台</div><div class="worktop-actions"><button class="btn btn-primary">提交标注</button></div></div><div class="annotation-shell"><div class="toolrail"><div class="toolbtn active" data-tip="指针"><span class="tool-icon">↖</span></div></div><div class="canvas-area"><div class="site-wall"></div><div class="site-floor"></div><div class="box one"></div><div class="example-pop"><strong>示例图片</strong><div class="example-grid"><div class="example-img"></div><div class="example-img"></div><div class="example-img"></div></div></div></div><aside class="object-panel"><div class="panel-title">标注对象列表</div><div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="proto-cascader proto-cascader-full" data-proto-cascader data-cascader-source="annotation-category" data-cascader-depth="2" data-placeholder="请选择"><button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">安全帽 / 白色</span><span class="proto-cascader-arrow">▾</span></button><div class="proto-cascader-panel"></div></div></div></aside></div></section>
       </main></div>
     </div>
   </section>
@@ -118,5 +156,25 @@
   <script src="./assets/prototype.js"></script>
   <script src="./assets/prototype-layout.js"></script>
   <script src="./assets/prototype-switcher.js"></script>
+  <script>
+    document.querySelectorAll(".object-menu-trigger").forEach((trigger) => {
+      trigger.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const menu = trigger.closest(".object-menu");
+        document.querySelectorAll(".object-menu.open").forEach((item) => {
+          if (item !== menu) item.classList.remove("open");
+        });
+        menu.classList.toggle("open");
+      });
+    });
+
+    document.querySelectorAll(".object-menu-pop").forEach((pop) => {
+      pop.addEventListener("click", (event) => event.stopPropagation());
+    });
+
+    document.addEventListener("click", () => {
+      document.querySelectorAll(".object-menu.open").forEach((menu) => menu.classList.remove("open"));
+    });
+  </script>
 </body>
 </html>
