@@ -20,7 +20,7 @@
     .task-stat-card[data-stat="invalid"] { --stat-color: #98a6b7; --stat-bg: #f5f7fa; }
     .task-stat-name { color: #5c7087; font-weight: 700; }
     .task-stat-num { margin-top: 8px; color: #193b68; font-size: 26px; font-weight: 700; }
-    .image-task-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 4px 28px 18px; }
+    .image-task-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; padding: 4px 28px 18px; }
     .image-card { border: 1px solid #dce6f1; background: #fff; box-shadow: 0 8px 18px rgba(18,51,95,0.05); cursor: pointer; overflow: hidden; }
     .image-thumb { aspect-ratio: 1 / 1; position: relative; background: #d7e1eb url("./img/biaozhu_img.png") center center / cover no-repeat; }
     .image-card-body { padding: 12px 14px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
@@ -38,7 +38,6 @@
     <button type="button" data-prototype-button="confirm">待确认类别</button>
     <button type="button" data-prototype-button="returned">质检退回</button>
     <button type="button" data-prototype-button="invalid">无效图片</button>
-    <button type="button" data-prototype-button="draft">草稿筛选</button>
     <button type="button" data-prototype-button="empty">空状态</button>
   </div>
 
@@ -96,12 +95,12 @@
           <div class="proto-list-head"><h3 class="proto-list-title">待标注图片</h3></div>
           <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>草稿状态</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
           <div class="task-stat-grid">
-            <div class="task-stat-card"><div class="task-stat-name">全部</div><div class="task-stat-num">128</div></div>
-            <div class="task-stat-card active"><div class="task-stat-name">待标注</div><div class="task-stat-num">62</div></div>
-            <div class="task-stat-card"><div class="task-stat-name">已标注</div><div class="task-stat-num">41</div></div>
-            <div class="task-stat-card"><div class="task-stat-name">待确认类别</div><div class="task-stat-num">9</div></div>
-            <div class="task-stat-card"><div class="task-stat-name">质检退回</div><div class="task-stat-num">6</div></div>
-            <div class="task-stat-card"><div class="task-stat-name">无效图片</div><div class="task-stat-num">10</div></div>
+            <div class="task-stat-card" data-stat="all" data-task-target="all"><div class="task-stat-name">全部</div><div class="task-stat-num">128</div></div>
+            <div class="task-stat-card active" data-stat="todo" data-task-target="todo"><div class="task-stat-name">待标注</div><div class="task-stat-num">62</div></div>
+            <div class="task-stat-card" data-stat="done" data-task-target="done"><div class="task-stat-name">已标注</div><div class="task-stat-num">41</div></div>
+            <div class="task-stat-card" data-stat="confirm" data-task-target="confirm"><div class="task-stat-name">待确认类别</div><div class="task-stat-num">9</div></div>
+            <div class="task-stat-card" data-stat="returned" data-task-target="returned"><div class="task-stat-name">质检退回</div><div class="task-stat-num">6</div></div>
+            <div class="task-stat-card" data-stat="invalid" data-task-target="invalid"><div class="task-stat-name">无效图片</div><div class="task-stat-num">10</div></div>
           </div>
           <div class="image-task-grid">
             <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">住宅装修</span></div></article>
@@ -114,17 +113,101 @@
     </div>
   </section>
 
-  <section class="prototype-stage" data-prototype-panel="draft">
+  <section class="prototype-stage" data-prototype-panel="done">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
       <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
-        <div class="crumb">☰ 标注质检 〉 标注任务列表 〉 草稿筛选</div>
-        <section class="surface tabbar"><div class="tab">有草稿任务</div></section>
+        <div class="crumb">☰ 标注质检 〉 标注任务列表 〉 已标注</div>
+        <section class="surface tabbar"><div class="tab">已标注</div></section>
         <section class="proto-list-shell">
-          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option selected>有草稿</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="proto-list-head"><h3 class="proto-list-title">已标注图片</h3></div>
+          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>草稿状态</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="task-stat-grid">
+            <div class="task-stat-card" data-stat="all" data-task-target="all"><div class="task-stat-name">全部</div><div class="task-stat-num">128</div></div>
+            <div class="task-stat-card" data-stat="todo" data-task-target="todo"><div class="task-stat-name">待标注</div><div class="task-stat-num">62</div></div>
+            <div class="task-stat-card active" data-stat="done" data-task-target="done"><div class="task-stat-name">已标注</div><div class="task-stat-num">41</div></div>
+            <div class="task-stat-card" data-stat="confirm" data-task-target="confirm"><div class="task-stat-name">待确认类别</div><div class="task-stat-num">9</div></div>
+            <div class="task-stat-card" data-stat="returned" data-task-target="returned"><div class="task-stat-name">质检退回</div><div class="task-stat-num">6</div></div>
+            <div class="task-stat-card" data-stat="invalid" data-task-target="invalid"><div class="task-stat-name">无效图片</div><div class="task-stat-num">10</div></div>
+          </div>
+          <div class="image-task-grid">
+            <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">住宅装修</span></div></article>
+            <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">小型工程</span></div></article>
+            <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">零星作业</span></div></article>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="confirm">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 标注任务列表 〉 待确认类别</div>
+        <section class="surface tabbar"><div class="tab">待确认类别</div></section>
+        <section class="proto-list-shell">
+          <div class="proto-list-head"><h3 class="proto-list-title">待确认类别图片</h3></div>
+          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>草稿状态</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="task-stat-grid">
+            <div class="task-stat-card" data-stat="all" data-task-target="all"><div class="task-stat-name">全部</div><div class="task-stat-num">128</div></div>
+            <div class="task-stat-card" data-stat="todo" data-task-target="todo"><div class="task-stat-name">待标注</div><div class="task-stat-num">62</div></div>
+            <div class="task-stat-card" data-stat="done" data-task-target="done"><div class="task-stat-name">已标注</div><div class="task-stat-num">41</div></div>
+            <div class="task-stat-card active" data-stat="confirm" data-task-target="confirm"><div class="task-stat-name">待确认类别</div><div class="task-stat-num">9</div></div>
+            <div class="task-stat-card" data-stat="returned" data-task-target="returned"><div class="task-stat-name">质检退回</div><div class="task-stat-num">6</div></div>
+            <div class="task-stat-card" data-stat="invalid" data-task-target="invalid"><div class="task-stat-name">无效图片</div><div class="task-stat-num">10</div></div>
+          </div>
           <div class="image-task-grid">
             <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">住宅装修</span><span class="draft-tag">有草稿</span></div></article>
-            <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">零星作业</span><span class="draft-tag">有草稿</span></div></article>
             <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">小型工程</span><span class="draft-tag">有草稿</span></div></article>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="returned">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 标注任务列表 〉 质检退回</div>
+        <section class="surface tabbar"><div class="tab">质检退回</div></section>
+        <section class="proto-list-shell">
+          <div class="proto-list-head"><h3 class="proto-list-title">质检退回图片</h3></div>
+          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>草稿状态</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="task-stat-grid">
+            <div class="task-stat-card" data-stat="all" data-task-target="all"><div class="task-stat-name">全部</div><div class="task-stat-num">128</div></div>
+            <div class="task-stat-card" data-stat="todo" data-task-target="todo"><div class="task-stat-name">待标注</div><div class="task-stat-num">62</div></div>
+            <div class="task-stat-card" data-stat="done" data-task-target="done"><div class="task-stat-name">已标注</div><div class="task-stat-num">41</div></div>
+            <div class="task-stat-card" data-stat="confirm" data-task-target="confirm"><div class="task-stat-name">待确认类别</div><div class="task-stat-num">9</div></div>
+            <div class="task-stat-card active" data-stat="returned" data-task-target="returned"><div class="task-stat-name">质检退回</div><div class="task-stat-num">6</div></div>
+            <div class="task-stat-card" data-stat="invalid" data-task-target="invalid"><div class="task-stat-name">无效图片</div><div class="task-stat-num">10</div></div>
+          </div>
+          <div class="image-task-grid">
+            <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">住宅装修</span><span class="draft-tag">有草稿</span></div></article>
+            <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">零星作业</span></div></article>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="invalid">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 标注任务列表 〉 无效图片</div>
+        <section class="surface tabbar"><div class="tab">无效图片</div></section>
+        <section class="proto-list-shell">
+          <div class="proto-list-head"><h3 class="proto-list-title">无效图片</h3></div>
+          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>草稿状态</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="task-stat-grid">
+            <div class="task-stat-card" data-stat="all" data-task-target="all"><div class="task-stat-name">全部</div><div class="task-stat-num">128</div></div>
+            <div class="task-stat-card" data-stat="todo" data-task-target="todo"><div class="task-stat-name">待标注</div><div class="task-stat-num">62</div></div>
+            <div class="task-stat-card" data-stat="done" data-task-target="done"><div class="task-stat-name">已标注</div><div class="task-stat-num">41</div></div>
+            <div class="task-stat-card" data-stat="confirm" data-task-target="confirm"><div class="task-stat-name">待确认类别</div><div class="task-stat-num">9</div></div>
+            <div class="task-stat-card" data-stat="returned" data-task-target="returned"><div class="task-stat-name">质检退回</div><div class="task-stat-num">6</div></div>
+            <div class="task-stat-card active" data-stat="invalid" data-task-target="invalid"><div class="task-stat-name">无效图片</div><div class="task-stat-num">10</div></div>
+          </div>
+          <div class="image-task-grid">
+            <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">住宅装修</span><span class="draft-tag">原因：无可标注对象</span></div></article>
+            <article class="image-card"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">小型工程</span><span class="draft-tag">原因：非施工现场</span></div></article>
           </div>
         </section>
       </main></div>
@@ -138,6 +221,14 @@
         <section class="surface tabbar"><div class="tab">标注任务</div></section>
         <section class="proto-list-shell">
           <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><select class="control select-control"><option>草稿状态</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
+          <div class="task-stat-grid">
+            <div class="task-stat-card active" data-stat="all" data-task-target="all"><div class="task-stat-name">全部</div><div class="task-stat-num">0</div></div>
+            <div class="task-stat-card" data-stat="todo" data-task-target="todo"><div class="task-stat-name">待标注</div><div class="task-stat-num">0</div></div>
+            <div class="task-stat-card" data-stat="done" data-task-target="done"><div class="task-stat-name">已标注</div><div class="task-stat-num">0</div></div>
+            <div class="task-stat-card" data-stat="confirm" data-task-target="confirm"><div class="task-stat-name">待确认类别</div><div class="task-stat-num">0</div></div>
+            <div class="task-stat-card" data-stat="returned" data-task-target="returned"><div class="task-stat-name">质检退回</div><div class="task-stat-num">0</div></div>
+            <div class="task-stat-card" data-stat="invalid" data-task-target="invalid"><div class="task-stat-name">无效图片</div><div class="task-stat-num">0</div></div>
+          </div>
           <div class="empty-panel">未找到符合条件的图片，请调整筛选条件</div>
         </section>
       </main></div>
@@ -147,5 +238,14 @@
   <script src="./assets/prototype.js"></script>
   <script src="./assets/prototype-layout.js"></script>
   <script src="./assets/prototype-switcher.js"></script>
+  <script>
+    document.querySelectorAll("[data-task-target]").forEach((card) => {
+      card.addEventListener("click", () => {
+        const target = card.dataset.taskTarget;
+        const switchButton = document.querySelector(`[data-prototype-button="${target}"]`);
+        if (switchButton) switchButton.click();
+      });
+    });
+  </script>
 </body>
 </html>
