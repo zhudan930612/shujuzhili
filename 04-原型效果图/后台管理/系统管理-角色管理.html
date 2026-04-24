@@ -15,14 +15,16 @@
     .role-table col:nth-child(6) { width:12%; }
     .role-table col:nth-child(7) { width:7%; }
     .role-edit-panel { min-height:780px; padding:28px 48px 96px; }
-    .role-form-grid { display:grid; grid-template-columns:120px minmax(0, 1fr) 120px minmax(0, 1fr); gap:18px 20px; align-items:center; max-width:1480px; }
+    .role-form-grid { display:grid; grid-template-columns:120px minmax(0, 1fr) 120px minmax(0, 1fr); gap:18px 20px; align-items:start; max-width:1480px; }
+    .role-form-grid .field-label { padding-top:8px; }
     .role-form-grid .full-row { grid-column:2 / 5; }
     .role-filter .proto-cascader,
     .role-filter .proto-cascader-control,
     .role-form-grid .proto-cascader,
     .role-form-grid .proto-cascader-control { width:100%; }
-    .role-area-tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+    .role-area-tags { display:flex; flex-wrap:wrap; gap:6px 8px; margin-top:6px; }
     .role-area-tag { border:1px solid #d6e0ec; border-radius:4px; background:#f7fafc; color:#40556f; padding:4px 8px; font-size:12px; line-height:1.4; }
+    .role-area-tags + .subtle-note { margin-top:2px; line-height:1.45; }
     .role-required { color:var(--danger); margin-right:4px; }
     .permission-layout { display:block; }
     .permission-tree { width:200px; border:1px solid var(--line); background:#fff; padding:10px 0; }
