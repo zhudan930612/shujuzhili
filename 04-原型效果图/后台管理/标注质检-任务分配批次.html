@@ -80,7 +80,20 @@
                 </tbody>
               </table>
             </div>
-            <div class="proto-pagination"><span>共 18 条</span><span class="proto-page-size">10条/页</span><span class="proto-page-current">1</span><span>2</span><span>›</span></div>
+            <div class="proto-pagination">
+              <span>共 18 条</span>
+              <select class="control select-control proto-page-size-select">
+                <option selected>10条/页</option>
+                <option>20条/页</option>
+                <option>50条/页</option>
+              </select>
+              <span class="proto-page-arrow">‹</span>
+              <span class="proto-page-current">1</span>
+              <span>前往</span>
+              <input class="control proto-page-jump-input" type="text" value="1" />
+              <span>页</span>
+              <span class="proto-page-arrow">›</span>
+            </div>
           </div>
         </section>
       </main></div>

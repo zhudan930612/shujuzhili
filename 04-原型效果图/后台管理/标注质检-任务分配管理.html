@@ -21,7 +21,8 @@
     .assignment-stat-name { color: #5c7087; font-weight: 700; }
     .assignment-stat-num { color: #193b68; font-size: 24px; font-weight: 700; padding-right: 10px; }
     .assignment-filter { padding: 14px 28px 16px; border-top: 1px solid #eef3f8; }
-    .assignment-filter .control { min-width: 148px; }
+    .assignment-filter .control,
+    .assignment-filter .proto-cascader-control { min-width: 148px; }
     .assignment-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 18px 28px 10px; }
     .assignment-title { margin: 0; display: flex; align-items: center; gap: 12px; color: #223549; font-size: 16px; font-weight: 700; }
     .assignment-title::before { content: ""; width: 4px; height: 18px; border-radius: 999px; background: var(--brand); display: inline-block; }
@@ -32,8 +33,10 @@
     .assignment-card.selected::after { content: "✓"; position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 50%; background: var(--brand); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; }
     .assignment-card.disabled { opacity: 0.48; cursor: not-allowed; filter: grayscale(0.18); }
     .assignment-thumb { aspect-ratio: 1 / 1; background: #d7e1eb url("./img/biaozhu_img.png") center center / cover no-repeat; }
-    .assignment-card-body { padding: 12px 14px 14px; }
+    .assignment-card-body { padding: 12px 14px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .project-type { color: #243c58; font-weight: 700; }
+    .assignment-status-tag { display: inline-flex; height: 24px; align-items: center; padding: 0 8px; border: 1px solid #bfd7f5; background: #eef6ff; color: #2f6dbd; font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .assignment-status-tag.assigned { border-color: #cbe8d8; background: #f2fbf5; color: #168554; }
     .empty-panel { height: 470px; border: 1px dashed #ccd9e8; background: #fbfdff; display: flex; align-items: center; justify-content: center; color: #7a8aa0; font-weight: 700; box-shadow: var(--shadow); }
     .modal-stage { display: flex; }
     .modal.large { width: 920px; }
@@ -57,6 +60,8 @@
 <body>
   <div class="prototype-state-bar" data-prototype-switch data-prototype-default="browse">
     <button class="active" type="button" data-prototype-button="browse">浏览态</button>
+    <button type="button" data-prototype-button="todo-list">待分配卡片</button>
+    <button type="button" data-prototype-button="assigned-list">已分配卡片</button>
     <button type="button" data-prototype-button="create">创建批次态</button>
     <button type="button" data-prototype-button="modal">创建弹窗</button>
     <button type="button" data-prototype-button="success">创建成功</button>
@@ -74,16 +79,99 @@
           <div class="assignment-panel">
             <div class="assignment-stat-grid">
               <div class="assignment-stat-card active" data-stat="all" data-assignment-target="browse"><div class="assignment-stat-name">全部</div><div class="assignment-stat-num">128</div></div>
-              <div class="assignment-stat-card" data-stat="todo"><div class="assignment-stat-name">待分配</div><div class="assignment-stat-num">46</div></div>
-              <div class="assignment-stat-card" data-stat="assigned"><div class="assignment-stat-name">已分配</div><div class="assignment-stat-num">82</div></div>
+              <div class="assignment-stat-card" data-stat="todo" data-jump="todo-list"><div class="assignment-stat-name">待分配</div><div class="assignment-stat-num">46</div></div>
+              <div class="assignment-stat-card" data-stat="assigned" data-jump="assigned-list"><div class="assignment-stat-name">已分配</div><div class="assignment-stat-num">82</div></div>
             </div>
             <div class="proto-filter-bar assignment-filter">
               <select class="control select-control"><option>项目类型</option><option>住宅装修</option><option>小型工程</option><option>零星作业</option></select>
-              <input class="control" value="" placeholder="项目名称" />
-              <input class="control" value="" placeholder="巡查记录" />
-              <input class="control" value="" placeholder="上传时间" />
-              <select class="control select-control"><option>行政区域</option><option>东莞市 / 松山湖</option></select>
-              <select class="control select-control"><option>图片来源</option><option>App 上传</option><option>后台上传</option></select>
+              <div class="date-range-picker">
+                <input class="control date-range-control" type="text" value="上传时间" readonly />
+                <div class="date-range-panel">
+                  <div class="date-range-title">选择上传时间</div>
+                  <div class="date-range-fields">
+                    <input class="control" type="date" value="2026-04-01" data-role="start" />
+                    <input class="control" type="date" value="2026-04-24" data-role="end" />
+                  </div>
+                  <div class="date-range-actions">
+                    <button class="btn btn-ghost" type="button" data-action="cancel">取消</button>
+                    <button class="btn btn-primary" type="button" data-action="apply">确定</button>
+                  </div>
+                </div>
+              </div>
+              <div class="proto-cascader" data-proto-cascader data-allow-any-level="true" data-cascader-depth="5" data-placeholder="行政区域">
+                <button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">行政区域</span><span class="proto-cascader-arrow">▾</span></button>
+                <div class="proto-cascader-panel"></div>
+              </div>
+              <button class="btn btn-primary">查询</button>
+              <button class="btn btn-ghost">重置</button>
+            </div>
+          </div>
+          <div class="assignment-panel">
+            <div class="assignment-head">
+              <h3 class="assignment-title">图片数据列表</h3>
+              <div class="assignment-tools">
+                <button class="btn btn-primary" type="button" disabled>创建任务批次</button>
+                <a class="btn btn-ghost" href="./标注质检-任务分配批次.html">查看批次</a>
+              </div>
+            </div>
+            <div class="assignment-grid">
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">住宅装修</span><span class="assignment-status-tag">待分配</span></div></article>
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">小型工程</span><span class="assignment-status-tag">待分配</span></div></article>
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">零星作业</span><span class="assignment-status-tag assigned">已分配</span></div></article>
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">小型工程</span><span class="assignment-status-tag">待分配</span></div></article>
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">住宅装修</span><span class="assignment-status-tag assigned">已分配</span></div></article>
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">零星作业</span><span class="assignment-status-tag">待分配</span></div></article>
+            </div>
+            <div class="proto-pagination">
+              <span>共 128 张</span>
+              <select class="control select-control proto-page-size-select">
+                <option selected>24条/页</option>
+                <option>48条/页</option>
+                <option>96条/页</option>
+              </select>
+              <span class="proto-page-arrow">‹</span>
+              <span class="proto-page-current">1</span>
+              <span>前往</span>
+              <input class="control proto-page-jump-input" type="text" value="1" />
+              <span>页</span>
+              <span class="proto-page-arrow">›</span>
+            </div>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="todo-list">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-assignment">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 任务分配管理</div>
+        <section class="surface tabbar"><div class="tab">标注任务</div></section>
+        <section class="assignment-shell">
+          <div class="assignment-panel">
+            <div class="assignment-stat-grid">
+              <div class="assignment-stat-card" data-stat="all" data-jump="browse"><div class="assignment-stat-name">全部</div><div class="assignment-stat-num">128</div></div>
+              <div class="assignment-stat-card active" data-stat="todo"><div class="assignment-stat-name">待分配</div><div class="assignment-stat-num">46</div></div>
+              <div class="assignment-stat-card" data-stat="assigned" data-jump="assigned-list"><div class="assignment-stat-name">已分配</div><div class="assignment-stat-num">82</div></div>
+            </div>
+            <div class="proto-filter-bar assignment-filter">
+              <select class="control select-control"><option>项目类型</option><option>住宅装修</option><option>小型工程</option><option>零星作业</option></select>
+              <div class="date-range-picker">
+                <input class="control date-range-control" type="text" value="上传时间" readonly />
+                <div class="date-range-panel">
+                  <div class="date-range-title">选择上传时间</div>
+                  <div class="date-range-fields">
+                    <input class="control" type="date" value="2026-04-01" data-role="start" />
+                    <input class="control" type="date" value="2026-04-24" data-role="end" />
+                  </div>
+                  <div class="date-range-actions"><button class="btn btn-ghost" type="button" data-action="cancel">取消</button><button class="btn btn-primary" type="button" data-action="apply">确定</button></div>
+                </div>
+              </div>
+              <div class="proto-cascader" data-proto-cascader data-allow-any-level="true" data-cascader-depth="5" data-placeholder="行政区域">
+                <button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">行政区域</span><span class="proto-cascader-arrow">▾</span></button>
+                <div class="proto-cascader-panel"></div>
+              </div>
               <button class="btn btn-primary">查询</button>
               <button class="btn btn-ghost">重置</button>
             </div>
@@ -97,14 +185,76 @@
               </div>
             </div>
             <div class="assignment-grid">
-              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">住宅装修</span></div></article>
-              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">小型工程</span></div></article>
-              <article class="assignment-card disabled"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">零星作业</span></div></article>
-              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">小型工程</span></div></article>
-              <article class="assignment-card disabled"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">住宅装修</span></div></article>
-              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">零星作业</span></div></article>
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">住宅装修</span><span class="assignment-status-tag">待分配</span></div></article>
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">小型工程</span><span class="assignment-status-tag">待分配</span></div></article>
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">零星作业</span><span class="assignment-status-tag">待分配</span></div></article>
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">小型工程</span><span class="assignment-status-tag">待分配</span></div></article>
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">住宅装修</span><span class="assignment-status-tag">待分配</span></div></article>
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">零星作业</span><span class="assignment-status-tag">待分配</span></div></article>
             </div>
-            <div class="proto-pagination"><span>共 128 张</span><span class="proto-page-size">24条/页</span><span class="proto-page-current">1</span><span>2</span><span>3</span><span>›</span></div>
+            <div class="proto-pagination">
+              <span>共 46 张</span>
+              <select class="control select-control proto-page-size-select"><option selected>24条/页</option><option>48条/页</option><option>96条/页</option></select>
+              <span class="proto-page-arrow">‹</span><span class="proto-page-current">1</span><span>前往</span><input class="control proto-page-jump-input" type="text" value="1" /><span>页</span><span class="proto-page-arrow">›</span>
+            </div>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="assigned-list">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-assignment">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 任务分配管理</div>
+        <section class="surface tabbar"><div class="tab">标注任务</div></section>
+        <section class="assignment-shell">
+          <div class="assignment-panel">
+            <div class="assignment-stat-grid">
+              <div class="assignment-stat-card" data-stat="all" data-jump="browse"><div class="assignment-stat-name">全部</div><div class="assignment-stat-num">128</div></div>
+              <div class="assignment-stat-card" data-stat="todo" data-jump="todo-list"><div class="assignment-stat-name">待分配</div><div class="assignment-stat-num">46</div></div>
+              <div class="assignment-stat-card active" data-stat="assigned"><div class="assignment-stat-name">已分配</div><div class="assignment-stat-num">82</div></div>
+            </div>
+            <div class="proto-filter-bar assignment-filter">
+              <select class="control select-control"><option>项目类型</option><option>住宅装修</option><option>小型工程</option><option>零星作业</option></select>
+              <div class="date-range-picker">
+                <input class="control date-range-control" type="text" value="上传时间" readonly />
+                <div class="date-range-panel">
+                  <div class="date-range-title">选择上传时间</div>
+                  <div class="date-range-fields"><input class="control" type="date" value="2026-04-01" data-role="start" /><input class="control" type="date" value="2026-04-24" data-role="end" /></div>
+                  <div class="date-range-actions"><button class="btn btn-ghost" type="button" data-action="cancel">取消</button><button class="btn btn-primary" type="button" data-action="apply">确定</button></div>
+                </div>
+              </div>
+              <div class="proto-cascader" data-proto-cascader data-allow-any-level="true" data-cascader-depth="5" data-placeholder="行政区域">
+                <button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">行政区域</span><span class="proto-cascader-arrow">▾</span></button>
+                <div class="proto-cascader-panel"></div>
+              </div>
+              <button class="btn btn-primary">查询</button>
+              <button class="btn btn-ghost">重置</button>
+            </div>
+          </div>
+          <div class="assignment-panel">
+            <div class="assignment-head">
+              <h3 class="assignment-title">图片数据列表</h3>
+              <div class="assignment-tools">
+                <button class="btn btn-primary" type="button" disabled>创建任务批次</button>
+                <a class="btn btn-ghost" href="./标注质检-任务分配批次.html">查看批次</a>
+              </div>
+            </div>
+            <div class="assignment-grid">
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">零星作业</span><span class="assignment-status-tag assigned">已分配</span></div></article>
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">住宅装修</span><span class="assignment-status-tag assigned">已分配</span></div></article>
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">小型工程</span><span class="assignment-status-tag assigned">已分配</span></div></article>
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">住宅装修</span><span class="assignment-status-tag assigned">已分配</span></div></article>
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">零星作业</span><span class="assignment-status-tag assigned">已分配</span></div></article>
+              <article class="assignment-card" data-jump="preview"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">小型工程</span><span class="assignment-status-tag assigned">已分配</span></div></article>
+            </div>
+            <div class="proto-pagination">
+              <span>共 82 张</span>
+              <select class="control select-control proto-page-size-select"><option selected>24条/页</option><option>48条/页</option><option>96条/页</option></select>
+              <span class="proto-page-arrow">‹</span><span class="proto-page-current">1</span><span>前往</span><input class="control proto-page-jump-input" type="text" value="1" /><span>页</span><span class="proto-page-arrow">›</span>
+            </div>
           </div>
         </section>
       </main></div>
@@ -120,15 +270,30 @@
         <section class="assignment-shell">
           <div class="assignment-panel">
             <div class="assignment-stat-grid">
-              <div class="assignment-stat-card active" data-stat="all"><div class="assignment-stat-name">全部</div><div class="assignment-stat-num">128</div></div>
-              <div class="assignment-stat-card" data-stat="todo"><div class="assignment-stat-name">待分配</div><div class="assignment-stat-num">46</div></div>
+              <div class="assignment-stat-card" data-stat="all" data-jump="browse"><div class="assignment-stat-name">全部</div><div class="assignment-stat-num">128</div></div>
+              <div class="assignment-stat-card active" data-stat="todo" data-jump="todo-list"><div class="assignment-stat-name">待分配</div><div class="assignment-stat-num">46</div></div>
               <div class="assignment-stat-card" data-stat="assigned"><div class="assignment-stat-name">已分配</div><div class="assignment-stat-num">82</div></div>
             </div>
             <div class="proto-filter-bar assignment-filter">
-              <select class="control select-control"><option>项目类型</option></select>
-              <input class="control" placeholder="项目名称" />
-              <input class="control" placeholder="巡查记录" />
-              <input class="control" placeholder="上传时间" />
+              <select class="control select-control"><option>项目类型</option><option>住宅装修</option><option>小型工程</option><option>零星作业</option></select>
+              <div class="date-range-picker">
+                <input class="control date-range-control" type="text" value="上传时间" readonly />
+                <div class="date-range-panel">
+                  <div class="date-range-title">选择上传时间</div>
+                  <div class="date-range-fields">
+                    <input class="control" type="date" value="2026-04-01" data-role="start" />
+                    <input class="control" type="date" value="2026-04-24" data-role="end" />
+                  </div>
+                  <div class="date-range-actions">
+                    <button class="btn btn-ghost" type="button" data-action="cancel">取消</button>
+                    <button class="btn btn-primary" type="button" data-action="apply">确定</button>
+                  </div>
+                </div>
+              </div>
+              <div class="proto-cascader" data-proto-cascader data-allow-any-level="true" data-cascader-depth="5" data-placeholder="行政区域">
+                <button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">行政区域</span><span class="proto-cascader-arrow">▾</span></button>
+                <div class="proto-cascader-panel"></div>
+              </div>
               <button class="btn btn-primary">查询</button>
               <button class="btn btn-ghost">重置</button>
             </div>
