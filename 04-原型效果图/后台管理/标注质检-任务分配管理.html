@@ -55,6 +55,7 @@
     .assignment-create-form .proto-select { min-height: 38px; }
     .assignment-create-form .proto-input,
     .assignment-create-form .proto-select,
+    .assignment-create-form .proto-cascader,
     .assignment-create-readonly { max-width: 420px; }
     .assignment-create-readonly { min-height: 38px; display: inline-flex; align-items: center; padding: 0 12px; border: 1px solid #d7dfe9; background: linear-gradient(180deg, #ffffff 0%, #f9fbfe 100%); color: #35475d; box-shadow: inset 0 1px 0 rgba(255,255,255,0.85); }
     .assignment-create-inline { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -403,10 +404,10 @@
                         </div>
                         <div class="proto-field-row">
                           <div class="proto-field-label">管理区域</div>
-                          <select class="proto-select">
-                            <option selected>请选择</option>
-                            <option>东莞市 / 松山湖</option>
-                          </select>
+                          <div class="proto-cascader" data-proto-cascader data-allow-any-level="true" data-cascader-depth="5" data-placeholder="请选择">
+                            <button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">请选择</span><span class="proto-cascader-arrow">▾</span></button>
+                            <div class="proto-cascader-panel"></div>
+                          </div>
                         </div>
                         <div class="proto-field-row">
                           <div class="proto-field-label">搜索人员</div>
