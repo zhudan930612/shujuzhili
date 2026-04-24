@@ -40,16 +40,68 @@
     .assignment-status-tag.assigned { border-color: #cbe8d8; background: #f2fbf5; color: #168554; }
     .empty-panel { height: 470px; border: 1px dashed #ccd9e8; background: #fbfdff; display: flex; align-items: center; justify-content: center; color: #7a8aa0; font-weight: 700; box-shadow: var(--shadow); }
     .modal-stage { display: flex; }
-    .modal.large { width: 920px; }
-    .batch-modal-body { padding: 18px; display: grid; gap: 16px; }
-    .batch-row { display: grid; grid-template-columns: 126px 1fr; gap: 12px; align-items: center; }
-    .batch-label { color: #516477; font-weight: 700; }
+    .assignment-create-stage { position: relative; min-height: 100vh; }
+    .assignment-create-stage .modal { width: 720px; max-width: calc(100% - 48px); }
+    .modal.large { width: 980px; }
+    .modal-head h3 { margin: 0; font-size: 18px; }
+    .modal-close { width: 30px; height: 30px; border: 1px solid #d8e2ee; border-radius: 50%; background: #f8fbff; color: #6e8095; font-size: 18px; line-height: 1; cursor: pointer; }
+    .assignment-create-head-left { display: flex; align-items: center; gap: 12px; }
+    .assignment-create-note { padding-left: 12px; border-left: 1px solid #d8e1ef; color: #64748b; font-size: 13px; font-weight: 400; line-height: 1.5; }
+    .batch-modal-body { padding: 22px 24px; display: grid; gap: 18px; background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%); }
+    .assignment-create-form { display: grid; gap: 14px; max-width: 920px; }
+    .assignment-create-form .proto-field-row { grid-template-columns: 108px minmax(0, 1fr); gap: 12px 18px; align-items: start; }
+    .assignment-create-form .proto-field-label { padding-top: 9px; font-weight: 700; color: #516477; letter-spacing: 0.2px; }
+    .assignment-create-form .proto-input,
+    .assignment-create-form .proto-select { min-height: 38px; }
+    .assignment-create-form .proto-input,
+    .assignment-create-form .proto-select,
+    .assignment-create-readonly { max-width: 420px; }
+    .assignment-create-readonly { min-height: 38px; display: inline-flex; align-items: center; padding: 0 12px; border: 1px solid #d7dfe9; background: linear-gradient(180deg, #ffffff 0%, #f9fbfe 100%); color: #35475d; box-shadow: inset 0 1px 0 rgba(255,255,255,0.85); }
+    .assignment-create-inline { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .assignment-create-inline .proto-select { width: 240px; min-width: 240px; }
+    .assignment-tag-box { min-height: 38px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 0; border: 0; background: transparent; box-shadow: none; }
+    .assignment-tag-box.people-box { width: 420px; max-width: 420px; }
+    .assignment-create-main { display: grid; gap: 18px; }
+    .assignment-create-group { display: grid; gap: 14px; padding: 16px 18px; border: 1px solid #dce6f1; background: #fff; box-shadow: 0 10px 20px rgba(18,51,95,0.04); }
+    .assignment-create-group-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid #eef3f8; }
+    .assignment-create-group-title { margin: 0; color: #223549; font-size: 15px; font-weight: 700; }
+    .assignment-create-group-note { color: #728397; font-size: 13px; }
+    .assignment-create-qc-list { display: grid; gap: 12px; }
+    .assignment-create-qc-row { display: grid; grid-template-columns: 108px minmax(0, 1fr); gap: 12px 18px; align-items: start; }
+    .assignment-create-qc-control { display: flex; align-items: center; gap: 10px; flex-wrap: nowrap; }
+    .assignment-create-qc-control .proto-select { width: 240px; min-width: 240px; }
+    .batch-modal-hero { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; padding: 16px 18px; border: 1px solid #dce7f3; background: linear-gradient(135deg, #f7fbff 0%, #eef6ff 100%); }
+    .batch-hero-title { margin: 0 0 6px; color: #173b68; font-size: 18px; font-weight: 700; }
+    .batch-hero-note { margin: 0; color: #63768a; line-height: 1.6; }
+    .batch-hero-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .batch-hero-stat { padding: 12px 14px; border: 1px solid #d4e3f5; background: rgba(255,255,255,0.84); }
+    .batch-hero-stat .num { display: block; color: #1a4f8f; font-size: 22px; font-weight: 700; line-height: 1.1; }
+    .batch-hero-stat .label { display: block; margin-top: 4px; color: #6f8195; font-size: 12px; }
+    .batch-section { border: 1px solid #e0e8f1; background: #fff; box-shadow: 0 10px 24px rgba(17, 49, 91, 0.05); }
+    .batch-section-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 18px; border-bottom: 1px solid #eef3f8; }
+    .batch-section-title { margin: 0; color: #223549; font-size: 15px; font-weight: 700; }
+    .batch-section-note { color: #728397; font-size: 13px; }
+    .batch-section-body { padding: 18px; display: grid; gap: 16px; }
+    .batch-row { display: grid; grid-template-columns: 126px minmax(0, 1fr); gap: 12px; align-items: start; }
+    .batch-label { padding-top: 8px; color: #516477; font-weight: 700; }
+    .batch-value-card { min-height: 38px; display: flex; align-items: center; padding: 0 12px; border: 1px solid #d8e2ee; background: #f8fbff; color: #2d455f; font-weight: 600; }
     .batch-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-    .person-tag { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border: 1px solid #cfe0f6; background: #f7fbff; color: #2c5cab; font-weight: 700; font-size: 13px; }
-    .person-tag button { border: 0; background: transparent; color: #7a8898; cursor: pointer; font-weight: 700; }
-    .qc-assign-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-    .qc-assign-card { border: 1px solid #dce6f1; background: #fbfdff; padding: 12px; display: grid; gap: 10px; }
-    .qc-assign-title { font-weight: 700; color: #223549; }
+    .person-tag { display: inline-flex; align-items: center; gap: 8px; padding: 7px 10px; border: 1px solid #cfe0f6; background: linear-gradient(180deg, #fbfdff 0%, #f1f7ff 100%); color: #24548f; font-weight: 700; font-size: 13px; }
+    .person-tag button { width: 18px; height: 18px; border: 0; border-radius: 50%; background: #dfeaf8; color: #6b7f94; cursor: pointer; font-weight: 700; line-height: 1; padding: 0; }
+    .batch-helper { color: #7a8aa0; font-size: 12px; line-height: 1.6; }
+    .batch-row .control,
+    .batch-row .proto-input,
+    .batch-row .proto-select { min-height: 38px; }
+    .batch-inline-tools { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .batch-auto-btn { display: inline-flex; align-items: center; gap: 8px; padding: 0 14px; height: 38px; border: 1px solid #b8d4f3; background: linear-gradient(180deg, #f6fbff 0%, #ebf4ff 100%); color: #1f5fa8; font-weight: 700; }
+    .qc-assign-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .qc-assign-card { border: 1px solid #dce6f1; background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%); padding: 14px; display: grid; gap: 10px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.8); }
+    .qc-assign-title { display: flex; align-items: center; gap: 8px; font-weight: 700; color: #223549; }
+    .qc-assign-title::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--brand); }
+    .qc-assign-card .proto-select,
+    .qc-assign-card .control.select-control { width: 100%; }
+    .assignment-create-form .person-tag { min-height: 26px; }
+    .assignment-create-qc-row .proto-field-label { padding-top: 9px; font-weight: 700; color: #516477; letter-spacing: 0.2px; }
     .preview-modal .preview-image { height: 520px; background: #d7e1eb url("./img/biaozhu_img.png") center center / contain no-repeat; border: 1px solid #dce6f1; }
     .preview-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; color: #4f6377; }
   </style>
@@ -319,30 +371,105 @@
 
   <section class="prototype-stage" data-prototype-panel="modal">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-assignment">
-      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
-        <div class="crumb">☰ 标注质检 〉 任务分配管理</div>
-        <section class="surface tabbar"><div class="tab">标注任务</div></section>
-        <section class="assignment-shell"><div class="assignment-panel"><div class="assignment-head"><h3 class="assignment-title">图片数据列表</h3></div><div class="assignment-grid"><article class="assignment-card selected"><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">住宅装修</span></div></article></div></div></section>
-        <div class="modal-stage">
-          <div class="modal large">
-            <div class="modal-head"><h3>创建任务批次</h3><button class="modal-close" type="button">×</button></div>
-            <div class="batch-modal-body">
-              <div class="batch-row"><div class="batch-label">批次名称</div><input class="control" value="202604241530" /></div>
-              <div class="batch-row"><div class="batch-label">已选图片</div><div>12 张</div></div>
-              <div class="batch-row"><div class="batch-label">管理区域</div><select class="control select-control"><option>东莞市 / 松山湖</option></select></div>
-              <div class="batch-row"><div class="batch-label">搜索人员</div><select class="control select-control"><option>姓名/账号多选</option><option>张三 zhangsan</option><option>李四 lisi</option></select></div>
-              <div class="batch-row"><div class="batch-label">已选人员</div><div class="batch-tags"><span class="person-tag">张三 <button>×</button></span><span class="person-tag">李四 <button>×</button></span><span class="person-tag">王五 <button>×</button></span></div></div>
-              <div class="batch-row"><div class="batch-label">质检人员</div><button class="btn btn-primary" type="button">自动分配质检人员</button></div>
-              <div class="qc-assign-grid">
-                <div class="qc-assign-card"><div class="qc-assign-title">一检人员</div><select class="control select-control"><option>姓名/账号多选</option></select><div class="batch-tags"><span class="person-tag">赵六 <button>×</button></span></div></div>
-                <div class="qc-assign-card"><div class="qc-assign-title">二检人员</div><select class="control select-control"><option>姓名/账号多选</option></select><div class="batch-tags"><span class="person-tag">钱七 <button>×</button></span></div></div>
-                <div class="qc-assign-card"><div class="qc-assign-title">三检人员</div><select class="control select-control"><option>姓名/账号多选</option></select><div class="batch-tags"><span class="person-tag">孙八 <button>×</button></span></div></div>
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <div class="crumb">☰ 标注质检 〉 任务分配管理</div>
+          <section class="content-panel">
+            <section class="modal-stage assignment-create-stage">
+              <div class="modal xlarge">
+                <div class="modal-head">
+                  <div class="assignment-create-head-left">
+                    <span>创建任务批次</span>
+                  </div>
+                  <span>×</span>
+                </div>
+                <div class="modal-body batch-modal-body">
+                  <div class="assignment-create-main">
+                    <section class="assignment-create-group">
+                      <div class="assignment-create-group-head">
+                        <h4 class="assignment-create-group-title">批次信息</h4>
+                        <span class="assignment-create-group-note">先确认批次名称、图片数量和标注人员范围。</span>
+                      </div>
+                      <div class="assignment-create-form">
+                        <div class="proto-field-row">
+                          <div class="proto-field-label">批次名称</div>
+                          <input class="proto-input" type="text" value="202604241530" />
+                        </div>
+                        <div class="proto-field-row">
+                          <div class="proto-field-label">已选图片</div>
+                          <div class="assignment-create-readonly">12 张</div>
+                        </div>
+                        <div class="proto-field-row">
+                          <div class="proto-field-label">管理区域</div>
+                          <select class="proto-select">
+                            <option selected>请选择</option>
+                            <option>东莞市 / 松山湖</option>
+                          </select>
+                        </div>
+                        <div class="proto-field-row">
+                          <div class="proto-field-label">搜索人员</div>
+                          <select class="proto-select">
+                            <option selected>姓名/账号多选</option>
+                            <option>张三 zhangsan</option>
+                            <option>李四 lisi</option>
+                          </select>
+                        </div>
+                        <div class="proto-field-row">
+                          <div class="proto-field-label">已选人员 *</div>
+                          <div class="assignment-tag-box people-box batch-tags">
+                            <span class="person-tag">张三 <button>×</button></span>
+                            <span class="person-tag">李四 <button>×</button></span>
+                            <span class="person-tag">王五 <button>×</button></span>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+
+                    <section class="assignment-create-group">
+                      <div class="assignment-create-group-head">
+                        <h4 class="assignment-create-group-title">质检配置</h4>
+                        <div style="display:flex;align-items:center;gap:12px;">
+                          <span class="assignment-create-group-note">支持一键自动分配，也支持逐轮手动调整。</span>
+                          <button class="batch-auto-btn" type="button">自动分配</button>
+                        </div>
+                      </div>
+                      <div class="assignment-create-qc-list">
+                        <div class="assignment-create-qc-row">
+                          <div class="proto-field-label">一检人员 *</div>
+                          <div class="assignment-create-qc-control">
+                            <select class="proto-select">
+                              <option>赵六</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="assignment-create-qc-row">
+                          <div class="proto-field-label">二检人员 *</div>
+                          <div class="assignment-create-qc-control">
+                            <select class="proto-select">
+                              <option>钱七</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="assignment-create-qc-row">
+                          <div class="proto-field-label">三检人员 *</div>
+                          <div class="assignment-create-qc-control">
+                            <select class="proto-select">
+                              <option>孙八</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </div>
+                <div class="modal-foot"><button class="btn btn-ghost" type="button" data-jump="create">取消</button><button class="btn btn-primary" type="button" data-jump="success">确认创建</button></div>
               </div>
-            </div>
-            <div class="modal-foot"><button class="btn btn-ghost" type="button" data-jump="create">取消</button><button class="btn btn-primary" type="button" data-jump="success">确认创建</button></div>
-          </div>
-        </div>
-      </main></div>
+            </section>
+          </section>
+        </main>
+      </div>
     </div>
   </section>
 
