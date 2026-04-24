@@ -21,6 +21,7 @@
       { key: "knowledge", label: "◫ 知识库管理" },
     ],
     annotation: [
+      { key: "annotation-assignment", label: "▥ 任务分配" },
       { key: "annotation-task", label: "▧ 标注任务" },
       { key: "annotation-qc", label: "▤ 质检任务" },
       { key: "quality-pool", label: "▣ 高质量数据池" },
