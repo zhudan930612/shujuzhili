@@ -8,9 +8,9 @@ stateDiagram-v2
   MultiAnnotationAssigned: 同一图片分配给多名标注人员
   AnnotationTodo: 个人任务待标注
   Annotating: 标注人员标注中
-  AnnotationDraft: 标注草稿
   AnnotationSubmitted: 个人标注任务已提交
   AnnotationInvalid: 个人任务提交无效图片
+  AnnotationReturned: 质检退回
   AllAnnotationSubmitted: 是否全部标注完成
   HasValidAnnotation: 是否存在正常标注
   AnnotationMerged: 多人标注结果汇总
@@ -22,14 +22,11 @@ stateDiagram-v2
   BatchCreated --> MultiAnnotationAssigned: 为同一图片生成多名标注人员任务
   MultiAnnotationAssigned --> AnnotationTodo: 生成多条个人标注任务
   AnnotationTodo --> Annotating: 标注人员开始标注
-  Annotating --> AnnotationDraft: 保存草稿
-  AnnotationDraft --> Annotating: 继续编辑
   Annotating --> AnnotationSubmitted: 提交个人标注成果
   Annotating --> AnnotationInvalid: 标记无效图片
-  AnnotationDraft --> AnnotationSubmitted: 草稿补全后提交
   AnnotationSubmitted --> AllAnnotationSubmitted: 记录个人提交
   AnnotationInvalid --> AllAnnotationSubmitted: 记录个人无效提交
-  AllAnnotationSubmitted --> AnnotationTodo: 未全部提交，继续等待其他标注人员
+  AnnotationReturned --> Annotating: 标注人员重新处理
   AllAnnotationSubmitted --> HasValidAnnotation: 全部提交完成
   HasValidAnnotation --> AnnotationMerged: 至少一条正常标注
   HasValidAnnotation --> AllInvalidSample: 全部为无效提交
@@ -40,77 +37,37 @@ stateDiagram-v2
     [*] --> QC1Waiting
 
     QC1Waiting: 待一检
-    QC1Doing: 一检中
-    QC1Scored: 一检已评分
     QC1Passed: 一检通过
     QC1Returned: 一检退回标注任务
-    QC1ReturnWaiting: 一检等待返工完成
-    QC1ReworkSubmitted: 被退回任务全部重新提交
-    QC1ReturnedByQC2: 二检退回
     QC1Escalated: 一检提交二检
 
-    QC1Waiting --> QC1Doing: 一检员开始检查
-    QC1Doing --> QC1Scored: 查看多人标注并采纳对象，检查漏标 / 误标 / 框选 / 类别并评分
-    QC1Scored --> QC1Returned: 退回指定或全部标注任务
-    QC1Returned --> QC1ReturnWaiting: 存在待返工任务，不能提交二检
-    QC1ReturnWaiting --> QC1ReworkSubmitted: 全部被退回任务重新提交
-    QC1ReworkSubmitted --> QC1Waiting: 重新进入一检
-    QC1ReturnedByQC2 --> QC1Waiting: 一检重新复核
-    QC1Scored --> QC1Passed: 一检通过
+    QC1Waiting --> QC1Returned: 检查多人标注并评分，不合格则退回指定或全部标注任务
+    QC1Waiting --> QC1Passed: 采纳对象并评分后通过
     QC1Passed --> QC1Escalated: 提交二检
 
     QC2Waiting: 待二检
-    QC2Doing: 二检中
-    QC2Scored: 二检已评分
     QC2Passed: 二检通过
-    QC2Returned: 二检退回一检复核
+    QC2Returned: 二检退回
     QC2Escalated: 二检提交三检
 
     QC1Escalated --> QC2Waiting: 进入二检队列
-    QC2Waiting --> QC2Doing: 二检员开始复核
-    QC2Doing --> QC2Scored: 整图复核一检结果，不逐项标记，不重新采纳
-    QC2Scored --> QC2Passed: 二检通过
+    QC2Waiting --> QC2Passed: 整图复核一检结果并评分，通过
     QC2Passed --> QC2Escalated: 提交三检
-    QC2Scored --> QC2Returned: 全部退回一检复核
+    QC2Waiting --> QC2Returned: 整图复核一检结果并评分，退回一检复核
 
     QC3Waiting: 待三检
-    QC3Doing: 三检中
-    QC3Scored: 三检已评分
     QC3Passed: 三检通过
     QC3NoPool: 三检不入池
 
     QC2Escalated --> QC3Waiting: 进入三检队列
-    QC3Waiting --> QC3Doing: 终审员开始仲裁
-    QC3Doing --> QC3Scored: 终审二检通过结果，不直接修改标注
-    QC3Scored --> QC3NoPool: 不入池
-    QC3Scored --> QC3Passed: 终审通过
+    QC3Waiting --> QC3NoPool: 终审二检通过结果并评分，不入池
+    QC3Waiting --> QC3Passed: 终审二检通过结果并评分，通过
   }
 
   QCWaiting --> QC1Waiting: 生成质检任务
 
-  QC1Returned --> AnnotationReturned: 生成一检退回记录
-  QC2Returned --> QC1ReturnedByQC2: 回到一检复核
-
-  state "退回返工状态" as ReturnFlow {
-    AnnotationReturned: 个人任务质检退回
-    ReturnReasonRecorded: 已记录退回原因
-    ReworkAssigned: 返工已分配
-    ReworkingPersonal: 标注人员返工中
-    ReworkDraftPersonal: 返工草稿
-    ReworkSubmittedPersonal: 返工已提交
-    ReworkCounted: 已累计返工次数与问题类型
-
-    AnnotationReturned --> ReturnReasonRecorded: 记录退回轮次 / 原因 / 责任标注人
-    ReturnReasonRecorded --> ReworkAssigned: 分配给原标注员或指定标注员
-    ReworkAssigned --> ReworkingPersonal: 开始返工
-    ReworkingPersonal --> ReworkDraftPersonal: 保存返工草稿
-    ReworkDraftPersonal --> ReworkingPersonal: 继续返工
-    ReworkingPersonal --> ReworkSubmittedPersonal: 重新提交
-    ReworkDraftPersonal --> ReworkSubmittedPersonal: 草稿补全后重新提交
-    ReworkSubmittedPersonal --> ReworkCounted: 记录返工次数和错误类型
-  }
-
-  ReworkCounted --> QC1ReturnWaiting: 记录返工提交，等待全部返工完成
+  QC1Returned --> AnnotationReturned: 回到被退回个人任务
+  QC2Returned --> QC1Waiting: 回到一检复核
 
   QC3Passed --> TrustedResult: 终审通过标注结果
   QC3NoPool --> SampleNoPool: 样本不入池
@@ -144,6 +101,6 @@ stateDiagram-v2
 
   classDef listStatus fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
   class AnnotationTodo,AnnotationSubmitted,AnnotationInvalid,AnnotationReturned listStatus
-  class QC1Waiting,QC1Passed,QC1Returned,QC1ReturnedByQC2 listStatus
+  class QC1Waiting,QC1Passed,QC1Returned listStatus
   class QC2Waiting,QC2Passed,QC2Returned listStatus
   class QC3Waiting,QC3Passed,QC3NoPool listStatus
