@@ -104,6 +104,20 @@
     .assignment-create-form .person-tag { min-height: 26px; }
     .assignment-create-qc-row .proto-field-label { padding-top: 9px; font-weight: 700; color: #516477; letter-spacing: 0.2px; }
     .preview-modal .preview-image { height: 520px; background: #d7e1eb url("./img/biaozhu_img.png") center center / contain no-repeat; border: 1px solid #dce6f1; }
+
+    /* 新布局：人员分配双栏 */
+    .assign-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .assign-col { display: flex; flex-direction: column; gap: 14px; }
+    .assign-col-title { margin: 0 0 2px; color: #223549; font-size: 14px; font-weight: 700; }
+    .assign-col-title .sub { color: #8a9bb0; font-weight: 400; font-size: 12px; margin-left: 6px; }
+    .assign-col-divider { height: 1px; background: #eef3f8; margin: 4px 0; }
+    .assign-col .proto-field-row { grid-template-columns: 80px minmax(0, 1fr); gap: 10px 14px; }
+    .assign-col .proto-field-label { padding-top: 9px; font-weight: 700; color: #516477; font-size: 13px; letter-spacing: 0.2px; }
+    .assign-col .proto-select, .assign-col .proto-cascader-control { min-height: 36px; }
+    .assign-selected-note { color: #5f7f9e; font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+    .batch-info-compact { display: grid; grid-template-columns: 108px minmax(0, 1fr); gap: 14px 18px; align-items: start; max-width: 560px; }
+    .batch-info-compact .proto-field-label { padding-top: 9px; font-weight: 700; color: #516477; letter-spacing: 0.2px; }
+    .batch-info-compact .assignment-create-readonly { max-width: 420px; }
     .preview-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; color: #4f6377; }
   </style>
 </head>
@@ -388,74 +402,66 @@
                 </div>
                 <div class="modal-body batch-modal-body">
                   <div class="assignment-create-main">
+                    <!-- 批次信息：精简为两行 -->
+                    <div class="batch-info-compact">
+                      <div class="proto-field-label">批次名称</div>
+                      <input class="proto-input" type="text" value="202604241530" />
+                      <div class="proto-field-label">已选图片</div>
+                      <div class="assignment-create-readonly">12 张</div>
+                    </div>
+
+                    <!-- 人员分配：双栏 -->
                     <section class="assignment-create-group">
                       <div class="assignment-create-group-head">
-                        <h4 class="assignment-create-group-title">批次信息</h4>
-                        <span class="assignment-create-group-note">先确认批次名称、图片数量和标注人员范围。</span>
+                        <h4 class="assignment-create-group-title">人员分配</h4>
+                        <button class="batch-auto-btn" type="button">自动分配</button>
                       </div>
-                      <div class="assignment-create-form">
-                        <div class="proto-field-row">
-                          <div class="proto-field-label">批次名称</div>
-                          <input class="proto-input" type="text" value="202604241530" />
-                        </div>
-                        <div class="proto-field-row">
-                          <div class="proto-field-label">已选图片</div>
-                          <div class="assignment-create-readonly">12 张</div>
-                        </div>
-                        <div class="proto-field-row">
-                          <div class="proto-field-label">管理区域</div>
-                          <div class="proto-cascader" data-proto-cascader data-allow-any-level="true" data-cascader-depth="5" data-placeholder="请选择">
-                            <button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">请选择</span><span class="proto-cascader-arrow">▾</span></button>
-                            <div class="proto-cascader-panel"></div>
+                      <div class="assign-two-col">
+                        <!-- 左栏：标注人员 -->
+                        <div class="assign-col">
+                          <h5 class="assign-col-title">标注人员 <span class="sub">* 必选</span></h5>
+                          <div class="assign-col-divider"></div>
+                          <div class="proto-field-row">
+                            <div class="proto-field-label">筛选区域</div>
+                            <div class="proto-cascader" data-proto-cascader data-allow-any-level="true" data-cascader-depth="5" data-placeholder="请选择">
+                              <button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">请选择</span><span class="proto-cascader-arrow">▾</span></button>
+                              <div class="proto-cascader-panel"></div>
+                            </div>
                           </div>
-                        </div>
-                        <div class="proto-field-row">
-                          <div class="proto-field-label">搜索人员</div>
-                          <select class="proto-select">
-                            <option selected>姓名/账号多选</option>
-                            <option>张三 zhangsan</option>
-                            <option>李四 lisi</option>
-                          </select>
-                        </div>
-                        <div class="proto-field-row">
-                          <div class="proto-field-label">已选人员 *</div>
-                          <div class="assignment-tag-box people-box batch-tags">
+                          <div class="proto-field-row">
+                            <div class="proto-field-label">搜索人员</div>
+                            <select class="proto-select">
+                              <option selected>姓名/账号多选</option>
+                              <option>张三 zhangsan</option>
+                              <option>李四 lisi</option>
+                            </select>
+                          </div>
+                          <div class="assign-selected-note">已选 3 人</div>
+                          <div class="assignment-tag-box batch-tags">
                             <span class="person-tag">张三 <button>×</button></span>
                             <span class="person-tag">李四 <button>×</button></span>
                             <span class="person-tag">王五 <button>×</button></span>
                           </div>
                         </div>
-                      </div>
-                    </section>
 
-                    <section class="assignment-create-group">
-                      <div class="assignment-create-group-head">
-                        <h4 class="assignment-create-group-title">质检配置</h4>
-                        <div style="display:flex;align-items:center;gap:12px;">
-                          <span class="assignment-create-group-note">支持一键自动分配，也支持逐轮手动调整。</span>
-                          <button class="batch-auto-btn" type="button">自动分配</button>
-                        </div>
-                      </div>
-                      <div class="assignment-create-qc-list">
-                        <div class="assignment-create-qc-row">
-                          <div class="proto-field-label">一检人员 *</div>
-                          <div class="assignment-create-qc-control">
+                        <!-- 右栏：质检人员 -->
+                        <div class="assign-col">
+                          <h5 class="assign-col-title">质检配置 <span class="sub">* 必选</span></h5>
+                          <div class="assign-col-divider"></div>
+                          <div class="proto-field-row">
+                            <div class="proto-field-label">一检人员</div>
                             <select class="proto-select">
                               <option>赵六</option>
                             </select>
                           </div>
-                        </div>
-                        <div class="assignment-create-qc-row">
-                          <div class="proto-field-label">二检人员 *</div>
-                          <div class="assignment-create-qc-control">
+                          <div class="proto-field-row">
+                            <div class="proto-field-label">二检人员</div>
                             <select class="proto-select">
                               <option>钱七</option>
                             </select>
                           </div>
-                        </div>
-                        <div class="assignment-create-qc-row">
-                          <div class="proto-field-label">三检人员 *</div>
-                          <div class="assignment-create-qc-control">
+                          <div class="proto-field-row">
+                            <div class="proto-field-label">三检人员</div>
                             <select class="proto-select">
                               <option>孙八</option>
                             </select>
