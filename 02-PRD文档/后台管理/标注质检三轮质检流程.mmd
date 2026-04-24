@@ -11,6 +11,7 @@ stateDiagram-v2
   AnnotationSubmitted: 个人标注任务已提交
   AnnotationInvalid: 个人任务提交无效图片
   AnnotationReturned: 质检退回
+  FinalInvalid: 无效图片
   AllAnnotationSubmitted: 是否全部标注完成
   HasValidAnnotation: 是否存在正常标注
   AnnotationMerged: 多人标注结果汇总
@@ -31,7 +32,7 @@ stateDiagram-v2
   HasValidAnnotation --> AnnotationMerged: 至少一条正常标注
   HasValidAnnotation --> AllInvalidSample: 全部为无效提交
   AnnotationMerged --> QCWaiting: 进入一轮质检队列
-  AllInvalidSample --> ExcludedFromTraining: 不进入质检
+  AllInvalidSample --> FinalInvalid: 不进入质检
 
   state "三轮质检状态" as QCFlow {
     [*] --> QC1Waiting
@@ -39,27 +40,25 @@ stateDiagram-v2
     QC1Waiting: 待一检
     QC1Passed: 一检通过
     QC1Returned: 一检退回标注任务
-    QC1Escalated: 一检提交二检
+    QC1ReturnedByQC2: 质检退回
 
     QC1Waiting --> QC1Returned: 检查多人标注并评分，不合格则退回指定或全部标注任务
+    QC1ReturnedByQC2 --> QC1Waiting: 返回待一检
     QC1Waiting --> QC1Passed: 采纳对象并评分后通过
-    QC1Passed --> QC1Escalated: 提交二检
 
     QC2Waiting: 待二检
     QC2Passed: 二检通过
     QC2Returned: 二检退回
-    QC2Escalated: 二检提交三检
 
-    QC1Escalated --> QC2Waiting: 进入二检队列
+    QC1Passed --> QC2Waiting: 进入二检队列
     QC2Waiting --> QC2Passed: 整图复核一检结果并评分，通过
-    QC2Passed --> QC2Escalated: 提交三检
     QC2Waiting --> QC2Returned: 整图复核一检结果并评分，退回一检复核
 
     QC3Waiting: 待三检
     QC3Passed: 三检通过
     QC3NoPool: 三检不入池
 
-    QC2Escalated --> QC3Waiting: 进入三检队列
+    QC2Passed --> QC3Waiting: 进入三检队列
     QC3Waiting --> QC3NoPool: 终审二检通过结果并评分，不入池
     QC3Waiting --> QC3Passed: 终审二检通过结果并评分，通过
   }
@@ -67,10 +66,10 @@ stateDiagram-v2
   QCWaiting --> QC1Waiting: 生成质检任务
 
   QC1Returned --> AnnotationReturned: 回到被退回个人任务
-  QC2Returned --> QC1Waiting: 回到一检复核
+  QC2Returned --> QC1ReturnedByQC2: 回到一检复核
 
   QC3Passed --> TrustedResult: 终审通过标注结果
-  QC3NoPool --> SampleNoPool: 样本不入池
+  QC3NoPool --> FinalInvalid: 不入池
 
   state "高质量数据状态" as DataFlow {
     TrustedResult: 通过质检的标注结果
@@ -85,22 +84,13 @@ stateDiagram-v2
     QualityDataPool --> QualityDataExport: 导出
   }
 
-  state "样本不入池状态" as RejectFlow {
-    SampleNoPool: 样本不入池
-    RejectReasonRecorded: 已记录不入池原因
-    ExcludedFromTraining: 不进入训练与评测数据
-
-    SampleNoPool --> RejectReasonRecorded: 记录不入池原因
-    RejectReasonRecorded --> ExcludedFromTraining: 排除出高质量数据
-  }
-
   QualityDataView --> [*]: 数据查看完成
   QualityDataFilter --> [*]: 数据筛选完成
   QualityDataExport --> [*]: 数据导出完成
-  ExcludedFromTraining --> [*]: 样本处理完成
+  FinalInvalid --> [*]: 无效结果处理完成
 
   classDef listStatus fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
-  class AnnotationTodo,AnnotationSubmitted,AnnotationInvalid,AnnotationReturned listStatus
-  class QC1Waiting,QC1Passed,QC1Returned listStatus
+  class AnnotationTodo,AnnotationSubmitted,AnnotationInvalid,AnnotationReturned,FinalInvalid listStatus
+  class QC1Waiting,QC1Passed,QC1Returned,QC1ReturnedByQC2 listStatus
   class QC2Waiting,QC2Passed,QC2Returned listStatus
   class QC3Waiting,QC3Passed,QC3NoPool listStatus
