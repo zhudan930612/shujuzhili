@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>系统管理-角色管理</title>
+  <link rel="stylesheet" href="./assets/prototype.css" />
+  <style>
+    .role-filter { display:grid; grid-template-columns:1.2fr 1fr 1.15fr 1.25fr auto auto; gap:14px; align-items:center; }
+    .role-table col:nth-child(1) { width:18%; }
+    .role-table col:nth-child(2) { width:13%; }
+    .role-table col:nth-child(3) { width:20%; }
+    .role-table col:nth-child(4) { width:20%; }
+    .role-table col:nth-child(5) { width:10%; }
+    .role-table col:nth-child(6) { width:12%; }
+    .role-table col:nth-child(7) { width:7%; }
+    .role-edit-panel { min-height:780px; padding:28px 48px 96px; }
+    .role-form-grid { display:grid; grid-template-columns:120px minmax(0, 1fr) 120px minmax(0, 1fr); gap:18px 20px; align-items:center; max-width:1480px; }
+    .role-form-grid .full-row { grid-column:2 / 5; }
+    .role-required { color:var(--danger); margin-right:4px; }
+    .permission-layout { display:block; }
+    .permission-tree { width:200px; border:1px solid var(--line); background:#fff; padding:10px 0; }
+    .permission-tree-item { display:flex; align-items:center; justify-content:space-between; height:38px; padding:0 18px; color:#334b63; font-size:14px; }
+    .permission-tree-item.active { background:#eaf3ff; color:var(--brand); font-weight:700; border-left:3px solid var(--brand); padding-left:15px; }
+    .permission-tree-item span:first-child { display:flex; align-items:center; gap:8px; }
+    .check-box { width:14px; height:14px; border:1px solid #c9d5e4; background:#fff; display:inline-flex; align-items:center; justify-content:center; color:#fff; font-size:12px; }
+    .check-box.checked { background:var(--brand); border-color:var(--brand); }
+    .check-box.checked::after { content:"✓"; }
+    .role-delete-stage { position:absolute; inset:0; z-index:8; }
+    .prototype-stage { display:none; }
+    .prototype-stage.active { display:block; }
+    .surface[data-view-scope] { position:relative; }
+  </style>
+</head>
+<body>
+  <div class="prototype-state-bar" data-prototype-switch>
+    <button class="active" type="button" data-prototype-button="list">列表态</button>
+    <button type="button" data-prototype-button="create">新增角色</button>
+    <button type="button" data-prototype-button="edit">编辑角色</button>
+    <button type="button" data-prototype-button="delete-confirm">删除确认</button>
+  </div>
+  <div class="frame" data-layout-module="system" data-layout-top-active="system" data-layout-side-preset="system" data-layout-side-active="role">
+    <header class="topbar"></header>
+    <div class="main">
+      <aside class="sidebar"></aside>
+      <main class="workspace">
+        <div class="crumb">☰ 系统管理 〉 角色管理</div>
+        <section class="surface tabbar">
+          <div class="tab active">角色管理</div>
+        </section>
+        <section class="surface" data-view-scope style="min-height:920px;">
+          <div class="prototype-stage active" data-prototype-panel="list">
+            <section class="content-panel">
+              <div class="role-filter">
+                <input class="control" type="text" placeholder="请输入角色名称" />
+                <select class="control select-control">
+                  <option selected>请选择角色类型</option>
+                  <option>运营角色</option>
+                  <option>监管角色</option>
+                  <option>保司角色</option>
+                  <option>平台管理角色</option>
+                </select>
+                <select class="control select-control">
+                  <option selected>请选择管理行业</option>
+                  <option>建筑施工</option>
+                  <option>金属冶炼</option>
+                  <option>能源矿产</option>
+                </select>
+                <select class="control select-control">
+                  <option selected>请选择管理区域</option>
+                  <option>广东省-深圳市</option>
+                  <option>上海市</option>
+                  <option>广东省-深圳市-罗湖区</option>
+                </select>
+                <button class="btn btn-primary" type="button">🔍 查询</button>
+                <button class="btn btn-ghost" type="button">重置</button>
+              </div>
+            </section>
+
+            <section class="proto-list-shell" style="margin-top:14px;">
+              <div class="proto-list-head">
+                <div class="proto-list-title">角色列表</div>
+                <div class="proto-list-tools"><button class="btn btn-primary" type="button">＋ 新增</button></div>
+              </div>
+              <div class="proto-table-wrap">
+                <table class="role-table">
+                  <colgroup>
+                    <col /><col /><col /><col /><col /><col /><col />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>角色名称</th>
+                      <th>角色类型</th>
+                      <th>管理行业</th>
+                      <th>管理区域</th>
+                      <th>创建人</th>
+                      <th>创建时间</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>CS深圳运营</td>
+                      <td>运营角色</td>
+                      <td>金属冶炼；交通运输</td>
+                      <td>广东省-深圳市</td>
+                      <td>超级管理员</td>
+                      <td>2026-01-09 15:32</td>
+                      <td><span class="link">编辑</span>　<span class="link danger-link">删除</span></td>
+                    </tr>
+                    <tr>
+                      <td>CS上海运营</td>
+                      <td>运营角色</td>
+                      <td>金属冶炼；交通运输</td>
+                      <td>上海市</td>
+                      <td>超级管理员</td>
+                      <td>2026-01-09 15:18</td>
+                      <td><span class="link">编辑</span>　<span class="link danger-link">删除</span></td>
+                    </tr>
+                    <tr>
+                      <td>测试运营</td>
+                      <td>运营角色</td>
+                      <td>金属冶炼；能源矿产</td>
+                      <td>广东省-深圳市</td>
+                      <td>超级管理员</td>
+                      <td>2026-01-08 14:44</td>
+                      <td><span class="link">编辑</span>　<span class="link danger-link">删除</span></td>
+                    </tr>
+                    <tr>
+                      <td>一保司11</td>
+                      <td>保司角色</td>
+                      <td>-</td>
+                      <td>-</td>
+                      <td>超级管理员</td>
+                      <td>2025-12-02 16:20</td>
+                      <td><span class="link">编辑</span>　<span class="link danger-link">删除</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="proto-pagination">
+                <span>共4条</span>
+                <select class="control select-control proto-page-size-select"><option selected>20条/页</option><option>50条/页</option></select>
+                <span>〈</span><span class="proto-page-current">1</span><span>前往</span>
+                <select class="control select-control proto-page-jump-select"><option selected>1页</option></select>
+                <span>页</span><span>〉</span>
+              </div>
+            </section>
+          </div>
+
+          <div class="prototype-stage" data-prototype-panel="create">
+            <section class="content-panel role-edit-panel has-page-actions">
+              <div class="page-header" style="padding:0 0 22px;">
+                <div>
+                  <div class="page-title">新增角色</div>
+                  <div class="page-subtitle">创建后台管理端角色模板，配置菜单权限、操作权限和数据范围。</div>
+                </div>
+              </div>
+              <div class="role-form-grid">
+                <div class="field-label"><span class="role-required">*</span>角色名称</div>
+                <input class="control" type="text" placeholder="请输入角色名称" />
+                <div class="field-label"><span class="role-required">*</span>角色类型</div>
+                <select class="control select-control"><option selected>请选择角色类型</option><option>运营角色</option><option>监管角色</option><option>保司角色</option><option>平台管理角色</option></select>
+                <div class="field-label"><span class="role-required">*</span>管理行业</div>
+                <select class="control select-control"><option selected>请选择管理行业</option><option>建筑施工</option><option>金属冶炼</option><option>能源矿产</option></select>
+                <div class="field-label"><span class="role-required">*</span>管理区域</div>
+                <select class="control select-control"><option selected>请选择管理区域</option><option>全国</option><option>广东省-深圳市</option><option>上海市</option></select>
+                <div class="field-label"><span class="role-required">*</span>角色权限设置</div>
+                <div class="full-row permission-layout">
+                  <div class="permission-tree">
+                    <div class="permission-tree-item active"><span><span class="check-box checked"></span>首页</span><span>›</span></div>
+                    <div class="permission-tree-item"><span><span class="check-box checked"></span>项目管理</span><span>›</span></div>
+                    <div class="permission-tree-item"><span><span class="check-box checked"></span>巡查管理</span><span>›</span></div>
+                    <div class="permission-tree-item"><span><span class="check-box"></span>用户中心</span><span>›</span></div>
+                    <div class="permission-tree-item"><span><span class="check-box checked"></span>系统管理</span><span>›</span></div>
+                    <div class="permission-tree-item"><span><span class="check-box checked"></span>知识库管理</span><span>›</span></div>
+                    <div class="permission-tree-item"><span><span class="check-box"></span>标注质检</span><span>›</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="page-actions">
+                <button class="btn btn-ghost" type="button">取消</button>
+                <button class="btn btn-primary" type="button">保存</button>
+              </div>
+            </section>
+          </div>
+
+          <div class="prototype-stage" data-prototype-panel="edit">
+            <section class="content-panel role-edit-panel has-page-actions">
+              <div class="page-header" style="padding:0 0 22px;">
+                <div>
+                  <div class="page-title">编辑角色</div>
+                  <div class="page-subtitle">调整角色权限后，关联账号下次进入对应页面时按最新权限生效。</div>
+                </div>
+              </div>
+              <div class="role-form-grid">
+                <div class="field-label"><span class="role-required">*</span>角色名称</div>
+                <input class="control" type="text" value="CS深圳运营" />
+                <div class="field-label"><span class="role-required">*</span>角色类型</div>
+                <select class="control select-control"><option selected>运营角色</option><option>监管角色</option><option>保司角色</option><option>平台管理角色</option></select>
+                <div class="field-label"><span class="role-required">*</span>管理行业</div>
+                <select class="control select-control"><option selected>金属冶炼；交通运输</option><option>建筑施工</option><option>能源矿产</option></select>
+                <div class="field-label"><span class="role-required">*</span>管理区域</div>
+                <select class="control select-control"><option selected>广东省-深圳市</option><option>上海市</option><option>广东省-深圳市-罗湖区</option></select>
+                <div class="field-label"><span class="role-required">*</span>角色权限设置</div>
+                <div class="full-row permission-layout">
+                  <div class="permission-tree">
+                    <div class="permission-tree-item"><span><span class="check-box checked"></span>首页</span><span>›</span></div>
+                    <div class="permission-tree-item active"><span><span class="check-box checked"></span>项目管理</span><span>›</span></div>
+                    <div class="permission-tree-item"><span><span class="check-box checked"></span>巡查管理</span><span>›</span></div>
+                    <div class="permission-tree-item"><span><span class="check-box checked"></span>用户中心</span><span>›</span></div>
+                    <div class="permission-tree-item"><span><span class="check-box checked"></span>系统管理</span><span>›</span></div>
+                    <div class="permission-tree-item"><span><span class="check-box checked"></span>知识库管理</span><span>›</span></div>
+                    <div class="permission-tree-item"><span><span class="check-box checked"></span>标注质检</span><span>›</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="page-actions">
+                <button class="btn btn-ghost" type="button">取消</button>
+                <button class="btn btn-primary" type="button">保存</button>
+              </div>
+            </section>
+          </div>
+
+          <div class="prototype-stage role-delete-stage" data-prototype-panel="delete-confirm">
+            <section class="modal-stage">
+              <div class="modal">
+                <div class="modal-head"><span>删除角色</span><span>×</span></div>
+                <div class="modal-body">
+                  <p style="margin:0;color:#405164;line-height:1.8;">确认删除角色“CS深圳运营”？删除后该角色不可继续分配给账号。</p>
+                  <p style="margin:10px 0 0;color:var(--danger);line-height:1.8;">如该角色已被账号引用，系统将阻断删除并提示先解除账号角色绑定。</p>
+                </div>
+                <div class="modal-foot">
+                  <button class="btn btn-ghost" type="button">取消</button>
+                  <button class="btn btn-danger" type="button">确认删除</button>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="./assets/prototype.js"></script>
+  <script src="./assets/prototype-switcher.js"></script>
+  <script src="./assets/prototype-layout.js"></script>
+  <script>
+    initProtoPagination();
+    initProtoRowActions();
+  </script>
+</body>
+</html>

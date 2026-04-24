@@ -40,7 +40,7 @@
     system: [
       { key: "dictionary", label: "▤ 字典管理" },
       { key: "user", label: "◧ 用户管理" },
-      { key: "role", label: "◎ 角色权限" },
+      { key: "role", label: "◎ 角色管理" },
       { key: "log", label: "◫ 操作日志" },
     ],
     overview: [
