@@ -25,7 +25,7 @@
       { key: "annotation-task", label: "▧ 标注任务" },
       { key: "annotation-qc", label: "▤ 质检任务" },
       { key: "quality-pool", label: "▣ 高质量数据池" },
-      { key: "annotation-category", label: "◫ 标注要素类别库" },
+      { key: "annotation-category", label: "◫ 标注类别库" },
     ],
     user: [
       { key: "inspection-org", label: "▤ 巡检单位库" },
