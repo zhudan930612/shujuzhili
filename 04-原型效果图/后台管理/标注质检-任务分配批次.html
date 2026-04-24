@@ -9,35 +9,27 @@
     .prototype-stage { display: none; }
     .prototype-stage.active { display: block; }
     .batch-shell { display: flex; flex-direction: column; gap: 14px; }
-    .batch-panel { background: #fff; box-shadow: var(--shadow); }
-    .batch-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 28px 12px; }
-    .batch-title { margin: 0; display: flex; align-items: center; gap: 12px; color: #223549; font-size: 16px; font-weight: 700; }
-    .batch-title::before { content: ""; width: 4px; height: 18px; border-radius: 999px; background: var(--brand); display: inline-block; }
-    .batch-filter { padding: 14px 28px 16px; border-top: 1px solid #eef3f8; }
-    .batch-filter .control { min-width: 156px; }
-    .batch-table-wrap { padding: 0 28px 18px; overflow-x: auto; }
-    .batch-table { width: 100%; min-width: 1120px; border-collapse: collapse; }
-    .batch-table th { background: var(--table-head); color: #22344b; font-weight: 700; padding: 14px 12px; text-align: left; }
-    .batch-table td { padding: 12px; border-bottom: 1px solid var(--line-soft); color: #405164; }
-    .batch-table tr:nth-child(even) td { background: #fafcff; }
-    .detail-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 18px 28px; }
-    .detail-item { border: 1px solid #e2ebf5; background: #fbfdff; padding: 12px 14px; }
-    .detail-label { color: #748395; font-size: 13px; margin-bottom: 6px; }
-    .detail-value { color: #223549; font-weight: 700; }
-    .person-section { padding: 0 28px 18px; display: grid; gap: 10px; }
+
+    /* 批次详情双栏 */
+    .batch-detail-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 0 24px 18px; }
+    .batch-person-block { display: grid; gap: 10px; align-content: start; }
     .person-line { display: flex; align-items: center; gap: 8px; color: #516477; }
     .person-line strong { min-width: 76px; color: #223549; }
-    .person-tag { display: inline-flex; align-items: center; padding: 6px 10px; border: 1px solid #cfe0f6; background: #f7fbff; color: #2c5cab; font-weight: 700; font-size: 13px; }
-    .image-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; padding: 18px 28px; }
-    .image-card { border: 1px solid #dce6f1; background: #fff; box-shadow: 0 8px 18px rgba(18,51,95,0.05); cursor: pointer; overflow: hidden; }
-    .image-thumb { aspect-ratio: 1 / 1; background: #d7e1eb url("./img/biaozhu_img.png") center center / cover no-repeat; }
-    .image-card-body { padding: 12px 14px 14px; }
-    .project-type { color: #243c58; font-weight: 700; }
-    .modal-stage { display: flex; }
-    .modal.large { width: 920px; }
+
+    /* 图片区域 - 复用 proto-image-grid 容器，卡片保留页面级结构 */
+    .batch-image-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; padding: 0 24px 18px; }
+    .batch-image-card { border: 1px solid #dce6f1; background: #fff; box-shadow: 0 8px 18px rgba(18,51,95,0.05); cursor: pointer; overflow: hidden; }
+    .batch-image-card-thumb { aspect-ratio: 1 / 1; background: #d7e1eb url("./img/biaozhu_img.png") center center / cover no-repeat; }
+    .batch-image-card-body { padding: 12px 14px 14px; }
+    .batch-image-card-label { color: #243c58; font-weight: 700; }
+
+    /* 图片预览弹窗 */
+    .modal-stage { display: flex; align-items: center; justify-content: center; position: relative; min-height: 600px; }
     .preview-image { height: 520px; background: #d7e1eb url("./img/biaozhu_img.png") center center / contain no-repeat; border: 1px solid #dce6f1; }
     .preview-body { padding: 18px; }
     .preview-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; color: #4f6377; }
+
+    /* 空状态 */
     .empty-panel { height: 470px; border: 1px dashed #ccd9e8; background: #fbfdff; display: flex; align-items: center; justify-content: center; color: #7a8aa0; font-weight: 700; box-shadow: var(--shadow); }
   </style>
 </head>
@@ -55,34 +47,69 @@
       <div class="main"><aside class="sidebar"></aside><main class="workspace">
         <div class="crumb">☰ 标注质检 〉 任务分配管理 〉 查看批次</div>
         <section class="batch-shell">
-          <div class="batch-panel">
-            <div class="batch-head">
-              <h3 class="batch-title">查看批次</h3>
-              <a class="btn btn-ghost" href="./标注质检-任务分配管理.html">返回任务分配</a>
+          <div class="proto-list-shell">
+            <div class="proto-list-head">
+              <h3 class="proto-list-title">查看批次</h3>
+              <div class="proto-list-tools">
+                <a class="btn btn-ghost" href="./标注质检-任务分配管理.html">返回任务分配</a>
+              </div>
             </div>
-            <div class="proto-filter-bar batch-filter">
-              <input class="control" placeholder="批次名称" />
-              <input class="control" placeholder="创建时间" />
-              <input class="control" placeholder="创建人" />
-              <input class="control" placeholder="标注人员" />
-              <button class="btn btn-primary">查询</button>
-              <button class="btn btn-ghost">重置</button>
+            <div class="proto-filter-bar" style="margin: 0 24px 18px;">
+              <input class="proto-input" type="text" placeholder="批次名称" />
+              <input class="proto-input" type="text" placeholder="创建时间" />
+              <input class="proto-input" type="text" placeholder="创建人" />
+              <input class="proto-input" type="text" placeholder="标注人员" />
+              <button class="btn btn-primary" type="button">查询</button>
+              <button class="btn btn-ghost" type="button">重置</button>
             </div>
-            <div class="batch-table-wrap">
-              <table class="batch-table">
+            <div class="proto-table-wrap">
+              <table>
                 <thead>
                   <tr><th>批次名称</th><th>创建时间</th><th>创建人</th><th>图片数</th><th>标注人员数</th><th>操作</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td>202604241530</td><td>2026-04-24 15:30</td><td>张三</td><td>12</td><td>3</td><td><button class="btn btn-link" type="button" data-jump="detail">查看</button></td></tr>
-                  <tr><td>202604241410</td><td>2026-04-24 14:10</td><td>李四</td><td>20</td><td>4</td><td><button class="btn btn-link" type="button" data-jump="detail">查看</button></td></tr>
-                  <tr><td>202604231650</td><td>2026-04-23 16:50</td><td>王五</td><td>18</td><td>3</td><td><button class="btn btn-link" type="button" data-jump="detail">查看</button></td></tr>
+                  <tr>
+                    <td>202604241530</td>
+                    <td>2026-04-24 15:30</td>
+                    <td>张三</td>
+                    <td>12</td>
+                    <td>3</td>
+                    <td>
+                      <div class="proto-row-actions">
+                        <button class="proto-action" type="button" data-jump="detail">查看</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>202604241410</td>
+                    <td>2026-04-24 14:10</td>
+                    <td>李四</td>
+                    <td>20</td>
+                    <td>4</td>
+                    <td>
+                      <div class="proto-row-actions">
+                        <button class="proto-action" type="button" data-jump="detail">查看</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>202604231650</td>
+                    <td>2026-04-23 16:50</td>
+                    <td>王五</td>
+                    <td>18</td>
+                    <td>3</td>
+                    <td>
+                      <div class="proto-row-actions">
+                        <button class="proto-action" type="button" data-jump="detail">查看</button>
+                      </div>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
             <div class="proto-pagination">
               <span>共 18 条</span>
-              <select class="control select-control proto-page-size-select">
+              <select class="proto-select proto-page-size-select">
                 <option selected>10条/页</option>
                 <option>20条/页</option>
                 <option>50条/页</option>
@@ -90,7 +117,7 @@
               <span class="proto-page-arrow">‹</span>
               <span class="proto-page-current">1</span>
               <span>前往</span>
-              <input class="control proto-page-jump-input" type="text" value="1" />
+              <input class="proto-input proto-page-jump-input" type="text" value="1" />
               <span>页</span>
               <span class="proto-page-arrow">›</span>
             </div>
@@ -106,33 +133,69 @@
       <div class="main"><aside class="sidebar"></aside><main class="workspace">
         <div class="crumb">☰ 标注质检 〉 任务分配管理 〉 查看批次 〉 批次详情</div>
         <section class="batch-shell">
-          <div class="batch-panel">
-            <div class="batch-head">
-              <h3 class="batch-title">批次详情</h3>
-              <button class="btn btn-ghost" type="button" data-jump="list">返回批次列表</button>
+          <div class="proto-list-shell">
+            <div class="proto-list-head">
+              <h3 class="proto-list-title">批次详情</h3>
+              <div class="proto-list-tools">
+                <button class="btn btn-ghost" type="button" data-jump="list">返回批次列表</button>
+              </div>
             </div>
-            <div class="detail-meta">
-              <div class="detail-item"><div class="detail-label">批次名称</div><div class="detail-value">202604241530</div></div>
-              <div class="detail-item"><div class="detail-label">创建人</div><div class="detail-value">张三</div></div>
-              <div class="detail-item"><div class="detail-label">创建时间</div><div class="detail-value">2026-04-24 15:30</div></div>
-              <div class="detail-item"><div class="detail-label">图片数</div><div class="detail-value">12</div></div>
-            </div>
-            <div class="person-section">
-              <div class="person-line"><strong>标注人员</strong><span class="person-tag">张三</span><span class="person-tag">李四</span><span class="person-tag">王五</span></div>
-              <div class="person-line"><strong>一检人员</strong><span class="person-tag">赵六</span></div>
-              <div class="person-line"><strong>二检人员</strong><span class="person-tag">钱七</span></div>
-              <div class="person-line"><strong>三检人员</strong><span class="person-tag">孙八</span></div>
+            <div class="batch-detail-row">
+              <div class="proto-detail-card" style="margin: 0;">
+                <div class="proto-detail-card-body">
+                  <div class="proto-detail-grid">
+                    <div class="proto-detail-label">批次名称</div>
+                    <div class="proto-detail-value">202604241530</div>
+                    <div class="proto-detail-label">创建人</div>
+                    <div class="proto-detail-value">张三</div>
+                    <div class="proto-detail-label">创建时间</div>
+                    <div class="proto-detail-value">2026-04-24 15:30</div>
+                    <div class="proto-detail-label">图片数</div>
+                    <div class="proto-detail-value">12</div>
+                  </div>
+                </div>
+              </div>
+              <div class="proto-detail-card" style="margin: 0;">
+                <div class="proto-detail-card-body">
+                  <div class="batch-person-block">
+                    <div class="person-line"><strong>标注人员</strong><span class="proto-tag">张三</span><span class="proto-tag">李四</span><span class="proto-tag">王五</span></div>
+                    <div class="person-line"><strong>一检人员</strong><span class="proto-tag">赵六</span></div>
+                    <div class="person-line"><strong>二检人员</strong><span class="proto-tag">钱七</span></div>
+                    <div class="person-line"><strong>三检人员</strong><span class="proto-tag">孙八</span></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="batch-panel">
-            <div class="batch-head"><h3 class="batch-title">图片明细</h3></div>
-            <div class="image-grid">
-              <article class="image-card" data-jump="preview"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">住宅装修</span></div></article>
-              <article class="image-card" data-jump="preview"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">小型工程</span></div></article>
-              <article class="image-card" data-jump="preview"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">零星作业</span></div></article>
-              <article class="image-card" data-jump="preview"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">小型工程</span></div></article>
-              <article class="image-card" data-jump="preview"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">住宅装修</span></div></article>
-              <article class="image-card" data-jump="preview"><div class="image-thumb"></div><div class="image-card-body"><span class="project-type">零星作业</span></div></article>
+          <div class="proto-list-shell">
+            <div class="proto-list-head">
+              <h3 class="proto-list-title">图片明细</h3>
+            </div>
+            <div class="batch-image-grid">
+              <article class="batch-image-card" data-jump="preview">
+                <div class="batch-image-card-thumb"></div>
+                <div class="batch-image-card-body"><span class="batch-image-card-label">住宅装修</span></div>
+              </article>
+              <article class="batch-image-card" data-jump="preview">
+                <div class="batch-image-card-thumb"></div>
+                <div class="batch-image-card-body"><span class="batch-image-card-label">小型工程</span></div>
+              </article>
+              <article class="batch-image-card" data-jump="preview">
+                <div class="batch-image-card-thumb"></div>
+                <div class="batch-image-card-body"><span class="batch-image-card-label">零星作业</span></div>
+              </article>
+              <article class="batch-image-card" data-jump="preview">
+                <div class="batch-image-card-thumb"></div>
+                <div class="batch-image-card-body"><span class="batch-image-card-label">小型工程</span></div>
+              </article>
+              <article class="batch-image-card" data-jump="preview">
+                <div class="batch-image-card-thumb"></div>
+                <div class="batch-image-card-body"><span class="batch-image-card-label">住宅装修</span></div>
+              </article>
+              <article class="batch-image-card" data-jump="preview">
+                <div class="batch-image-card-thumb"></div>
+                <div class="batch-image-card-body"><span class="batch-image-card-label">零星作业</span></div>
+              </article>
             </div>
           </div>
         </section>
@@ -144,15 +207,15 @@
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-assignment">
       <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
         <div class="crumb">☰ 标注质检 〉 任务分配管理 〉 查看批次 〉 批次详情</div>
-        <section class="batch-shell"><div class="batch-panel"><div class="batch-head"><h3 class="batch-title">批次详情</h3></div></div></section>
+        <section class="batch-shell"><div class="proto-list-shell"><div class="proto-list-head"><h3 class="proto-list-title">批次详情</h3></div></div></section>
         <div class="modal-stage">
-          <div class="modal large">
-            <div class="modal-head"><h3>图片预览</h3><button class="modal-close" type="button">×</button></div>
-            <div class="preview-body">
+          <div class="proto-modal-form large">
+            <div class="proto-modal-head"><span>图片预览</span><span>×</span></div>
+            <div class="proto-modal-body">
               <div class="preview-image"></div>
               <div class="preview-meta"><span>项目类型：住宅装修</span><span>项目名称：松湖花园装修</span><span>巡查记录：XC20260424001</span><span>批次名称：202604241530</span></div>
             </div>
-            <div class="modal-foot"><button class="btn btn-primary" type="button" data-jump="detail">关闭</button></div>
+            <div class="proto-modal-foot"><button class="btn btn-primary" type="button" data-jump="detail">关闭</button></div>
           </div>
         </div>
       </main></div>
