@@ -1,79 +1,85 @@
 %%{init: {'theme':'mc'}}%%
 stateDiagram-v2
-  [*] --> InspectionUploaded: 巡查记录上传图片
+  %% ═══════════════════════════════════════════
+  %% 阶段一：任务分配
+  %% ═══════════════════════════════════════════
+  state "任务分配" as Assign {
+    InspectionUploaded: 巡查记录已上传图片
+    AssignmentManage: 任务分配管理
+    BatchCreated: 创建标注批次
+    MultiAnnotationAssigned: 同一图片分配给多名标注人员
 
-  InspectionUploaded: 巡查记录已上传图片
-  AssignmentManage: 任务分配管理
-  BatchCreated: 创建标注批次
-  MultiAnnotationAssigned: 同一图片分配给多名标注人员
-  AnnotationTodo: 个人任务待标注
-  Annotating: 标注人员标注中
-  AnnotationSubmitted: 个人标注任务已提交
-  AnnotationInvalid: 个人任务提交无效图片
-  AnnotationReturned: 质检退回
-  FinalInvalid: 无效图片
-  AllAnnotationSubmitted: 是否全部标注完成
-  HasValidAnnotation: 是否存在正常标注
-  AnnotationMerged: 多人标注结果汇总
-  QCWaiting: 待质检
-  AllInvalidSample: 全部标注均为无效图片
+    [*] --> InspectionUploaded: 巡查记录上传图片
+    InspectionUploaded --> AssignmentManage: 进入任务分配管理
+    AssignmentManage --> BatchCreated: 选择图片指定标注人员
+    BatchCreated --> MultiAnnotationAssigned: 生成多人标注任务
+  }
 
-  InspectionUploaded --> AssignmentManage: 进入任务分配管理
-  AssignmentManage --> BatchCreated: 选择图片并指定标注人员
-  BatchCreated --> MultiAnnotationAssigned: 为同一图片生成多名标注人员任务
-  MultiAnnotationAssigned --> AnnotationTodo: 生成多条个人标注任务
-  AnnotationTodo --> Annotating: 标注人员开始标注
-  Annotating --> AnnotationSubmitted: 提交个人标注成果
-  Annotating --> AnnotationInvalid: 标记无效图片
-  AnnotationSubmitted --> AllAnnotationSubmitted: 记录个人提交
-  AnnotationInvalid --> AllAnnotationSubmitted: 记录个人无效提交
-  AnnotationReturned --> Annotating: 标注人员重新处理
-  AllAnnotationSubmitted --> HasValidAnnotation: 全部提交完成
-  HasValidAnnotation --> AnnotationMerged: 至少一条正常标注
-  HasValidAnnotation --> AllInvalidSample: 全部为无效提交
-  AnnotationMerged --> QCWaiting: 进入一轮质检队列
-  AllInvalidSample --> QC3Waiting: 全部无效，跳过一检二检直接进三检校验
+  %% ═══════════════════════════════════════════
+  %% 阶段二：标注
+  %% ═══════════════════════════════════════════
+  state "标注" as Anno {
+    AnnotationTodo: 个人任务待标注
+    Annotating: 标注人员标注中
+    AnnotationSubmitted: 个人标注任务已提交
+    AnnotationInvalid: 无效图片标记
+    AllAnnotationSubmitted: 全部提交完成
+    HasValidAnnotation: 是否存在正常标注
+    AnnotationMerged: 多人标注结果汇总
+    AllInvalidSample: 全部标注均为无效图片
+    AnnotationReturned: 质检退回
 
-  state "三轮质检状态" as QCFlow {
-    [*] --> QC1Waiting
+    AnnotationTodo --> Annotating: 开始标注
+    Annotating --> AnnotationSubmitted: 提交标注成果
+    Annotating --> AnnotationInvalid: 标记无效图片
+    AnnotationSubmitted --> AllAnnotationSubmitted: 记录提交
+    AnnotationInvalid --> AllAnnotationSubmitted: 记录无效提交
+    AnnotationReturned --> Annotating: 重新处理
+    AllAnnotationSubmitted --> HasValidAnnotation: 全部提交完成
+    HasValidAnnotation --> AnnotationMerged: 存在正常标注
+    HasValidAnnotation --> AllInvalidSample: 全部无效提交
+  }
+
+  %% ═══════════════════════════════════════════
+  %% 阶段三：三轮质检
+  %% ═══════════════════════════════════════════
+  state "三轮质检" as QC {
+    QCWaiting: 待质检
 
     QC1Waiting: 待一检
     QC1Passed: 一检通过
-    QC1Returned: 一检退回标注任务
-
-    QC1Waiting --> QC1Returned: 检查多人标注并评分，不合格则退回指定或全部标注任务
-
-    QC1Waiting --> QC1Passed: 采纳对象并评分后通过
+    QC1Returned: 一检退回
 
     QC2Waiting: 待二检
     QC2Passed: 二检通过
     QC2Returned: 二检退回
 
-    QC1Passed --> QC2Waiting: 进入二检队列
-    QC2Waiting --> QC2Passed: 整图复核一检结果并评分，通过
-    QC2Waiting --> QC2Returned: 整图复核一检结果并评分，直接退回标注人员
-
     QC3Waiting: 待三检
     QC3Passed: 三检通过
     QC3NoPool: 三检不入池
-    QC3Returned: 三检退回标注任务
+    QC3Returned: 三检退回
 
-    QC2Passed --> QC3Waiting: 进入三检队列
-    QC3Waiting --> QC3NoPool: 终审二检通过结果并评分，不入池
-    QC3Waiting --> QC3Passed: 终审二检通过结果并评分，通过
-    QC3Waiting --> QC3Returned: 终审发现问题，直接退回标注
+    QCWaiting --> QC1Waiting: 生成质检任务
+    AllInvalidSample --> QC3Waiting: 跳过一检二检直接进三检
+
+    QC1Waiting --> QC1Returned: 检查并评分，不合格退回
+    QC1Waiting --> QC1Passed: 采纳对象并评分通过
+
+    QC1Passed --> QC2Waiting: 进入二检
+    QC2Waiting --> QC2Passed: 复核一检结果，通过
+    QC2Waiting --> QC2Returned: 复核一检结果，退回
+
+    QC2Passed --> QC3Waiting: 进入三检
+    QC3Waiting --> QC3NoPool: 终审不入池
+    QC3Waiting --> QC3Passed: 终审通过
+    QC3Waiting --> QC3Returned: 终审退回
   }
 
-  QCWaiting --> QC1Waiting: 生成质检任务
-
-  QC1Returned --> AnnotationReturned: 回到被退回个人任务
-  QC2Returned --> AnnotationReturned: 退回标注人员重新处理
-  QC3Returned --> AnnotationReturned: 退回标注人员重新处理
-
-  QC3Passed --> TrustedResult: 终审通过标注结果
-  QC3NoPool --> FinalInvalid: 不入池
-
-  state "高质量数据状态" as DataFlow {
+  %% ═══════════════════════════════════════════
+  %% 阶段四：最终结果
+  %% ═══════════════════════════════════════════
+  state "最终结果" as Result {
+    FinalInvalid: 无效图片
     TrustedResult: 通过质检的标注结果
     QualityDataPool: 高质量数据池
     QualityDataView: 查看数据
@@ -84,15 +90,37 @@ stateDiagram-v2
     QualityDataPool --> QualityDataView: 查看
     QualityDataPool --> QualityDataFilter: 筛选
     QualityDataPool --> QualityDataExport: 导出
+
+    QualityDataView --> [*]
+    QualityDataFilter --> [*]
+    QualityDataExport --> [*]
+    FinalInvalid --> [*]
   }
 
-  QualityDataView --> [*]: 数据查看完成
-  QualityDataFilter --> [*]: 数据筛选完成
-  QualityDataExport --> [*]: 数据导出完成
-  FinalInvalid --> [*]: 无效结果处理完成
+  %% ═══════════════════════════════════════════
+  %% 跨阶段连线
+  %% ═══════════════════════════════════════════
+  MultiAnnotationAssigned --> AnnotationTodo: 生成个人标注任务
+  AnnotationMerged --> QCWaiting: 进入质检队列
+  QC1Returned --> AnnotationReturned: 退回个人任务
+  QC2Returned --> AnnotationReturned: 退回个人任务
+  QC3Returned --> AnnotationReturned: 退回个人任务
+  QC3Passed --> TrustedResult: 终审通过入池
+  QC3NoPool --> FinalInvalid: 不入池
 
-  classDef listStatus fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
-  class AnnotationTodo,AnnotationSubmitted,AnnotationInvalid,AnnotationReturned,FinalInvalid listStatus
-  class QC1Waiting,QC1Passed,QC1Returned listStatus
-  class QC2Waiting,QC2Passed,QC2Returned listStatus
-  class QC3Waiting,QC3Passed,QC3NoPool,QC3Returned listStatus
+  %% ═══════════════════════════════════════════
+  %% 样式
+  %% ═══════════════════════════════════════════
+  classDef assignStyle fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+  classDef annoStyle fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#e65100
+  classDef qc1Style fill:#fce4ec,stroke:#c62828,stroke-width:2px,color:#b71c1c
+  classDef qc2Style fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#4a148c
+  classDef qc3Style fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+  classDef resultStyle fill:#eceff1,stroke:#37474f,stroke-width:2px,color:#263238
+
+  class InspectionUploaded,AssignmentManage,BatchCreated,MultiAnnotationAssigned assignStyle
+  class AnnotationTodo,Annotating,AnnotationSubmitted,AnnotationInvalid,AllAnnotationSubmitted,HasValidAnnotation,AnnotationMerged,AllInvalidSample,AnnotationReturned annoStyle
+  class QCWaiting,QC1Waiting,QC1Passed,QC1Returned qc1Style
+  class QC2Waiting,QC2Passed,QC2Returned qc2Style
+  class QC3Waiting,QC3Passed,QC3NoPool,QC3Returned qc3Style
+  class FinalInvalid,TrustedResult,QualityDataPool,QualityDataView,QualityDataFilter,QualityDataExport resultStyle
