@@ -9,6 +9,12 @@
     .prototype-stage { display: none; }
     .prototype-stage.active { display: block; }
     .batch-shell { display: flex; flex-direction: column; gap: 14px; }
+    .batch-page-header { display:flex; align-items:center; justify-content:space-between; gap:16px; padding: 8px 0 14px; }
+    .batch-titlebar { display:inline-flex; align-items:center; gap:14px; color:#23415f; }
+    .batch-back { display:inline-flex; align-items:center; gap:6px; color:#395673; font-size:14px; line-height:1; font-weight:500; cursor:pointer; background:none; border:none; padding:0; text-decoration:none; }
+    .batch-divider { width:1px; height:18px; background:#d8e3ef; }
+    .batch-current { color:#193b68; font-size:16px; line-height:1; font-weight:700; }
+    .batch-filter-persons .proto-select { width: 180px; min-width: 180px; }
 
     /* 批次详情双栏 */
     .batch-detail-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 0 24px 18px; }
@@ -46,21 +52,52 @@
       <header class="topbar"></header>
       <div class="main"><aside class="sidebar"></aside><main class="workspace">
         <div class="crumb">☰ 标注质检 〉 任务分配管理 〉 查看批次</div>
+        <section class="surface tabbar"><div class="tab">查看批次</div></section>
+        <div class="batch-page-header">
+          <div class="batch-titlebar">
+            <a class="batch-back" href="./标注质检-任务分配管理.html">〈 <span>返回</span></a>
+            <div class="batch-divider"></div>
+            <div class="batch-current">查看批次</div>
+          </div>
+        </div>
+        <section class="proto-filter-bar">
+          <input class="control" type="text" placeholder="批次名称" />
+          <div class="date-range-picker">
+            <input class="control date-range-control" type="text" placeholder="创建时间" value="2026-04-01 至 2026-04-24" readonly />
+            <div class="date-range-panel">
+              <div class="date-range-title">选择创建时间</div>
+              <div class="date-range-fields">
+                <input class="control" type="date" value="2026-04-01" data-role="start" />
+                <input class="control" type="date" value="2026-04-24" data-role="end" />
+              </div>
+              <div class="date-range-actions">
+                <button class="btn btn-ghost" type="button" data-action="cancel">取消</button>
+                <button class="btn btn-primary" type="button" data-action="apply">确定</button>
+              </div>
+            </div>
+          </div>
+          <select class="proto-select">
+            <option selected>创建人</option>
+            <option>张三</option>
+            <option>李四</option>
+            <option>王五</option>
+          </select>
+          <div class="batch-filter-persons">
+            <select class="proto-select">
+              <option selected>标注人员</option>
+              <option>张三</option>
+              <option>李四</option>
+              <option>王五</option>
+              <option>赵六</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" type="button">🔍 查询</button>
+          <button class="btn btn-ghost" type="button">↻ 重置</button>
+        </section>
         <section class="batch-shell">
           <div class="proto-list-shell">
             <div class="proto-list-head">
-              <h3 class="proto-list-title">查看批次</h3>
-              <div class="proto-list-tools">
-                <a class="btn btn-ghost" href="./标注质检-任务分配管理.html">返回任务分配</a>
-              </div>
-            </div>
-            <div class="proto-filter-bar" style="margin: 0 24px 18px;">
-              <input class="proto-input" type="text" placeholder="批次名称" />
-              <input class="proto-input" type="text" placeholder="创建时间" />
-              <input class="proto-input" type="text" placeholder="创建人" />
-              <input class="proto-input" type="text" placeholder="标注人员" />
-              <button class="btn btn-primary" type="button">查询</button>
-              <button class="btn btn-ghost" type="button">重置</button>
+              <h3 class="proto-list-title">批次列表</h3>
             </div>
             <div class="proto-table-wrap">
               <table>
@@ -132,14 +169,15 @@
       <header class="topbar"></header>
       <div class="main"><aside class="sidebar"></aside><main class="workspace">
         <div class="crumb">☰ 标注质检 〉 任务分配管理 〉 查看批次 〉 批次详情</div>
+        <div class="batch-page-header">
+          <div class="batch-titlebar">
+            <button class="batch-back" type="button" data-jump="list">〈 <span>返回</span></button>
+            <div class="batch-divider"></div>
+            <div class="batch-current">批次详情</div>
+          </div>
+        </div>
         <section class="batch-shell">
           <div class="proto-list-shell">
-            <div class="proto-list-head">
-              <h3 class="proto-list-title">批次详情</h3>
-              <div class="proto-list-tools">
-                <button class="btn btn-ghost" type="button" data-jump="list">返回批次列表</button>
-              </div>
-            </div>
             <div class="batch-detail-row">
               <div class="proto-detail-card" style="margin: 0;">
                 <div class="proto-detail-card-body">
@@ -207,7 +245,13 @@
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-assignment">
       <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
         <div class="crumb">☰ 标注质检 〉 任务分配管理 〉 查看批次 〉 批次详情</div>
-        <section class="batch-shell"><div class="proto-list-shell"><div class="proto-list-head"><h3 class="proto-list-title">批次详情</h3></div></div></section>
+        <div class="batch-page-header">
+          <div class="batch-titlebar">
+            <button class="batch-back" type="button" data-jump="detail">〈 <span>返回</span></button>
+            <div class="batch-divider"></div>
+            <div class="batch-current">批次详情</div>
+          </div>
+        </div>
         <div class="modal-stage">
           <div class="proto-modal-form large">
             <div class="proto-modal-head"><span>图片预览</span><span>×</span></div>
