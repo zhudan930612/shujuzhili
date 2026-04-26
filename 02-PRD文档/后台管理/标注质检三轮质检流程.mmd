@@ -40,10 +40,9 @@ stateDiagram-v2
     QC1Waiting: 待一检
     QC1Passed: 一检通过
     QC1Returned: 一检退回标注任务
-    QC1ReturnedByQC2: 质检退回
 
     QC1Waiting --> QC1Returned: 检查多人标注并评分，不合格则退回指定或全部标注任务
-    QC1ReturnedByQC2 --> QC1Waiting: 返回待一检
+
     QC1Waiting --> QC1Passed: 采纳对象并评分后通过
 
     QC2Waiting: 待二检
@@ -52,21 +51,24 @@ stateDiagram-v2
 
     QC1Passed --> QC2Waiting: 进入二检队列
     QC2Waiting --> QC2Passed: 整图复核一检结果并评分，通过
-    QC2Waiting --> QC2Returned: 整图复核一检结果并评分，退回一检复核
+    QC2Waiting --> QC2Returned: 整图复核一检结果并评分，直接退回标注人员
 
     QC3Waiting: 待三检
     QC3Passed: 三检通过
     QC3NoPool: 三检不入池
+    QC3Returned: 三检退回标注任务
 
     QC2Passed --> QC3Waiting: 进入三检队列
     QC3Waiting --> QC3NoPool: 终审二检通过结果并评分，不入池
     QC3Waiting --> QC3Passed: 终审二检通过结果并评分，通过
+    QC3Waiting --> QC3Returned: 终审发现问题，直接退回标注
   }
 
   QCWaiting --> QC1Waiting: 生成质检任务
 
   QC1Returned --> AnnotationReturned: 回到被退回个人任务
-  QC2Returned --> QC1ReturnedByQC2: 回到一检复核
+  QC2Returned --> AnnotationReturned: 退回标注人员重新处理
+  QC3Returned --> AnnotationReturned: 退回标注人员重新处理
 
   QC3Passed --> TrustedResult: 终审通过标注结果
   QC3NoPool --> FinalInvalid: 不入池
@@ -91,6 +93,6 @@ stateDiagram-v2
 
   classDef listStatus fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
   class AnnotationTodo,AnnotationSubmitted,AnnotationInvalid,AnnotationReturned,FinalInvalid listStatus
-  class QC1Waiting,QC1Passed,QC1Returned,QC1ReturnedByQC2 listStatus
+  class QC1Waiting,QC1Passed,QC1Returned listStatus
   class QC2Waiting,QC2Passed,QC2Returned listStatus
-  class QC3Waiting,QC3Passed,QC3NoPool listStatus
+  class QC3Waiting,QC3Passed,QC3NoPool,QC3Returned listStatus
