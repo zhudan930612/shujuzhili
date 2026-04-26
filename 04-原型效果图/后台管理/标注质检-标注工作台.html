@@ -50,8 +50,7 @@
     .return-reasons { display: flex; flex-wrap: wrap; gap: 6px; }
     .return-reason-tag { display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border: 1px solid #f1c8c3; background: #fff4f3; color: #b44335; font-size: 12px; font-weight: 700; }
     .return-tip { margin-top: 12px; padding-top: 10px; border-top: 1px dashed #d8e3ee; color: #52708d; font-weight: 700; }
-    .return-panel-entry { position: absolute; right: 28px; top: 24px; height: 34px; padding: 0 12px; border: 1px solid #d7e3f0; background: #fff; color: var(--brand); font-weight: 700; box-shadow: var(--shadow); cursor: pointer; z-index: 24; display: none; }
-    .return-panel-entry.is-visible { display: inline-flex; align-items: center; }
+    .return-panel-entry { display: inline-flex; align-items: center; color: var(--brand); font-weight: 700; }
     .object-panel { border-left: 1px solid #dbe5f0; background: #fff; padding: 14px; overflow: visible; }
     .panel-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; color: #1f3e62; font-size: 16px; font-weight: 700; }
     .proto-status-danger { border-color: #f1c8c3; background: #fff4f3; color: var(--danger); }
@@ -87,6 +86,7 @@
     .annotation-multi-tag { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border: 1px solid #cfe0f3; background: #f3f8ff; color: #1f4f88; font-size: 12px; font-weight: 700; }
     .annotation-multi-panel { position: absolute; top: calc(100% + 6px); left: 0; right: 0; display: none; padding: 12px; border: 1px solid #d8e3ee; background: #fff; box-shadow: var(--shadow); z-index: 320; }
     .annotation-multi-select.open .annotation-multi-panel { display: block; }
+    .annotation-multi-special { padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid #edf2f7; }
     .annotation-multi-group + .annotation-multi-group { margin-top: 12px; padding-top: 12px; border-top: 1px solid #edf2f7; }
     .annotation-multi-group-title { margin-bottom: 8px; color: #1f3e62; font-size: 13px; font-weight: 700; }
     .annotation-checkbox-group { gap: 10px 14px; align-items: flex-start; }
@@ -158,8 +158,8 @@
             <aside class="object-panel">
               <div class="panel-title"><span>标注对象列表</span><span class="proto-tag">待标注</span></div>
               <div class="project-line">项目类型：住宅装修</div>
-              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="object-meta"><div>形状：矩形</div><div class="annotation-multi-select" data-annotation-multi-select><button class="annotation-multi-select-control" type="button"><span class="annotation-multi-select-value"><span class="annotation-multi-tag">安全帽 / 白色</span><span class="annotation-multi-tag">安全帽 / 红色</span></span><span class="annotation-multi-select-arrow">▾</span></button><div class="annotation-multi-panel"><div class="annotation-multi-group"><div class="annotation-multi-group-title">安全帽</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" checked /> 白色</label><label class="proto-checkbox"><input type="checkbox" checked /> 红色</label><label class="proto-checkbox"><input type="checkbox" /> 黄色</label></div></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">灭火器</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" /> 正常</label><label class="proto-checkbox"><input type="checkbox" /> 损坏</label></div></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">脚手架</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" /> 完整</label><label class="proto-checkbox"><input type="checkbox" /> 变形</label></div></div></div></div></div><div class="mini-actions"><button type="button" data-tip="锁定">🔒</button><button type="button" data-tip="可见">👁</button><button type="button" data-tip="固定">📌</button></div></div>
-              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot blue"></i>对象2</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="object-meta"><div>形状：多边形</div><div class="annotation-multi-select" data-annotation-multi-select><button class="annotation-multi-select-control" type="button"><span class="annotation-multi-select-value"><span class="annotation-multi-tag">灭火器 / 正常</span></span><span class="annotation-multi-select-arrow">▾</span></button><div class="annotation-multi-panel"><div class="annotation-multi-group"><div class="annotation-multi-group-title">安全帽</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" /> 白色</label><label class="proto-checkbox"><input type="checkbox" /> 红色</label><label class="proto-checkbox"><input type="checkbox" /> 黄色</label></div></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">灭火器</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" checked /> 正常</label><label class="proto-checkbox"><input type="checkbox" /> 损坏</label></div></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">脚手架</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" /> 完整</label><label class="proto-checkbox"><input type="checkbox" /> 变形</label></div></div></div></div></div><div class="mini-actions"><button type="button" data-tip="解锁">🔓</button><button type="button" data-tip="可见">👁</button><button type="button" data-tip="固定">📌</button></div></div>
+              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="object-meta"><div>形状：矩形</div><div class="annotation-multi-select" data-annotation-multi-select><button class="annotation-multi-select-control" type="button"><span class="annotation-multi-select-value"><span class="annotation-multi-tag">安全帽 / 白色</span><span class="annotation-multi-tag">安全帽 / 红色</span></span><span class="annotation-multi-select-arrow">▾</span></button><div class="annotation-multi-panel"><div class="annotation-multi-special"><label class="proto-checkbox"><input type="checkbox" data-confirm-option /> 待确认类别</label></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">安全帽</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" checked /> 白色</label><label class="proto-checkbox"><input type="checkbox" checked /> 红色</label><label class="proto-checkbox"><input type="checkbox" /> 黄色</label></div></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">灭火器</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" /> 正常</label><label class="proto-checkbox"><input type="checkbox" /> 损坏</label></div></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">脚手架</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" /> 完整</label><label class="proto-checkbox"><input type="checkbox" /> 变形</label></div></div></div></div></div><div class="mini-actions"><button type="button" data-tip="锁定">🔒</button><button type="button" data-tip="可见">👁</button><button type="button" data-tip="固定">📌</button></div></div>
+              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot blue"></i>对象2</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="object-meta"><div>形状：多边形</div><div class="annotation-multi-select" data-annotation-multi-select><button class="annotation-multi-select-control" type="button"><span class="annotation-multi-select-value"><span class="annotation-multi-tag">灭火器 / 正常</span></span><span class="annotation-multi-select-arrow">▾</span></button><div class="annotation-multi-panel"><div class="annotation-multi-special"><label class="proto-checkbox"><input type="checkbox" data-confirm-option /> 待确认类别</label></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">安全帽</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" /> 白色</label><label class="proto-checkbox"><input type="checkbox" /> 红色</label><label class="proto-checkbox"><input type="checkbox" /> 黄色</label></div></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">灭火器</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" checked /> 正常</label><label class="proto-checkbox"><input type="checkbox" /> 损坏</label></div></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">脚手架</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" /> 完整</label><label class="proto-checkbox"><input type="checkbox" /> 变形</label></div></div></div></div></div><div class="mini-actions"><button type="button" data-tip="解锁">🔓</button><button type="button" data-tip="可见">👁</button><button type="button" data-tip="固定">📌</button></div></div>
             </aside>
           </div>
         </section>
@@ -191,7 +191,7 @@
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
       <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
         <section class="content-panel" style="height: 982px; padding:0; overflow:hidden;">
-          <div class="worktop"><div class="worktop-title"><button class="worktop-back js-unsaved-trigger" type="button">← 标注工作台</button></div><div class="worktop-actions"><button class="btn btn-ghost">上一张</button><button class="btn btn-ghost js-unsaved-trigger" type="button">下一张</button><button class="btn btn-ghost">保存草稿</button><button class="btn btn-primary">提交标注</button><button class="btn btn-danger">标记无效</button><button class="btn btn-ghost">任务记录</button></div></div>
+          <div class="worktop"><div class="worktop-title"><button class="worktop-back js-unsaved-trigger" type="button">← 标注工作台</button></div><div class="worktop-actions"><button class="btn btn-ghost return-panel-entry" type="button">查看退回原因</button><button class="btn btn-ghost">上一张</button><button class="btn btn-ghost js-unsaved-trigger" type="button">下一张</button><button class="btn btn-ghost">保存草稿</button><button class="btn btn-primary">提交标注</button><button class="btn btn-danger">标记无效</button><button class="btn btn-ghost">任务记录</button></div></div>
           <div class="annotation-shell">
             <div class="toolrail">
               <div class="toolbtn active" data-tip="指针"><span class="tool-icon">↖</span></div>
@@ -204,7 +204,6 @@
             </div>
             <div class="canvas-area">
               <div class="site-wall"></div><div class="site-floor"></div><div class="box one"></div><div class="box two"></div><div class="poly"></div><span class="node n1"></span><span class="node n2"></span>
-              <button class="return-panel-entry" type="button">查看退回原因</button>
               <div class="return-panel">
                 <div class="return-panel-head"><span>质检退回原因</span><button class="return-panel-close" type="button">×</button></div>
                 <div class="return-panel-body">
@@ -220,8 +219,8 @@
             <aside class="object-panel">
               <div class="panel-title"><span>标注对象列表</span><span class="proto-tag proto-status-danger">质检退回</span></div>
               <div class="project-line">项目类型：住宅装修</div>
-              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="object-meta"><div>形状：矩形</div><div class="annotation-multi-select" data-annotation-multi-select><button class="annotation-multi-select-control" type="button"><span class="annotation-multi-select-value"><span class="annotation-multi-tag">安全帽 / 白色</span><span class="annotation-multi-tag">安全帽 / 红色</span></span><span class="annotation-multi-select-arrow">▾</span></button><div class="annotation-multi-panel"><div class="annotation-multi-group"><div class="annotation-multi-group-title">安全帽</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" checked /> 白色</label><label class="proto-checkbox"><input type="checkbox" checked /> 红色</label><label class="proto-checkbox"><input type="checkbox" /> 黄色</label></div></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">灭火器</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" /> 正常</label><label class="proto-checkbox"><input type="checkbox" /> 损坏</label></div></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">脚手架</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" /> 完整</label><label class="proto-checkbox"><input type="checkbox" /> 变形</label></div></div></div></div></div><div class="mini-actions"><button type="button" data-tip="锁定">🔒</button><button type="button" data-tip="可见">👁</button><button type="button" data-tip="固定">📌</button></div></div>
-              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot blue"></i>对象2</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="object-meta"><div>形状：多边形</div><div class="annotation-multi-select" data-annotation-multi-select><button class="annotation-multi-select-control" type="button"><span class="annotation-multi-select-value"><span class="annotation-multi-tag">灭火器 / 正常</span></span><span class="annotation-multi-select-arrow">▾</span></button><div class="annotation-multi-panel"><div class="annotation-multi-group"><div class="annotation-multi-group-title">安全帽</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" /> 白色</label><label class="proto-checkbox"><input type="checkbox" /> 红色</label><label class="proto-checkbox"><input type="checkbox" /> 黄色</label></div></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">灭火器</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" checked /> 正常</label><label class="proto-checkbox"><input type="checkbox" /> 损坏</label></div></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">脚手架</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" /> 完整</label><label class="proto-checkbox"><input type="checkbox" /> 变形</label></div></div></div></div></div><div class="mini-actions"><button type="button" data-tip="解锁">🔓</button><button type="button" data-tip="可见">👁</button><button type="button" data-tip="固定">📌</button></div></div>
+              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="object-meta"><div>形状：矩形</div><div class="annotation-multi-select" data-annotation-multi-select><button class="annotation-multi-select-control" type="button"><span class="annotation-multi-select-value"><span class="annotation-multi-tag">安全帽 / 白色</span><span class="annotation-multi-tag">安全帽 / 红色</span></span><span class="annotation-multi-select-arrow">▾</span></button><div class="annotation-multi-panel"><div class="annotation-multi-special"><label class="proto-checkbox"><input type="checkbox" data-confirm-option /> 待确认类别</label></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">安全帽</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" checked /> 白色</label><label class="proto-checkbox"><input type="checkbox" checked /> 红色</label><label class="proto-checkbox"><input type="checkbox" /> 黄色</label></div></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">灭火器</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" /> 正常</label><label class="proto-checkbox"><input type="checkbox" /> 损坏</label></div></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">脚手架</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" /> 完整</label><label class="proto-checkbox"><input type="checkbox" /> 变形</label></div></div></div></div></div><div class="mini-actions"><button type="button" data-tip="锁定">🔒</button><button type="button" data-tip="可见">👁</button><button type="button" data-tip="固定">📌</button></div></div>
+              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot blue"></i>对象2</span><div class="object-menu"><button class="object-menu-trigger" type="button">⋮</button><div class="object-menu-pop"><button type="button">复制</button><button class="danger" type="button">删除</button></div></div></div><div class="object-meta"><div>形状：多边形</div><div class="annotation-multi-select" data-annotation-multi-select><button class="annotation-multi-select-control" type="button"><span class="annotation-multi-select-value"><span class="annotation-multi-tag">灭火器 / 正常</span></span><span class="annotation-multi-select-arrow">▾</span></button><div class="annotation-multi-panel"><div class="annotation-multi-special"><label class="proto-checkbox"><input type="checkbox" data-confirm-option /> 待确认类别</label></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">安全帽</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" /> 白色</label><label class="proto-checkbox"><input type="checkbox" /> 红色</label><label class="proto-checkbox"><input type="checkbox" /> 黄色</label></div></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">灭火器</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" checked /> 正常</label><label class="proto-checkbox"><input type="checkbox" /> 损坏</label></div></div><div class="annotation-multi-group"><div class="annotation-multi-group-title">脚手架</div><div class="proto-checkbox-group annotation-checkbox-group"><label class="proto-checkbox"><input type="checkbox" /> 完整</label><label class="proto-checkbox"><input type="checkbox" /> 变形</label></div></div></div></div></div><div class="mini-actions"><button type="button" data-tip="解锁">🔓</button><button type="button" data-tip="可见">👁</button><button type="button" data-tip="固定">📌</button></div></div>
             </aside>
           </div>
         </section>
@@ -336,10 +335,11 @@
     });
 
     document.querySelectorAll(".return-panel").forEach((panel) => {
+      const stage = panel.closest("[data-prototype-panel]");
       const canvas = panel.closest(".canvas-area");
       const head = panel.querySelector(".return-panel-head");
       const close = panel.querySelector(".return-panel-close");
-      const entry = canvas && canvas.querySelector(".return-panel-entry");
+      const entry = stage && stage.querySelector(".return-panel-entry");
       let dragging = false;
       let offsetX = 0;
       let offsetY = 0;
@@ -356,13 +356,11 @@
       close.addEventListener("click", (event) => {
         event.stopPropagation();
         panel.classList.add("is-hidden");
-        if (entry) entry.classList.add("is-visible");
       });
 
       if (entry) {
         entry.addEventListener("click", (event) => {
           event.stopPropagation();
-          entry.classList.remove("is-visible");
           panel.classList.remove("is-hidden");
         });
       }
@@ -407,10 +405,16 @@
     document.querySelectorAll("[data-annotation-multi-select]").forEach((select) => {
       const control = select.querySelector(".annotation-multi-select-control");
       const value = select.querySelector(".annotation-multi-select-value");
-      const checkboxes = Array.from(select.querySelectorAll('input[type="checkbox"]'));
+      const confirmOption = select.querySelector("[data-confirm-option]");
+      const checkboxes = Array.from(select.querySelectorAll('input[type="checkbox"]')).filter((item) => item !== confirmOption);
 
       const renderMultiValue = () => {
         if (!value) return;
+        if (confirmOption && confirmOption.checked) {
+          value.innerHTML = '<span class="annotation-multi-tag">待确认类别</span>';
+          return;
+        }
+
         const selected = checkboxes
           .filter((checkbox) => checkbox.checked)
           .map((checkbox) => {
@@ -439,9 +443,24 @@
         });
       }
 
+      if (confirmOption) {
+        confirmOption.addEventListener("click", (event) => event.stopPropagation());
+        confirmOption.addEventListener("change", () => {
+          if (confirmOption.checked) {
+            checkboxes.forEach((item) => {
+              item.checked = false;
+            });
+          }
+          renderMultiValue();
+        });
+      }
+
       checkboxes.forEach((checkbox) => {
         checkbox.addEventListener("click", (event) => event.stopPropagation());
         checkbox.addEventListener("change", () => {
+          if (confirmOption && checkbox.checked) {
+            confirmOption.checked = false;
+          }
           if (checkbox.checked) {
             const currentGroup = checkbox.closest(".annotation-multi-group");
             checkboxes.forEach((item) => {
