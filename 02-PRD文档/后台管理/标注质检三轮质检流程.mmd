@@ -32,7 +32,7 @@ stateDiagram-v2
   HasValidAnnotation --> AnnotationMerged: 至少一条正常标注
   HasValidAnnotation --> AllInvalidSample: 全部为无效提交
   AnnotationMerged --> QCWaiting: 进入一轮质检队列
-  AllInvalidSample --> FinalInvalid: 不进入质检
+  AllInvalidSample --> QC3Waiting: 全部无效，跳过一检二检直接进三检校验
 
   state "三轮质检状态" as QCFlow {
     [*] --> QC1Waiting
