@@ -9,11 +9,9 @@
     .prototype-stage { display: none; }
     .prototype-stage.active { display: block; }
     .attr-list { display: flex; flex-wrap: wrap; gap: 6px; }
-    .thumb-row { display: flex; gap: 8px; }
-    .mini-thumb { width: 68px; height: 48px; border: 1px solid #d7e2ee; background: linear-gradient(135deg, #d7e5f5, #f6f9fd); }
     .attr-block { border: 1px solid #dce6f1; background: #fbfdff; padding: 12px; margin-bottom: 12px; }
     .attr-block-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 700; color: #243d5c; }
-    .upload-box { height: 72px; border: 1px dashed #b8c9dc; background: #f8fbff; display: flex; align-items: center; justify-content: center; color: #6f8196; font-weight: 700; }
+    .attr-head-action { font-size: 13px; font-weight: 400; color: #2a6edc; cursor: pointer; }
     .modal-stage { height: calc(100% - 64px); }
     .modal-body .control { width: 100%; }
     .category-form-grid { display: grid; grid-template-columns: 120px 1fr; gap: 16px 18px; align-items: center; }
@@ -63,8 +61,8 @@
               <div class="category-form-grid">
                 <label>类别名称*</label><input class="control" value="安全帽" />
                 <div class="full">
-                  <div class="attr-block"><div class="attr-block-head"><span>属性 1</span></div><div class="category-form-grid"><label>属性名称*</label><input class="control" value="白色" /><label>状态*</label><div><label><input type="radio" checked /> 启用</label>　<label><input type="radio" /> 停用</label></div></div></div>
-                  <div class="attr-block"><div class="attr-block-head"><span>属性 2</span></div><div class="category-form-grid"><label>属性名称*</label><input class="control" value="红色" /><label>状态*</label><div><label><input type="radio" checked /> 启用</label>　<label><input type="radio" /> 停用</label></div></div></div>
+                  <div class="attr-block"><div class="attr-block-head"><span>属性 1</span><span class="attr-head-action">移除属性</span></div><div class="category-form-grid"><label>属性名称*</label><input class="control" value="白色" /><label>状态*</label><div><label><input type="radio" checked /> 启用</label>　<label><input type="radio" /> 停用</label></div></div></div>
+                  <div class="attr-block"><div class="attr-block-head"><span>属性 2</span><span class="attr-head-action">移除属性</span></div><div class="category-form-grid"><label>属性名称*</label><input class="control" value="红色" /><label>状态*</label><div><label><input type="radio" checked /> 启用</label>　<label><input type="radio" /> 停用</label></div></div></div>
                   <button class="btn btn-ghost" type="button">＋ 添加属性</button>
                 </div>
               </div>
