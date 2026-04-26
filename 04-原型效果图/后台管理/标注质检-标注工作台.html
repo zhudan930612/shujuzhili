@@ -137,6 +137,7 @@
     <button type="button" data-prototype-button="record">任务记录</button>
     <button type="button" data-prototype-button="invalid">标记无效</button>
     <button type="button" data-prototype-button="unsaved">未保存变更弹窗</button>
+    <button type="button" data-prototype-button="confirm-submit">待确认提交阻断</button>
   </div>
 
   <section class="prototype-stage active" data-prototype-panel="edit">
@@ -320,6 +321,27 @@
               <button class="btn btn-ghost">取消</button>
               <button class="btn btn-ghost">不保存离开</button>
               <button class="btn btn-primary">保存草稿</button>
+            </div>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="confirm-submit">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="modal-stage">
+          <div class="modal medium">
+            <div class="modal-head"><span>无法提交标注</span><span>×</span></div>
+            <div class="modal-body">
+              <div class="danger-box">
+                <div style="color:#c33b3b;">⚠ 存在标注对象的类别为「待确认类别」，请先补齐正式类别后再提交或保存草稿。</div>
+              </div>
+            </div>
+            <div class="modal-foot">
+              <button class="btn btn-primary">我知道了</button>
             </div>
           </div>
         </section>
