@@ -136,6 +136,7 @@
     <button type="button" data-prototype-button="returned">质检退回</button>
     <button type="button" data-prototype-button="record">任务记录</button>
     <button type="button" data-prototype-button="invalid">标记无效</button>
+    <button type="button" data-prototype-button="unsaved">未保存变更弹窗</button>
   </div>
 
   <section class="prototype-stage active" data-prototype-panel="edit">
@@ -296,6 +297,29 @@
             <div class="modal-foot">
               <button class="btn btn-ghost">取消</button>
               <button class="btn btn-danger">确认标记无效</button>
+            </div>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="unsaved">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="modal-stage">
+          <div class="modal medium">
+            <div class="modal-head"><span>存在未保存的标注修改</span><span>×</span></div>
+            <div class="modal-body">
+              <div class="danger-box">
+                <div style="color:#c33b3b;">⚠ 当前标注内容有未保存修改，离开后将丢失。</div>
+              </div>
+            </div>
+            <div class="modal-foot">
+              <button class="btn btn-ghost">取消</button>
+              <button class="btn btn-ghost">不保存离开</button>
+              <button class="btn btn-primary">保存草稿</button>
             </div>
           </div>
         </section>
