@@ -37,6 +37,46 @@
 
     /* 空状态 */
     .empty-panel { height: 470px; border: 1px dashed #ccd9e8; background: #fbfdff; display: flex; align-items: center; justify-content: center; color: #7a8aa0; font-weight: 700; box-shadow: var(--shadow); }
+
+    /* 删除按钮禁用态 + tooltip */
+    .proto-row-actions .proto-action[disabled] {
+      color: #bcc7d6;
+      cursor: not-allowed;
+      pointer-events: auto;
+    }
+    .action-wrapper {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+    .action-tooltip {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #344055;
+      color: #fff;
+      font-size: 12px;
+      line-height: 1.4;
+      padding: 8px 12px;
+      border-radius: 6px;
+      white-space: nowrap;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    }
+    .action-wrapper:hover .action-tooltip { display: block; }
+    .action-tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: #344055;
+    }
+
+    /* 删除弹窗 - 复用 modal + danger-box 公共组件 */
   </style>
 </head>
 <body>
@@ -45,6 +85,7 @@
     <button type="button" data-prototype-button="detail">批次详情</button>
     <button type="button" data-prototype-button="preview">图片预览</button>
     <button type="button" data-prototype-button="empty">空状态</button>
+    <button type="button" data-prototype-button="delete">删除确认</button>
   </div>
 
   <section class="prototype-stage active" data-prototype-panel="list">
@@ -114,6 +155,10 @@
                     <td>
                       <div class="proto-row-actions">
                         <button class="proto-action" type="button" data-jump="detail">查看</button>
+                        <span class="action-wrapper">
+                          <button class="proto-action danger" type="button" disabled>删除</button>
+                          <span class="action-tooltip">已有标注任务进行中，无法删除</span>
+                        </span>
                       </div>
                     </td>
                   </tr>
@@ -126,6 +171,7 @@
                     <td>
                       <div class="proto-row-actions">
                         <button class="proto-action" type="button" data-jump="detail">查看</button>
+                        <button class="proto-action danger" type="button" data-delete="202604241410" data-batch-name="202604241410" data-batch-creator="李四" data-batch-images="20" data-batch-persons="4">删除</button>
                       </div>
                     </td>
                   </tr>
@@ -138,6 +184,10 @@
                     <td>
                       <div class="proto-row-actions">
                         <button class="proto-action" type="button" data-jump="detail">查看</button>
+                        <span class="action-wrapper">
+                          <button class="proto-action danger" type="button" disabled>删除</button>
+                          <span class="action-tooltip">已有标注任务进行中，无法删除</span>
+                        </span>
                       </div>
                     </td>
                   </tr>
@@ -160,6 +210,24 @@
             </div>
           </div>
         </section>
+        <!-- 删除确认弹窗（复用 modal + danger-box） -->
+        <div id="deleteConfirmStage" style="position:absolute;inset:0;z-index:10;display:none;">
+          <section class="modal-stage">
+            <div class="modal">
+              <div class="modal-head"><span>确认删除任务批次？</span><span>×</span></div>
+              <div class="modal-body">
+                <div class="danger-box">
+                  <div style="line-height:2;" id="deleteBatchInfo"></div>
+                  <div style="margin-top:14px;color:#c33b3b;">⚠ 删除后将同时删除该批次下所有未标注的个人任务，且无法恢复。</div>
+                </div>
+              </div>
+              <div class="modal-foot">
+                <button class="btn btn-ghost" type="button" id="cancelDeleteBtn">取消</button>
+                <button class="btn btn-danger" type="button" id="confirmDeleteBtn">确认删除</button>
+              </div>
+            </div>
+          </section>
+        </div>
       </main></div>
     </div>
   </section>
@@ -275,6 +343,32 @@
     </div>
   </section>
 
+  <section class="prototype-stage" data-prototype-panel="delete">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-assignment">
+      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 任务分配管理 〉 查看批次</div>
+        <section class="modal-stage">
+          <div class="modal">
+            <div class="modal-head"><span>确认删除任务批次？</span><span>×</span></div>
+            <div class="modal-body">
+              <div class="danger-box">
+                <div style="line-height:2;">
+                  <div>批次名称：202604241410</div>
+                  <div>创建人：李四&emsp;图片数：20&emsp;标注人员：4</div>
+                </div>
+                <div style="margin-top:14px;color:#c33b3b;">⚠ 删除后将同时删除该批次下所有未标注的个人任务，且无法恢复。</div>
+              </div>
+            </div>
+            <div class="modal-foot">
+              <button class="btn btn-ghost" type="button">取消</button>
+              <button class="btn btn-danger" type="button">确认删除</button>
+            </div>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
   <script src="./assets/prototype.js"></script>
   <script src="./assets/prototype-layout.js"></script>
   <script src="./assets/prototype-switcher.js"></script>
@@ -284,6 +378,58 @@
         var button = document.querySelector('[data-prototype-button="' + item.dataset.jump + '"]');
         if (button) button.click();
       });
+    });
+
+    /* 删除确认弹窗逻辑 */
+    var deleteStage = document.getElementById('deleteConfirmStage');
+    var deleteBatchInfo = document.getElementById('deleteBatchInfo');
+    var cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    var confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    var pendingDeleteTarget = null;
+
+    function openDeleteModal() { deleteStage.style.display = 'block'; }
+    function closeDeleteModal() { deleteStage.style.display = 'none'; pendingDeleteTarget = null; }
+
+    // 点击删除按钮打开确认弹窗
+    document.querySelectorAll('[data-delete]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        pendingDeleteTarget = btn;
+        var name = btn.dataset.batchName;
+        var creator = btn.dataset.batchCreator;
+        var images = btn.dataset.batchImages;
+        var persons = btn.dataset.batchPersons;
+        deleteBatchInfo.innerHTML =
+          '<div>批次名称：<strong>' + name + '</strong></div>' +
+          '<div>创建人：' + creator + '&emsp;图片数：' + images + '&emsp;标注人员：' + persons + '</div>';
+        openDeleteModal();
+      });
+    });
+
+    // 点击弹窗右上角关闭按钮
+    var closeBtn = deleteStage.querySelector('.modal-head span:last-child');
+    if (closeBtn) closeBtn.addEventListener('click', closeDeleteModal);
+
+    // 取消删除
+    cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+
+    // 点击 modal-stage 背景区关闭
+    deleteStage.querySelector('.modal-stage').addEventListener('click', function (e) {
+      if (e.target === this || e.target.classList.contains('modal-stage')) closeDeleteModal();
+    });
+
+    // 确认删除
+    confirmDeleteBtn.addEventListener('click', function () {
+      if (pendingDeleteTarget) {
+        var row = pendingDeleteTarget.closest('tr');
+        if (row) row.remove();
+        var countSpan = document.querySelector('.proto-pagination span');
+        if (countSpan) {
+          var txt = countSpan.textContent;
+          var m = txt.match(/\d+/);
+          if (m) countSpan.textContent = txt.replace(m[0], String(Number(m[0]) - 1));
+        }
+      }
+      closeDeleteModal();
     });
   </script>
 </body>
