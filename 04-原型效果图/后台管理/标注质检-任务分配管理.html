@@ -41,13 +41,12 @@
     .empty-panel { height: 470px; border: 1px dashed #ccd9e8; background: #fbfdff; display: flex; align-items: center; justify-content: center; color: #7a8aa0; font-weight: 700; box-shadow: var(--shadow); }
     .modal-stage { display: flex; }
     .assignment-create-stage { position: relative; min-height: 100vh; }
-    .assignment-create-stage .modal { width: 720px; max-width: calc(100% - 48px); }
-    .modal.large { width: 980px; }
+    .assignment-create-stage .modal { width: 760px; max-width: calc(100% - 48px); }
     .modal-head h3 { margin: 0; font-size: 18px; }
     .modal-close { width: 30px; height: 30px; border: 1px solid #d8e2ee; border-radius: 50%; background: #f8fbff; color: #6e8095; font-size: 18px; line-height: 1; cursor: pointer; }
     .assignment-create-head-left { display: flex; align-items: center; gap: 12px; }
     .assignment-create-note { padding-left: 12px; border-left: 1px solid #d8e1ef; color: #64748b; font-size: 13px; font-weight: 400; line-height: 1.5; }
-    .batch-modal-body { padding: 22px 24px; display: grid; gap: 18px; background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%); }
+    .batch-modal-body { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%); }
     .assignment-create-form { display: grid; gap: 14px; max-width: 920px; }
     .assignment-create-form .proto-field-row { grid-template-columns: 108px minmax(0, 1fr); gap: 12px 18px; align-items: start; }
     .assignment-create-form .proto-field-label { padding-top: 9px; font-weight: 700; color: #516477; letter-spacing: 0.2px; }
@@ -119,6 +118,28 @@
     .batch-info-compact .proto-field-label { padding-top: 9px; font-weight: 700; color: #516477; letter-spacing: 0.2px; }
     .batch-info-compact .assignment-create-readonly { max-width: 420px; }
     .preview-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; color: #4f6377; }
+
+    /* 弹窗内筛选条件栏 */
+    .filter-condensed { display: flex; flex-direction: column; gap: 10px; padding: 16px 22px; background: linear-gradient(135deg, #f8fbff 0%, #f1f6fe 100%); border: 1px solid #dae6f5; }
+    .filter-condensed .proto-filter-bar { flex: 1; min-width: 0; flex-wrap: nowrap; }
+    .filter-condensed-desc {
+      color: #7a8aa0;
+      font-size: 13px;
+    }
+    .filter-condensed-desc strong {
+      color: #1a4f8f;
+      font-weight: 700;
+    }
+
+    /* 弹窗表单卡片 */
+    .modal-form-card { border: 1px solid #dce6f1; background: #fff; box-shadow: 0 10px 20px rgba(18,51,95,0.04); }
+    .modal-form-card-section { padding: 20px 22px; }
+    .modal-form-card-section + .modal-form-card-section { border-top: 1px solid #eef3f8; }
+    .modal-form-card-section.has-bg { background: linear-gradient(180deg, #fcfdff 0%, #f8fbff 100%); }
+    .modal-form-row { display: flex; align-items: center; gap: 12px; }
+    .modal-form-row .proto-field-label { min-width: 80px; font-weight: 700; color: #516477; letter-spacing: 0.2px; }
+    .modal-form-row .proto-input { flex: 1; max-width: 360px; }
+
   </style>
 </head>
 <body>
@@ -126,7 +147,6 @@
     <button class="active" type="button" data-prototype-button="browse">全部</button>
     <button type="button" data-prototype-button="todo-list">待分配</button>
     <button type="button" data-prototype-button="assigned-list">已分配</button>
-    <button type="button" data-prototype-button="create">创建批次态</button>
     <button type="button" data-prototype-button="modal">创建弹窗</button>
     <button type="button" data-prototype-button="success">创建成功Toast</button>
   </div>
@@ -172,7 +192,7 @@
             <div class="assignment-head">
               <h3 class="assignment-title">图片数据列表</h3>
               <div class="assignment-tools">
-                <button class="btn btn-primary" type="button" disabled>创建任务批次</button>
+                <button class="btn btn-primary" type="button" data-jump="modal">创建任务批次</button>
                 <a class="btn btn-ghost" href="./标注质检-任务分配批次.html">查看批次</a>
               </div>
             </div>
@@ -242,7 +262,7 @@
             <div class="assignment-head">
               <h3 class="assignment-title">图片数据列表</h3>
               <div class="assignment-tools">
-                <button class="btn btn-primary" type="button" data-jump="create">创建任务批次</button>
+                <button class="btn btn-primary" type="button" data-jump="modal">创建任务批次</button>
                 <a class="btn btn-ghost" href="./标注质检-任务分配批次.html">查看批次</a>
               </div>
             </div>
@@ -323,67 +343,6 @@
     </div>
   </section>
 
-  <section class="prototype-stage" data-prototype-panel="create">
-    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-assignment">
-      <header class="topbar"></header>
-      <div class="main"><aside class="sidebar"></aside><main class="workspace">
-        <div class="crumb">☰ 标注质检 〉 任务分配管理</div>
-        <section class="surface tabbar"><div class="tab">标注任务</div></section>
-        <section class="assignment-shell">
-          <div class="assignment-panel">
-            <div class="assignment-stat-grid">
-              <div class="assignment-stat-card" data-stat="all" data-jump="browse"><div class="assignment-stat-name">全部</div><div class="assignment-stat-num">128</div></div>
-              <div class="assignment-stat-card active" data-stat="todo" data-jump="todo-list"><div class="assignment-stat-name">待分配</div><div class="assignment-stat-num">46</div></div>
-              <div class="assignment-stat-card" data-stat="assigned"><div class="assignment-stat-name">已分配</div><div class="assignment-stat-num">82</div></div>
-            </div>
-            <div class="proto-filter-bar assignment-filter">
-              <select class="control select-control"><option>项目类型</option><option>住宅装修</option><option>小型工程</option><option>零星作业</option></select>
-              <div class="date-range-picker">
-                <input class="control date-range-control" type="text" value="上传时间" readonly />
-                <div class="date-range-panel">
-                  <div class="date-range-title">选择上传时间</div>
-                  <div class="date-range-fields">
-                    <input class="control" type="date" value="2026-04-01" data-role="start" />
-                    <input class="control" type="date" value="2026-04-24" data-role="end" />
-                  </div>
-                  <div class="date-range-actions">
-                    <button class="btn btn-ghost" type="button" data-action="cancel">取消</button>
-                    <button class="btn btn-primary" type="button" data-action="apply">确定</button>
-                  </div>
-                </div>
-              </div>
-              <div class="proto-cascader" data-proto-cascader data-allow-any-level="true" data-cascader-depth="5" data-placeholder="行政区域">
-                <button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">行政区域</span><span class="proto-cascader-arrow">▾</span></button>
-                <div class="proto-cascader-panel"></div>
-              </div>
-              <button class="btn btn-primary">查询</button>
-              <button class="btn btn-ghost">重置</button>
-            </div>
-          </div>
-          <div class="assignment-panel">
-            <div class="assignment-head">
-              <h3 class="assignment-title">图片数据列表</h3>
-              <div class="assignment-tools">
-                <label><input type="checkbox" data-assignment-select-all checked /> 全选</label>
-                <span data-assignment-selected-count>已选 3 张</span>
-                <button class="btn btn-ghost" type="button" data-jump="browse">取消</button>
-                <button class="btn btn-primary" type="button" data-jump="modal">创建任务</button>
-              </div>
-            </div>
-            <div class="assignment-grid">
-              <article class="assignment-card selected" data-assignment-selectable><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">住宅装修</span></div></article>
-              <article class="assignment-card" data-assignment-selectable><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">小型工程</span></div></article>
-              <article class="assignment-card selected" data-assignment-selectable><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">零星作业</span></div></article>
-              <article class="assignment-card" data-assignment-selectable><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">小型工程</span></div></article>
-              <article class="assignment-card selected" data-assignment-selectable><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">住宅装修</span></div></article>
-              <article class="assignment-card" data-assignment-selectable><div class="assignment-thumb"></div><div class="assignment-card-body"><span class="project-type">零星作业</span></div></article>
-            </div>
-          </div>
-        </section>
-      </main></div>
-    </div>
-  </section>
-
   <section class="prototype-stage" data-prototype-panel="modal">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-assignment">
       <header class="topbar"></header>
@@ -393,7 +352,7 @@
           <div class="crumb">☰ 标注质检 〉 任务分配管理</div>
           <section class="content-panel">
             <section class="modal-stage assignment-create-stage">
-              <div class="modal xlarge">
+              <div class="modal large">
                 <div class="modal-head">
                   <div class="assignment-create-head-left">
                     <span>创建任务批次</span>
@@ -401,23 +360,43 @@
                   <span>×</span>
                 </div>
                 <div class="modal-body batch-modal-body">
-                  <div class="assignment-create-main">
-                    <!-- 批次信息：精简为两行 -->
-                    <div class="batch-info-compact">
-                      <div class="proto-field-label">批次名称</div>
-                      <input class="proto-input" type="text" value="202604241530" />
-                      <div class="proto-field-label">已选图片</div>
-                      <div class="assignment-create-readonly">12 张</div>
-                    </div>
-
-                    <!-- 人员分配：双栏 -->
-                    <section class="assignment-create-group">
-                      <div class="assignment-create-group-head">
-                        <h4 class="assignment-create-group-title">人员分配</h4>
-                        <button class="batch-auto-btn" type="button">自动分配</button>
+                  <!-- 筛选条件区 -->
+                  <div class="filter-condensed">
+                    <div class="proto-filter-bar" style="padding:0;margin:0;background:transparent;box-shadow:none;border:0;flex:1;">
+                      <select class="control select-control"><option selected>住宅装修</option><option>小型工程</option><option>零星作业</option></select>
+                      <div class="date-range-picker">
+                        <input class="control date-range-control" type="text" value="2026-04-01 至 2026-04-24" readonly />
+                        <div class="date-range-panel">
+                          <div class="date-range-title">选择上传时间</div>
+                          <div class="date-range-fields"><input class="control" type="date" value="2026-04-01" data-role="start" /><input class="control" type="date" value="2026-04-24" data-role="end" /></div>
+                          <div class="date-range-actions"><button class="btn btn-ghost" type="button" data-action="cancel">取消</button><button class="btn btn-primary" type="button" data-action="apply">确定</button></div>
+                        </div>
                       </div>
-                      <div class="assign-two-col">
-                        <!-- 左栏：标注人员 -->
+                      <div class="proto-cascader" data-proto-cascader data-allow-any-level="true" data-cascader-depth="5" data-placeholder="行政区域">
+                        <button class="control proto-cascader-control" type="button"><span class="proto-cascader-value">广东省 / 深圳市</span><span class="proto-cascader-arrow">▾</span></button>
+                        <div class="proto-cascader-panel"></div>
+                      </div>
+                    </div>
+                  <div class="filter-condensed-desc">
+                    当前筛选条件下，找到 <strong id="matchCount">46</strong> 张待分配图片
+                  </div>
+                  </div>
+                  <!-- 表单卡片 -->
+                  <div class="modal-form-card">
+                    <!-- 批次名称 -->
+                    <div class="modal-form-card-section">
+                      <div class="modal-form-row">
+                        <span class="proto-field-label">批次名称</span>
+                        <input class="proto-input" type="text" value="202604241530" />
+                      </div>
+                    </div>
+                    <!-- 人员分配 -->
+                    <div class="modal-form-card-section has-bg">
+                      <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid #eef3f8;">
+                        <h4 class="assignment-create-group-title" style="margin:0;">人员分配</h4>
+                        <button class="batch-auto-btn" type="button">自动分配人员</button>
+                      </div>
+                      <div class="assign-two-col" style="margin-top:16px;">
                         <div class="assign-col">
                           <h5 class="assign-col-title">标注人员 <span class="sub">*</span></h5>
                           <div class="assign-col-divider"></div>
@@ -436,35 +415,27 @@
                             <span class="person-tag">王五 <button>×</button></span>
                           </div>
                         </div>
-
-                        <!-- 右栏：质检人员 -->
                         <div class="assign-col">
                           <h5 class="assign-col-title">质检配置 <span class="sub">*</span></h5>
                           <div class="assign-col-divider"></div>
                           <div class="proto-field-row">
                             <div class="proto-field-label">一检人员</div>
-                            <select class="proto-select">
-                              <option>赵六</option>
-                            </select>
+                            <select class="proto-select"><option>赵六</option></select>
                           </div>
                           <div class="proto-field-row">
                             <div class="proto-field-label">二检人员</div>
-                            <select class="proto-select">
-                              <option>钱七</option>
-                            </select>
+                            <select class="proto-select"><option>钱七</option></select>
                           </div>
                           <div class="proto-field-row">
                             <div class="proto-field-label">三检人员</div>
-                            <select class="proto-select">
-                              <option>孙八</option>
-                            </select>
+                            <select class="proto-select"><option>孙八</option></select>
                           </div>
                         </div>
                       </div>
-                    </section>
+                    </div>
                   </div>
                 </div>
-                <div class="modal-foot"><button class="btn btn-ghost" type="button" data-jump="create">取消</button><button class="btn btn-primary" type="button" data-jump="success">确认创建</button></div>
+                <div class="modal-foot"><button class="btn btn-ghost" type="button" data-jump="todo-list">取消</button><button class="btn btn-primary" type="button" data-jump="success">确认创建</button></div>
               </div>
             </section>
           </section>
@@ -566,49 +537,6 @@
       });
     });
 
-    (function () {
-      var createPanel = document.querySelector('[data-prototype-panel="create"]');
-      if (!createPanel) return;
-
-      var selectableCards = Array.prototype.slice.call(
-        createPanel.querySelectorAll("[data-assignment-selectable]")
-      );
-      var selectAll = createPanel.querySelector("[data-assignment-select-all]");
-      var countText = createPanel.querySelector("[data-assignment-selected-count]");
-
-      function syncSelectionState() {
-        var selectedCount = selectableCards.filter(function (card) {
-          return card.classList.contains("selected");
-        }).length;
-
-        if (countText) {
-          countText.textContent = "已选 " + selectedCount + " 张";
-        }
-
-        if (selectAll) {
-          selectAll.checked = selectedCount === selectableCards.length;
-          selectAll.indeterminate = selectedCount > 0 && selectedCount < selectableCards.length;
-        }
-      }
-
-      selectableCards.forEach(function (card) {
-        card.addEventListener("click", function () {
-          card.classList.toggle("selected");
-          syncSelectionState();
-        });
-      });
-
-      if (selectAll) {
-        selectAll.addEventListener("change", function () {
-          selectableCards.forEach(function (card) {
-            card.classList.toggle("selected", selectAll.checked);
-          });
-          syncSelectionState();
-        });
-      }
-
-      syncSelectionState();
-    })();
   </script>
 </body>
 </html>

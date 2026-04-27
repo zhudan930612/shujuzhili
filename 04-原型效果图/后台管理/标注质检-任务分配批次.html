@@ -16,6 +16,19 @@
     .batch-current { color:#193b68; font-size:16px; line-height:1; font-weight:700; }
     .batch-filter-persons .proto-select { width: 180px; min-width: 180px; }
 
+    /* 标注人员多选筛选 */
+    .multi-select { position: relative; width: 200px; }
+    .multi-select-trigger { width: 100%; height: 32px; display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 0 12px; border: 1px solid #d7dfe9; background: #fff; color: #42566b; font-size: 14px; cursor: pointer; text-align: left; }
+    .multi-select-trigger:hover { border-color: #2e7de0; }
+    .multi-select-trigger .placeholder { color: #7d8fa5; }
+    .multi-select-trigger .count { color: #1a4f8f; font-weight: 700; }
+    .multi-select-arrow { color: #7d8fa5; font-size: 10px; flex-shrink: 0; }
+    .multi-select-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 50; margin-top: 4px; border: 1px solid #d7dfe9; background: #fff; box-shadow: 0 8px 20px rgba(18,51,95,0.12); border-radius: 6px; padding: 6px 0; max-height: 220px; overflow-y: auto; }
+    .multi-select.open .multi-select-dropdown { display: block; }
+    .multi-select-option { display: flex; align-items: center; gap: 10px; padding: 7px 14px; font-size: 14px; color: #42566b; cursor: pointer; }
+    .multi-select-option:hover { background: #eef6ff; }
+    .multi-select-option input[type="checkbox"] { margin: 0; accent-color: #2e7de0; }
+
     /* 批次详情双栏 */
     .batch-detail-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 0 24px 18px; }
     .batch-person-block { display: grid; gap: 10px; align-content: start; }
@@ -124,13 +137,18 @@
             <option>王五</option>
           </select>
           <div class="batch-filter-persons">
-            <select class="proto-select">
-              <option selected>标注人员</option>
-              <option>张三</option>
-              <option>李四</option>
-              <option>王五</option>
-              <option>赵六</option>
-            </select>
+            <div class="multi-select" id="annotatorMultiSelect">
+              <button class="multi-select-trigger" type="button">
+                <span class="placeholder">标注人员</span>
+                <span class="multi-select-arrow">▾</span>
+              </button>
+              <div class="multi-select-dropdown">
+                <label class="multi-select-option"><input type="checkbox" value="张三"> 张三</label>
+                <label class="multi-select-option"><input type="checkbox" value="李四"> 李四</label>
+                <label class="multi-select-option"><input type="checkbox" value="王五"> 王五</label>
+                <label class="multi-select-option"><input type="checkbox" value="赵六"> 赵六</label>
+              </div>
+            </div>
           </div>
           <button class="btn btn-primary" type="button">🔍 查询</button>
           <button class="btn btn-ghost" type="button">↻ 重置</button>
@@ -431,6 +449,52 @@
       }
       closeDeleteModal();
     });
+
+    /* 标注人员多选筛选 */
+    (function () {
+      var container = document.getElementById('annotatorMultiSelect');
+      var trigger = container.querySelector('.multi-select-trigger');
+      var placeholder = trigger.querySelector('.placeholder');
+      var checkboxes = container.querySelectorAll('.multi-select-option input[type="checkbox"]');
+
+      function updateUI() {
+        var count = 0;
+        checkboxes.forEach(function (cb) { if (cb.checked) count++; });
+        if (count > 0) {
+          placeholder.textContent = '标注人员 (' + count + ')';
+          placeholder.classList.add('count');
+          placeholder.classList.remove('placeholder');
+        } else {
+          placeholder.textContent = '标注人员';
+          placeholder.classList.remove('count');
+          placeholder.classList.add('placeholder');
+        }
+      }
+
+      trigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        container.classList.toggle('open');
+      });
+
+      checkboxes.forEach(function (cb) {
+        cb.addEventListener('change', updateUI);
+      });
+
+      // 点击外部关闭下拉
+      document.addEventListener('click', function (e) {
+        if (!container.contains(e.target)) container.classList.remove('open');
+      });
+
+      // 重置按钮
+      var resetBtn = container.closest('section').querySelector('.btn-ghost');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', function () {
+          checkboxes.forEach(function (cb) { cb.checked = false; });
+          updateUI();
+          container.classList.remove('open');
+        });
+      }
+    })();
   </script>
 </body>
 </html>
