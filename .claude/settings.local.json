@@ -28,7 +28,8 @@
       "Bash(git clone *)",
       "Read(//tmp/**)",
       "Read(//tmp/andrej-skills/**)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Read(//c/Users/zhudan/AppData/Local/Temp/**)"
     ]
   }
 }
