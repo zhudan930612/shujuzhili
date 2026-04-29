@@ -107,6 +107,22 @@ class CheckPrototypesTests(unittest.TestCase):
 
         self.assertTrue(any("multi-action cell without proto-row-actions" in item.message for item in result.warnings))
 
+    def test_reports_filter_grid_using_flexible_fr_columns(self):
+        root = self.make_root("filter_grid_with_fr")
+        page = root / "04-原型效果图/后台管理/系统管理-角色管理.html"
+        page.write_text(
+            '<link rel="stylesheet" href="./assets/prototype.css" />\n'
+            '<style>.role-filter { display:grid; grid-template-columns:1.2fr 1fr 1.25fr auto auto; }</style>\n'
+            '<div class="role-filter"><input /><select></select><div></div><button>查询</button><button>重置</button></div>\n'
+            '<script src="./assets/prototype.js"></script>\n'
+            '<script src="./assets/prototype-layout.js"></script>\n',
+            encoding="utf-8",
+        )
+
+        result = check_prototypes.run_checks(root)
+
+        self.assertTrue(any("custom filter grid" in item.message for item in result.warnings))
+
 
 if __name__ == "__main__":
     unittest.main()

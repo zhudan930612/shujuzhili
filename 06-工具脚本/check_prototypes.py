@@ -15,6 +15,10 @@ REQUIRED_LAYOUT_SCRIPT = './assets/prototype-layout.js'
 REQUIRED_SWITCHER_SCRIPT = './assets/prototype-switcher.js'
 LIST_PAGE_KEYWORDS = ("列表", "字典")
 MULTI_ACTION_RE = re.compile(r"<td[^>]*>.*?(编辑|删除).*?(编辑|删除|复制|停用|启用|详情).*?</td>", re.S)
+CUSTOM_FILTER_GRID_RE = re.compile(
+    r"\.(?P<class_name>[\w-]*filter[\w-]*)\s*\{[^}]*grid-template-columns\s*:\s*(?P<columns>[^;}]*\b\d+(?:\.\d+)?fr\b[^;}]*)",
+    re.S,
+)
 
 
 @dataclass(frozen=True)
@@ -47,6 +51,7 @@ def run_checks(root: Path) -> CheckResult:
         check_layout_script(root, path, result)
         check_switcher_script(root, path, result)
         check_list_shell(root, path, result)
+        check_filter_width_layout(root, path, result)
         check_page_actions(root, path, result)
         check_multi_row_actions(root, path, result)
     return result
@@ -131,6 +136,29 @@ def check_list_shell(root: Path, path: Path, result: CheckResult) -> None:
                 "List-like prototype page missing proto-list-shell.",
                 "List and dictionary pages should start from the shared list shell so filters, tools, tables, and pagination stay structurally consistent.",
                 "Wrap the page's list area with `proto-list-shell`, and place the title/tools/table/pagination inside the shared shell.",
+            )
+        )
+
+
+def check_filter_width_layout(root: Path, path: Path, result: CheckResult) -> None:
+    text = path.read_text(encoding="utf-8")
+    for match in CUSTOM_FILTER_GRID_RE.finditer(text):
+        class_name = match.group("class_name")
+        columns = match.group("columns").strip()
+        if "role-form-grid" in class_name:
+            continue
+        if "assignment" in class_name or "dictionary" in class_name:
+            continue
+        if f'class="{class_name}"' not in text and f'class="{class_name} ' not in text and f" {class_name}\"" not in text:
+            continue
+        result.add(
+            Issue(
+                "WARN",
+                path.relative_to(root),
+                None,
+                f"Prototype page uses flexible fr columns in custom filter grid: .{class_name}",
+                "Small filter sets should prefer fixed-width fields; fr-based stretching often makes filters visually too wide and inconsistent across pages.",
+                f"Replace `{columns}` with fixed widths such as `220px 180px 220px auto auto`, or fall back to `proto-filter-bar` natural layout.",
             )
         )
 
