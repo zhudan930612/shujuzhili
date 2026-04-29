@@ -59,6 +59,10 @@ AGENTS_FORBIDDEN_DETAILS = {
 
 MARKDOWN_LINK_RE = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 
+RELATIVE_TIME_RE = re.compile(
+    r"今天|昨天|明天|前天|后天|刚刚|最近|近日|上周|本周|下周|上月|本月|下月|去年|今年|明年|月初|月底|年末|年初|星期[一二三四五六日]|周[一二三四五六日]"
+)
+
 
 @dataclass(frozen=True)
 class Issue:
@@ -91,6 +95,7 @@ def run_checks(root: Path) -> CheckResult:
     check_agents_forbidden_details(root, result)
     check_deprecated_terms(root, result)
     check_markdown_links(root, result)
+    check_relative_time(root, result)
     check_large_discussion_doc(root, result)
     check_root_directories(root, result)
     check_readme_headings(root, result)
@@ -175,6 +180,23 @@ def check_deprecated_terms(root: Path, result: CheckResult) -> None:
                             fix,
                         )
                     )
+
+
+def check_relative_time(root: Path, result: CheckResult) -> None:
+    for path in iter_markdown_files(root):
+        rel_path = path.relative_to(root)
+        for line_no, line in enumerate(read_lines(path), start=1):
+            for match in RELATIVE_TIME_RE.finditer(line):
+                result.add(
+                    Issue(
+                        "WARN",
+                        rel_path,
+                        line_no,
+                        f"Relative time expression found: {match.group()}",
+                        "Relative time expressions rot over time and become inaccurate.",
+                        "Replace with an absolute date (e.g., 2026-04-29) or remove the time reference.",
+                    )
+                )
 
 
 def check_markdown_links(root: Path, result: CheckResult) -> None:
