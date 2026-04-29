@@ -32,10 +32,21 @@ README_REQUIRED_HEADINGS = ["## 目录定位", "## 主要内容"]
 CHECK_DOCS_COMMAND = "python 06-工具脚本/check_docs.py"
 DISCUSSION_LANDING_CHECKLIST_TITLE = "拆回正式文档清单"
 DISCUSSION_LANDING_CHECKLIST_COLUMNS = ["结论/规则", "主定义文档", "影响资产", "状态", "备注"]
+DISCUSSION_LANDING_CHECKLIST_ALLOWED_STATUSES = {
+    "待确认",
+    "沟通中",
+    "已确认",
+    "待拆回",
+    "已拆回",
+    "待归档",
+    "已归档",
+    "已拒绝",
+}
 REQUIREMENT_OUTPUT_FRAMEWORK_TITLE = "## 需求沟通输出框架"
 REQUIREMENT_COMPLETENESS_CHECKLIST_TITLE = "## 需求完备性检查清单"
 PAGE_REQUIREMENT_HEADING_RE = re.compile(r"^#####\s+Q\d+(?:-\d+)?\s+.+")
 CONFIRMED_PAGE_ROW_RE = re.compile(r"^\|\s*(Q\d+(?:-\d+)?)\s*\|.*\|\s*已确认\s*\|")
+REVIEW_ENTRY_HEADING_RE = re.compile(r"^##\s+\d{4}-\d{2}-\d{2}\s+.+")
 PAGE_REQUIREMENT_CORE_HEADINGS = [
     "功能目标",
     "使用角色",
@@ -43,6 +54,27 @@ PAGE_REQUIREMENT_CORE_HEADINGS = [
     "页面结构",
     "ASCII 草图",
     "待确认/待研发项",
+]
+REVIEW_RECORD_REQUIRED_HEADINGS = [
+    "问题描述",
+    "原因分析",
+    "评审结论",
+    "后续处理",
+    "收获",
+]
+COMPLETION_CLOSURE_GATE_PHRASES = [
+    "本轮任务类型",
+    "对应协议产物",
+    "新增结论是否进入拆回清单",
+    "待拆回/已拆回/已归档",
+    "WARN",
+]
+WORKBENCH_PROTOCOL_RULE_PHRASES = [
+    "协议驱动",
+    "任务执行协议.md",
+    "任务完成检查.md",
+    "当前需求沟通文档.md",
+    "评审记录.md",
 ]
 
 DEPRECATED_TERMS = {
@@ -104,6 +136,8 @@ def run_checks(root: Path) -> CheckResult:
     check_completion_check_command(root, result)
     check_discussion_landing_checklist(root, result)
     check_requirement_output_framework(root, result)
+    check_review_record_structure(root, result)
+    check_workbench_protocol_alignment(root, result)
 
     return result
 
@@ -373,6 +407,68 @@ def check_discussion_landing_checklist(root: Path, result: CheckResult) -> None:
         )
         return
 
+    lines = read_lines(path)
+    for line_no, row in iter_markdown_table_rows(lines, DISCUSSION_LANDING_CHECKLIST_TITLE):
+        status = row.get("状态", "").strip()
+        main_doc = row.get("主定义文档", "").strip()
+        row_text = " | ".join(row.values())
+
+        if status and status not in DISCUSSION_LANDING_CHECKLIST_ALLOWED_STATUSES:
+            result.add(
+                Issue(
+                    "WARN",
+                    rel_path,
+                    line_no,
+                    f"Row has invalid landing status: {status}",
+                    "Unexpected status values make it hard for AI to reason about whether conclusions are pending, landed, or archived.",
+                    "Use one of the agreed statuses: 待确认, 沟通中, 已确认, 待拆回, 已拆回, 待归档, 已归档, 已拒绝.",
+                )
+            )
+
+        if status == "已拆回" and not has_meaningful_link_or_path(main_doc):
+            result.add(
+                Issue(
+                    "WARN",
+                    rel_path,
+                    line_no,
+                    "Landing row marked 已拆回 but has no source-of-truth link.",
+                    "A split-back conclusion is not traceable if the checklist row does not point to the source-of-truth file.",
+                    "Add the source-of-truth Markdown link or relative path in 主定义文档.",
+                )
+            )
+
+        if status == "已归档" and not has_archive_link(row_text):
+            result.add(
+                Issue(
+                    "WARN",
+                    rel_path,
+                    line_no,
+                    "Landing row marked 已归档 but has no archive link.",
+                    "An archived conclusion is not auditable if the checklist row does not point to the archive record.",
+                    "Add a Markdown link or relative path under 90-归档记录 in 主定义文档, 影响资产, or 备注.",
+                )
+            )
+
+    if has_any_landing_status(lines, {"已确认", "待拆回", "已拆回", "已归档"}):
+        completion_rel_path = Path("03-工作台/任务完成检查.md")
+        completion_path = root / completion_rel_path
+        if completion_path.exists():
+            completion_text = completion_path.read_text(encoding="utf-8")
+            missing_phrases = [
+                phrase for phrase in COMPLETION_CLOSURE_GATE_PHRASES if phrase not in completion_text
+            ]
+            for phrase in missing_phrases:
+                result.add(
+                    Issue(
+                        "WARN",
+                        completion_rel_path,
+                        None,
+                        f"任务完成检查.md missing closure gate: {phrase}",
+                        "When conclusions are confirmed or pending split-back, the completion checklist should explicitly ask for closure evidence.",
+                    "Add the missing closure gate so task wrap-up can verify protocol artifacts and next actions.",
+                    )
+                )
+
     missing_columns = [column for column in DISCUSSION_LANDING_CHECKLIST_COLUMNS if column not in text]
     if missing_columns:
         result.add(
@@ -486,12 +582,112 @@ def check_requirement_output_framework(root: Path, result: CheckResult) -> None:
                 )
 
 
+def check_review_record_structure(root: Path, result: CheckResult) -> None:
+    rel_path = Path("03-工作台/评审记录.md")
+    path = root / rel_path
+    if not path.exists():
+        return
+
+    lines = read_lines(path)
+    entry_start_indexes = [
+        index for index, line in enumerate(lines) if REVIEW_ENTRY_HEADING_RE.match(line)
+    ]
+    for offset, start_index in enumerate(entry_start_indexes):
+        end_index = entry_start_indexes[offset + 1] if offset + 1 < len(entry_start_indexes) else len(lines)
+        section = "\n".join(lines[start_index:end_index])
+        missing_headings = [
+            heading for heading in REVIEW_RECORD_REQUIRED_HEADINGS if f"### {heading}" not in section
+        ]
+        if missing_headings:
+            result.add(
+                Issue(
+                    "WARN",
+                    rel_path,
+                    start_index + 1,
+                    f"review entry missing sections: {', '.join(missing_headings)}.",
+                    "Review records should use a consistent skeleton so AI can quickly find the problem, reasoning, decision, and follow-up.",
+                    "Add the missing review sections: 问题描述, 原因分析, 评审结论, 后续处理, 收获.",
+                )
+            )
+
+
+def check_workbench_protocol_alignment(root: Path, result: CheckResult) -> None:
+    rel_path = Path("03-工作台/README.md")
+    path = root / rel_path
+    if not path.exists():
+        return
+
+    text = path.read_text(encoding="utf-8")
+    missing_phrases = [phrase for phrase in WORKBENCH_PROTOCOL_RULE_PHRASES if phrase not in text]
+    for phrase in missing_phrases:
+        result.add(
+            Issue(
+                "WARN",
+                rel_path,
+                None,
+                f"README missing protocol-driven workbench rule: {phrase}",
+                "Workbench navigation should make the protocol-driven workflow obvious before AI starts editing discussion docs.",
+                "Add protocol-driven routing for 当前需求沟通文档, 评审记录, 任务执行协议, and 任务完成检查.",
+            )
+        )
+
+
 def iter_markdown_files(root: Path):
     for path in root.rglob("*.md"):
         parts = path.relative_to(root).parts
         if ".git" in parts or "check_docs_tests_sandbox" in parts:
             continue
         yield path
+
+
+def iter_markdown_table_rows(lines: list[str], section_title: str):
+    in_section = False
+    header = None
+    saw_separator = False
+    for index, line in enumerate(lines, start=1):
+        stripped = line.strip()
+        if stripped.startswith("#") and section_title in stripped:
+            in_section = True
+            header = None
+            saw_separator = False
+            continue
+        if not in_section:
+            continue
+        if stripped.startswith("#") and section_title not in stripped:
+            break
+        if not stripped.startswith("|"):
+            continue
+
+        cells = split_markdown_row(stripped)
+        if not header:
+            header = cells
+            continue
+        if not saw_separator and all(set(cell) <= {"-", " "} for cell in cells):
+            saw_separator = True
+            continue
+        if header and saw_separator and len(cells) >= len(header):
+            yield index, {header[i]: cells[i] for i in range(len(header))}
+
+
+def split_markdown_row(line: str) -> list[str]:
+    return [cell.strip() for cell in line.strip().strip("|").split("|")]
+
+
+def has_meaningful_link_or_path(value: str) -> bool:
+    if not value or value in {"-", "—"}:
+        return False
+    return "[" in value and "](" in value or "/" in value or "\\" in value
+
+
+def has_archive_link(value: str) -> bool:
+    return "90-归档记录/" in value or "90-归档记录\\" in value
+
+
+def has_any_landing_status(lines: list[str], statuses: set[str]) -> bool:
+    for _, row in iter_markdown_table_rows(lines, DISCUSSION_LANDING_CHECKLIST_TITLE):
+        if row.get("状态", "").strip() in statuses:
+            return True
+    return False
 
 
 def read_lines(path: Path) -> list[str]:

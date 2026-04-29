@@ -280,6 +280,96 @@ class CheckDocsTests(unittest.TestCase):
             any("mentions records but has no trigger rules" in item.message for item in result.warnings)
         )
 
+    def test_reports_invalid_landing_checklist_status(self):
+        root = self.make_root("invalid_landing_checklist_status")
+        self.add_required_files(root)
+        workbench = root / "03-工作台"
+        (workbench / "当前需求沟通文档.md").write_text(
+            "### 拆回正式文档清单\n\n"
+            "| 结论/规则 | 主定义文档 | 影响资产 | 状态 | 备注 |\n"
+            "|---|---|---|---|---|\n"
+            "| 规则A | [主文档](../02-PRD文档/后台管理/系统管理.md) | - | 已完成 | - |\n",
+            encoding="utf-8",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("invalid landing status" in item.message for item in result.warnings))
+
+    def test_reports_landing_row_missing_source_doc_for_split_back(self):
+        root = self.make_root("landing_split_back_missing_doc")
+        self.add_required_files(root)
+        workbench = root / "03-工作台"
+        (workbench / "当前需求沟通文档.md").write_text(
+            "### 拆回正式文档清单\n\n"
+            "| 结论/规则 | 主定义文档 | 影响资产 | 状态 | 备注 |\n"
+            "|---|---|---|---|---|\n"
+            "| 规则A | - | - | 已拆回 | - |\n",
+            encoding="utf-8",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("已拆回 but has no source-of-truth link" in item.message for item in result.warnings))
+
+    def test_reports_landing_row_missing_archive_link(self):
+        root = self.make_root("landing_archive_missing_link")
+        self.add_required_files(root)
+        workbench = root / "03-工作台"
+        (workbench / "当前需求沟通文档.md").write_text(
+            "### 拆回正式文档清单\n\n"
+            "| 结论/规则 | 主定义文档 | 影响资产 | 状态 | 备注 |\n"
+            "|---|---|---|---|---|\n"
+            "| 规则A | [主文档](../02-PRD文档/后台管理/系统管理.md) | - | 已归档 | - |\n",
+            encoding="utf-8",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("已归档 but has no archive link" in item.message for item in result.warnings))
+
+    def test_reports_missing_completion_closure_gates_when_landing_statuses_exist(self):
+        root = self.make_root("missing_completion_closure_gates")
+        self.add_required_files(root)
+        workbench = root / "03-工作台"
+        (workbench / "当前需求沟通文档.md").write_text(
+            "### 拆回正式文档清单\n\n"
+            "| 结论/规则 | 主定义文档 | 影响资产 | 状态 | 备注 |\n"
+            "|---|---|---|---|---|\n"
+            "| 规则A | [主文档](../02-PRD文档/后台管理/系统管理.md) | - | 待拆回 | - |\n",
+            encoding="utf-8",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("missing closure gate" in item.message for item in result.warnings))
+
+    def test_reports_review_record_missing_required_sections(self):
+        root = self.make_root("review_record_missing_sections")
+        self.add_required_files(root)
+        workbench = root / "03-工作台"
+        (workbench / "评审记录.md").write_text(
+            "# 评审记录\n\n## 2026-04-29 示例主题\n\n### 问题描述\n",
+            encoding="utf-8",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("review entry missing sections" in item.message for item in result.warnings))
+
+    def test_reports_workbench_readme_missing_protocol_driven_rules(self):
+        root = self.make_root("workbench_readme_missing_protocol_rules")
+        self.add_required_files(root)
+        workbench = root / "03-工作台"
+        (workbench / "README.md").write_text(
+            "# 工作台\n\n## 目录定位\n当前目录用于承接讨论。\n\n## 主要内容\n- 记录\n",
+            encoding="utf-8",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("README missing protocol-driven workbench rule" in item.message for item in result.warnings))
+
 
 if __name__ == "__main__":
     unittest.main()
