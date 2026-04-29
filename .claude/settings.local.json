@@ -1,4 +1,14 @@
 {
+  "hooks": {
+    "PostToolUse": [{
+      "matcher": "Edit|Write",
+      "hooks": [{
+        "type": "command",
+        "command": "cd \"e:/各产品线/数据治理\" && python \"06-工具脚本/check_docs.py\"",
+        "shell": "bash"
+      }]
+    }]
+  },
   "permissions": {
     "allow": [
       "Bash(:)",
