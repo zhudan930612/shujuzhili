@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>页面名称-列表页</title>
+  <link rel="stylesheet" href="../prototype.css" />
+</head>
+<body>
+  <div class="prototype-state-bar" data-prototype-switch data-prototype-default="list">
+    <button class="active" type="button" data-prototype-button="list">列表态</button>
+    <button type="button" data-prototype-button="create">新增弹窗</button>
+  </div>
+
+  <div class="frame" data-layout-module="system" data-layout-top-active="system" data-layout-side-preset="system" data-layout-side-active="replace-me">
+    <header class="topbar"></header>
+    <div class="main">
+      <aside class="sidebar"></aside>
+      <main class="workspace">
+        <div class="crumb">☰ 模块 〉 页面名称</div>
+        <section class="surface tabbar">
+          <div class="tab active">页面名称</div>
+        </section>
+
+        <section class="prototype-stage active" data-prototype-panel="list">
+          <section class="proto-filter-bar">
+            <input class="control search-control" type="text" placeholder="请输入关键词" />
+            <select class="control select-control">
+              <option selected>请选择状态</option>
+            </select>
+            <button class="btn btn-primary" type="button">查询</button>
+            <button class="btn btn-ghost" type="button">重置</button>
+          </section>
+
+          <section class="proto-list-shell">
+            <div class="proto-list-head">
+              <h3 class="proto-list-title">列表标题</h3>
+              <div class="proto-list-tools">
+                <button class="btn btn-primary" type="button">＋ 新增</button>
+              </div>
+            </div>
+            <div class="proto-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>列1</th>
+                    <th>列2</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>示例</td>
+                    <td>示例</td>
+                    <td>
+                      <div class="proto-row-actions">
+                        <button class="proto-action" type="button">查看</button>
+                        <button class="proto-action" type="button">编辑</button>
+                        <button class="proto-action danger" type="button">删除</button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="proto-pagination">
+              <span>共1条</span>
+              <select class="control select-control proto-page-size-select">
+                <option selected>20条/页</option>
+              </select>
+              <span>‹</span><span class="proto-page-current">1</span><span>前往</span>
+              <select class="control select-control proto-page-jump-select">
+                <option selected>1页</option>
+              </select>
+              <span>页</span><span>›</span>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="../prototype.js"></script>
+  <script src="../prototype-layout.js"></script>
+  <script src="../prototype-switcher.js"></script>
+  <script>
+    initProtoPagination();
+    initProtoRowActions();
+  </script>
+</body>
+</html>

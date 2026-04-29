@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>页面名称-详情页</title>
+  <link rel="stylesheet" href="../prototype.css" />
+</head>
+<body>
+  <div class="frame" data-layout-module="system" data-layout-top-active="system" data-layout-side-preset="system" data-layout-side-active="replace-me">
+    <header class="topbar"></header>
+    <div class="main">
+      <aside class="sidebar"></aside>
+      <main class="workspace">
+        <div class="crumb">☰ 模块 〉 页面名称</div>
+        <section class="surface tabbar">
+          <div class="tab active">页面名称</div>
+        </section>
+
+        <section class="content-panel has-page-actions">
+          <div class="project-detail-titlebar">
+            <span class="project-detail-back">← 返回</span>
+            <span class="project-detail-divider">/</span>
+            <span class="project-detail-current">页面详情</span>
+          </div>
+
+          <section class="proto-detail-card">
+            <h3 class="proto-detail-card-title">基础信息</h3>
+            <div class="proto-detail-card-body">
+              <div class="proto-detail-grid">
+                <div class="proto-detail-label">字段1</div>
+                <div class="proto-detail-value">示例值</div>
+                <div class="proto-detail-label">字段2</div>
+                <div class="proto-detail-value">示例值</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="proto-detail-card">
+            <h3 class="proto-detail-card-title">编辑表单</h3>
+            <div class="proto-detail-card-body">
+              <div class="proto-field-row">
+                <div class="proto-field-label">字段A</div>
+                <input class="proto-input" type="text" placeholder="请输入" />
+              </div>
+              <div class="proto-field-row">
+                <div class="proto-field-label">字段B</div>
+                <select class="proto-select">
+                  <option selected>请选择</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <div class="page-actions">
+            <button class="btn btn-ghost" type="button">取消</button>
+            <button class="btn btn-primary" type="button">保存</button>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="../prototype.js"></script>
+  <script src="../prototype-layout.js"></script>
+</body>
+</html>
