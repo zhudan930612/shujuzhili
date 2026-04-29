@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>页面名称-列表页</title>
   <link rel="stylesheet" href="../prototype.css" />
+  <style>
+    .list-page-filter-width-guide .search-control { width: 220px; }
+    .list-page-filter-width-guide .select-control,
+    .list-page-filter-width-guide .proto-cascader-control { width: 180px; }
+  </style>
 </head>
 <body>
   <div class="prototype-state-bar" data-prototype-switch data-prototype-default="list">
@@ -23,7 +28,7 @@
         </section>
 
         <section class="prototype-stage active" data-prototype-panel="list">
-          <section class="proto-filter-bar">
+          <section class="proto-filter-bar list-page-filter-width-guide">
             <input class="control search-control" type="text" placeholder="请输入关键词" />
             <select class="control select-control">
               <option selected>请选择状态</option>
@@ -37,6 +42,12 @@
               <h3 class="proto-list-title">列表标题</h3>
               <div class="proto-list-tools">
                 <button class="btn btn-primary" type="button">＋ 新增</button>
+                <select class="proto-select" style="width: 140px;">
+                  <option selected>1 - 1</option>
+                  <option>1 - 20</option>
+                  <option>21 - 40</option>
+                </select>
+                <button class="btn btn-ghost" type="button">⇪ 导出</button>
               </div>
             </div>
             <div class="proto-table-wrap">

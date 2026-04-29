@@ -5,56 +5,106 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>页面名称-详情页</title>
   <link rel="stylesheet" href="../prototype.css" />
+  <style>
+    .link-readonly {
+      color: #9aa5b8;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .hazard-main-column {
+      gap: 18px;
+    }
+  </style>
 </head>
 <body>
-  <div class="frame" data-layout-module="system" data-layout-top-active="system" data-layout-side-preset="system" data-layout-side-active="replace-me">
+  <div class="frame" data-layout-module="knowledge" data-layout-top-active="knowledge" data-layout-side-preset="knowledge" data-layout-side-active="replace-me">
     <header class="topbar"></header>
     <div class="main">
       <aside class="sidebar"></aside>
       <main class="workspace">
-        <div class="crumb">☰ 模块 〉 页面名称</div>
-        <section class="surface tabbar">
-          <div class="tab active">页面名称</div>
-        </section>
-
+        <div class="crumb">☰ 模块名称 〉 页面名称</div>
         <section class="content-panel has-page-actions">
-          <div class="project-detail-titlebar">
-            <span class="project-detail-back">← 返回</span>
-            <span class="project-detail-divider">/</span>
-            <span class="project-detail-current">页面详情</span>
+          <div class="page-header" style="padding: 0 0 18px;">
+            <div>
+              <div class="project-detail-titlebar">
+                <div class="project-detail-back">〈 <span>返回</span></div>
+                <div class="project-detail-divider"></div>
+                <div class="project-detail-current">详情标题</div>
+              </div>
+            </div>
           </div>
 
-          <section class="proto-detail-card">
-            <h3 class="proto-detail-card-title">基础信息</h3>
-            <div class="proto-detail-card-body">
-              <div class="proto-detail-grid">
-                <div class="proto-detail-label">字段1</div>
-                <div class="proto-detail-value">示例值</div>
-                <div class="proto-detail-label">字段2</div>
-                <div class="proto-detail-value">示例值</div>
-              </div>
-            </div>
-          </section>
+          <div class="hazard-detail-layout">
+            <div class="hazard-main-column">
+              <section class="proto-detail-card">
+                <h3 class="proto-detail-card-title">基础信息</h3>
+                <div class="proto-detail-card-body">
+                  <div class="proto-detail-grid">
+                    <div class="proto-detail-label">字段1</div><div class="proto-detail-value">示例值</div>
+                    <div class="proto-detail-label">字段2</div><div class="proto-detail-value">示例值</div>
+                    <div class="proto-detail-label">字段3</div><div class="proto-detail-value">示例值</div>
+                    <div class="proto-detail-label">字段4</div><div class="proto-detail-value">示例值</div>
+                    <div class="proto-detail-label">备注</div><div class="proto-detail-value">暂无备注</div>
+                  </div>
+                </div>
+              </section>
 
-          <section class="proto-detail-card">
-            <h3 class="proto-detail-card-title">编辑表单</h3>
-            <div class="proto-detail-card-body">
-              <div class="proto-field-row">
-                <div class="proto-field-label">字段A</div>
-                <input class="proto-input" type="text" placeholder="请输入" />
-              </div>
-              <div class="proto-field-row">
-                <div class="proto-field-label">字段B</div>
-                <select class="proto-select">
-                  <option selected>请选择</option>
-                </select>
-              </div>
+              <section class="proto-detail-card">
+                <h3 class="proto-detail-card-title">系统信息</h3>
+                <div class="proto-detail-card-body">
+                  <div class="proto-detail-grid">
+                    <div class="proto-detail-label">创建人</div><div class="proto-detail-value">张三</div>
+                    <div class="proto-detail-label">创建时间</div><div class="proto-detail-value">2026-04-29 10:00:00</div>
+                    <div class="proto-detail-label">更新人</div><div class="proto-detail-value">李四</div>
+                    <div class="proto-detail-label">更新时间</div><div class="proto-detail-value">2026-04-29 14:30:00</div>
+                  </div>
+                </div>
+              </section>
             </div>
-          </section>
+
+            <section class="section-card">
+              <h3>关联信息　<span class="link link-readonly">[+ 关联]</span></h3>
+              <div class="section-body">
+                <table>
+                  <colgroup>
+                    <col style="width:20%;" />
+                    <col style="width:24%;" />
+                    <col style="width:34%;" />
+                    <col style="width:22%;" />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>编号</th>
+                      <th>名称</th>
+                      <th>说明</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>REL-001</td>
+                      <td>示例关联项</td>
+                      <td>这里放关联对象的摘要信息，保持与详情主信息分栏展示。</td>
+                      <td><span class="link link-readonly">解除</span></td>
+                    </tr>
+                    <tr>
+                      <td>REL-002</td>
+                      <td>示例关联项</td>
+                      <td>如暂无编辑权限，可继续使用只读链接态占位。</td>
+                      <td><span class="link link-readonly">解除</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
 
           <div class="page-actions">
-            <button class="btn btn-ghost" type="button">取消</button>
-            <button class="btn btn-primary" type="button">保存</button>
+            <button class="btn btn-ghost" type="button">上一条</button>
+            <button class="btn btn-ghost" type="button">下一条</button>
+            <button class="btn btn-ghost" type="button">编辑</button>
+            <button class="btn btn-ghost" type="button">复制</button>
+            <button class="btn btn-primary" type="button">停用</button>
           </div>
         </section>
       </main>
