@@ -6,18 +6,18 @@
   <title>系统管理-角色管理</title>
   <link rel="stylesheet" href="./assets/prototype.css" />
   <style>
-    .role-filter { display:grid; grid-template-columns:1.2fr 1fr 1.15fr 1.25fr auto auto; gap:14px; align-items:center; }
-    .role-table col:nth-child(1) { width:18%; }
-    .role-table col:nth-child(2) { width:13%; }
-    .role-table col:nth-child(3) { width:20%; }
-    .role-table col:nth-child(4) { width:20%; }
-    .role-table col:nth-child(5) { width:10%; }
-    .role-table col:nth-child(6) { width:12%; }
-    .role-table col:nth-child(7) { width:7%; }
+    .role-filter { display:grid; grid-template-columns:1.2fr 1fr 1.25fr auto auto; gap:14px; align-items:center; }
+    .role-table col:nth-child(1) { width:22%; }
+    .role-table col:nth-child(2) { width:14%; }
+    .role-table col:nth-child(3) { width:24%; }
+    .role-table col:nth-child(4) { width:12%; }
+    .role-table col:nth-child(5) { width:14%; }
+    .role-table col:nth-child(6) { width:14%; }
     .role-edit-panel { min-height:780px; padding:28px 48px 96px; }
     .role-form-grid { display:grid; grid-template-columns:120px minmax(0, 1fr) 120px minmax(0, 1fr); gap:18px 20px; align-items:start; max-width:1480px; }
     .role-form-grid .field-label { padding-top:8px; }
     .role-form-grid .full-row { grid-column:2 / 5; }
+    .role-form-grid .full-line { grid-column:1 / 5; }
     .role-filter .proto-cascader,
     .role-filter .proto-cascader-control,
     .role-form-grid .proto-cascader,
@@ -26,6 +26,10 @@
     .role-area-tag { border:1px solid #d6e0ec; border-radius:4px; background:#f7fafc; color:#40556f; padding:4px 8px; font-size:12px; line-height:1.4; }
     .role-area-tags + .subtle-note { margin-top:2px; line-height:1.45; }
     .role-required { color:var(--danger); margin-right:4px; }
+    .role-area-field.hidden, .role-area-content.hidden { display:none; }
+    .role-area-content { grid-column:2 / 5; }
+    .role-area-hidden-note { display:none; grid-column:1 / 5; background:#f7faff; border:1px dashed #cfd9e8; padding:10px 14px; color:#5f7186; font-size:13px; line-height:1.7; }
+    .role-area-hidden-note.show { display:block; }
     .permission-layout { display:block; }
     .permission-tree { width:200px; border:1px solid var(--line); background:#fff; padding:10px 0; }
     .permission-tree-item { display:flex; align-items:center; justify-content:space-between; height:38px; padding:0 18px; color:#334b63; font-size:14px; }
@@ -57,22 +61,18 @@
           <div class="tab active">角色管理</div>
         </section>
         <section class="surface" data-view-scope style="min-height:920px;">
+          <!-- 列表态 -->
           <div class="prototype-stage active" data-prototype-panel="list">
             <section class="content-panel">
               <div class="role-filter">
                 <input class="control" type="text" placeholder="请输入角色名称" />
                 <select class="control select-control">
                   <option selected>请选择角色类型</option>
-                  <option>运营角色</option>
-                  <option>监管角色</option>
-                  <option>保司角色</option>
-                  <option>平台管理角色</option>
-                </select>
-                <select class="control select-control">
-                  <option selected>请选择管理行业</option>
-                  <option>建筑施工</option>
-                  <option>金属冶炼</option>
-                  <option>能源矿产</option>
+                  <option>标注人员</option>
+                  <option>质检人员</option>
+                  <option>巡查人员</option>
+                  <option>领域工程师</option>
+                  <option>运营管理员</option>
                 </select>
                 <div class="proto-cascader" data-proto-cascader data-allow-any-level="true" data-cascader-depth="5" data-placeholder="请选择管理区域">
                   <button class="proto-input proto-cascader-control" type="button"><span class="proto-cascader-value">请选择管理区域</span><span class="proto-cascader-arrow">▾</span></button>
@@ -91,13 +91,12 @@
               <div class="proto-table-wrap">
                 <table class="role-table">
                   <colgroup>
-                    <col /><col /><col /><col /><col /><col /><col />
+                    <col /><col /><col /><col /><col /><col />
                   </colgroup>
                   <thead>
                     <tr>
                       <th>角色名称</th>
                       <th>角色类型</th>
-                      <th>管理行业</th>
                       <th>管理区域</th>
                       <th>创建人</th>
                       <th>创建时间</th>
@@ -106,46 +105,50 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td>CS深圳运营</td>
-                      <td>运营角色</td>
-                      <td>金属冶炼；交通运输</td>
-                      <td>广东省-深圳市</td>
+                      <td>标注员-默认</td>
+                      <td>标注人员</td>
+                      <td>全国</td>
                       <td>超级管理员</td>
-                      <td>2026-01-09 15:32</td>
+                      <td>2026-04-08 10:12</td>
                       <td><span class="link">编辑</span>　<span class="link danger-link">删除</span></td>
                     </tr>
                     <tr>
-                      <td>CS上海运营</td>
-                      <td>运营角色</td>
-                      <td>金属冶炼；交通运输</td>
-                      <td>上海市</td>
+                      <td>质检员-默认</td>
+                      <td>质检人员</td>
+                      <td>全国</td>
                       <td>超级管理员</td>
-                      <td>2026-01-09 15:18</td>
+                      <td>2026-04-08 10:14</td>
                       <td><span class="link">编辑</span>　<span class="link danger-link">删除</span></td>
                     </tr>
                     <tr>
-                      <td>测试运营</td>
-                      <td>运营角色</td>
-                      <td>金属冶炼；能源矿产</td>
-                      <td>广东省-深圳市</td>
+                      <td>深圳巡查队</td>
+                      <td>巡查人员</td>
+                      <td>广东省 / 深圳市</td>
                       <td>超级管理员</td>
-                      <td>2026-01-08 14:44</td>
+                      <td>2026-04-09 14:30</td>
                       <td><span class="link">编辑</span>　<span class="link danger-link">删除</span></td>
                     </tr>
                     <tr>
-                      <td>一保司11</td>
-                      <td>保司角色</td>
-                      <td>-</td>
-                      <td>-</td>
+                      <td>领域工程师-默认</td>
+                      <td>领域工程师</td>
+                      <td>全国</td>
                       <td>超级管理员</td>
-                      <td>2025-12-02 16:20</td>
+                      <td>2026-04-10 09:48</td>
+                      <td><span class="link">编辑</span>　<span class="link danger-link">删除</span></td>
+                    </tr>
+                    <tr>
+                      <td>华东运营</td>
+                      <td>运营管理员</td>
+                      <td>上海市；江苏省</td>
+                      <td>超级管理员</td>
+                      <td>2026-04-12 16:05</td>
                       <td><span class="link">编辑</span>　<span class="link danger-link">删除</span></td>
                     </tr>
                   </tbody>
                 </table>
               </div>
               <div class="proto-pagination">
-                <span>共4条</span>
+                <span>共5条</span>
                 <select class="control select-control proto-page-size-select"><option selected>20条/页</option><option>50条/页</option></select>
                 <span>〈</span><span class="proto-page-current">1</span><span>前往</span>
                 <select class="control select-control proto-page-jump-select"><option selected>1页</option></select>
@@ -154,6 +157,7 @@
             </section>
           </div>
 
+          <!-- 新增角色 -->
           <div class="prototype-stage" data-prototype-panel="create">
             <section class="content-panel role-edit-panel has-page-actions">
               <div class="page-header" style="padding:0 0 22px;">
@@ -166,18 +170,24 @@
                 <div class="field-label"><span class="role-required">*</span>角色名称</div>
                 <input class="control" type="text" placeholder="请输入角色名称" />
                 <div class="field-label"><span class="role-required">*</span>角色类型</div>
-                <select class="control select-control"><option selected>请选择角色类型</option><option>运营角色</option><option>监管角色</option><option>保司角色</option><option>平台管理角色</option></select>
-                <div class="field-label"><span class="role-required">*</span>管理行业</div>
-                <select class="control select-control"><option selected>请选择管理行业</option><option>建筑施工</option><option>金属冶炼</option><option>能源矿产</option></select>
-                <div class="field-label"><span class="role-required">*</span>管理区域</div>
-                <div>
+                <select class="control select-control" id="createRoleType">
+                  <option selected value="">请选择角色类型</option>
+                  <option value="annotator">标注人员</option>
+                  <option value="inspector">质检人员</option>
+                  <option value="patrol">巡查人员</option>
+                  <option value="engineer">领域工程师</option>
+                  <option value="operator">运营管理员</option>
+                </select>
+                <div class="field-label role-area-field hidden" data-area-group="create"><span class="role-required">*</span>管理区域</div>
+                <div class="role-area-content hidden" data-area-group="create">
                   <div class="proto-cascader proto-cascader-full" data-proto-cascader data-allow-any-level="true" data-cascader-depth="5" data-placeholder="管理区域">
                     <button class="proto-input proto-cascader-control" type="button"><span class="proto-cascader-value">广东省 / 深圳市 / 南山区</span><span class="proto-cascader-arrow">▾</span></button>
                     <div class="proto-cascader-panel"></div>
                   </div>
                   <div class="role-area-tags"><span class="role-area-tag">广东省 / 深圳市 / 南山区</span><span class="role-area-tag">上海市 / 上海市 / 黄浦区</span></div>
-                  <div class="subtle-note">支持选择多个管理区域，用于限定角色可见和可操作数据范围。</div>
+                  <div class="subtle-note">巡查/运营管理员需手动选择管理区域，可多选，多区域取并集。</div>
                 </div>
+                <div class="role-area-hidden-note" data-area-alt="create">当前角色类型为<strong>标注人员/质检人员/领域工程师</strong>，管理区域由系统默认写入 <code>全国</code>，表单不展示该字段。</div>
                 <div class="field-label"><span class="role-required">*</span>角色权限设置</div>
                 <div class="full-row permission-layout">
                   <div class="permission-tree">
@@ -198,6 +208,7 @@
             </section>
           </div>
 
+          <!-- 编辑角色 -->
           <div class="prototype-stage" data-prototype-panel="edit">
             <section class="content-panel role-edit-panel has-page-actions">
               <div class="page-header" style="padding:0 0 22px;">
@@ -208,20 +219,25 @@
               </div>
               <div class="role-form-grid">
                 <div class="field-label"><span class="role-required">*</span>角色名称</div>
-                <input class="control" type="text" value="CS深圳运营" />
+                <input class="control" type="text" value="华东运营" />
                 <div class="field-label"><span class="role-required">*</span>角色类型</div>
-                <select class="control select-control"><option selected>运营角色</option><option>监管角色</option><option>保司角色</option><option>平台管理角色</option></select>
-                <div class="field-label"><span class="role-required">*</span>管理行业</div>
-                <select class="control select-control"><option selected>金属冶炼；交通运输</option><option>建筑施工</option><option>能源矿产</option></select>
-                <div class="field-label"><span class="role-required">*</span>管理区域</div>
-                <div>
+                <select class="control select-control" id="editRoleType">
+                  <option value="annotator">标注人员</option>
+                  <option value="inspector">质检人员</option>
+                  <option value="patrol">巡查人员</option>
+                  <option value="engineer">领域工程师</option>
+                  <option selected value="operator">运营管理员</option>
+                </select>
+                <div class="field-label role-area-field" data-area-group="edit"><span class="role-required">*</span>管理区域</div>
+                <div class="role-area-content" data-area-group="edit">
                   <div class="proto-cascader proto-cascader-full" data-proto-cascader data-allow-any-level="true" data-cascader-depth="5" data-placeholder="管理区域">
-                    <button class="proto-input proto-cascader-control" type="button"><span class="proto-cascader-value">广东省 / 深圳市 / 罗湖区 / 东门街道</span><span class="proto-cascader-arrow">▾</span></button>
+                    <button class="proto-input proto-cascader-control" type="button"><span class="proto-cascader-value">上海市</span><span class="proto-cascader-arrow">▾</span></button>
                     <div class="proto-cascader-panel"></div>
                   </div>
-                  <div class="role-area-tags"><span class="role-area-tag">广东省 / 深圳市 / 罗湖区 / 东门街道</span><span class="role-area-tag">上海市 / 上海市 / 青浦区 / 夏阳街道 / 青湖社区</span></div>
-                  <div class="subtle-note">支持选择多个管理区域，用于限定角色可见和可操作数据范围。</div>
+                  <div class="role-area-tags"><span class="role-area-tag">上海市</span><span class="role-area-tag">江苏省</span></div>
+                  <div class="subtle-note">运营管理员可手动选择具体区域，亦可选 <code>全国</code>。</div>
                 </div>
+                <div class="role-area-hidden-note" data-area-alt="edit">当前角色类型为<strong>标注人员/质检人员/领域工程师</strong>，管理区域由系统默认写入 <code>全国</code>，表单不展示该字段。</div>
                 <div class="field-label"><span class="role-required">*</span>角色权限设置</div>
                 <div class="full-row permission-layout">
                   <div class="permission-tree">
@@ -242,17 +258,18 @@
             </section>
           </div>
 
+          <!-- 删除确认 -->
           <div class="prototype-stage role-delete-stage" data-prototype-panel="delete-confirm">
             <section class="modal-stage">
               <div class="modal">
                 <div class="modal-head"><span>删除角色</span><span>×</span></div>
                 <div class="modal-body">
-                  <p style="margin:0;color:#405164;line-height:1.8;">确认删除角色“CS深圳运营”？删除后该角色不可继续分配给账号。</p>
-                  <p style="margin:10px 0 0;color:var(--danger);line-height:1.8;">如该角色已被账号引用，系统将阻断删除并提示先解除账号角色绑定。</p>
+                  <p style="margin:0;color:#405164;line-height:1.8;">确认删除角色"<strong>华东运营</strong>"？删除后该角色不可继续分配给账号。</p>
+                  <p style="margin:10px 0 0;color:var(--danger);line-height:1.8;">该角色当前被 <strong>3 个账号</strong>引用，不允许直接删除。请先在 <span class="link">账号管理</span> 中解除账号与该角色的绑定。</p>
                 </div>
                 <div class="modal-foot">
                   <button class="btn btn-ghost" type="button">取消</button>
-                  <button class="btn btn-danger" type="button">确认删除</button>
+                  <button class="btn btn-danger" type="button" disabled>确认删除</button>
                 </div>
               </div>
             </section>
@@ -267,6 +284,27 @@
   <script>
     initProtoPagination();
     initProtoRowActions();
+    // 管理区域字段按角色类型显隐
+    (function() {
+      var HIDDEN_TYPES = ['annotator', 'inspector', 'engineer']; // 标注/质检/领域工程师 不展示管理区域
+      function setupToggle(selectId, group) {
+        var select = document.getElementById(selectId);
+        var fields = document.querySelectorAll('[data-area-group="' + group + '"]');
+        var note = document.querySelector('[data-area-alt="' + group + '"]');
+        if (!select || !fields.length) return;
+        function toggle() {
+          var val = select.value;
+          var showArea = val && HIDDEN_TYPES.indexOf(val) === -1;
+          var showNote = val && HIDDEN_TYPES.indexOf(val) !== -1;
+          fields.forEach(function(el) { el.classList.toggle('hidden', !showArea); });
+          if (note) note.classList.toggle('show', showNote);
+        }
+        select.addEventListener('change', toggle);
+        toggle();
+      }
+      setupToggle('createRoleType', 'create');
+      setupToggle('editRoleType', 'edit');
+    })();
   </script>
 </body>
 </html>
