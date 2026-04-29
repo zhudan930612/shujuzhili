@@ -48,13 +48,13 @@ REQUIREMENT_COMPLETENESS_CHECKLIST_TITLE = "## 需求完备性检查清单"
 PAGE_REQUIREMENT_HEADING_RE = re.compile(r"^#####\s+Q\d+(?:-\d+)?\s+.+")
 CONFIRMED_PAGE_ROW_RE = re.compile(r"^\|\s*(Q\d+(?:-\d+)?)\s*\|.*\|\s*已确认\s*\|")
 REVIEW_ENTRY_HEADING_RE = re.compile(r"^##\s+\d{4}-\d{2}-\d{2}\s+.+")
-PAGE_REQUIREMENT_CORE_HEADINGS = [
-    "功能目标",
-    "使用角色",
-    "入口与权限",
-    "页面结构",
-    "ASCII 草图",
-    "待确认/待研发项",
+PAGE_REQUIREMENT_CORE_HEADING_ALTERNATIVES = [
+    ("功能目标",),
+    ("使用角色", "业务使用对象/参与角色建议"),
+    ("入口与权限", "页面入口"),
+    ("页面结构",),
+    ("ASCII 草图",),
+    ("待确认/待研发项",),
 ]
 REVIEW_RECORD_REQUIRED_HEADINGS = [
     "问题描述",
@@ -79,6 +79,15 @@ WORKBENCH_PROTOCOL_RULE_PHRASES = [
     "当前需求沟通文档.md",
     "评审记录.md",
     "错误治理清单.md",
+]
+PERMISSION_MATRIX_DUPLICATION_TERMS = [
+    "角色权限矩阵",
+    "页面权限矩阵",
+    "操作权限矩阵",
+]
+PERMISSION_BEHAVIOR_RULE_PHRASES = [
+    "权限相关行为",
+    "系统管理.md",
 ]
 
 DEPRECATED_TERMS = {
@@ -142,6 +151,7 @@ def run_checks(root: Path) -> CheckResult:
     check_requirement_output_framework(root, result)
     check_review_record_structure(root, result)
     check_workbench_protocol_alignment(root, result)
+    check_permission_definition_boundary(root, result)
 
     return result
 
@@ -548,9 +558,10 @@ def check_requirement_output_framework(root: Path, result: CheckResult) -> None:
         if not has_framework_heading:
             continue
 
-        missing_headings = [
-            heading for heading in PAGE_REQUIREMENT_CORE_HEADINGS if f"###### {heading}" not in section
-        ]
+        missing_headings = []
+        for heading_group in PAGE_REQUIREMENT_CORE_HEADING_ALTERNATIVES:
+            if not any(f"###### {heading}" in section for heading in heading_group):
+                missing_headings.append(" / ".join(heading_group))
         if missing_headings:
             result.add(
                 Issue(
@@ -645,6 +656,44 @@ def check_workbench_protocol_alignment(root: Path, result: CheckResult) -> None:
                 "Add protocol-driven routing for 当前需求沟通文档, 评审记录, 任务执行协议, and 任务完成检查.",
             )
         )
+
+
+def check_permission_definition_boundary(root: Path, result: CheckResult) -> None:
+    protocol_rel_path = Path("03-工作台/任务执行协议.md")
+    protocol_path = root / protocol_rel_path
+    if protocol_path.exists():
+        protocol_text = protocol_path.read_text(encoding="utf-8")
+        for phrase in PERMISSION_BEHAVIOR_RULE_PHRASES:
+            if phrase not in protocol_text:
+                result.add(
+                    Issue(
+                        "WARN",
+                        protocol_rel_path,
+                        None,
+                        f"任务执行协议.md missing permission-boundary rule: {phrase}",
+                        "Without an explicit permission-boundary rule, page requirements may duplicate role-permission source-of-truth content in process docs.",
+                        "Add rules that pages keep only 权限相关行为 and reference 系统管理.md for role-permission source of truth.",
+                    )
+                )
+
+    discussion_rel_path = Path("03-工作台/当前需求沟通文档.md")
+    discussion_path = root / discussion_rel_path
+    if not discussion_path.exists():
+        return
+
+    for line_no, line in enumerate(read_lines(discussion_path), start=1):
+        for term in PERMISSION_MATRIX_DUPLICATION_TERMS:
+            if term in line:
+                result.add(
+                    Issue(
+                        "WARN",
+                        discussion_rel_path,
+                        line_no,
+                        f"Process doc appears to repeat permission source-of-truth content: {term}",
+                        "Process documents should not become the long-term source of truth for role-to-page or role-to-operation permission matrices.",
+                        "Move the matrix definition back to 02-PRD文档/后台管理/系统管理.md and keep only 权限相关行为 in the process doc.",
+                    )
+                )
 
 
 def iter_markdown_files(root: Path):

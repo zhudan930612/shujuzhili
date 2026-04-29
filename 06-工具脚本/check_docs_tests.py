@@ -382,6 +382,41 @@ class CheckDocsTests(unittest.TestCase):
 
         self.assertTrue(any("missing check_prototypes command" in item.message for item in result.warnings))
 
+    def test_reports_missing_permission_boundary_rules_in_protocol(self):
+        root = self.make_root("missing_permission_boundary_rules")
+        self.add_required_files(root)
+        workbench = root / "03-工作台"
+        (workbench / "当前需求沟通文档.md").write_text(
+            "### 拆回正式文档清单\n\n"
+            "| 结论/规则 | 主定义文档 | 影响资产 | 状态 | 备注 |\n"
+            "|---|---|---|---|---|\n",
+            encoding="utf-8",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("missing permission-boundary rule" in item.message for item in result.warnings))
+
+    def test_reports_permission_matrix_duplication_in_discussion_doc(self):
+        root = self.make_root("permission_matrix_duplication")
+        self.add_required_files(root)
+        workbench = root / "03-工作台"
+        (workbench / "任务执行协议.md").write_text(
+            "权限相关行为\n系统管理.md\npython 06-工具脚本/check_docs.py\n",
+            encoding="utf-8",
+        )
+        (workbench / "当前需求沟通文档.md").write_text(
+            "### 拆回正式文档清单\n\n"
+            "| 结论/规则 | 主定义文档 | 影响资产 | 状态 | 备注 |\n"
+            "|---|---|---|---|---|\n\n"
+            "这里新增一张页面权限矩阵。\n",
+            encoding="utf-8",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("repeat permission source-of-truth content" in item.message for item in result.warnings))
+
     def test_reports_missing_error_governance_doc_reference_in_workbench_readme(self):
         root = self.make_root("missing_error_governance_reference")
         self.add_required_files(root)
