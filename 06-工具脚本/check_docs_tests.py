@@ -370,6 +370,39 @@ class CheckDocsTests(unittest.TestCase):
 
         self.assertTrue(any("README missing protocol-driven workbench rule" in item.message for item in result.warnings))
 
+    def test_reports_missing_prototype_check_command_in_completion_check(self):
+        root = self.make_root("missing_prototype_check_command")
+        (root / "AGENTS.md").write_text("ok\n", encoding="utf-8")
+        workbench = root / "03-工作台"
+        workbench.mkdir(parents=True)
+        (workbench / "任务执行协议.md").write_text("ok\n", encoding="utf-8")
+        (workbench / "任务完成检查.md").write_text("python 06-工具脚本/check_docs.py\n", encoding="utf-8")
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("missing check_prototypes command" in item.message for item in result.warnings))
+
+    def test_reports_missing_error_governance_doc_reference_in_workbench_readme(self):
+        root = self.make_root("missing_error_governance_reference")
+        self.add_required_files(root)
+        workbench = root / "03-工作台"
+        (workbench / "README.md").write_text(
+            "# 工作台\n\n"
+            "## 目录定位\n当前目录用于承接讨论。\n\n"
+            "## 主要内容\n"
+            "| 文件 | 用途 |\n|---|---|\n| 当前需求沟通文档.md | 过程记录 |\n\n"
+            "## 协议驱动区\n"
+            "- 查看任务执行协议.md\n"
+            "- 查看任务完成检查.md\n"
+            "- 当前需求沟通文档.md\n"
+            "- 评审记录.md\n",
+            encoding="utf-8",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("错误治理清单.md" in item.message for item in result.warnings))
+
 
 if __name__ == "__main__":
     unittest.main()

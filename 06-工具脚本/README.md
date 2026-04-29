@@ -10,6 +10,7 @@
 - Guide 是行动前引导，包括 [../AGENTS.md](../AGENTS.md)、目录 README、任务执行协议、PRD、业务上下文。
 - Sensor 是行动后反馈，包括 [check_docs.py](check_docs.py)、[check_docs_tests.py](check_docs_tests.py)、任务完成检查、AI 自查与人工复核。
 - [check_docs.py](check_docs.py) 属于计算性 Sensor，只检查明确结构问题。
+- [check_prototypes.py](check_prototypes.py) 属于原型类 Sensor，检查后台原型的共享组件复用和共享脚本接入。
 - 业务评审属于推理性 Sensor，不放入脚本硬编码。
 - 工具脚本只做结构性背压，不替代人工确认点。
 - 脚本通过只代表结构闭环基本成立，不代表业务结论、评审质量或方案取舍已经正确。
@@ -19,6 +20,8 @@
 |------|------|
 | [check_docs.py](check_docs.py) | 文档基础机械检查脚本 |
 | [check_docs_tests.py](check_docs_tests.py) | `check_docs.py` 的单元测试 |
+| [check_prototypes.py](check_prototypes.py) | 后台原型共享组件与共享脚本检查脚本 |
+| [check_prototypes_tests.py](check_prototypes_tests.py) | `check_prototypes.py` 的单元测试 |
 
 ## 使用方式
 在仓库根目录运行：
@@ -31,6 +34,8 @@ python 06-工具脚本/check_docs.py
 
 ```powershell
 python 06-工具脚本/check_docs_tests.py
+python 06-工具脚本/check_prototypes.py
+python 06-工具脚本/check_prototypes_tests.py
 ```
 
 ## 当前检查项
@@ -54,6 +59,11 @@ python 06-工具脚本/check_docs_tests.py
 | `任务完成检查.md` 是否包含收尾闭环门 | WARN |
 | `评审记录.md` 是否符合默认骨架 | WARN |
 | `03-工作台/README.md` 是否体现协议驱动区 | WARN |
+| 原型页是否接入 `prototype.css` | ERROR |
+| 原型页是否接入 `prototype-layout.js` / `prototype-switcher.js` | WARN |
+| 列表页是否复用 `proto-list-shell` | WARN |
+| 页面底部操作是否复用 `page-actions + has-page-actions` | WARN |
+| 多操作列是否复用 `proto-row-actions` | WARN |
 
 ## 维护约定
 - 脚本只读，不自动修改仓库文件。
@@ -63,6 +73,7 @@ python 06-工具脚本/check_docs_tests.py
 - 新增检查项时，优先给出明确错误原因和修复建议。
 - 新增检查项必须包含 `Why` 和 `Fix`，让 AI 能理解风险并执行修复。
 - 新检查项优先从重复出现的 AI 漏改、断链、术语漂移、目录漂移中沉淀。
+- 已经犯过且明确不该再次发生的错误，应优先判断是否要升级为模板或脚本检查，而不是只写进经验说明。
 - 沟通落地检查只判断结构闭环、状态和链接痕迹，不判断业务拆回是否正确。
 - 涉及业务语义、产品取舍或页面规则的判断，不放进脚本硬编码。
 - 脚本发现 `WARN` 时不阻断任务结束，但需要在任务收尾说明中交代原因。

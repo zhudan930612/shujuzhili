@@ -30,6 +30,7 @@ EXPECTED_ROOT_DIRS = {
 
 README_REQUIRED_HEADINGS = ["## 目录定位", "## 主要内容"]
 CHECK_DOCS_COMMAND = "python 06-工具脚本/check_docs.py"
+CHECK_PROTOTYPES_COMMAND = "python 06-工具脚本/check_prototypes.py"
 DISCUSSION_LANDING_CHECKLIST_TITLE = "拆回正式文档清单"
 DISCUSSION_LANDING_CHECKLIST_COLUMNS = ["结论/规则", "主定义文档", "影响资产", "状态", "备注"]
 DISCUSSION_LANDING_CHECKLIST_ALLOWED_STATUSES = {
@@ -68,6 +69,8 @@ COMPLETION_CLOSURE_GATE_PHRASES = [
     "新增结论是否进入拆回清单",
     "待拆回/已拆回/已归档",
     "WARN",
+    "可复发错误",
+    "制度化动作",
 ]
 WORKBENCH_PROTOCOL_RULE_PHRASES = [
     "协议驱动",
@@ -75,6 +78,7 @@ WORKBENCH_PROTOCOL_RULE_PHRASES = [
     "任务完成检查.md",
     "当前需求沟通文档.md",
     "评审记录.md",
+    "错误治理清单.md",
 ]
 
 DEPRECATED_TERMS = {
@@ -383,6 +387,17 @@ def check_completion_check_command(root: Path, result: CheckResult) -> None:
                 "任务完成检查.md missing check_docs command.",
                 "The completion checklist should point AI to the mechanical check command.",
                 f"Add `{CHECK_DOCS_COMMAND}` to the task completion checklist.",
+            )
+        )
+    if CHECK_PROTOTYPES_COMMAND not in text:
+        result.add(
+            Issue(
+                "WARN",
+                rel_path,
+                None,
+                "任务完成检查.md missing check_prototypes command.",
+                "Prototype tasks need a dedicated sensor for shared-component reuse and shared-script integration.",
+                f"Add `{CHECK_PROTOTYPES_COMMAND}` to the prototype-related completion checks.",
             )
         )
 
