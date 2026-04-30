@@ -8,8 +8,8 @@
 
 ## Guide / Sensor 边界
 - Guide 是行动前引导，包括 [../AGENTS.md](../AGENTS.md)、目录 README、任务执行协议、PRD、业务上下文。
-- Sensor 是行动后反馈，包括 [check_docs.py](check_docs.py)、[check_docs_tests.py](check_docs_tests.py)、任务完成检查、AI 自查与人工复核。
-- [check_docs.py](check_docs.py) 属于计算性 Sensor，只检查明确结构问题。
+- Sensor 是行动后反馈，包括 [run_checks.py](run_checks.py)、分脚本检查、对应测试、任务完成检查、AI 自查与人工复核。
+- [run_checks.py](run_checks.py) 是统一检查入口，按 scope 调度仓库级、工作台、PRD 和原型检查。
 - [check_prototypes.py](check_prototypes.py) 属于原型类 Sensor，检查后台原型的共享组件复用和共享脚本接入。
 - 业务评审属于推理性 Sensor，不放入脚本硬编码。
 - 工具脚本只做结构性背压，不替代人工确认点。
@@ -19,23 +19,38 @@
 ## 主要内容
 | 文件 | 用途 |
 |------|------|
-| [check_docs.py](check_docs.py) | 文档基础机械检查脚本 |
-| [check_docs_tests.py](check_docs_tests.py) | `check_docs.py` 的单元测试 |
+| [run_checks.py](run_checks.py) | 统一检查入口，支持按 scope 调度 |
+| [check_repo.py](check_repo.py) | 仓库级基础治理检查脚本 |
+| [check_workbench.py](check_workbench.py) | 工作台协议、过程文档和收尾痕迹检查脚本 |
+| [check_prd.py](check_prd.py) | 后台模块 PRD 页面骨架和表达检查脚本 |
+| [check_repo_tests.py](check_repo_tests.py) | `check_repo.py` 的单元测试 |
+| [check_workbench_tests.py](check_workbench_tests.py) | `check_workbench.py` 的单元测试 |
+| [check_prd_tests.py](check_prd_tests.py) | `check_prd.py` 的单元测试 |
 | [check_prototypes.py](check_prototypes.py) | 后台原型共享组件与共享脚本检查脚本 |
 | [check_prototypes_tests.py](check_prototypes_tests.py) | `check_prototypes.py` 的单元测试 |
 
 ## 使用方式
-在仓库根目录运行：
+默认全量检查：
 
 ```powershell
-python 06-工具脚本/check_docs.py
+python 06-工具脚本/run_checks.py --scope all
+```
+
+按资产类型运行：
+
+```powershell
+python 06-工具脚本/run_checks.py --scope repo
+python 06-工具脚本/run_checks.py --scope workbench
+python 06-工具脚本/run_checks.py --scope prd
+python 06-工具脚本/run_checks.py --scope prototypes
 ```
 
 运行脚本测试：
 
 ```powershell
-python 06-工具脚本/check_docs_tests.py
-python 06-工具脚本/check_prototypes.py
+python 06-工具脚本/check_repo_tests.py
+python 06-工具脚本/check_workbench_tests.py
+python 06-工具脚本/check_prd_tests.py
 python 06-工具脚本/check_prototypes_tests.py
 ```
 
