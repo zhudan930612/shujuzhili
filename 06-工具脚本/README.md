@@ -20,14 +20,15 @@
 | 文件 | 用途 |
 |------|------|
 | [run_checks.py](run_checks.py) | 统一检查入口，支持按 scope 调度 |
+| [check_common.py](check_common.py) | 共享 Issue/CheckResult 数据类、Markdown 解析、表格迭代等通用工具 |
 | [check_repo.py](check_repo.py) | 仓库级基础治理检查脚本 |
 | [check_workbench.py](check_workbench.py) | 工作台协议、过程文档和收尾痕迹检查脚本 |
 | [check_prd.py](check_prd.py) | 后台模块 PRD 页面骨架和表达检查脚本 |
-| [check_repo_tests.py](check_repo_tests.py) | `check_repo.py` 的单元测试 |
-| [check_workbench_tests.py](check_workbench_tests.py) | `check_workbench.py` 的单元测试 |
-| [check_prd_tests.py](check_prd_tests.py) | `check_prd.py` 的单元测试 |
 | [check_prototypes.py](check_prototypes.py) | 后台原型共享组件与共享脚本检查脚本 |
-| [check_prototypes_tests.py](check_prototypes_tests.py) | `check_prototypes.py` 的单元测试 |
+| [tests/check_repo_tests.py](tests/check_repo_tests.py) | `check_repo.py` 的单元测试 |
+| [tests/check_workbench_tests.py](tests/check_workbench_tests.py) | `check_workbench.py` 的单元测试 |
+| [tests/check_prd_tests.py](tests/check_prd_tests.py) | `check_prd.py` 的单元测试 |
+| [tests/check_prototypes_tests.py](tests/check_prototypes_tests.py) | `check_prototypes.py` 的单元测试 |
 
 ## 使用方式
 默认全量检查：
@@ -48,10 +49,10 @@ python 06-工具脚本/run_checks.py --scope prototypes
 运行脚本测试：
 
 ```powershell
-python 06-工具脚本/check_repo_tests.py
-python 06-工具脚本/check_workbench_tests.py
-python 06-工具脚本/check_prd_tests.py
-python 06-工具脚本/check_prototypes_tests.py
+python 06-工具脚本/tests/check_repo_tests.py
+python 06-工具脚本/tests/check_workbench_tests.py
+python 06-工具脚本/tests/check_prd_tests.py
+python 06-工具脚本/tests/check_prototypes_tests.py
 ```
 
 ## 当前检查项
