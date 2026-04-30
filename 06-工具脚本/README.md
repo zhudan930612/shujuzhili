@@ -65,6 +65,7 @@ python 06-工具脚本/check_prototypes_tests.py
 | 正式 PRD 是否残留页面 ASCII 草图正文 | WARN |
 | 确认类弹窗是否具备最小结构 | WARN |
 | 页面级 PRD 是否出现开放口径、扩展字段、否定式冗余、暂缓区正式规则 | WARN |
+| 同一页面内同一图片对象是否出现互斥规则模式 | WARN |
 | 原型页是否接入 `prototype.css` | ERROR |
 | 原型页是否接入 `prototype-layout.js` / `prototype-switcher.js` | WARN |
 | 列表页是否复用 `proto-list-shell` | WARN |

@@ -568,6 +568,44 @@ class CheckDocsTests(unittest.TestCase):
 
         self.assertTrue(any("staging section may contain a formal rule" in item.message for item in result.warnings))
 
+    def test_reports_conflicting_image_object_rules_in_same_page(self):
+        root = self.make_root("conflicting_image_object_rules_in_same_page")
+        self.add_required_files(root)
+        self.add_backend_prd(
+            root,
+            "巡查管理.md",
+            "## 页面目录索引\n- 页面 1：巡查记录详情页\n\n"
+            "## 页面需求\n\n### 页面 1：巡查记录详情页\n\n"
+            "#### 页面基本信息\n#### 页面入口\n#### 对应原型\n#### 页面状态\n"
+            "#### 字段与展示规则\n- 图片列表无图片时展示空状态\n"
+            "#### 操作规则\n- 巡查记录至少保留 1 张图片，如需清空请删除记录\n"
+            "#### 异常与边界\n#### 页面弹窗 / 抽屉\n"
+            "#### 权限相关行为\n#### 模块衔接\n#### 暂缓 / 待研发确认项\n#### 页面待确认问题\n",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("conflicting image-object rules" in item.message for item in result.warnings))
+
+    def test_does_not_report_upload_page_empty_state_without_min_retain_conflict(self):
+        root = self.make_root("upload_page_empty_state_without_min_retain_conflict")
+        self.add_required_files(root)
+        self.add_backend_prd(
+            root,
+            "巡查管理.md",
+            "## 页面目录索引\n- 页面 1：上传巡查记录页\n\n"
+            "## 页面需求\n\n### 页面 1：上传巡查记录页\n\n"
+            "#### 页面基本信息\n#### 页面入口\n#### 对应原型\n#### 页面状态\n"
+            "#### 字段与展示规则\n- 上传图片空状态显示暂未上传图片\n"
+            "#### 操作规则\n- 当前至少存在 1 张成功图片才能保存\n- 删除至 0 张时恢复空状态\n"
+            "#### 异常与边界\n#### 页面弹窗 / 抽屉\n"
+            "#### 权限相关行为\n#### 模块衔接\n#### 暂缓 / 待研发确认项\n#### 页面待确认问题\n",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertFalse(any("conflicting image-object rules" in item.message for item in result.warnings))
+
 
 if __name__ == "__main__":
     unittest.main()

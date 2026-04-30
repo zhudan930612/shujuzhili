@@ -71,6 +71,7 @@ COMPLETION_CLOSURE_GATE_PHRASES = [
     "WARN",
     "可复发错误",
     "制度化动作",
+    "同一页面、同一对象是否存在互斥规则",
 ]
 WORKBENCH_PROTOCOL_RULE_PHRASES = [
     "协议驱动",
@@ -125,6 +126,10 @@ MODULE_PRD_NEGATIVE_REDUNDANCY_TERMS = [
     "无删除入口",
 ]
 MODULE_PRD_STAGING_FORMAL_RULE_TERMS = ["仅做", "统一在", "必须", "不允许"]
+MODULE_PRD_IMAGE_RULE_MIN_RETAIN_RE = re.compile(r"至少保留\s*1\s*张图片")
+MODULE_PRD_IMAGE_RULE_DELETE_LAST_BLOCK_RE = re.compile(r"删除到最后\s*1\s*张.*阻断")
+MODULE_PRD_IMAGE_RULE_EMPTY_STATE_RE = re.compile(r"无图片时.*空状态")
+MODULE_PRD_IMAGE_RULE_DELETE_TO_ZERO_RE = re.compile(r"删除至\s*0\s*张")
 
 DEPRECATED_TERMS = {
     "ASCII 原型": "Use PRD ASCII 草图 or ASCII 草图 for PRD low-fi sketches.",
@@ -908,6 +913,34 @@ def check_module_prd_page_wording(
                             "Move the stable rule back into 字段与展示规则, 操作规则, 异常与边界, or another formal page section.",
                         )
                     )
+
+    min_retain_matches: list[tuple[int, str]] = []
+    empty_state_matches: list[tuple[int, str]] = []
+    for offset, line in enumerate(section_lines):
+        line_no = start_line + offset
+        stripped = line.strip()
+        if (
+            MODULE_PRD_IMAGE_RULE_MIN_RETAIN_RE.search(stripped)
+            or MODULE_PRD_IMAGE_RULE_DELETE_LAST_BLOCK_RE.search(stripped)
+        ):
+            min_retain_matches.append((line_no, stripped))
+        if (
+            MODULE_PRD_IMAGE_RULE_EMPTY_STATE_RE.search(stripped)
+            or MODULE_PRD_IMAGE_RULE_DELETE_TO_ZERO_RE.search(stripped)
+        ):
+            empty_state_matches.append((line_no, stripped))
+
+    if min_retain_matches and empty_state_matches:
+        result.add(
+            Issue(
+                "WARN",
+                rel_path,
+                min_retain_matches[0][0],
+                f"{page_heading} may contain conflicting image-object rules: {min_retain_matches[0][1]} / {empty_state_matches[0][1]}",
+                "The same page appears to describe both 'must retain at least one image' and an 'image list can become empty' path for what may be the same image object.",
+                "Check whether these lines describe the same image object. If they do, keep one consistent rule; if they describe different objects, split the wording so the object boundary is explicit.",
+            )
+        )
 
 
 def iter_backend_module_prd_files(root: Path):
