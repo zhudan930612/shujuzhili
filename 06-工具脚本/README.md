@@ -61,6 +61,10 @@ python 06-工具脚本/check_prototypes_tests.py
 | `评审记录.md` 是否符合默认骨架 | WARN |
 | `03-工作台/README.md` 是否体现协议驱动区 | WARN |
 | 过程文档是否重复承载“权限矩阵式”主定义 | WARN |
+| 后台模块 PRD 是否包含页面目录索引和统一页面骨架 | WARN |
+| 正式 PRD 是否残留页面 ASCII 草图正文 | WARN |
+| 确认类弹窗是否具备最小结构 | WARN |
+| 页面级 PRD 是否出现开放口径、扩展字段、否定式冗余、暂缓区正式规则 | WARN |
 | 原型页是否接入 `prototype.css` | ERROR |
 | 原型页是否接入 `prototype-layout.js` / `prototype-switcher.js` | WARN |
 | 列表页是否复用 `proto-list-shell` | WARN |

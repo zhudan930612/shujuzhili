@@ -438,6 +438,136 @@ class CheckDocsTests(unittest.TestCase):
 
         self.assertTrue(any("错误治理清单.md" in item.message for item in result.warnings))
 
+    def add_backend_prd(self, root: Path, filename: str, content: str) -> None:
+        prd_dir = root / "02-PRD文档" / "后台管理"
+        prd_dir.mkdir(parents=True, exist_ok=True)
+        (prd_dir / filename).write_text(content, encoding="utf-8")
+
+    def test_reports_module_prd_missing_page_index(self):
+        root = self.make_root("module_prd_missing_page_index")
+        self.add_required_files(root)
+        self.add_backend_prd(
+            root,
+            "项目管理.md",
+            "## 页面需求\n\n### 页面 1：项目列表页\n\n"
+            "#### 页面基本信息\n#### 页面入口\n#### 对应原型\n#### 页面状态\n"
+            "#### 字段与展示规则\n#### 操作规则\n#### 异常与边界\n#### 页面弹窗 / 抽屉\n"
+            "#### 权限相关行为\n#### 模块衔接\n#### 暂缓 / 待研发确认项\n#### 页面待确认问题\n",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("missing 页面目录索引" in item.message for item in result.warnings))
+
+    def test_reports_module_prd_missing_required_page_heading(self):
+        root = self.make_root("module_prd_missing_required_page_heading")
+        self.add_required_files(root)
+        self.add_backend_prd(
+            root,
+            "项目管理.md",
+            "## 页面目录索引\n- 页面 1：项目列表页\n\n"
+            "## 页面需求\n\n### 页面 1：项目列表页\n\n"
+            "#### 页面基本信息\n#### 页面入口\n#### 页面状态\n"
+            "#### 字段与展示规则\n#### 操作规则\n#### 异常与边界\n#### 页面弹窗 / 抽屉\n"
+            "#### 权限相关行为\n#### 模块衔接\n#### 暂缓 / 待研发确认项\n#### 页面待确认问题\n",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("missing page skeleton headings" in item.message for item in result.warnings))
+        self.assertTrue(any("对应原型" in item.message for item in result.warnings))
+
+    def test_reports_formal_prd_ascii_sketch_residue(self):
+        root = self.make_root("formal_prd_ascii_sketch_residue")
+        self.add_required_files(root)
+        self.add_backend_prd(
+            root,
+            "项目管理.md",
+            "## 文档定位\n\nASCII原型\n┌──────┐\n",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("retain page sketch body" in item.message for item in result.warnings))
+
+    def test_reports_confirm_popup_missing_result_feedback(self):
+        root = self.make_root("confirm_popup_missing_result_feedback")
+        self.add_required_files(root)
+        self.add_backend_prd(
+            root,
+            "项目管理.md",
+            "## 页面目录索引\n- 页面 1：项目列表页\n\n"
+            "## 页面需求\n\n### 页面 1：项目列表页\n\n"
+            "#### 页面基本信息\n#### 页面入口\n#### 对应原型\n#### 页面状态\n"
+            "#### 字段与展示规则\n#### 操作规则\n#### 异常与边界\n#### 页面弹窗 / 抽屉\n"
+            "##### 弹窗 1：删除确认弹窗\n"
+            "- 触发入口：点击删除\n"
+            "- 触发条件 / 阻断条件：项目未被引用\n"
+            "- 提示文案：确认删除吗\n"
+            "- 按钮：取消 / 确认删除\n"
+            "#### 权限相关行为\n#### 模块衔接\n#### 暂缓 / 待研发确认项\n#### 页面待确认问题\n",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("confirm popup missing structure" in item.message for item in result.warnings))
+        self.assertTrue(any("结果反馈" in item.message for item in result.warnings))
+
+    def test_reports_open_ended_wording_in_page_prd(self):
+        root = self.make_root("open_ended_wording_in_page_prd")
+        self.add_required_files(root)
+        self.add_backend_prd(
+            root,
+            "项目管理.md",
+            "## 页面目录索引\n- 页面 1：项目详情页\n\n"
+            "## 页面需求\n\n### 页面 1：项目详情页\n\n"
+            "#### 页面基本信息\n#### 页面入口\n#### 对应原型\n#### 页面状态\n"
+            "#### 字段与展示规则\n- 基本信息区域展示字段包括但不限于以下内容。\n"
+            "#### 操作规则\n#### 异常与边界\n#### 页面弹窗 / 抽屉\n"
+            "#### 权限相关行为\n#### 模块衔接\n#### 暂缓 / 待研发确认项\n#### 页面待确认问题\n",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("uses open-ended wording" in item.message for item in result.warnings))
+
+    def test_reports_extension_field_heading_in_page_prd(self):
+        root = self.make_root("extension_field_heading_in_page_prd")
+        self.add_required_files(root)
+        self.add_backend_prd(
+            root,
+            "项目管理.md",
+            "## 页面目录索引\n- 页面 1：项目列表页\n\n"
+            "## 页面需求\n\n### 页面 1：项目列表页\n\n"
+            "#### 页面基本信息\n#### 页面入口\n#### 对应原型\n#### 页面状态\n"
+            "#### 字段与展示规则\n##### 扩展字段\n"
+            "#### 操作规则\n#### 异常与边界\n#### 页面弹窗 / 抽屉\n"
+            "#### 权限相关行为\n#### 模块衔接\n#### 暂缓 / 待研发确认项\n#### 页面待确认问题\n",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("contains 扩展字段 section" in item.message for item in result.warnings))
+
+    def test_reports_formal_rule_wording_in_staging_section(self):
+        root = self.make_root("formal_rule_wording_in_staging_section")
+        self.add_required_files(root)
+        self.add_backend_prd(
+            root,
+            "项目管理.md",
+            "## 页面目录索引\n- 页面 1：批量导入项目\n\n"
+            "## 页面需求\n\n### 页面 1：批量导入项目\n\n"
+            "#### 页面基本信息\n#### 页面入口\n#### 对应原型\n#### 页面状态\n"
+            "#### 字段与展示规则\n#### 操作规则\n#### 异常与边界\n#### 页面弹窗 / 抽屉\n"
+            "#### 权限相关行为\n#### 模块衔接\n#### 暂缓 / 待研发确认项\n"
+            "- 存在错误行时不允许执行正式导入。\n"
+            "#### 页面待确认问题\n",
+        )
+
+        result = check_docs.run_checks(root)
+
+        self.assertTrue(any("staging section may contain a formal rule" in item.message for item in result.warnings))
+
 
 if __name__ == "__main__":
     unittest.main()
