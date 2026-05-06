@@ -200,7 +200,7 @@ def check_markdown_links(root: Path, result: CheckResult) -> None:
 
 
 def check_large_discussion_doc(root: Path, result: CheckResult) -> None:
-    rel_path = Path("03-工作台/当前需求沟通文档.md")
+    rel_path = Path("03-工作台/需求沟通模板.md")
     path = root / rel_path
     if not path.exists():
         return
@@ -304,3 +304,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+

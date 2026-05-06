@@ -65,7 +65,7 @@ WORKBENCH_PROTOCOL_RULE_PHRASES = [
     "协议驱动",
     "任务执行协议.md",
     "任务完成检查.md",
-    "当前需求沟通文档.md",
+    "需求沟通模板.md",
     "评审记录.md",
     "错误治理清单.md",
 ]
@@ -124,7 +124,7 @@ def check_completion_check_command(root: Path, result: CheckResult) -> None:
 
 
 def check_discussion_landing_checklist(root: Path, result: CheckResult) -> None:
-    rel_path = Path("03-工作台/当前需求沟通文档.md")
+    rel_path = Path("03-工作台/需求沟通模板.md")
     path = root / rel_path
     if not path.exists():
         return
@@ -247,7 +247,7 @@ def check_requirement_output_framework(root: Path, result: CheckResult) -> None:
                 )
             )
 
-    discussion_rel_path = Path("03-工作台/当前需求沟通文档.md")
+    discussion_rel_path = Path("03-工作台/需求沟通模板.md")
     discussion_path = root / discussion_rel_path
     if not discussion_path.exists():
         return
@@ -363,7 +363,7 @@ def check_workbench_protocol_alignment(root: Path, result: CheckResult) -> None:
                 None,
                 f"README missing protocol-driven workbench rule: {phrase}",
                 "Workbench navigation should make the protocol-driven workflow obvious before AI starts editing discussion docs.",
-                "Add protocol-driven routing for 当前需求沟通文档, 评审记录, 任务执行协议, and 任务完成检查.",
+                "Add protocol-driven routing for 需求沟通模板, 评审记录, 任务执行协议, and 任务完成检查.",
             )
         )
 
@@ -386,7 +386,7 @@ def check_permission_definition_boundary(root: Path, result: CheckResult) -> Non
                     )
                 )
 
-    discussion_rel_path = Path("03-工作台/当前需求沟通文档.md")
+    discussion_rel_path = Path("03-工作台/需求沟通模板.md")
     discussion_path = root / discussion_rel_path
     if not discussion_path.exists():
         return
@@ -415,3 +415,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+

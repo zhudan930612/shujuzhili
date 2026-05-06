@@ -37,7 +37,7 @@ class CheckWorkbenchTests(unittest.TestCase):
             encoding="utf-8",
         )
         (workbench / "README.md").write_text(
-            "协议驱动\n任务执行协议.md\n任务完成检查.md\n当前需求沟通文档.md\n评审记录.md\n错误治理清单.md\n",
+            "协议驱动\n任务执行协议.md\n任务完成检查.md\n需求沟通模板.md\n评审记录.md\n错误治理清单.md\n",
             encoding="utf-8",
         )
 
@@ -52,17 +52,18 @@ class CheckWorkbenchTests(unittest.TestCase):
     def test_reports_missing_discussion_landing_checklist(self):
         root = self.make_root("missing_landing_checklist")
         self.add_required_workbench_files(root)
-        (root / "03-工作台" / "当前需求沟通文档.md").write_text("过程讨论\n", encoding="utf-8")
+        (root / "03-工作台" / "需求沟通模板.md").write_text("过程讨论\n", encoding="utf-8")
         result = check_workbench.run_checks(root)
         self.assertTrue(any("missing 拆回正式文档清单" in item.message for item in result.warnings))
 
     def test_reports_permission_matrix_duplication(self):
         root = self.make_root("permission_duplication")
         self.add_required_workbench_files(root)
-        (root / "03-工作台" / "当前需求沟通文档.md").write_text("角色权限矩阵\n", encoding="utf-8")
+        (root / "03-工作台" / "需求沟通模板.md").write_text("角色权限矩阵\n", encoding="utf-8")
         result = check_workbench.run_checks(root)
         self.assertTrue(any("repeat permission source-of-truth" in item.message for item in result.warnings))
 
 
 if __name__ == "__main__":
     unittest.main()
+

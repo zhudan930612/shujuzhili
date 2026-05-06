@@ -50,10 +50,11 @@ class CheckRepoTests(unittest.TestCase):
     def test_large_discussion_doc_is_warning_only(self):
         root = self.make_root("large_discussion")
         self.add_required_files(root)
-        (root / "03-工作台" / "当前需求沟通文档.md").write_text("x" * 30001, encoding="utf-8")
+        (root / "03-工作台" / "需求沟通模板.md").write_text("x" * 30001, encoding="utf-8")
         result = check_repo.run_checks(root)
         self.assertTrue(any("Current discussion doc is large" in item.message for item in result.warnings))
 
 
 if __name__ == "__main__":
     unittest.main()
+
