@@ -1,14 +1,4 @@
 {
-  "hooks": {
-    "PostToolUse": [{
-      "matcher": "Edit|Write",
-      "hooks": [{
-        "type": "command",
-        "command": "python -c \"import subprocess,json; r=subprocess.run(['python','06-工具脚本/check_docs.py'],cwd='e:/各产品线/数据治理',capture_output=True,text=True); out=(r.stdout+r.stderr).strip(); print(json.dumps({'hookSpecificOutput':{'hookEventName':'PostToolUse','additionalContext':'[docs check] '+out[:2000]}}) if out else '{}')\"",
-        "shell": "bash"
-      }]
-    }]
-  },
   "permissions": {
     "allow": [
       "Bash(:)",
@@ -39,7 +29,23 @@
       "Read(//tmp/**)",
       "Read(//tmp/andrej-skills/**)",
       "Bash(git commit -m ' *)",
-      "Read(//c/Users/zhudan/AppData/Local/Temp/**)"
+      "Read(//c/Users/zhudan/AppData/Local/Temp/**)",
+      "WebFetch(domain:officecli.ai)",
+      "Bash(curl -fsSL https://officecli.ai/SKILL.md)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -c \"import subprocess,json; r=subprocess.run(['python','06-工具脚本/run_checks.py','--scope','all'],cwd='e:/各产品线/数据治理',capture_output=True,text=True); out=(r.stdout+r.stderr).strip(); print(json.dumps({'hookSpecificOutput':{'hookEventName':'PostToolUse','additionalContext':'[docs check] '+out[:2000]}}) if out else '{}')\"",
+            "shell": "bash"
+          }
+        ]
+      }
     ]
   }
 }
