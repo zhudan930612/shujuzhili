@@ -31,7 +31,11 @@
       "Bash(git commit -m ' *)",
       "Read(//c/Users/zhudan/AppData/Local/Temp/**)",
       "WebFetch(domain:officecli.ai)",
-      "Bash(curl -fsSL https://officecli.ai/SKILL.md)"
+      "Bash(curl -fsSL https://officecli.ai/SKILL.md)",
+      "Bash(powershell -Command \"irm https://raw.githubusercontent.com/iOfficeAI/OfficeCLI/main/install.ps1 | iex\")",
+      "Bash(officecli --version)",
+      "Bash(echo \"=== ~/.agents/skills/ ===\" && ls \"C:\\\\Users\\\\zhudan\\\\.agents\\\\skills\\\\\" 2>/dev/null && echo \"\" && echo \"=== ~/.claude/skills/ ===\" && ls \"C:\\\\Users\\\\zhudan\\\\.claude\\\\skills\\\\\" 2>/dev/null)",
+      "Read(//e/各产品线/数据治理/**)"
     ]
   },
   "hooks": {
