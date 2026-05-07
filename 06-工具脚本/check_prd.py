@@ -52,6 +52,7 @@ MODULE_PRD_NEGATIVE_REDUNDANCY_TERMS = [
     "无删除入口",
 ]
 MODULE_PRD_NEGATIVE_REDUNDANCY_GENERIC_RE = re.compile(r"无(?:按钮|入口|展示)")
+MODULE_PRD_REVERSE_DEFINED_NON_DISPLAY_ROW_RE = re.compile(r"^\|\s*(不展示项|不提供项|不支持项|不显示项)\s*\|")
 MODULE_PRD_STAGING_FORMAL_RULE_TERMS = ["仅做", "统一在", "必须", "不允许"]
 MODULE_PRD_IMAGE_RULE_MIN_RETAIN_RE = re.compile(r"至少保留\s*1\s*张图片")
 MODULE_PRD_IMAGE_RULE_DELETE_LAST_BLOCK_RE = re.compile(r"删除到最后\s*1\s*张.*阻断")
@@ -222,6 +223,17 @@ def check_module_prd_page_wording(
                     f"{page_heading} contains 扩展字段 section.",
                     "An 扩展字段 section often reintroduces fields that are not actually shown on the current page.",
                     "Keep only fields that are actually shown on this page; move other fields back to the page or popup where they appear.",
+                )
+            )
+        if MODULE_PRD_REVERSE_DEFINED_NON_DISPLAY_ROW_RE.match(line.strip()):
+            result.add(
+                Issue(
+                    "WARN",
+                    rel_path,
+                    line_no,
+                    "page field table contains reverse-defined non-display row.",
+                    "Page field tables should list only fields, actions, or states that are actually shown on the page, not reverse-defined rows describing what is absent.",
+                    "Delete the reverse-defined row and keep only the fields that are actually shown on this page. If you still think the absence needs explanation, move it to a more appropriate rule section and verify it is truly necessary.",
                 )
             )
         if any(term in line for term in MODULE_PRD_NEGATIVE_REDUNDANCY_TERMS) or MODULE_PRD_NEGATIVE_REDUNDANCY_GENERIC_RE.search(line):
