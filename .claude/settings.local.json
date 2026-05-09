@@ -35,7 +35,8 @@
       "Bash(powershell -Command \"irm https://raw.githubusercontent.com/iOfficeAI/OfficeCLI/main/install.ps1 | iex\")",
       "Bash(officecli --version)",
       "Bash(echo \"=== ~/.agents/skills/ ===\" && ls \"C:\\\\Users\\\\zhudan\\\\.agents\\\\skills\\\\\" 2>/dev/null && echo \"\" && echo \"=== ~/.claude/skills/ ===\" && ls \"C:\\\\Users\\\\zhudan\\\\.claude\\\\skills\\\\\" 2>/dev/null)",
-      "Read(//e/各产品线/数据治理/**)"
+      "Read(//e/各产品线/数据治理/**)",
+      "WebFetch(domain:docs.rs)"
     ]
   },
   "hooks": {
