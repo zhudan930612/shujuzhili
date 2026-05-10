@@ -8,86 +8,1492 @@
   <style>
     .prototype-stage { display: none; }
     .prototype-stage.active { display: block; }
-    .qc-worktop { height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; border-bottom: 1px solid var(--line); background: #fff; }
-    .qc-actions { display: flex; gap: 10px; }
-    .qc-workspace { height: calc(100% - 50px); display: grid; grid-template-columns: 1fr 350px; background: #edf2f8; }
-    .qc-main { padding: 12px 14px; overflow: hidden; }
-    .mode-tabs { height: 42px; display: flex; gap: 10px; align-items: center; }
-    .mode-tab { height: 32px; padding: 0 22px; display: inline-flex; align-items: center; border: 1px solid #d7e2ee; background: #fff; color: #52687f; font-weight: 700; }
-    .mode-tab.active { background: var(--brand); border-color: var(--brand); color: #fff; }
-    .compare-strip, .source-strip { display: flex; gap: 8px; align-items: center; min-height: 42px; padding: 8px 0; }
-    .canvas { position: relative; height: 780px; border: 1px solid #cfdbea; background: linear-gradient(135deg, #dce8f4, #f8fafc 44%, #bdcbd9); overflow: hidden; }
-    .canvas::before { content: ""; position: absolute; left: 70px; right: 70px; bottom: 84px; height: 88px; background: rgba(71,86,104,0.18); transform: skewX(-12deg); }
-    .ref-box { position: absolute; border: 3px solid #7b61ff; background: rgba(123,97,255,0.08); }
-    .ref-box.b1 { left: 250px; top: 160px; width: 210px; height: 110px; }
-    .ref-box.b2 { left: 285px; top: 180px; width: 205px; height: 105px; border-color: #00a4a6; }
-    .ref-box.b3 { right: 240px; bottom: 210px; width: 190px; height: 138px; border-color: #8f6d3f; }
-    .std-box { position: absolute; right: 285px; top: 250px; width: 220px; height: 140px; border: 3px solid #e85b73; background: rgba(232,91,115,0.12); }
-    .context-pop { position: absolute; left: 470px; top: 118px; padding: 10px 12px; background: #fff; border: 1px solid #dce7f3; box-shadow: var(--shadow); color: #40556d; font-weight: 700; }
-    .source-panel { position: absolute; right: 20px; top: 20px; width: 310px; padding: 14px; background: rgba(255,255,255,0.96); border: 1px solid #dce7f3; box-shadow: var(--shadow); }
-    .source-panel-row { display: flex; justify-content: space-between; margin: 8px 0; color: #52687f; }
-    .standard-panel { border-left: 1px solid #dbe5f0; background: #fff; padding: 14px; overflow: hidden; }
-    .panel-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; color: #1f3e62; font-size: 16px; font-weight: 700; }
-    .std-card { border: 1px solid #dce6f1; background: #fbfdff; padding: 12px; margin-bottom: 12px; }
-    .std-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 700; }
-    .dot { width: 14px; height: 14px; display: inline-block; margin-right: 8px; background: #e85b73; vertical-align: -2px; }
-    .std-meta { display: grid; gap: 8px; color: #52687f; }
-    .std-meta select { width: 100%; }
-    .mini-actions { display: flex; gap: 8px; margin-top: 10px; }
-    .mini-actions span { flex: 1; height: 26px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #d8e3ee; background: #fff; color: #52677e; font-size: 12px; font-weight: 700; }
-    .modal-stage { height: calc(100% - 64px); }
-    .record-drawer { position: absolute; right: 0; top: 64px; bottom: 0; width: 450px; background: rgba(255,255,255,0.96); box-shadow: var(--drawer-shadow); padding: 18px; }
-    .timeline { margin-top: 12px; border-left: 2px solid #d9e5f2; padding-left: 18px; }
-    .timeline-item { margin-bottom: 18px; position: relative; color: #52687f; line-height: 1.7; }
-    .timeline-item::before { content: ""; position: absolute; left: -25px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--brand); }
+    .qc-shell {
+      height: 982px;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #edf2f8;
+    }
+    .qc-worktop {
+      height: 56px;
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+      flex-shrink: 0;
+    }
+    .qc-worktop strong {
+      font-size: 16px;
+      color: #1f3e62;
+    }
+    .qc-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .qc-summary-bar {
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      background: #f8fbff;
+      border-bottom: 1px solid var(--line);
+      flex-shrink: 0;
+    }
+    .qc-summary-left,
+    .qc-summary-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .qc-summary-right {
+      justify-content: flex-end;
+    }
+    .qc-meta-line {
+      color: #50667f;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .qc-status-pill {
+      min-height: 32px;
+      padding: 0 14px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid #d6e4f3;
+      background: #fff;
+      color: #45607e;
+    }
+    .qc-status-pill[data-variant="pending"] {
+      color: #165ab7;
+      background: #eef5ff;
+      border-color: #c8daf8;
+    }
+    .qc-status-pill[data-variant="rework"] {
+      color: #9f6413;
+      background: #fff8ed;
+      border-color: #f1dfc4;
+    }
+    .qc-status-pill[data-variant="done"] {
+      color: #177c53;
+      background: #f1fbf5;
+      border-color: #cce7d6;
+    }
+    .qc-status-pill[data-variant="terminal"] {
+      color: #7b4451;
+      background: #fff5f7;
+      border-color: #efced6;
+    }
+    .qc-workspace {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 390px;
+      gap: 14px;
+      padding: 14px;
+      min-height: 0;
+    }
+    .qc-main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 0;
+    }
+    .qc-side {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 0;
+    }
+    .qc-card {
+      background: #fff;
+      border: 1px solid #dde6f0;
+      box-shadow: var(--shadow);
+      min-width: 0;
+    }
+    .qc-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px 12px;
+      border-bottom: 1px solid #edf2f7;
+    }
+    .qc-card-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #1f3e62;
+    }
+    .qc-card-title::before {
+      content: "";
+      width: 4px;
+      height: 18px;
+      border-radius: 999px;
+      background: var(--brand);
+      flex-shrink: 0;
+    }
+    .qc-card-body {
+      padding: 16px 18px 18px;
+    }
+    .qc-overview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .qc-overview-item {
+      padding: 14px 16px;
+      border: 1px solid #e4ebf3;
+      background: #fbfdff;
+    }
+    .qc-overview-label {
+      color: #758598;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    .qc-overview-value {
+      color: #223549;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .qc-canvas-card {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .qc-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      border-bottom: 1px solid #edf2f7;
+      background: #fbfdff;
+      gap: 12px;
+    }
+    .qc-toolbar-left,
+    .qc-toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .qc-chip {
+      min-height: 30px;
+      padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid #dbe6f2;
+      background: #fff;
+      color: #4f6881;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .qc-chip[data-variant="selected"] {
+      background: #eef5ff;
+      border-color: #c8daf8;
+      color: #195db9;
+    }
+    .qc-chip[data-variant="success"] {
+      background: #f1fbf5;
+      border-color: #cce7d6;
+      color: #187c53;
+    }
+    .qc-chip[data-variant="warning"] {
+      background: #fff8ed;
+      border-color: #f1dfc4;
+      color: #9f6413;
+    }
+    .qc-chip[data-variant="danger"] {
+      background: #fff4f3;
+      border-color: #f1d1cb;
+      color: #c05c52;
+    }
+    .qc-canvas {
+      flex: 1;
+      min-height: 0;
+      margin: 18px;
+      position: relative;
+      border: 1px solid #cfdbea;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.48), rgba(255,255,255,0.22)),
+        linear-gradient(135deg, #dbe7f4 0%, #f7f9fc 40%, #c4d0dc 100%);
+      overflow: hidden;
+    }
+    .qc-canvas::before {
+      content: "";
+      position: absolute;
+      inset: 32px 54px 120px;
+      border: 1px dashed rgba(35, 67, 102, 0.18);
+    }
+    .qc-canvas::after {
+      content: "";
+      position: absolute;
+      left: 60px;
+      right: 60px;
+      bottom: 70px;
+      height: 110px;
+      background: rgba(62, 83, 108, 0.14);
+      transform: skewX(-14deg);
+      filter: blur(1px);
+    }
+    .qc-object-box {
+      position: absolute;
+      border: 3px solid #2f84e7;
+      background: rgba(47, 132, 231, 0.12);
+    }
+    .qc-object-box[data-variant="pass"] {
+      border-color: #20a36b;
+      background: rgba(32, 163, 107, 0.14);
+    }
+    .qc-object-box[data-variant="return"] {
+      border-color: #ef6a6a;
+      background: rgba(239, 106, 106, 0.16);
+    }
+    .qc-object-box[data-variant="invalid"] {
+      border-color: #f3a73d;
+      background: rgba(243, 167, 61, 0.18);
+    }
+    .qc-object-box[data-variant="selected"] {
+      box-shadow: 0 0 0 5px rgba(47, 132, 231, 0.16);
+    }
+    .qc-box-label {
+      position: absolute;
+      top: -34px;
+      left: -2px;
+      min-height: 28px;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: rgba(27, 49, 78, 0.86);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .qc-focus-panel {
+      position: absolute;
+      left: 26px;
+      top: 22px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.96);
+      border: 1px solid #dbe6f2;
+      box-shadow: var(--shadow);
+      color: #42576e;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .qc-banner {
+      margin: 0 18px 18px;
+      padding: 14px 16px;
+      border: 1px solid #f0dfc7;
+      background: #fff9ef;
+      color: #9a6317;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    .qc-side-scroll {
+      overflow: auto;
+      min-height: 0;
+      padding-right: 2px;
+    }
+    .qc-side-card {
+      margin-bottom: 14px;
+      border: 1px solid #dde6f0;
+      background: #fbfdff;
+    }
+    .qc-side-card:last-child {
+      margin-bottom: 0;
+    }
+    .qc-side-card-head {
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid #edf2f7;
+      font-weight: 700;
+      color: #1f3e62;
+    }
+    .qc-side-card-body {
+      padding: 14px 16px 16px;
+    }
+    .qc-object-list {
+      display: grid;
+      gap: 10px;
+    }
+    .qc-object-item {
+      border: 1px solid #dce6f1;
+      background: #fff;
+      padding: 12px 12px 10px;
+    }
+    .qc-object-item.active {
+      border-color: #9ec2f3;
+      box-shadow: inset 0 0 0 1px rgba(47,132,231,0.14);
+      background: #f8fbff;
+    }
+    .qc-object-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .qc-object-name {
+      font-weight: 700;
+      color: #273a4f;
+    }
+    .qc-object-meta {
+      color: #6d7e90;
+      font-size: 12px;
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+    .qc-judge-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .qc-judge-btn {
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #d8e3ef;
+      background: #fff;
+      color: #536981;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .qc-judge-btn[data-variant="pass"] {
+      color: #177c53;
+      border-color: #cce7d6;
+      background: #f1fbf5;
+    }
+    .qc-judge-btn[data-variant="return"] {
+      color: #bf5b51;
+      border-color: #f1d1cb;
+      background: #fff4f3;
+    }
+    .qc-judge-btn[data-variant="invalid"] {
+      color: #9f6413;
+      border-color: #f1dfc4;
+      background: #fff8ed;
+    }
+    .qc-detail-grid {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 10px 12px;
+      color: #516880;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .qc-detail-label {
+      color: #7a8b9d;
+    }
+    .qc-score-box {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .qc-score-entry {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid #dce6f1;
+      background: #fff;
+    }
+    .qc-score-entry-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      color: #42576e;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .qc-score-scale {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 6px;
+    }
+    .qc-score-mark {
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #d8e3ef;
+      background: #fff;
+      color: #556b83;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .qc-score-mark.active {
+      background: #eef5ff;
+      border-color: #9fc0f0;
+      color: #165ab7;
+    }
+    .qc-object-score {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: #5c7188;
+      font-size: 12px;
+    }
+    .qc-object-score strong {
+      color: #1f3e62;
+      font-size: 14px;
+    }
+    .qc-score-item {
+      border: 1px solid #dce6f1;
+      background: #fff;
+      padding: 12px;
+    }
+    .qc-score-item strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 18px;
+      color: #1f3e62;
+    }
+    .qc-source-list {
+      display: grid;
+      gap: 10px;
+    }
+    .qc-source-item {
+      border: 1px solid #dce6f1;
+      background: #fff;
+      padding: 12px;
+      color: #4f6780;
+      line-height: 1.7;
+      font-size: 13px;
+    }
+    .qc-source-item strong {
+      color: #24384e;
+    }
+    .qc-source-item .proto-status,
+    .qc-source-item .proto-tag {
+      margin-top: 8px;
+    }
+    .qc-terminal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .qc-terminal-card {
+      border: 1px solid #dce6f1;
+      background: #fff;
+      padding: 12px;
+    }
+    .qc-terminal-card strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 18px;
+      color: #1f3e62;
+    }
+    .qc-terminal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .qc-terminal-note {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border: 1px solid #f0dfc7;
+      background: #fff9ef;
+      color: #9a6317;
+      line-height: 1.8;
+      font-size: 13px;
+    }
+    .record-drawer {
+      position: absolute;
+      right: 0;
+      top: 64px;
+      bottom: 0;
+      width: 440px;
+      background: rgba(255,255,255,0.96);
+      box-shadow: var(--drawer-shadow);
+      padding: 18px;
+      overflow: auto;
+    }
+    .timeline {
+      margin-top: 12px;
+      border-left: 2px solid #d9e5f2;
+      padding-left: 18px;
+    }
+    .timeline-item {
+      margin-bottom: 18px;
+      position: relative;
+      color: #52687f;
+      line-height: 1.8;
+    }
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -25px;
+      top: 7px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--brand);
+    }
+    .timeline-item strong {
+      color: #20384f;
+    }
+    .modal-stage {
+      height: calc(100% - 64px);
+    }
+    .modal .notice {
+      margin: 0;
+      color: #52687f;
+      line-height: 1.9;
+    }
+    .qc-modal-grid {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 14px 16px;
+      color: #52687f;
+      line-height: 1.8;
+    }
+    .qc-modal-label {
+      color: #7a8b9d;
+    }
+    .qc-modal-section {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid #edf2f7;
+    }
+    .qc-check-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+      color: #445a72;
+    }
+    .qc-check-grid label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .qc-modal-note {
+      margin-top: 12px;
+      padding: 12px 14px;
+      background: #f7fbff;
+      border: 1px solid #dde8f4;
+      color: #546a82;
+      line-height: 1.8;
+    }
+    .qc-modal-stat {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .qc-modal-stat .qc-terminal-card strong {
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
-  <div class="prototype-state-bar" data-prototype-switch data-prototype-default="object">
-    <button class="active" type="button" data-prototype-button="object">对象组</button>
-    <button type="button" data-prototype-button="source">来源</button>
-    <button type="button" data-prototype-button="return">退回弹窗</button>
-    <button type="button" data-prototype-button="blocked">入池阻断</button>
+  <div class="prototype-state-bar" data-prototype-switch data-prototype-default="round12-pending">
+    <button class="active" type="button" data-prototype-button="round12-pending">一/二检待质检</button>
+    <button type="button" data-prototype-button="round12-rework">一/二检返工整改</button>
+    <button type="button" data-prototype-button="round3-pending">三检待质检</button>
+    <button type="button" data-prototype-button="round3-terminal">三检终局态</button>
+    <button type="button" data-prototype-button="modal-return">退回确认弹窗</button>
+    <button type="button" data-prototype-button="modal-invalid">无效原因弹窗</button>
+    <button type="button" data-prototype-button="modal-score">评分说明弹窗</button>
+    <button type="button" data-prototype-button="modal-terminal">终局确认弹窗</button>
     <button type="button" data-prototype-button="record">任务记录</button>
   </div>
 
-  <section class="prototype-stage active" data-prototype-panel="object">
+  <section class="prototype-stage active" data-prototype-panel="round12-pending">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
-      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
-        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;">
-          <div class="qc-worktop"><strong>← 质检工作台</strong><div class="qc-actions"><button class="btn btn-ghost">保存草稿</button><button class="btn btn-primary">确认入池</button><button class="btn btn-ghost">不入池</button><button class="btn btn-ghost">任务记录</button></div></div>
-          <div class="qc-workspace"><div class="qc-main"><div class="mode-tabs"><span class="mode-tab active">对象组</span><span class="mode-tab">来源</span></div><div class="compare-strip"><span class="proto-tag">安全帽 / 白色</span><span class="proto-tag" data-variant="gray">灭火器 / 正常</span><span class="proto-tag" data-variant="gray">脚手架 / 盘扣式</span></div><div class="compare-strip"><span class="proto-tag">候选：张三 白色</span><span class="proto-tag">候选：李四 白色</span><span class="proto-tag">候选：王五 白色</span></div><div class="canvas"><div class="ref-box b1"></div><div class="ref-box b2"></div><div class="std-box"></div><div class="context-pop">当前候选：李四｜安全帽/白色 <button class="btn btn-primary" style="height:26px; padding:0 12px; margin-left:8px;">采纳</button></div></div></div><aside class="standard-panel"><div class="panel-title">标准结果列表 <span class="proto-status" data-variant="warning">草稿</span></div><div class="std-card"><div class="std-head"><span><i class="dot"></i>标准对象1</span><span>⋮</span></div><div class="std-meta"><div>形状：矩形</div><select class="control select-control"><option>安全帽 / 白色</option></select></div><div class="mini-actions"><span>锁定</span><span>可见</span><span>固定</span></div></div></aside></div>
-        </section>
-      </main></div>
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <section class="qc-shell">
+            <div class="qc-worktop">
+              <strong>← 质检工作台</strong>
+              <div class="qc-actions">
+                <button class="btn btn-ghost" type="button">保存草稿</button>
+                <button class="btn btn-ghost" type="button">任务记录</button>
+                <button class="btn btn-primary" type="button">提交本轮质检</button>
+              </div>
+            </div>
+            <div class="qc-summary-bar">
+              <div class="qc-summary-left">
+                <span class="qc-status-pill" data-variant="pending">一检 · 待质检</span>
+                <span class="proto-tag">图片任务：IMG_20260510_018</span>
+                <span class="proto-tag">项目类型：住宅装修</span>
+                <span class="proto-tag">来源标注人数：3 人</span>
+              </div>
+              <div class="qc-summary-right">
+                <span class="qc-meta-line">当前图片共 8 个对象</span>
+                <span class="qc-meta-line">已裁决 5 个</span>
+                <span class="qc-meta-line">待裁决 3 个</span>
+              </div>
+            </div>
+            <div class="qc-workspace">
+              <div class="qc-main">
+                <section class="qc-card">
+                  <div class="qc-card-head">
+                    <div class="qc-card-title">当前任务摘要</div>
+                    <span class="proto-status" data-variant="warning">评分待确认</span>
+                  </div>
+                  <div class="qc-card-body">
+                    <div class="qc-overview-grid">
+                      <div class="qc-overview-item">
+                        <div class="qc-overview-label">当前轮次</div>
+                        <div class="qc-overview-value">一检</div>
+                      </div>
+                      <div class="qc-overview-item">
+                        <div class="qc-overview-label">对象摘要</div>
+                        <div class="qc-overview-value">通过 4 / 退回 1 / 无效 0</div>
+                      </div>
+                      <div class="qc-overview-item">
+                        <div class="qc-overview-label">当前评分</div>
+                        <div class="qc-overview-value">7.5 分</div>
+                      </div>
+                      <div class="qc-overview-item">
+                        <div class="qc-overview-label">前序回流</div>
+                        <div class="qc-overview-value">首次进入质检</div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="qc-card qc-canvas-card">
+                  <div class="qc-toolbar">
+                    <div class="qc-toolbar-left">
+                      <span class="qc-chip" data-variant="selected">当前对象：安全帽 / 白色</span>
+                      <span class="qc-chip">标注员：李四</span>
+                      <span class="qc-chip">对象编号：OBJ-03</span>
+                    </div>
+                    <div class="qc-toolbar-right">
+                      <span class="qc-chip" data-variant="success">已通过 4</span>
+                      <span class="qc-chip" data-variant="warning">待裁决 3</span>
+                      <span class="qc-chip" data-variant="danger">已退回 1</span>
+                    </div>
+                  </div>
+                  <div class="qc-canvas">
+                    <div class="qc-focus-panel">
+                      当前选中对象：李四｜安全帽 / 白色<br />
+                      当前位置与类别存在疑义，请完成本轮裁决。
+                    </div>
+                    <div class="qc-object-box" data-variant="pass" style="left: 186px; top: 172px; width: 180px; height: 112px;">
+                      <span class="qc-box-label">对象 01 · 已通过</span>
+                    </div>
+                    <div class="qc-object-box" data-variant="selected" style="left: 418px; top: 154px; width: 222px; height: 146px;">
+                      <span class="qc-box-label">对象 03 · 待质检</span>
+                    </div>
+                    <div class="qc-object-box" data-variant="return" style="right: 188px; bottom: 210px; width: 174px; height: 136px;">
+                      <span class="qc-box-label">对象 06 · 已退回</span>
+                    </div>
+                    <div class="qc-object-box" data-variant="invalid" style="left: 238px; bottom: 160px; width: 160px; height: 118px;">
+                      <span class="qc-box-label">对象 08 · 候选无效</span>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <aside class="qc-side">
+                <section class="qc-card qc-side-scroll">
+                  <div class="qc-card-head">
+                    <div class="qc-card-title">对象裁决与来源辅助</div>
+                    <span class="proto-tag">当前选中 1 个对象</span>
+                  </div>
+                  <div class="qc-card-body">
+                    <div class="qc-side-card">
+                      <div class="qc-side-card-head">当前对象裁决</div>
+                      <div class="qc-side-card-body">
+                        <div class="qc-detail-grid">
+                          <div class="qc-detail-label">对象类别</div>
+                          <div>安全帽 / 白色</div>
+                          <div class="qc-detail-label">来源标注</div>
+                          <div>李四，矩形框，置信度 0.83</div>
+                          <div class="qc-detail-label">前序结果</div>
+                          <div>当前为一检首次裁决</div>
+                        </div>
+                        <div class="qc-score-entry">
+                          <div class="qc-score-entry-head">
+                            <span>当前对象评分（10 分制）</span>
+                            <strong>7.5 分</strong>
+                          </div>
+                          <div class="qc-score-scale">
+                            <span class="qc-score-mark">1</span>
+                            <span class="qc-score-mark">2</span>
+                            <span class="qc-score-mark">3</span>
+                            <span class="qc-score-mark">4</span>
+                            <span class="qc-score-mark">5</span>
+                            <span class="qc-score-mark">6</span>
+                            <span class="qc-score-mark">7</span>
+                            <span class="qc-score-mark active">8</span>
+                            <span class="qc-score-mark">9</span>
+                            <span class="qc-score-mark">10</span>
+                          </div>
+                        </div>
+                        <div class="qc-judge-row" style="margin-top:12px;">
+                          <span class="qc-judge-btn" data-variant="pass">通过</span>
+                          <span class="qc-judge-btn" data-variant="return">退回</span>
+                          <span class="qc-judge-btn" data-variant="invalid">无效</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="qc-side-card">
+                      <div class="qc-side-card-head">对象列表</div>
+                      <div class="qc-side-card-body">
+                        <div class="qc-object-list">
+                          <div class="qc-object-item active">
+                            <div class="qc-object-top">
+                              <span class="qc-object-name">对象 03</span>
+                              <span class="proto-status" data-variant="warning">待质检</span>
+                            </div>
+                            <div class="qc-object-meta">安全帽 / 白色 · 标注员 李四 · 候选 2 条</div>
+                            <div class="qc-object-score">
+                              <span>对象评分（10 分制）</span>
+                              <strong>7.5</strong>
+                            </div>
+                            <div class="qc-judge-row">
+                              <span class="qc-judge-btn" data-variant="pass">通过</span>
+                              <span class="qc-judge-btn" data-variant="return">退回</span>
+                              <span class="qc-judge-btn" data-variant="invalid">无效</span>
+                            </div>
+                          </div>
+                          <div class="qc-object-item">
+                            <div class="qc-object-top">
+                              <span class="qc-object-name">对象 05</span>
+                              <span class="proto-status" data-variant="muted">待质检</span>
+                            </div>
+                            <div class="qc-object-meta">脚手架 / 盘扣式 · 标注员 张三 · 候选 1 条</div>
+                            <div class="qc-object-score">
+                              <span>对象评分（10 分制）</span>
+                              <strong>8.0</strong>
+                            </div>
+                            <div class="qc-judge-row">
+                              <span class="qc-judge-btn" data-variant="pass">通过</span>
+                              <span class="qc-judge-btn" data-variant="return">退回</span>
+                              <span class="qc-judge-btn" data-variant="invalid">无效</span>
+                            </div>
+                          </div>
+                          <div class="qc-object-item">
+                            <div class="qc-object-top">
+                              <span class="qc-object-name">对象 08</span>
+                              <span class="proto-status" data-variant="muted">待质检</span>
+                            </div>
+                            <div class="qc-object-meta">灭火器 / 损坏 · 标注员 王五 · 候选 1 条</div>
+                            <div class="qc-object-score">
+                              <span>对象评分（10 分制）</span>
+                              <strong>6.5</strong>
+                            </div>
+                            <div class="qc-judge-row">
+                              <span class="qc-judge-btn" data-variant="pass">通过</span>
+                              <span class="qc-judge-btn" data-variant="return">退回</span>
+                              <span class="qc-judge-btn" data-variant="invalid">无效</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="qc-side-card">
+                      <div class="qc-side-card-head">当前轮评分摘要</div>
+                      <div class="qc-side-card-body">
+                        <div class="qc-score-box">
+                          <div class="qc-score-item">
+                            <div class="qc-overview-label">当前评分</div>
+                            <strong>7.5</strong>
+                          </div>
+                          <div class="qc-score-item">
+                            <div class="qc-overview-label">阈值命中</div>
+                            <strong>低于 8 分</strong>
+                          </div>
+                        </div>
+                        <div class="qc-modal-note">
+                          当前分数与“对象 03 计划退回”一致；若后续裁决与分数明显不一致，提交时将触发评分说明弹窗。
+                        </div>
+                      </div>
+                    </div>
+                    <div class="qc-side-card">
+                      <div class="qc-side-card-head">来源结果与前序记录</div>
+                      <div class="qc-side-card-body">
+                        <div class="qc-source-list">
+                          <div class="qc-source-item">
+                            <strong>李四</strong>：共标注 7 个对象，当前对象来自该记录。<br />
+                            <span class="proto-tag">候选：安全帽 / 白色</span>
+                          </div>
+                          <div class="qc-source-item">
+                            <strong>张三</strong>：共标注 5 个对象，当前对象存在近似候选。<br />
+                            <span class="proto-tag">候选：安全帽 / 红色</span>
+                          </div>
+                          <div class="qc-source-item">
+                            <strong>前序记录</strong>：首次进入一检，无历史返工。
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </aside>
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
   </section>
 
-  <section class="prototype-stage" data-prototype-panel="source">
+  <section class="prototype-stage" data-prototype-panel="round12-rework">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
-      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace">
-        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;">
-          <div class="qc-worktop"><strong>← 质检工作台</strong><div class="qc-actions"><button class="btn btn-ghost">保存草稿</button><button class="btn btn-primary">确认入池</button><button class="btn btn-ghost">不入池</button></div></div>
-          <div class="qc-workspace"><div class="qc-main"><div class="mode-tabs"><span class="mode-tab">对象组</span><span class="mode-tab active">来源</span></div><div class="source-strip"><span class="proto-tag">张三 5框</span><span class="proto-tag">李四 7框</span><span class="proto-tag" data-variant="orange">王五 无效</span></div><div class="source-strip"><span class="proto-tag">安全帽 白色 x2</span><span class="proto-tag">安全帽 红色</span><span class="proto-tag">灭火器 损坏</span></div><div class="canvas"><div class="ref-box b1"></div><div class="ref-box b2"></div><div class="ref-box b3"></div><div class="context-pop">当前对象：李四｜安全帽/白色 <button class="btn btn-primary" style="height:26px; padding:0 12px; margin-left:8px;">采纳</button></div><div class="source-panel"><div class="panel-title">来源操作面板</div><div class="source-panel-row"><span>标注人</span><strong>李四</strong></div><div class="source-panel-row"><span>标注对象</span><strong>7 个</strong></div><div class="source-panel-row"><span>已采纳对象</span><strong>1 个</strong></div><button class="btn btn-ghost" disabled style="width:100%; margin-top:10px;">退回该记录</button><p style="color:#8a6a18; line-height:1.7;">该标注记录已有对象被采纳，请先移除相关标准对象后再退回。</p></div></div></div><aside class="standard-panel"><div class="panel-title">标准结果列表</div><div class="std-card"><div class="std-head"><span><i class="dot"></i>标准对象1</span><span>⋮</span></div><div class="std-meta"><select class="control select-control"><option>安全帽 / 白色</option></select></div></div></aside></div>
-        </section>
-      </main></div>
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <section class="qc-shell">
+            <div class="qc-worktop">
+              <strong>← 质检工作台</strong>
+              <div class="qc-actions">
+                <button class="btn btn-ghost" type="button">任务记录</button>
+                <button class="btn btn-ghost" type="button">刷新返工结果</button>
+              </div>
+            </div>
+            <div class="qc-summary-bar">
+              <div class="qc-summary-left">
+                <span class="qc-status-pill" data-variant="rework">二检 · 返工整改</span>
+                <span class="proto-tag">图片任务：IMG_20260510_052</span>
+                <span class="proto-tag">项目类型：住宅装修</span>
+                <span class="proto-tag">返工对象：3 个</span>
+              </div>
+              <div class="qc-summary-right">
+                <span class="qc-meta-line">等待返工标注员 2 人</span>
+                <span class="qc-meta-line">最近退回时间：2026-05-10 11:26</span>
+              </div>
+            </div>
+            <div class="qc-workspace">
+              <div class="qc-main">
+                <section class="qc-card qc-canvas-card">
+                  <div class="qc-card-head">
+                    <div class="qc-card-title">返工整改等待态</div>
+                    <span class="proto-status" data-variant="warning">当前轮暂不可继续流转</span>
+                  </div>
+                  <div class="qc-banner">
+                    当前图片在二检存在 3 个退回对象，系统已生成对象级返工子任务。<br />
+                    在返工子任务全部提交前，本轮主任务保持在 <strong>返工整改</strong> 状态，不可进入下一轮；返工结果提交后，整图将回一检复核。
+                  </div>
+                  <div class="qc-canvas">
+                    <div class="qc-focus-panel">
+                      当前处于返工闭环等待阶段。<br />
+                      退回对象以红色高亮，仅供查看回流范围。
+                    </div>
+                    <div class="qc-object-box" data-variant="pass" style="left: 186px; top: 172px; width: 180px; height: 112px;">
+                      <span class="qc-box-label">对象 01 · 已通过</span>
+                    </div>
+                    <div class="qc-object-box" data-variant="return" style="left: 418px; top: 154px; width: 222px; height: 146px;">
+                      <span class="qc-box-label">对象 03 · 返工整改中</span>
+                    </div>
+                    <div class="qc-object-box" data-variant="return" style="right: 188px; bottom: 210px; width: 174px; height: 136px;">
+                      <span class="qc-box-label">对象 06 · 返工整改中</span>
+                    </div>
+                    <div class="qc-object-box" data-variant="return" style="left: 238px; bottom: 160px; width: 160px; height: 118px;">
+                      <span class="qc-box-label">对象 08 · 返工整改中</span>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <aside class="qc-side">
+                <section class="qc-card qc-side-scroll">
+                  <div class="qc-card-head">
+                    <div class="qc-card-title">返工整改闭环信息</div>
+                    <span class="proto-tag">只读查看</span>
+                  </div>
+                  <div class="qc-card-body">
+                    <div class="qc-side-card">
+                      <div class="qc-side-card-head">退回对象清单</div>
+                      <div class="qc-side-card-body">
+                        <div class="qc-object-list">
+                          <div class="qc-object-item">
+                            <div class="qc-object-top">
+                              <span class="qc-object-name">对象 03</span>
+                              <span class="proto-status" data-variant="warning">返工整改中</span>
+                            </div>
+                            <div class="qc-object-meta">退回原因：框选位置不准确 / 类别冲突</div>
+                          </div>
+                          <div class="qc-object-item">
+                            <div class="qc-object-top">
+                              <span class="qc-object-name">对象 06</span>
+                              <span class="proto-status" data-variant="warning">返工整改中</span>
+                            </div>
+                            <div class="qc-object-meta">退回原因：漏标较多</div>
+                          </div>
+                          <div class="qc-object-item">
+                            <div class="qc-object-top">
+                              <span class="qc-object-name">对象 08</span>
+                              <span class="proto-status" data-variant="warning">返工整改中</span>
+                            </div>
+                            <div class="qc-object-meta">退回原因：属性选择错误</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="qc-side-card">
+                      <div class="qc-side-card-head">返工子任务进度</div>
+                      <div class="qc-side-card-body">
+                        <div class="qc-detail-grid">
+                          <div class="qc-detail-label">返工去向</div>
+                          <div>对象级返工子任务，已下发至标注任务列表</div>
+                          <div class="qc-detail-label">标注员</div>
+                          <div>李四、王五</div>
+                          <div class="qc-detail-label">当前进度</div>
+                          <div>李四待提交 2 个对象，王五待提交 1 个对象</div>
+                          <div class="qc-detail-label">回流目标</div>
+                          <div>返工提交后整图回一检复核</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="qc-side-card">
+                      <div class="qc-side-card-head">前序轮次记录</div>
+                      <div class="qc-side-card-body">
+                        <div class="qc-source-list">
+                          <div class="qc-source-item">
+                            <strong>一检结果</strong>：通过 5 / 退回 1 / 无效 0
+                          </div>
+                          <div class="qc-source-item">
+                            <strong>二检当前结果</strong>：通过 5 / 退回 3 / 无效 0
+                          </div>
+                          <div class="qc-source-item">
+                            <strong>当前说明</strong>：返工未闭环前，不开放继续裁决与终局动作。
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </aside>
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
   </section>
 
-  <section class="prototype-stage" data-prototype-panel="return">
+  <section class="prototype-stage" data-prototype-panel="round3-pending">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
-      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace"><section class="modal-stage"><div class="modal"><div class="modal-head"><span>退回标注记录</span><span>×</span></div><div class="modal-body"><div class="proto-detail-grid"><div class="proto-detail-label">标注人</div><div class="proto-detail-value">李四</div><div class="proto-detail-label">标注对象</div><div class="proto-detail-value">7 个</div></div><div style="display:grid; gap:10px; margin-top:18px;"><label><input type="checkbox" checked /> 漏标较多</label><label><input type="checkbox" checked /> 框选位置不准确</label><label><input type="checkbox" /> 类别/属性选择错误</label><label><input type="checkbox" /> 标注对象误标</label><label><input type="checkbox" /> 整体质量不可接受</label><label><input type="checkbox" /> 其他</label></div><textarea class="control" style="width:100%; height:88px; margin-top:16px;" placeholder="请说明返工内容；选择其他时需写明具体原因"></textarea></div><div class="modal-foot"><button class="btn btn-ghost">取消</button><button class="btn btn-primary">确认退回</button></div></div></section></main></div>
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <section class="qc-shell">
+            <div class="qc-worktop">
+              <strong>← 质检工作台</strong>
+              <div class="qc-actions">
+                <button class="btn btn-ghost" type="button">保存草稿</button>
+                <button class="btn btn-ghost" type="button">任务记录</button>
+                <button class="btn btn-primary" type="button">提交本轮质检</button>
+              </div>
+            </div>
+            <div class="qc-summary-bar">
+              <div class="qc-summary-left">
+                <span class="qc-status-pill" data-variant="pending">三检 · 待质检</span>
+                <span class="proto-tag">图片任务：IMG_20260510_041</span>
+                <span class="proto-tag">项目类型：零星作业</span>
+                <span class="proto-tag">前序已通过轮次：一检、二检</span>
+              </div>
+              <div class="qc-summary-right">
+                <span class="qc-meta-line">对象摘要：通过 5 / 退回 0 / 无效 3</span>
+                <span class="qc-meta-line">终局动作待确认</span>
+              </div>
+            </div>
+            <div class="qc-workspace">
+              <div class="qc-main">
+                <section class="qc-card qc-canvas-card">
+                  <div class="qc-toolbar">
+                    <div class="qc-toolbar-left">
+                      <span class="qc-chip" data-variant="selected">当前对象：脚手架 / 盘扣式</span>
+                      <span class="qc-chip">二检结果：通过</span>
+                      <span class="qc-chip">当前建议：通过</span>
+                    </div>
+                    <div class="qc-toolbar-right">
+                      <span class="qc-chip" data-variant="success">通过 5</span>
+                      <span class="qc-chip" data-variant="danger">无效 3</span>
+                      <span class="qc-chip" data-variant="warning">终局待确认</span>
+                    </div>
+                  </div>
+                  <div class="qc-canvas">
+                    <div class="qc-focus-panel">
+                      当前为三检裁决页。<br />
+                      完成本轮对象裁决后，可进入图片级终局确认。
+                    </div>
+                    <div class="qc-object-box" data-variant="pass" style="left: 210px; top: 158px; width: 210px; height: 122px;">
+                      <span class="qc-box-label">对象 02 · 二检通过</span>
+                    </div>
+                    <div class="qc-object-box" data-variant="selected" style="left: 470px; top: 142px; width: 206px; height: 134px;">
+                      <span class="qc-box-label">对象 04 · 待质检</span>
+                    </div>
+                    <div class="qc-object-box" data-variant="invalid" style="right: 198px; bottom: 206px; width: 180px; height: 142px;">
+                      <span class="qc-box-label">对象 07 · 二检无效</span>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <aside class="qc-side">
+                <section class="qc-card qc-side-scroll">
+                  <div class="qc-card-head">
+                    <div class="qc-card-title">三检裁决与终局准备</div>
+                    <span class="proto-status" data-variant="warning">终局前检查中</span>
+                  </div>
+                  <div class="qc-card-body">
+                    <div class="qc-side-card">
+                      <div class="qc-side-card-head">当前对象裁决</div>
+                      <div class="qc-side-card-body">
+                        <div class="qc-detail-grid">
+                          <div class="qc-detail-label">对象类别</div>
+                          <div>脚手架 / 盘扣式</div>
+                          <div class="qc-detail-label">二检结果</div>
+                          <div>通过，评分 8.0 分</div>
+                          <div class="qc-detail-label">三检意见</div>
+                          <div>拟通过，可进入终局统计</div>
+                        </div>
+                        <div class="qc-score-entry">
+                          <div class="qc-score-entry-head">
+                            <span>当前对象评分（10 分制）</span>
+                            <strong>9.0 分</strong>
+                          </div>
+                          <div class="qc-score-scale">
+                            <span class="qc-score-mark">1</span>
+                            <span class="qc-score-mark">2</span>
+                            <span class="qc-score-mark">3</span>
+                            <span class="qc-score-mark">4</span>
+                            <span class="qc-score-mark">5</span>
+                            <span class="qc-score-mark">6</span>
+                            <span class="qc-score-mark">7</span>
+                            <span class="qc-score-mark">8</span>
+                            <span class="qc-score-mark active">9</span>
+                            <span class="qc-score-mark">10</span>
+                          </div>
+                        </div>
+                        <div class="qc-judge-row" style="margin-top:12px;">
+                          <span class="qc-judge-btn" data-variant="pass">通过</span>
+                          <span class="qc-judge-btn" data-variant="return">退回</span>
+                          <span class="qc-judge-btn" data-variant="invalid">无效</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="qc-side-card">
+                      <div class="qc-side-card-head">终局准备摘要</div>
+                      <div class="qc-side-card-body">
+                        <div class="qc-terminal-grid">
+                          <div class="qc-terminal-card">
+                            <div class="qc-overview-label">建议入池对象</div>
+                            <strong>5 个</strong>
+                          </div>
+                          <div class="qc-terminal-card">
+                            <div class="qc-overview-label">无效对象</div>
+                            <strong>3 个</strong>
+                          </div>
+                          <div class="qc-terminal-card">
+                            <div class="qc-overview-label">未闭环退回</div>
+                            <strong>0 个</strong>
+                          </div>
+                        </div>
+                        <div class="qc-modal-note">
+                          当前三检页允许继续对象裁决，但真正的 `入池 / 不入池` 终局动作仅在终局态或终局确认弹窗中执行。
+                        </div>
+                      </div>
+                    </div>
+                    <div class="qc-side-card">
+                      <div class="qc-side-card-head">评分与前序记录</div>
+                      <div class="qc-side-card-body">
+                        <div class="qc-score-box">
+                          <div class="qc-score-item">
+                            <div class="qc-overview-label">当前评分</div>
+                            <strong>9.0</strong>
+                          </div>
+                          <div class="qc-score-item">
+                            <div class="qc-overview-label">被评分对象</div>
+                            <strong>二检人员</strong>
+                          </div>
+                        </div>
+                        <div class="qc-source-list" style="margin-top:12px;">
+                          <div class="qc-source-item">
+                            <strong>一检记录</strong>：通过 5 / 退回 1 / 无效 0
+                          </div>
+                          <div class="qc-source-item">
+                            <strong>二检记录</strong>：通过 5 / 退回 0 / 无效 3
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </aside>
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
   </section>
 
-  <section class="prototype-stage" data-prototype-panel="blocked">
+  <section class="prototype-stage" data-prototype-panel="round3-terminal">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
-      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace"><section class="modal-stage"><div class="modal"><div class="modal-head"><span>无法确认入池</span><span>×</span></div><div class="modal-body"><p class="notice">当前图片存在待返工退回记录，不能确认入池或不入池。请等待相关标注员重新提交，或撤销退回后再裁决。</p></div><div class="modal-foot"><button class="btn btn-primary">我知道了</button></div></div></section></main></div>
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <section class="qc-shell">
+            <div class="qc-worktop">
+              <strong>← 质检工作台</strong>
+              <div class="qc-actions">
+                <button class="btn btn-ghost" type="button">任务记录</button>
+                <button class="btn btn-primary" type="button">确认入池</button>
+                <button class="btn btn-ghost" type="button">不入池</button>
+              </div>
+            </div>
+            <div class="qc-summary-bar">
+              <div class="qc-summary-left">
+                <span class="qc-status-pill" data-variant="terminal">三检 · 终局态</span>
+                <span class="proto-tag">图片任务：IMG_20260510_071</span>
+                <span class="proto-tag">项目类型：零星作业</span>
+                <span class="proto-tag">未闭环退回：0 个</span>
+              </div>
+              <div class="qc-summary-right">
+                <span class="qc-meta-line">当前已满足终局确认条件</span>
+              </div>
+            </div>
+            <div class="qc-workspace">
+              <div class="qc-main">
+                <section class="qc-card qc-canvas-card">
+                  <div class="qc-card-head">
+                    <div class="qc-card-title">三检终局裁决</div>
+                    <span class="proto-status" data-variant="success">可执行图片级终局</span>
+                  </div>
+                  <div class="qc-card-body">
+                    <div class="qc-terminal-grid">
+                      <div class="qc-terminal-card">
+                        <div class="qc-overview-label">对象级入池数</div>
+                        <strong>10 个</strong>
+                      </div>
+                      <div class="qc-terminal-card">
+                        <div class="qc-overview-label">无效对象数</div>
+                        <strong>0 个</strong>
+                      </div>
+                      <div class="qc-terminal-card">
+                        <div class="qc-overview-label">终局建议</div>
+                        <strong>建议入池</strong>
+                      </div>
+                    </div>
+                    <div class="qc-terminal-note">
+                      当前图片不存在未闭环退回对象，可以执行图片级 `入池 / 不入池`。<br />
+                      若点击终局按钮，系统将打开三检终局确认弹窗并写入图片级终局结果。
+                    </div>
+                    <div class="qc-terminal-actions">
+                      <button class="btn btn-primary" type="button">确认入池</button>
+                      <button class="btn btn-ghost" type="button">不入池</button>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <aside class="qc-side">
+                <section class="qc-card qc-side-scroll">
+                  <div class="qc-card-head">
+                    <div class="qc-card-title">终局前检查与结果摘要</div>
+                    <span class="proto-tag">图片级操作</span>
+                  </div>
+                  <div class="qc-card-body">
+                    <div class="qc-side-card">
+                      <div class="qc-side-card-head">未闭环退回检查</div>
+                      <div class="qc-side-card-body">
+                        <div class="qc-detail-grid">
+                          <div class="qc-detail-label">检查结果</div>
+                          <div>无未闭环退回对象</div>
+                          <div class="qc-detail-label">阻断状态</div>
+                          <div>未阻断，可进入终局</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="qc-side-card">
+                      <div class="qc-side-card-head">终局结果说明</div>
+                      <div class="qc-side-card-body">
+                        <div class="qc-source-list">
+                          <div class="qc-source-item">
+                            <strong>入池</strong>：图片形成高质量数据池记录，并保留对象级标准结果。
+                          </div>
+                          <div class="qc-source-item">
+                            <strong>不入池</strong>：图片终局结束，不回写标注链路，也不进入高质量数据池。
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="qc-side-card">
+                      <div class="qc-side-card-head">本轮结果汇总</div>
+                      <div class="qc-side-card-body">
+                        <div class="qc-source-list">
+                          <div class="qc-source-item">
+                            <strong>通过对象</strong>：10 个
+                          </div>
+                          <div class="qc-source-item">
+                            <strong>无效对象</strong>：0 个
+                          </div>
+                          <div class="qc-source-item">
+                            <strong>返工整改</strong>：0 个
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </aside>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="modal-return">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <section class="modal-stage">
+            <div class="modal">
+              <div class="modal-head">
+                <span>退回确认弹窗</span>
+                <span>×</span>
+              </div>
+              <div class="modal-body">
+                <div class="qc-modal-grid">
+                  <div class="qc-modal-label">退回对象范围</div>
+                  <div>对象 03、对象 06、对象 08（共 3 个对象）</div>
+                  <div class="qc-modal-label">当前轮次</div>
+                  <div>二检</div>
+                  <div class="qc-modal-label">返工去向说明</div>
+                  <div>确认后将生成对象级返工子任务，并在返工提交后整图回一检复核。</div>
+                </div>
+                <div class="qc-modal-section">
+                  <div class="qc-modal-label">退回原因（必填）</div>
+                  <div class="qc-check-grid">
+                    <label><input type="checkbox" checked /> 漏标较多</label>
+                    <label><input type="checkbox" checked /> 类别 / 属性选择错误</label>
+                    <label><input type="checkbox" /> 框选位置不准确</label>
+                    <label><input type="checkbox" /> 其他</label>
+                  </div>
+                  <textarea class="control" style="width:100%; height:88px; margin-top:14px;" placeholder="选择“其他”时需补充说明；也可在此补充返工范围说明。"></textarea>
+                </div>
+                <div class="qc-modal-note">
+                  当前弹窗确认的是 <strong>对象级退回</strong>，不是把整条标注任务整条打回。
+                </div>
+              </div>
+              <div class="modal-foot">
+                <button class="btn btn-ghost" type="button">取消</button>
+                <button class="btn btn-primary" type="button">确认退回</button>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="modal-invalid">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <section class="modal-stage">
+            <div class="modal">
+              <div class="modal-head">
+                <span>无效原因弹窗</span>
+                <span>×</span>
+              </div>
+              <div class="modal-body">
+                <div class="qc-modal-grid">
+                  <div class="qc-modal-label">当前对象</div>
+                  <div>对象 08 · 灭火器 / 损坏</div>
+                  <div class="qc-modal-label">当前轮次</div>
+                  <div>一检</div>
+                </div>
+                <div class="qc-modal-section">
+                  <div class="qc-modal-label">无效原因（必填）</div>
+                  <div class="qc-check-grid">
+                    <label><input type="checkbox" checked /> 目标被遮挡无法判定</label>
+                    <label><input type="checkbox" /> 非业务关注对象</label>
+                    <label><input type="checkbox" /> 标注结果与图片事实不符</label>
+                    <label><input type="checkbox" checked /> 其他</label>
+                  </div>
+                  <textarea class="control" style="width:100%; height:92px; margin-top:14px;" placeholder="选择“其他”时必须填写具体原因。">当前对象仅露出局部边缘，无法支持稳定判定。</textarea>
+                </div>
+              </div>
+              <div class="modal-foot">
+                <button class="btn btn-ghost" type="button">取消</button>
+                <button class="btn btn-primary" type="button">确认无效</button>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="modal-score">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <section class="modal-stage">
+            <div class="modal">
+              <div class="modal-head">
+                <span>评分说明弹窗</span>
+                <span>×</span>
+              </div>
+              <div class="modal-body">
+                <div class="qc-modal-grid">
+                  <div class="qc-modal-label">当前评分</div>
+                  <div>9.0 分</div>
+                  <div class="qc-modal-label">阈值命中情况</div>
+                  <div>高于 8 分阈值</div>
+                  <div class="qc-modal-label">当前裁决</div>
+                  <div>对象 04 拟退回</div>
+                </div>
+                <div class="qc-modal-note">
+                  当前评分较高，但裁决为 `退回`，系统要求补充分数与裁决明显不一致的原因说明。
+                </div>
+                <div class="qc-modal-section">
+                  <div class="qc-modal-label">理由说明（必填）</div>
+                  <textarea class="control" style="width:100%; height:112px;" placeholder="请补充说明为什么高分对象仍被退回。">该对象整体质量较高，但关键属性“盘扣式 / 扣件式”选择错误，会直接影响后续标准结果，因此仍判定退回。</textarea>
+                </div>
+              </div>
+              <div class="modal-foot">
+                <button class="btn btn-ghost" type="button">取消</button>
+                <button class="btn btn-primary" type="button">确认说明</button>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="modal-terminal">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <section class="modal-stage">
+            <div class="modal" style="width: 860px;">
+              <div class="modal-head">
+                <span>三检终局确认弹窗</span>
+                <span>×</span>
+              </div>
+              <div class="modal-body">
+                <div class="qc-modal-grid">
+                  <div class="qc-modal-label">当前图片任务</div>
+                  <div>IMG_20260510_071</div>
+                  <div class="qc-modal-label">终局操作</div>
+                  <div>确认入池</div>
+                  <div class="qc-modal-label">未闭环退回检查</div>
+                  <div>无未闭环退回对象，可执行终局</div>
+                </div>
+                <div class="qc-modal-stat">
+                  <div class="qc-terminal-card">
+                    <div class="qc-overview-label">对象级入池数</div>
+                    <strong>10 个</strong>
+                  </div>
+                  <div class="qc-terminal-card">
+                    <div class="qc-overview-label">无效对象数</div>
+                    <strong>0 个</strong>
+                  </div>
+                  <div class="qc-terminal-card">
+                    <div class="qc-overview-label">终局结果说明</div>
+                    <strong>进入高质量数据池</strong>
+                  </div>
+                </div>
+                <div class="qc-modal-note">
+                  确认后将写入图片级 `入池` 终局结果，并驱动后续高质量数据池沉淀；若存在任何未闭环退回对象，应阻断本次终局确认。
+                </div>
+              </div>
+              <div class="modal-foot">
+                <button class="btn btn-ghost" type="button">取消</button>
+                <button class="btn btn-primary" type="button">确认终局</button>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
   </section>
 
   <section class="prototype-stage" data-prototype-panel="record">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
-      <header class="topbar"></header><div class="main"><aside class="sidebar"></aside><main class="workspace"><section class="content-panel" style="height:982px; padding:0; overflow:hidden;"><div class="qc-worktop"><strong>← 质检工作台</strong><div class="qc-actions"><button class="btn btn-primary">确认入池</button></div></div><div class="qc-workspace"><div class="qc-main"><div class="canvas"><div class="std-box"></div></div></div><aside class="standard-panel"><div class="panel-title">标准结果列表</div><div class="std-card"><div class="std-head"><span><i class="dot"></i>标准对象1</span></div></div></aside></div></section><aside class="record-drawer"><div class="panel-title">任务记录 <span>×</span></div><div class="timeline"><div class="timeline-item"><strong>保存质检草稿</strong><br />2026-04-23 15:22<br />标准对象：3 个</div><div class="timeline-item"><strong>退回标注记录</strong><br />2026-04-23 15:05<br />退回对象：李四标注记录</div><div class="timeline-item"><strong>进入质检</strong><br />2026-04-23 14:30<br />正常标注结果：3 条</div></div></aside></main></div>
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <section class="qc-shell">
+            <div class="qc-worktop">
+              <strong>← 质检工作台</strong>
+              <div class="qc-actions">
+                <button class="btn btn-primary" type="button">提交本轮质检</button>
+              </div>
+            </div>
+            <div class="qc-summary-bar">
+              <div class="qc-summary-left">
+                <span class="qc-status-pill" data-variant="pending">一检 · 待质检</span>
+                <span class="proto-tag">任务记录预览</span>
+              </div>
+            </div>
+            <div class="qc-workspace" style="position:relative;">
+              <div class="qc-main">
+                <section class="qc-card qc-canvas-card">
+                  <div class="qc-card-head">
+                    <div class="qc-card-title">当前图片画布</div>
+                  </div>
+                  <div class="qc-canvas">
+                    <div class="qc-object-box" data-variant="selected" style="left: 408px; top: 154px; width: 222px; height: 146px;">
+                      <span class="qc-box-label">对象 03 · 当前查看</span>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <aside class="record-drawer">
+                <div class="panel-title">任务记录 <span>×</span></div>
+                <div class="timeline">
+                  <div class="timeline-item">
+                    <strong>保存质检草稿</strong><br />
+                    2026-05-10 15:22<br />
+                    当前轮次：一检；已裁决对象 5 个。
+                  </div>
+                  <div class="timeline-item">
+                    <strong>退回对象并生成返工子任务</strong><br />
+                    2026-05-10 15:05<br />
+                    退回对象：对象 06、对象 08；退回人：二检质检员。
+                  </div>
+                  <div class="timeline-item">
+                    <strong>返工子任务重新提交</strong><br />
+                    2026-05-10 14:41<br />
+                    李四完成返工提交，整图回一检复核。
+                  </div>
+                  <div class="timeline-item">
+                    <strong>进入质检工作台</strong><br />
+                    2026-05-10 14:08<br />
+                    来源：标注提交完成，生成图片级质检主任务。
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
   </section>
 
