@@ -54,7 +54,6 @@ stateDiagram-v2
     QC1Passed: 一检完成，进入二检
 
     QC2Review: 二检规则校准与逐对象复核
-    QC2WaitRework: 二检存在退回对象，等待全部子任务提交
     QC2Passed: 二检完成，进入三检
 
     QC3Review: 三检终审
@@ -73,9 +72,8 @@ stateDiagram-v2
     QC1ReReview --> QC1Passed: 复核后全部通过/无效
 
     QC1Passed --> QC2Review: 展示一检通过对象集合<br/>并可查看原始标注来源
-    QC2Review --> QC2WaitRework: 任一对象裁决为退回<br/>生成新的对象级返工子任务
+    QC2Review --> AnnotationReturned: 任一对象裁决为退回<br/>随机分配给标注人员
     QC2Review --> QC2Passed: 全部对象裁决完成且无退回对象
-    QC2WaitRework --> QC1Review: 同轮全部返工子任务提交<br/>回原二检质检人员复核后整图回一检
 
     QC2Passed --> QC3Review: 展示二检通过对象和无效对象
     QC3Review --> QC3WaitRework: 存在任一退回对象<br/>本轮不得同时存在入池对象
@@ -110,7 +108,6 @@ stateDiagram-v2
   %% ═══════════════════════════════════════════
   MultiAnnotationAssigned --> AnnotationTodo: 生成个人标注任务
   QC1WaitRework --> AnnotationReturned: 下发对象级返工子任务<br/>随机分配给标注人员
-  QC2WaitRework --> AnnotationReturned: 下发对象级返工子任务<br/>随机分配给标注人员
   QC3WaitRework --> AnnotationReturned: 下发对象级返工子任务<br/>随机分配给标注人员
   QC3Pooled --> QualityDataPool: 图片级入池
   QC3NoPool --> NoPoolEnd: 图片级不入池
@@ -128,6 +125,6 @@ stateDiagram-v2
   class InspectionUploaded,AssignmentManage,BatchCreated,MultiAnnotationAssigned assignStyle
   class AnnotationTodo,Annotating,AnnotationSubmitted,AnnotationInvalid,AnnotationReturned,AnnotationResubmitted,AnnotationMerged,CheckMergedResult,AllInvalidSample annoStyle
   class QCWaiting,QC1Review,QC1WaitRework,QC1ReReview,QC1Passed qc1Style
-  class QC2Review,QC2WaitRework,QC2Passed qc2Style
+  class QC2Review,QC2Passed qc2Style
   class QC3Review,QC3WaitRework,QC3PoolPath,QC3NoPool,QC3Pooled qc3Style
   class QualityDataPool,QualityDataView,QualityDataFilter,QualityDataExport,NoPoolEnd resultStyle
