@@ -36,7 +36,10 @@
       "Bash(officecli --version)",
       "Bash(echo \"=== ~/.agents/skills/ ===\" && ls \"C:\\\\Users\\\\zhudan\\\\.agents\\\\skills\\\\\" 2>/dev/null && echo \"\" && echo \"=== ~/.claude/skills/ ===\" && ls \"C:\\\\Users\\\\zhudan\\\\.claude\\\\skills\\\\\" 2>/dev/null)",
       "Read(//e/各产品线/数据治理/**)",
-      "WebFetch(domain:docs.rs)"
+      "WebFetch(domain:docs.rs)",
+      "Bash(xxd)",
+      "Bash(sed -i '136s/页面 7-1/页面 5-1/' \"e:\\\\各产品线\\\\shujuzhili\\\\02-PRD文档\\\\后台管理\\\\标注质检管理.md\")",
+      "Bash(sed -i '138s/页面 8/页面 6/' \"e:\\\\各产品线\\\\shujuzhili\\\\02-PRD文档\\\\后台管理\\\\标注质检管理.md\")"
     ]
   },
   "hooks": {
