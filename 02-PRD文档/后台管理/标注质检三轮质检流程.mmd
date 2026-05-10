@@ -56,11 +56,10 @@ stateDiagram-v2
     QC2Review: 二检规则校准与逐对象复核
     QC2Passed: 二检完成，进入三检
 
-    QC3Review: 三检终审
-    QC3WaitRework: 三检存在退回对象，本轮不得入池
-    QC3PoolPath: 三检进入入池路径
-    QC3NoPool: 图片级不入池
-    QC3Pooled: 图片级入池
+    QC3Review: 三检终审并提交质检
+    QC3WaitRework: 三检存在退回对象，进入返工链路
+    QC3NoPool: 三检无退回且全部对象为无效
+    QC3Pooled: 三检无退回，自动沉淀通过对象
 
     QCWaiting --> QC1Review: 生成图片级质检主任务
     AllInvalidSample --> QC3Review: 跳过一检、二检，直接进入三检终审
@@ -76,11 +75,10 @@ stateDiagram-v2
     QC2Review --> QC2Passed: 全部对象裁决完成且无退回对象
 
     QC2Passed --> QC3Review: 展示二检通过对象和无效对象
-    QC3Review --> QC3WaitRework: 存在任一退回对象<br/>本轮不得同时存在入池对象
-    QC3Review --> QC3PoolPath: 无退回对象<br/>仅从二检通过对象中选择入池对象
+    QC3Review --> QC3WaitRework: 提交质检后存在任一退回对象<br/>下发对象级返工子任务
+    QC3Review --> QC3Pooled: 提交质检后无退回对象且至少存在1个通过对象<br/>自动沉淀通过对象入池
+    QC3Review --> QC3NoPool: 提交质检后无退回对象且全部对象为无效<br/>本轮无可入池对象
     QC3WaitRework --> QC1Review: 同轮全部返工子任务提交<br/>回原三检质检人员复核后整图回一检
-    QC3PoolPath --> QC3Pooled: 至少保留1个对象级入池对象
-    QC3PoolPath --> QC3NoPool: 未保留任何对象级入池对象
   }
 
   %% ═══════════════════════════════════════════
@@ -126,5 +124,5 @@ stateDiagram-v2
   class AnnotationTodo,Annotating,AnnotationSubmitted,AnnotationInvalid,AnnotationReturned,AnnotationResubmitted,AnnotationMerged,CheckMergedResult,AllInvalidSample annoStyle
   class QCWaiting,QC1Review,QC1WaitRework,QC1ReReview,QC1Passed qc1Style
   class QC2Review,QC2Passed qc2Style
-  class QC3Review,QC3WaitRework,QC3PoolPath,QC3NoPool,QC3Pooled qc3Style
+  class QC3Review,QC3WaitRework,QC3NoPool,QC3Pooled qc3Style
   class QualityDataPool,QualityDataView,QualityDataFilter,QualityDataExport,NoPoolEnd resultStyle
