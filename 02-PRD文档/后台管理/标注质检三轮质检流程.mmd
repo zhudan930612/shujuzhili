@@ -11,7 +11,7 @@ stateDiagram-v2
 
     [*] --> InspectionUploaded: 巡查记录上传图片
     InspectionUploaded --> AssignmentManage: 进入任务分配管理
-    AssignmentManage --> BatchCreated: 选择图片指定标注人员
+    AssignmentManage --> BatchCreated: 选择图片并指定标注人员
     BatchCreated --> MultiAnnotationAssigned: 生成多人标注任务
   }
 
@@ -21,72 +21,80 @@ stateDiagram-v2
   state "标注" as Anno {
     AnnotationTodo: 个人任务待标注
     Annotating: 标注人员标注中
-    AnnotationSubmitted: 个人标注任务已提交
-    AnnotationInvalid: 无效图片标记
-    AllAnnotationSubmitted: 全部提交完成
-    HasValidAnnotation: 是否存在正常标注
-    AnnotationMerged: 多人标注结果汇总
-    AllInvalidSample: 全部标注均为无效图片
-    AnnotationReturned: 质检退回
+    AnnotationSubmitted: 提交正常标注结果
+    AnnotationInvalid: 标记无效图片
+    AnnotationReturned: 质检退回后随机分配标注返工
+    AnnotationResubmitted: 返工重新提交
+    AnnotationMerged: 汇总多人原始标注结果
+    CheckMergedResult: 判断是否存在正常标注对象
+    AllInvalidSample: 全部标注人员均标记无效
 
     AnnotationTodo --> Annotating: 开始标注
-    Annotating --> AnnotationSubmitted: 提交标注成果
+    Annotating --> AnnotationSubmitted: 提交正式标注
     Annotating --> AnnotationInvalid: 标记无效图片
-    AnnotationSubmitted --> AllAnnotationSubmitted: 记录提交
-    AnnotationInvalid --> AllAnnotationSubmitted: 记录无效提交
-    AnnotationReturned --> Annotating: 重新处理
-    AllAnnotationSubmitted --> HasValidAnnotation: 全部提交完成
-    HasValidAnnotation --> AnnotationMerged: 存在正常标注
-    HasValidAnnotation --> AllInvalidSample: 全部无效提交
+    AnnotationReturned --> Annotating: 随机分配给标注人员后重新标注
+    Annotating --> AnnotationResubmitted: 提交返工结果
+    AnnotationSubmitted --> AnnotationMerged: 汇总正常标注结果
+    AnnotationInvalid --> AnnotationMerged: 汇总无效图片结果
+    AnnotationResubmitted --> AnnotationMerged: 汇总返工结果
+    AnnotationMerged --> CheckMergedResult: 汇总完成
+    CheckMergedResult --> QCWaiting: 至少存在1条正常标注结果
+    CheckMergedResult --> AllInvalidSample: 全部结果均为无效图片
   }
 
   %% ═══════════════════════════════════════════
   %% 阶段三：三轮质检
   %% ═══════════════════════════════════════════
   state "三轮质检" as QC {
-    QCWaiting: 待质检
+    QCWaiting: 图片级主任务待质检
 
-    QC1Waiting: 待一检
-    QC1Passed: 一检通过
-    QC1Returned: 一检退回
+    QC1Review: 一检逐对象评分与裁决
+    QC1WaitRework: 一检存在退回对象，等待全部子任务提交
+    QC1ReReview: 一检复核返工新增/修改对象
+    QC1Passed: 一检完成，进入二检
 
-    QC2Waiting: 待二检
-    QC2Passed: 二检通过
-    QC2Returned: 二检退回
+    QC2Review: 二检规则校准与逐对象复核
+    QC2WaitRework: 二检存在退回对象，等待全部子任务提交
+    QC2Passed: 二检完成，进入三检
 
-    QC3Waiting: 待三检
-    QC3Passed: 三检通过
-    QC3NoPool: 三检不入池
-    QC3Returned: 三检退回
+    QC3Review: 三检终审
+    QC3WaitRework: 三检存在退回对象，本轮不得入池
+    QC3PoolPath: 三检进入入池路径
+    QC3NoPool: 图片级不入池
+    QC3Pooled: 图片级入池
 
-    QCWaiting --> QC1Waiting: 生成质检任务
-    AllInvalidSample --> QC3Waiting: 跳过一检二检直接进三检
+    QCWaiting --> QC1Review: 生成图片级质检主任务
+    AllInvalidSample --> QC3Review: 跳过一检、二检，直接进入三检终审
 
-    QC1Waiting --> QC1Returned: 检查并评分，不合格退回
-    QC1Waiting --> QC1Passed: 采纳对象并评分通过
+    QC1Review --> QC1WaitRework: 任一对象裁决为退回<br/>生成对象级返工子任务
+    QC1Review --> QC1Passed: 全部对象裁决完成且无退回对象
+    QC1WaitRework --> QC1ReReview: 同轮全部返工子任务提交<br/>优先回原一检质检人员复核
+    QC1ReReview --> QC1WaitRework: 复核后仍有退回对象
+    QC1ReReview --> QC1Passed: 复核后全部通过/无效
 
-    QC1Passed --> QC2Waiting: 进入二检
-    QC2Waiting --> QC2Passed: 复核一检结果，通过
-    QC2Waiting --> QC2Returned: 复核一检结果，退回
+    QC1Passed --> QC2Review: 展示一检通过对象集合<br/>并可查看原始标注来源
+    QC2Review --> QC2WaitRework: 任一对象裁决为退回<br/>生成新的对象级返工子任务
+    QC2Review --> QC2Passed: 全部对象裁决完成且无退回对象
+    QC2WaitRework --> QC1Review: 同轮全部返工子任务提交<br/>优先回原二检质检人员复核后整图回一检
 
-    QC2Passed --> QC3Waiting: 进入三检
-    QC3Waiting --> QC3NoPool: 终审不入池
-    QC3Waiting --> QC3Passed: 终审通过
-    QC3Waiting --> QC3Returned: 终审退回
+    QC2Passed --> QC3Review: 展示二检通过对象和无效对象
+    QC3Review --> QC3WaitRework: 存在任一退回对象<br/>本轮不得同时存在入池对象
+    QC3Review --> QC3PoolPath: 无退回对象<br/>仅从二检通过对象中选择入池对象
+    QC3WaitRework --> QC1Review: 同轮全部返工子任务提交<br/>优先回原三检质检人员复核后整图回一检
+    QC3PoolPath --> QC3Pooled: 至少保留1个对象级入池对象
+    QC3PoolPath --> QC3NoPool: 未保留任何对象级入池对象
   }
 
   %% ═══════════════════════════════════════════
   %% 阶段四：最终结果
   %% ═══════════════════════════════════════════
   state "最终结果" as Result {
-    FinalInvalid: 无效图片
-    TrustedResult: 通过质检的标注结果
     QualityDataPool: 高质量数据池
     QualityDataView: 查看数据
     QualityDataFilter: 筛选数据
     QualityDataExport: 导出数据
+    NoPoolEnd: 图片结束为不入池
 
-    TrustedResult --> QualityDataPool: 入池
     QualityDataPool --> QualityDataView: 查看
     QualityDataPool --> QualityDataFilter: 筛选
     QualityDataPool --> QualityDataExport: 导出
@@ -94,19 +102,18 @@ stateDiagram-v2
     QualityDataView --> [*]
     QualityDataFilter --> [*]
     QualityDataExport --> [*]
-    FinalInvalid --> [*]
+    NoPoolEnd --> [*]
   }
 
   %% ═══════════════════════════════════════════
   %% 跨阶段连线
   %% ═══════════════════════════════════════════
   MultiAnnotationAssigned --> AnnotationTodo: 生成个人标注任务
-  AnnotationMerged --> QCWaiting: 进入质检队列
-  QC1Returned --> AnnotationReturned: 退回个人任务
-  QC2Returned --> AnnotationReturned: 退回个人任务
-  QC3Returned --> AnnotationReturned: 退回个人任务
-  QC3Passed --> TrustedResult: 终审通过入池
-  QC3NoPool --> FinalInvalid: 不入池
+  QC1WaitRework --> AnnotationReturned: 下发对象级返工子任务<br/>随机分配给标注人员
+  QC2WaitRework --> AnnotationReturned: 下发对象级返工子任务<br/>随机分配给标注人员
+  QC3WaitRework --> AnnotationReturned: 下发对象级返工子任务<br/>随机分配给标注人员
+  QC3Pooled --> QualityDataPool: 图片级入池
+  QC3NoPool --> NoPoolEnd: 图片级不入池
 
   %% ═══════════════════════════════════════════
   %% 样式
@@ -119,8 +126,8 @@ stateDiagram-v2
   classDef resultStyle fill:#eceff1,stroke:#37474f,stroke-width:2px,color:#263238
 
   class InspectionUploaded,AssignmentManage,BatchCreated,MultiAnnotationAssigned assignStyle
-  class AnnotationTodo,Annotating,AnnotationSubmitted,AnnotationInvalid,AllAnnotationSubmitted,HasValidAnnotation,AnnotationMerged,AllInvalidSample,AnnotationReturned annoStyle
-  class QCWaiting,QC1Waiting,QC1Passed,QC1Returned qc1Style
-  class QC2Waiting,QC2Passed,QC2Returned qc2Style
-  class QC3Waiting,QC3Passed,QC3NoPool,QC3Returned qc3Style
-  class FinalInvalid,TrustedResult,QualityDataPool,QualityDataView,QualityDataFilter,QualityDataExport resultStyle
+  class AnnotationTodo,Annotating,AnnotationSubmitted,AnnotationInvalid,AnnotationReturned,AnnotationResubmitted,AnnotationMerged,CheckMergedResult,AllInvalidSample annoStyle
+  class QCWaiting,QC1Review,QC1WaitRework,QC1ReReview,QC1Passed qc1Style
+  class QC2Review,QC2WaitRework,QC2Passed qc2Style
+  class QC3Review,QC3WaitRework,QC3PoolPath,QC3NoPool,QC3Pooled qc3Style
+  class QualityDataPool,QualityDataView,QualityDataFilter,QualityDataExport,NoPoolEnd resultStyle
