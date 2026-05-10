@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
@@ -23,7 +23,7 @@
       margin-bottom: 0;
     }
     .score-filter-guide .search-control {
-      width: 220px;
+      width: 150px;
     }
     .score-filter-guide .select-control {
       width: 160px;
@@ -51,22 +51,8 @@
       flex-direction: column;
       gap: 6px;
     }
-    .score-list-shell .proto-list-desc {
-      color: #708399;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-    .score-list-shell .proto-list-tools {
-      align-items: center;
-      gap: 10px;
-      color: #6f8298;
-      font-size: 12px;
-    }
-    .score-list-shell .proto-list-tools .tip {
-      white-space: nowrap;
-    }
     .score-table {
-      min-width: 1680px;
+      min-width: 1520px;
     }
     .score-table th {
       white-space: nowrap;
@@ -89,65 +75,25 @@
       vertical-align: bottom;
     }
     .score-line.long {
-      max-width: 240px;
+      max-width: 220px;
     }
     .score-line.medium {
-      max-width: 180px;
+      max-width: 156px;
     }
     .score-line.short {
-      max-width: 120px;
+      max-width: 104px;
     }
-    .score-stage-tag {
+    .score-table td:last-child .score-line.long {
+      max-width: 320px;
+    }
+    .score-table td:last-child .score-line.medium {
+      max-width: 220px;
+    }
+    .score-rater-cell {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      min-width: 52px;
-      height: 24px;
-      padding: 0 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      color: #21527e;
-      background: #edf5ff;
-      border: 1px solid #cfe0f6;
-    }
-    .score-stage-tag[data-stage="一检"] {
-      color: #0f5bd6;
-      background: #eef6ff;
-      border-color: #bfd4ff;
-    }
-    .score-stage-tag[data-stage="二检"] {
-      color: #7a3db2;
-      background: #f6efff;
-      border-color: #dcc8f3;
-    }
-    .score-stage-tag[data-stage="三检"] {
-      color: #1e7859;
-      background: #eef8f2;
-      border-color: #cbe7d7;
-    }
-    .score-person-type {
-      display: inline-flex;
-      align-items: center;
-      height: 24px;
-      padding: 0 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      background: #f7f9fc;
-      border: 1px solid #d9e3ee;
-      color: #536a83;
-      white-space: nowrap;
-    }
-    .score-cell-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      min-width: 0;
-    }
-    .score-meta {
-      color: #8093a7;
-      font-size: 12px;
+      gap: 8px;
+      flex-wrap: wrap;
     }
     .score-attrs {
       display: flex;
@@ -167,6 +113,33 @@
       color: #7e90a4;
       font-size: 11px;
       font-weight: 600;
+    }
+    .qc-chip {
+      min-height: 30px;
+      padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid #dbe6f2;
+      background: #fff;
+      color: #4f6881;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .qc-chip[data-variant="success"] {
+      background: #f1fbf5;
+      border-color: #cce7d6;
+      color: #187c53;
+    }
+    .qc-chip[data-variant="warning"] {
+      background: #fff8ed;
+      border-color: #f1dfc4;
+      color: #9f6413;
+    }
+    .qc-chip[data-variant="danger"] {
+      background: #fff4f3;
+      border-color: #f1d1cb;
+      color: #c05c52;
     }
     .score-empty {
       display: flex;
@@ -214,7 +187,7 @@
                 <option>二检</option>
                 <option>三检</option>
               </select>
-              <input class="control search-control" type="text" placeholder="评分人" value="全部质检人员" />
+              <input class="control search-control" type="text" placeholder="评分人" />
               <input class="control search-control" type="text" placeholder="被评分人" />
               <select class="control select-control">
                 <option selected>被评分人类型</option>
@@ -260,15 +233,6 @@
               <div class="proto-list-head">
                 <div class="proto-list-title-wrap">
                   <h3 class="proto-list-title">评分记录列表</h3>
-                  <p class="proto-list-desc">按评分记录查看一检、二检、三检对对象结果形成的明细打分，不在当前页做人员最终得分统计。</p>
-                </div>
-                <div class="proto-list-tools">
-                  <span class="tip">默认按评分时间倒序</span>
-                  <select class="control select-control" style="width: 156px;">
-                    <option selected>排序：评分时间倒序</option>
-                    <option>排序：分值从高到低</option>
-                    <option>排序：评分阶段</option>
-                  </select>
                 </div>
               </div>
 
@@ -276,164 +240,107 @@
                 <table class="score-table">
                   <colgroup>
                     <col style="width: 10%;" />
-                    <col style="width: 6%;" />
-                    <col style="width: 9%;" />
-                    <col style="width: 9%;" />
-                    <col style="width: 8%;" />
-                    <col style="width: 8%;" />
-                    <col style="width: 10%;" />
-                    <col style="width: 14%;" />
-                    <col style="width: 7%;" />
-                    <col style="width: 6%;" />
                     <col style="width: 13%;" />
+                    <col style="width: 8%;" />
+                    <col style="width: 8%;" />
+                    <col style="width: 7%;" />
+                    <col style="width: 8%;" />
+                    <col style="width: 14%;" />
+                    <col style="width: 9%;" />
+                    <col style="width: 7%;" />
+                    <col style="width: 16%;" />
                   </colgroup>
                   <thead>
                     <tr>
                       <th>评分时间<span class="sort-hint">↓</span></th>
-                      <th>评分阶段<span class="sort-hint">↕</span></th>
-                      <th>评分人</th>
+                      <th>评分人<span class="sort-hint">↕</span></th>
                       <th>被评分人</th>
                       <th>被评分人类型</th>
                       <th>标注类型</th>
                       <th>对象类别</th>
                       <th>对象属性</th>
-                      <th>当前对象裁决结果</th>
+                      <th>裁决结果</th>
                       <th>对象分值<span class="sort-hint">↕</span></th>
-                      <th>退回原因 / 无效原因</th>
+                      <th>退回 / 无效原因</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td><span class="score-line medium">2026-05-10 16:42:18</span></td>
-                      <td><span class="score-stage-tag" data-stage="一检">一检</span></td>
-                      <td>
-                        <div class="score-cell-stack">
-                          <span class="score-line short">王质检</span>
-                          <span class="score-meta">深圳一检组</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="score-cell-stack">
-                          <span class="score-line short">李标注</span>
-                          <span class="score-meta">住宅装修项目</span>
-                        </div>
-                      </td>
-                      <td><span class="score-person-type">标注人员</span></td>
+                      <td><span class="score-line medium">王质检 / 一检</span></td>
+                      <td><span class="score-line short">李标注</span></td>
+                      <td><span class="score-line short">标注人员</span></td>
                       <td><span class="score-line short">多边形</span></td>
                       <td><span class="score-line medium">安全帽</span></td>
                       <td>
-                        <div class="score-attrs" title="颜色：白色；佩戴状态：规范；遮挡：无">
-                          <span class="score-line long">颜色：白色；佩戴状态：规范；遮挡：无</span>
+                        <div class="score-attrs" title="白色 / 红色">
+                          <span class="score-line long">白色 / 红色</span>
                         </div>
                       </td>
-                      <td><span class="proto-table-status" data-variant="success">通过</span></td>
-                      <td><span class="score-value">9.5<small>/ 10</small></span></td>
+                      <td><span class="qc-chip" data-variant="success">通过</span></td>
+                      <td><span class="score-value">10<small>/ 10</small></span></td>
                       <td><span class="score-line medium">-</span></td>
                     </tr>
                     <tr>
                       <td><span class="score-line medium">2026-05-10 15:58:07</span></td>
-                      <td><span class="score-stage-tag" data-stage="二检">二检</span></td>
-                      <td>
-                        <div class="score-cell-stack">
-                          <span class="score-line short">周复核</span>
-                          <span class="score-meta">深圳二检组</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="score-cell-stack">
-                          <span class="score-line short">王质检</span>
-                          <span class="score-meta">一检裁决记录</span>
-                        </div>
-                      </td>
-                      <td><span class="score-person-type">质检人员</span></td>
+                      <td><span class="score-line medium">周复核 / 二检</span></td>
+                      <td><span class="score-line short">王质检</span></td>
+                      <td><span class="score-line short">质检人员</span></td>
                       <td><span class="score-line short">矩形</span></td>
                       <td><span class="score-line medium">灭火器</span></td>
-                      <td title="完好状态：损坏；摆放位置：通道拐角；是否遮挡：是">
-                        <span class="score-line long">完好状态：损坏；摆放位置：通道拐角；是否遮挡：是</span>
+                      <td title="损坏">
+                        <span class="score-line long">损坏</span>
                       </td>
-                      <td><span class="proto-table-status" data-variant="danger">退回</span></td>
-                      <td><span class="score-value">6.0<small>/ 10</small></span></td>
+                      <td><span class="qc-chip" data-variant="warning">退回</span></td>
+                      <td><span class="score-value">6<small>/ 10</small></span></td>
                       <td title="对象框未完整覆盖灭火器本体；灭火器被脚手架遮挡后仍判定为完好；位置属性填写与实际不符">
                         <span class="score-line long">对象框未完整覆盖灭火器本体；灭火器被脚手架遮挡后仍判定为完好；位置属性填写与实际不符</span>
                       </td>
                     </tr>
                     <tr>
                       <td><span class="score-line medium">2026-05-10 14:36:42</span></td>
-                      <td><span class="score-stage-tag" data-stage="三检">三检</span></td>
-                      <td>
-                        <div class="score-cell-stack">
-                          <span class="score-line short">陈终审</span>
-                          <span class="score-meta">深圳三检组</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="score-cell-stack">
-                          <span class="score-line short">周复核</span>
-                          <span class="score-meta">二检裁决记录</span>
-                        </div>
-                      </td>
-                      <td><span class="score-person-type">质检人员</span></td>
+                      <td><span class="score-line medium">陈终审 / 三检</span></td>
+                      <td><span class="score-line short">周复核</span></td>
+                      <td><span class="score-line short">质检人员</span></td>
                       <td><span class="score-line short">点标注</span></td>
-                      <td><span class="score-line medium">违规吸烟</span></td>
-                      <td title="人员状态：吸烟中；区域属性：材料堆放区；可见性：清晰">
-                        <span class="score-line long">人员状态：吸烟中；区域属性：材料堆放区；可见性：清晰</span>
+                      <td><span class="score-line medium">安全帽</span></td>
+                      <td title="黄色">
+                        <span class="score-line long">黄色</span>
                       </td>
-                      <td><span class="proto-table-status" data-variant="warning">无效</span></td>
-                      <td><span class="score-value">4.5<small>/ 10</small></span></td>
+                      <td><span class="qc-chip" data-variant="danger">无效</span></td>
+                      <td><span class="score-value">5<small>/ 10</small></span></td>
                       <td title="吸烟点位落在旁观人员肩部，未命中实际烟头位置；区域属性与现场图层不一致">
                         <span class="score-line long">吸烟点位落在旁观人员肩部，未命中实际烟头位置；区域属性与现场图层不一致</span>
                       </td>
                     </tr>
                     <tr>
                       <td><span class="score-line medium">2026-05-09 18:12:05</span></td>
-                      <td><span class="score-stage-tag" data-stage="一检">一检</span></td>
-                      <td>
-                        <div class="score-cell-stack">
-                          <span class="score-line short">王质检</span>
-                          <span class="score-meta">深圳一检组</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="score-cell-stack">
-                          <span class="score-line short">赵标注</span>
-                          <span class="score-meta">小型工程项目</span>
-                        </div>
-                      </td>
-                      <td><span class="score-person-type">标注人员</span></td>
+                      <td><span class="score-line medium">王质检 / 一检</span></td>
+                      <td><span class="score-line short">赵标注</span></td>
+                      <td><span class="score-line short">标注人员</span></td>
                       <td><span class="score-line short">矩形</span></td>
                       <td><span class="score-line medium">脚手架</span></td>
-                      <td title="脚手架类型：盘扣式；搭设状态：缺少踢脚板；临边防护：缺失">
-                        <span class="score-line long">脚手架类型：盘扣式；搭设状态：缺少踢脚板；临边防护：缺失</span>
+                      <td title="变形">
+                        <span class="score-line long">变形</span>
                       </td>
-                      <td><span class="proto-table-status" data-variant="danger">退回</span></td>
-                      <td><span class="score-value">5.0<small>/ 10</small></span></td>
+                      <td><span class="qc-chip" data-variant="warning">退回</span></td>
+                      <td><span class="score-value">5<small>/ 10</small></span></td>
                       <td title="矩形框选范围过大，带入相邻材料堆放区；临边防护属性误填为“已设置”；踢脚板缺失未体现">
                         <span class="score-line long">矩形框选范围过大，带入相邻材料堆放区；临边防护属性误填为“已设置”；踢脚板缺失未体现</span>
                       </td>
                     </tr>
                     <tr>
                       <td><span class="score-line medium">2026-05-09 11:07:49</span></td>
-                      <td><span class="score-stage-tag" data-stage="二检">二检</span></td>
-                      <td>
-                        <div class="score-cell-stack">
-                          <span class="score-line short">周复核</span>
-                          <span class="score-meta">深圳二检组</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="score-cell-stack">
-                          <span class="score-line short">王质检</span>
-                          <span class="score-meta">一检裁决记录</span>
-                        </div>
-                      </td>
-                      <td><span class="score-person-type">质检人员</span></td>
+                      <td><span class="score-line medium">周复核 / 二检</span></td>
+                      <td><span class="score-line short">王质检</span></td>
+                      <td><span class="score-line short">质检人员</span></td>
                       <td><span class="score-line short">多边形</span></td>
-                      <td><span class="score-line medium">临边防护栏杆</span></td>
-                      <td title="栏杆高度：0.9m；横杆数量：1 道；踢脚板：无；颜色：黄色">
-                        <span class="score-line long">栏杆高度：0.9m；横杆数量：1 道；踢脚板：无；颜色：黄色</span>
+                      <td><span class="score-line medium">灭火器</span></td>
+                      <td title="正常">
+                        <span class="score-line long">正常</span>
                       </td>
-                      <td><span class="proto-table-status" data-variant="success">通过</span></td>
-                      <td><span class="score-value">8.5<small>/ 10</small></span></td>
+                      <td><span class="qc-chip" data-variant="success">通过</span></td>
+                      <td><span class="score-value">9<small>/ 10</small></span></td>
                       <td><span class="score-line medium">-</span></td>
                     </tr>
                   </tbody>
@@ -457,7 +364,7 @@
                   <option>6页</option>
                   <option>7页</option>
                 </select>
-                <span>页 · 默认评分时间倒序</span>
+                <span>页</span>
               </div>
             </section>
           </div>
@@ -469,11 +376,11 @@
               <select class="control select-control">
                 <option selected>评分阶段</option>
                 <option>一检</option>
-                <option>二检</option>
+                <option selected>二检</option>
                 <option>三检</option>
               </select>
-              <input class="control search-control" type="text" placeholder="评分人" value="周复核" />
-              <input class="control search-control" type="text" placeholder="被评分人" value="张质检" />
+              <input class="control search-control" type="text" placeholder="评分人" />
+              <input class="control search-control" type="text" placeholder="被评分人" />
               <select class="control select-control">
                 <option selected>被评分人类型</option>
                 <option>标注人员</option>
@@ -518,7 +425,6 @@
               <div class="proto-list-head">
                 <div class="proto-list-title-wrap">
                   <h3 class="proto-list-title">评分记录列表</h3>
-                  <p class="proto-list-desc">当前未命中评分记录。首版仅查看明细记录，不在本页展开人员最终得分统计。</p>
                 </div>
               </div>
               <div class="proto-table-wrap">
