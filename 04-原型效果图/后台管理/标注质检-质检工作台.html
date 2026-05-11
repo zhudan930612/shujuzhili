@@ -609,8 +609,10 @@
     <button class="active" type="button" data-prototype-button="round12-pending">一/二检待质检</button>
     <button type="button" data-prototype-button="round12-rework">一/二检返工整改</button>
     <button type="button" data-prototype-button="round3-pending">三检待质检</button>
+    <button type="button" data-prototype-button="round3-all-invalid">三检全员无效终审</button>
     <button type="button" data-prototype-button="round3-terminal">三检终局态</button>
     <button type="button" data-prototype-button="modal-return">退回确认弹窗</button>
+    <button type="button" data-prototype-button="modal-rework-invalid">退回整改原因弹窗</button>
     <button type="button" data-prototype-button="modal-invalid">无效原因弹窗</button>
     <button type="button" data-prototype-button="modal-score">评分说明弹窗</button>
     <button type="button" data-prototype-button="modal-terminal">终局确认弹窗</button>
@@ -1140,6 +1142,116 @@
     </div>
   </section>
 
+  <section class="prototype-stage" data-prototype-panel="round3-all-invalid">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <section class="qc-shell">
+            <div class="qc-worktop">
+              <strong>← 质检工作台</strong>
+              <div class="qc-actions">
+                <button class="btn btn-ghost" type="button">上一张</button>
+                <button class="btn btn-ghost" type="button">下一张</button>
+                <button class="btn btn-primary" type="button">退回整改</button>
+                <button class="btn btn-danger" type="button">不入池</button>
+                <button class="btn btn-ghost" type="button">任务记录</button>
+              </div>
+            </div>
+            <div class="qc-summary-bar">
+              <div class="qc-summary-left">
+                <span class="qc-status-pill" data-variant="pending">三检 · 待质检</span>
+                <span class="proto-tag">图片任务：IMG_20260510_089</span>
+                <span class="proto-tag">项目类型：住宅装修</span>
+                <span class="proto-tag">全员无效直达三检</span>
+              </div>
+              <div class="qc-summary-right">
+                <span class="qc-meta-line">来源标注人数：3 人</span>
+                <span class="qc-meta-line">当前模式：无效图片终审</span>
+              </div>
+            </div>
+            <div class="qc-workspace">
+              <div class="qc-main">
+                <section class="qc-card qc-canvas-card">
+                  <div class="qc-toolbar">
+                    <div class="qc-toolbar-left">
+                      <span class="qc-chip" data-variant="selected">当前模式：无效图片终审</span>
+                      <span class="qc-chip">三检仅可执行退回整改或不入池</span>
+                    </div>
+                    <div class="qc-toolbar-right">
+                      <span class="qc-chip" data-variant="danger">无效提交 3</span>
+                      <span class="qc-chip" data-variant="warning">终审待确认</span>
+                    </div>
+                  </div>
+                  <div class="qc-canvas">
+                    <div class="qc-focus-panel">
+                      当前图片的全部标注人员均提交了无效图片结果。<br />
+                      三检不进入对象级裁决，直接对整张图片执行“退回整改”或“不入池”终审判断。
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <aside class="qc-side">
+                <section class="qc-card qc-side-scroll">
+                  <div class="qc-card-head">
+                    <div class="qc-card-title">标注人员无效提交列表</div>
+                    <span class="proto-status" data-variant="warning">待质检</span>
+                  </div>
+                  <div class="qc-card-body">
+                    <div class="qc-meta-line" style="margin-bottom: 12px;">项目类型：住宅装修</div>
+                    <div class="qc-side-card">
+                      <div class="qc-side-card-body">
+                        <div class="qc-detail-grid">
+                          <div class="qc-detail-label">标注人员</div>
+                          <div>张三</div>
+                          <div class="qc-detail-label">无效原因</div>
+                          <div>
+                            1. 目标被遮挡无法判定<br />
+                            2. 非业务关注对象<br />
+                            3. 标注结果与图片事实不符
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="qc-side-card">
+                      <div class="qc-side-card-body">
+                        <div class="qc-detail-grid">
+                          <div class="qc-detail-label">标注人员</div>
+                          <div>李四</div>
+                          <div class="qc-detail-label">无效原因</div>
+                          <div>
+                            1. 目标被遮挡无法判定<br />
+                            2. 非业务关注对象
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="qc-side-card">
+                      <div class="qc-side-card-body">
+                        <div class="qc-detail-grid">
+                          <div class="qc-detail-label">标注人员</div>
+                          <div>王五</div>
+                          <div class="qc-detail-label">无效原因</div>
+                          <div>
+                            1. 目标被遮挡无法判定
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="qc-modal-note">
+                      点击 <strong>退回整改</strong> 后需填写退回原因，并将整张图片退回标注侧重新处理；点击 <strong>不入池</strong> 则直接以图片级终局结束。
+                    </div>
+                  </div>
+                </section>
+              </aside>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </section>
+
   <section class="prototype-stage" data-prototype-panel="round3-terminal">
     <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
       <header class="topbar"></header>
@@ -1294,6 +1406,47 @@
               <div class="modal-foot">
                 <button class="btn btn-ghost" type="button">取消</button>
                 <button class="btn btn-primary" type="button">确认退回</button>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="modal-rework-invalid">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+      <header class="topbar"></header>
+      <div class="main">
+        <aside class="sidebar"></aside>
+        <main class="workspace">
+          <section class="modal-stage">
+            <div class="modal medium">
+              <div class="modal-head">
+                <span>确认退回整改？</span>
+                <span>×</span>
+              </div>
+              <div class="modal-body">
+                <div class="danger-box">
+                  <div style="color:#c33b3b;">⚠ 退回整改后，本图片将重新回到标注链路；当前 3 名标注人员的无效图片结论仅作为退回参考，不直接保留为终局结果。</div>
+                  <div class="qc-modal-section">
+                    <div class="qc-modal-label">退回原因（必填）</div>
+                    <div class="qc-check-grid">
+                      <label><input type="checkbox" checked /> 图片中仍存在可标注对象</label>
+                      <label><input type="checkbox" /> 无效原因判断不准确</label>
+                      <label><input type="checkbox" /> 多名标注员结论不一致</label>
+                      <label><input type="checkbox" /> 需要重新确认标注范围</label>
+                      <label><input type="checkbox" /> 当前无效依据不足</label>
+                      <label><input type="checkbox" /> 需补充属性 / 类别判断</label>
+                      <label><input type="checkbox" /> 其他</label>
+                    </div>
+                    <textarea class="control" style="width:100%; height:88px; margin-top:14px;" placeholder="选择“其他”时需补充说明；也可补充本次退回整改的具体要求。">图片内脚手架主体仍可识别，当前“目标被遮挡无法判定”不足以支撑整图无效，需退回标注侧重新标注。</textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-foot">
+                <button class="btn btn-ghost" type="button">取消</button>
+                <button class="btn btn-primary" type="button">确认退回整改</button>
               </div>
             </div>
           </section>
