@@ -52,7 +52,9 @@
       gap: 6px;
     }
     .score-table {
-      min-width: 1520px;
+      width: 100%;
+      min-width: 0;
+      table-layout: fixed;
     }
     .score-table th {
       white-space: nowrap;
@@ -84,10 +86,12 @@
       max-width: 104px;
     }
     .score-table td:last-child .score-line.long {
-      max-width: 320px;
+      width: 100%;
+      max-width: 100%;
     }
     .score-table td:last-child .score-line.medium {
-      max-width: 220px;
+      width: 100%;
+      max-width: 100%;
     }
     .score-rater-cell {
       display: inline-flex;
@@ -188,12 +192,6 @@
                 <option>三检</option>
               </select>
               <input class="control search-control" type="text" placeholder="评分人" />
-              <input class="control search-control" type="text" placeholder="被评分人" />
-              <select class="control select-control">
-                <option selected>被评分人类型</option>
-                <option>标注人员</option>
-                <option>质检人员</option>
-              </select>
               <select class="control select-control">
                 <option selected>项目类型</option>
                 <option>住宅装修</option>
@@ -239,23 +237,19 @@
               <div class="proto-table-wrap">
                 <table class="score-table">
                   <colgroup>
-                    <col style="width: 10%;" />
-                    <col style="width: 13%;" />
-                    <col style="width: 8%;" />
-                    <col style="width: 8%;" />
-                    <col style="width: 7%;" />
-                    <col style="width: 8%;" />
-                    <col style="width: 14%;" />
-                    <col style="width: 9%;" />
-                    <col style="width: 7%;" />
-                    <col style="width: 16%;" />
+                    <col style="width: 12.5%;" />
+                    <col style="width: 12.5%;" />
+                    <col style="width: 12.5%;" />
+                    <col style="width: 12.5%;" />
+                    <col style="width: 12.5%;" />
+                    <col style="width: 12.5%;" />
+                    <col style="width: 12.5%;" />
+                    <col style="width: 12.5%;" />
                   </colgroup>
                   <thead>
                     <tr>
                       <th>评分时间<span class="sort-hint">↓</span></th>
                       <th>评分人<span class="sort-hint">↕</span></th>
-                      <th>被评分人</th>
-                      <th>被评分人类型</th>
                       <th>标注类型</th>
                       <th>对象类别</th>
                       <th>对象属性</th>
@@ -268,8 +262,6 @@
                     <tr>
                       <td><span class="score-line medium">2026-05-10 16:42:18</span></td>
                       <td><span class="score-line medium">王质检 / 一检</span></td>
-                      <td><span class="score-line short">李标注</span></td>
-                      <td><span class="score-line short">标注人员</span></td>
                       <td><span class="score-line short">多边形</span></td>
                       <td><span class="score-line medium">安全帽</span></td>
                       <td>
@@ -284,8 +276,6 @@
                     <tr>
                       <td><span class="score-line medium">2026-05-10 15:58:07</span></td>
                       <td><span class="score-line medium">周复核 / 二检</span></td>
-                      <td><span class="score-line short">王质检</span></td>
-                      <td><span class="score-line short">质检人员</span></td>
                       <td><span class="score-line short">矩形</span></td>
                       <td><span class="score-line medium">灭火器</span></td>
                       <td title="损坏">
@@ -300,8 +290,6 @@
                     <tr>
                       <td><span class="score-line medium">2026-05-10 14:36:42</span></td>
                       <td><span class="score-line medium">陈终审 / 三检</span></td>
-                      <td><span class="score-line short">周复核</span></td>
-                      <td><span class="score-line short">质检人员</span></td>
                       <td><span class="score-line short">点标注</span></td>
                       <td><span class="score-line medium">安全帽</span></td>
                       <td title="黄色">
@@ -316,8 +304,6 @@
                     <tr>
                       <td><span class="score-line medium">2026-05-09 18:12:05</span></td>
                       <td><span class="score-line medium">王质检 / 一检</span></td>
-                      <td><span class="score-line short">赵标注</span></td>
-                      <td><span class="score-line short">标注人员</span></td>
                       <td><span class="score-line short">矩形</span></td>
                       <td><span class="score-line medium">脚手架</span></td>
                       <td title="变形">
@@ -332,8 +318,6 @@
                     <tr>
                       <td><span class="score-line medium">2026-05-09 11:07:49</span></td>
                       <td><span class="score-line medium">周复核 / 二检</span></td>
-                      <td><span class="score-line short">王质检</span></td>
-                      <td><span class="score-line short">质检人员</span></td>
                       <td><span class="score-line short">多边形</span></td>
                       <td><span class="score-line medium">灭火器</span></td>
                       <td title="正常">
@@ -380,12 +364,6 @@
                 <option>三检</option>
               </select>
               <input class="control search-control" type="text" placeholder="评分人" />
-              <input class="control search-control" type="text" placeholder="被评分人" />
-              <select class="control select-control">
-                <option selected>被评分人类型</option>
-                <option>标注人员</option>
-                <option selected>质检人员</option>
-              </select>
               <select class="control select-control">
                 <option selected>项目类型</option>
                 <option>住宅装修</option>
@@ -430,7 +408,7 @@
               <div class="proto-table-wrap">
                 <div class="score-empty">
                   <strong>暂无评分记录</strong>
-                  <p>当前筛选条件下未查询到评分记录，请调整评分阶段、评分人、被评分人或时间范围后重试。</p>
+                  <p>当前筛选条件下未查询到评分记录，请调整评分阶段、评分人或时间范围后重试。</p>
                 </div>
               </div>
               <div class="proto-pagination">
