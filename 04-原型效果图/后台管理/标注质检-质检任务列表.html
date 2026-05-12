@@ -52,8 +52,8 @@
     .qc-stat-grid[data-columns="4"] {
       grid-template-columns: repeat(4, 1fr);
     }
-    .qc-stat-grid[data-columns="5"] {
-      grid-template-columns: repeat(5, 1fr);
+    .qc-stat-grid[data-columns="3"] {
+      grid-template-columns: repeat(3, 1fr);
     }
     .proto-list-shell .proto-filter-bar {
       order: 2;
@@ -119,7 +119,6 @@
       background: var(--stat-bg, #eef6ff);
       box-shadow: inset 0 0 0 1px var(--stat-color, var(--brand)), 0 8px 18px rgba(18, 51, 95, 0.06);
     }
-    .qc-stat-card[data-stat="all"] { --stat-color: #5f7f9e; --stat-bg: #f2f7fc; }
     .qc-stat-card[data-stat="pending"] { --stat-color: var(--brand); --stat-bg: #eef6ff; }
     .qc-stat-card[data-stat="rework"] { --stat-color: var(--danger); --stat-bg: #fff4f3; }
     .qc-stat-card[data-stat="processed"] { --stat-color: var(--success); --stat-bg: #f2fbf5; }
@@ -218,6 +217,11 @@
       font-weight: 700;
       box-shadow: 0 4px 10px rgba(18, 51, 95, 0.08);
     }
+    .draft-tag[data-variant="processed-count"] {
+      background: rgba(238, 249, 244, 0.96);
+      border-color: #b6dfcf;
+      color: #176b52;
+    }
     .qc-summary {
       padding: 10px 12px;
       background: #f6f9fc;
@@ -259,41 +263,13 @@
         <section class="surface tabbar"><div class="tab">质检任务</div></section>
 
         <section class="page-panel active" data-page-panel="round12">
-          <section class="state-view active" data-state-group="round12" data-state-panel="all">
+          <section class="state-view active" data-state-group="round12" data-state-panel="pending">
             <section class="proto-list-shell">
               <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
-              <div class="qc-stat-grid" data-columns="4">
-                <div class="qc-stat-card active" data-stat="all" data-state-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">36</div></div>
-                <div class="qc-stat-card" data-stat="pending" data-state-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">18</div></div>
-                <div class="qc-stat-card" data-stat="rework" data-state-target="rework"><div class="qc-stat-name">返工整改</div><div class="qc-stat-num">6</div></div>
-                <div class="qc-stat-card" data-stat="processed" data-state-target="processed"><div class="qc-stat-name">已质检</div><div class="qc-stat-num">12</div></div>
-              </div>
-              <div class="proto-filter-bar">
-                <select class="control select-control"><option>项目类型</option><option>住宅装修</option><option>小型工程</option><option>零星作业</option></select>
-                <select class="control select-control"><option>草稿状态</option><option>有草稿</option><option>无草稿</option></select>
-                <button class="btn btn-primary" type="button">查询</button>
-                <button class="btn btn-ghost" type="button">重置</button>
-              </div>
-              <div class="image-task-grid">
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">一检</span><span class="qc-chip" data-variant="pending">待质检</span></div><span class="draft-tag">有返工记录</span></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">住宅装修 / IMG_20260510_018</span><span class="draft-tag">有草稿</span></div><div class="qc-summary">通过 6 / 退回 2 / 无效 1</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>3 个</strong></div><div>是否存在返工：<strong>是</strong></div><div>前序回流：<strong>回一检 1 次</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">一检</span><span class="qc-chip" data-variant="pending">待质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">小型工程 / IMG_20260510_024</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 4 / 退回 1 / 无效 0</div><div class="qc-meta"><div>来源标注人数：<strong>2 人</strong></div><div>待处理对象数：<strong>1 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>无</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">二检</span><span class="qc-chip" data-variant="pending">待质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">零星作业 / IMG_20260510_037</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 7 / 退回 0 / 无效 2</div><div class="qc-meta"><div>来源标注人数：<strong>4 人</strong></div><div>待处理对象数：<strong>2 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>一检已裁决</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">一检</span><span class="qc-chip" data-variant="pending">待质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">住宅装修 / IMG_20260510_045</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 5 / 退回 1 / 无效 1</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>2 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>无</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">二检</span><span class="qc-chip" data-variant="rework">返工整改</span></div><span class="draft-tag">返工未闭环</span></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">住宅装修 / IMG_20260510_052</span><span class="draft-tag">有草稿</span></div><div class="qc-summary">通过 5 / 退回 3 / 无效 0</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>3 个</strong></div><div>是否存在返工：<strong>是</strong></div><div>前序回流：<strong>返工待提交 2 人</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">一检</span><span class="qc-chip" data-variant="processed">已质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">小型工程 / IMG_20260510_061</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 7 / 退回 1 / 无效 0</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>0 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>已流转至二检</strong></div></div></div></article>
-              </div>
-              <div class="proto-pagination"><span>共 36 张</span><span class="proto-page-size">24条/页</span><span>‹</span><span class="proto-page-current">1</span><span>2</span><span>›</span><span>前往</span><input class="proto-page-jump-input" value="1" /><span>页</span></div>
-            </section>
-          </section>
-
-          <section class="state-view" data-state-group="round12" data-state-panel="pending">
-            <section class="proto-list-shell">
-              <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
-              <div class="qc-stat-grid" data-columns="4">
-                <div class="qc-stat-card" data-stat="all" data-state-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">36</div></div>
+              <div class="qc-stat-grid" data-columns="3">
                 <div class="qc-stat-card active" data-stat="pending" data-state-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">18</div></div>
                 <div class="qc-stat-card" data-stat="rework" data-state-target="rework"><div class="qc-stat-name">返工整改</div><div class="qc-stat-num">6</div></div>
-                <div class="qc-stat-card" data-stat="processed" data-state-target="processed"><div class="qc-stat-name">已质检</div><div class="qc-stat-num">12</div></div>
+                <div class="qc-stat-card" data-stat="processed" data-state-target="processed"><div class="qc-stat-name">已处理</div><div class="qc-stat-num">12</div></div>
               </div>
               <div class="proto-filter-bar">
                 <select class="control select-control"><option>项目类型</option><option>住宅装修</option><option>小型工程</option><option>零星作业</option></select>
@@ -302,10 +278,10 @@
                 <button class="btn btn-ghost" type="button">重置</button>
               </div>
               <div class="image-task-grid">
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">一检</span><span class="qc-chip" data-variant="pending">待质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">住宅装修 / IMG_20260510_018</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 6 / 退回 2 / 无效 1</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>3 个</strong></div><div>是否存在返工：<strong>是</strong></div><div>前序回流：<strong>回一检 1 次</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">一检</span><span class="qc-chip" data-variant="pending">待质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">小型工程 / IMG_20260510_024</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 4 / 退回 1 / 无效 0</div><div class="qc-meta"><div>来源标注人数：<strong>2 人</strong></div><div>待处理对象数：<strong>1 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>无</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">二检</span><span class="qc-chip" data-variant="pending">待质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">零星作业 / IMG_20260510_037</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 7 / 退回 0 / 无效 2</div><div class="qc-meta"><div>来源标注人数：<strong>4 人</strong></div><div>待处理对象数：<strong>2 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>一检已裁决</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">一检</span><span class="qc-chip" data-variant="pending">待质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">住宅装修 / IMG_20260510_045</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 5 / 退回 1 / 无效 1</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>2 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>无</strong></div></div></div></article>
+                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">一检</span><span class="qc-chip" data-variant="pending">待质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">住宅装修 / IMG_20260510_018</span><span class="draft-tag">有草稿</span></div><div class="qc-summary">通过 6 / 退回 2 / 无效 1</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>3 个</strong></div><div>是否存在返工：<strong>是</strong></div><div>前序回流：<strong>回一检 1 次</strong></div></div></div></article>
+                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">一检</span><span class="qc-chip" data-variant="pending">待质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">小型工程 / IMG_20260510_024</span><span class="draft-tag">有草稿</span></div><div class="qc-summary">通过 4 / 退回 1 / 无效 0</div><div class="qc-meta"><div>来源标注人数：<strong>2 人</strong></div><div>待处理对象数：<strong>1 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>无</strong></div></div></div></article>
+                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">二检</span><span class="qc-chip" data-variant="pending">待质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">零星作业 / IMG_20260510_037</span><span class="draft-tag">有草稿</span></div><div class="qc-summary">通过 7 / 退回 0 / 无效 2</div><div class="qc-meta"><div>来源标注人数：<strong>4 人</strong></div><div>待处理对象数：<strong>2 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>一检已裁决</strong></div></div></div></article>
+                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">一检</span><span class="qc-chip" data-variant="pending">待质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">住宅装修 / IMG_20260510_045</span><span class="draft-tag">有草稿</span></div><div class="qc-summary">通过 5 / 退回 1 / 无效 1</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>2 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>无</strong></div></div></div></article>
               </div>
               <div class="proto-pagination"><span>共 18 张</span><span class="proto-page-size">24条/页</span><span class="proto-page-current">1</span></div>
             </section>
@@ -314,11 +290,10 @@
           <section class="state-view" data-state-group="round12" data-state-panel="rework">
             <section class="proto-list-shell">
               <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
-              <div class="qc-stat-grid" data-columns="4">
-                <div class="qc-stat-card" data-stat="all" data-state-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">36</div></div>
+              <div class="qc-stat-grid" data-columns="3">
                 <div class="qc-stat-card" data-stat="pending" data-state-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">18</div></div>
                 <div class="qc-stat-card active" data-stat="rework" data-state-target="rework"><div class="qc-stat-name">返工整改</div><div class="qc-stat-num">6</div></div>
-                <div class="qc-stat-card" data-stat="processed" data-state-target="processed"><div class="qc-stat-name">已质检</div><div class="qc-stat-num">12</div></div>
+                <div class="qc-stat-card" data-stat="processed" data-state-target="processed"><div class="qc-stat-name">已处理</div><div class="qc-stat-num">12</div></div>
               </div>
               <div class="proto-filter-bar">
                 <select class="control select-control"><option>项目类型</option><option>住宅装修</option><option>小型工程</option><option>零星作业</option></select>
@@ -337,11 +312,10 @@
           <section class="state-view" data-state-group="round12" data-state-panel="processed">
             <section class="proto-list-shell">
               <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
-              <div class="qc-stat-grid" data-columns="4">
-                <div class="qc-stat-card" data-stat="all" data-state-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">36</div></div>
+              <div class="qc-stat-grid" data-columns="3">
                 <div class="qc-stat-card" data-stat="pending" data-state-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">18</div></div>
                 <div class="qc-stat-card" data-stat="rework" data-state-target="rework"><div class="qc-stat-name">返工整改</div><div class="qc-stat-num">6</div></div>
-                <div class="qc-stat-card active" data-stat="processed" data-state-target="processed"><div class="qc-stat-name">已质检</div><div class="qc-stat-num">12</div></div>
+                <div class="qc-stat-card active" data-stat="processed" data-state-target="processed"><div class="qc-stat-name">已处理</div><div class="qc-stat-num">12</div></div>
               </div>
               <div class="proto-filter-bar">
                 <select class="control select-control"><option>项目类型</option><option>住宅装修</option><option>小型工程</option><option>零星作业</option></select>
@@ -350,10 +324,10 @@
                 <button class="btn btn-ghost" type="button">重置</button>
               </div>
               <div class="image-task-grid">
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">一检</span><span class="qc-chip" data-variant="processed">已质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">小型工程 / IMG_20260510_061</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 7 / 退回 1 / 无效 0</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>0 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>已流转至二检</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">二检</span><span class="qc-chip" data-variant="processed">已质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">住宅装修 / IMG_20260510_063</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 8 / 退回 0 / 无效 1</div><div class="qc-meta"><div>来源标注人数：<strong>4 人</strong></div><div>待处理对象数：<strong>0 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>已流转至三检</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">一检</span><span class="qc-chip" data-variant="processed">已质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">零星作业 / IMG_20260510_068</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 6 / 退回 0 / 无效 1</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>0 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>已流转至二检</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">二检</span><span class="qc-chip" data-variant="processed">已质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">住宅装修 / IMG_20260510_069</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 9 / 退回 0 / 无效 0</div><div class="qc-meta"><div>来源标注人数：<strong>4 人</strong></div><div>待处理对象数：<strong>0 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>已流转至三检</strong></div></div></div></article>
+                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">一检</span><span class="qc-chip" data-variant="processed">已处理</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">小型工程 / IMG_20260510_061</span><span class="draft-tag" data-variant="processed-count">已处理 2 次</span></div><div class="qc-summary">通过 7 / 退回 1 / 无效 0</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>0 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>已流转至二检</strong></div></div></div></article>
+                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">二检</span><span class="qc-chip" data-variant="processed">已处理</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">住宅装修 / IMG_20260510_063</span><span class="draft-tag" data-variant="processed-count">已处理 3 次</span></div><div class="qc-summary">通过 8 / 退回 0 / 无效 1</div><div class="qc-meta"><div>来源标注人数：<strong>4 人</strong></div><div>待处理对象数：<strong>0 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>已流转至三检</strong></div></div></div></article>
+                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">一检</span><span class="qc-chip" data-variant="processed">已处理</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">零星作业 / IMG_20260510_068</span><span class="draft-tag" data-variant="processed-count">已处理 1 次</span></div><div class="qc-summary">通过 6 / 退回 0 / 无效 1</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>0 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>已流转至二检</strong></div></div></div></article>
+                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">二检</span><span class="qc-chip" data-variant="processed">已处理</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">住宅装修 / IMG_20260510_069</span><span class="draft-tag" data-variant="processed-count">已处理 4 次</span></div><div class="qc-summary">通过 9 / 退回 0 / 无效 0</div><div class="qc-meta"><div>来源标注人数：<strong>4 人</strong></div><div>待处理对象数：<strong>0 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>已流转至三检</strong></div></div></div></article>
               </div>
               <div class="proto-pagination"><span>共 12 张</span><span class="proto-page-size">24条/页</span><span class="proto-page-current">1</span></div>
             </section>
@@ -361,39 +335,10 @@
         </section>
 
         <section class="page-panel" data-page-panel="round3">
-          <section class="state-view active" data-state-group="round3" data-state-panel="all">
+          <section class="state-view active" data-state-group="round3" data-state-panel="pending">
             <section class="proto-list-shell">
               <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
-              <div class="qc-stat-grid" data-columns="5">
-                <div class="qc-stat-card active" data-stat="all" data-state-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">31</div></div>
-                <div class="qc-stat-card" data-stat="pending" data-state-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">14</div></div>
-                <div class="qc-stat-card" data-stat="rework" data-state-target="rework"><div class="qc-stat-name">返工整改</div><div class="qc-stat-num">5</div></div>
-                <div class="qc-stat-card" data-stat="in-pool" data-state-target="in-pool"><div class="qc-stat-name">入池</div><div class="qc-stat-num">8</div></div>
-                <div class="qc-stat-card" data-stat="no-pool" data-state-target="no-pool"><div class="qc-stat-name">不入池</div><div class="qc-stat-num">4</div></div>
-              </div>
-              <div class="proto-filter-bar">
-                <select class="control select-control"><option>项目类型</option><option>住宅装修</option><option>小型工程</option><option>零星作业</option></select>
-                <select class="control select-control"><option>草稿状态</option><option>有草稿</option><option>无草稿</option></select>
-                <button class="btn btn-primary" type="button">查询</button>
-                <button class="btn btn-ghost" type="button">重置</button>
-              </div>
-              <div class="image-task-grid">
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">三检</span><span class="qc-chip" data-variant="pending">待质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">住宅装修 / IMG_20260510_041</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 5 / 退回 0 / 无效 3</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>2 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>二检已裁决</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">三检</span><span class="qc-chip" data-variant="rework">返工整改</span></div><span class="draft-tag">返工未闭环</span></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">零星作业 / IMG_20260510_086</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 4 / 退回 2 / 无效 1</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>2 个</strong></div><div>是否存在返工：<strong>是</strong></div><div>前序回流：<strong>返工整改待提交</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">三检</span><span class="qc-chip" data-variant="in-pool">入池</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">零星作业 / IMG_20260510_071</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 10 / 退回 0 / 无效 0</div><div class="qc-meta"><div>来源标注人数：<strong>4 人</strong></div><div>待处理对象数：<strong>0 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>三检终局完成</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">三检</span><span class="qc-chip" data-variant="no-pool">不入池</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">住宅装修 / IMG_20260510_073</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 3 / 退回 0 / 无效 6</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>0 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>三检终局完成</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">三检</span><span class="qc-chip" data-variant="pending">待质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">小型工程 / IMG_20260510_081</span><span class="draft-tag">有草稿</span></div><div class="qc-summary">通过 6 / 退回 1 / 无效 2</div><div class="qc-meta"><div>来源标注人数：<strong>4 人</strong></div><div>待处理对象数：<strong>2 个</strong></div><div>是否存在返工：<strong>是</strong></div><div>前序回流：<strong>二检回流 1 次</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">三检</span><span class="qc-chip" data-variant="in-pool">入池</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">住宅装修 / IMG_20260510_072</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 9 / 退回 0 / 无效 0</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>0 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>三检终局完成</strong></div></div></div></article>
-              </div>
-              <div class="proto-pagination"><span>共 31 张</span><span class="proto-page-size">24条/页</span><span>‹</span><span class="proto-page-current">1</span><span>2</span><span>›</span><span>前往</span><input class="proto-page-jump-input" value="1" /><span>页</span></div>
-            </section>
-          </section>
-
-          <section class="state-view" data-state-group="round3" data-state-panel="pending">
-            <section class="proto-list-shell">
-              <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
-              <div class="qc-stat-grid" data-columns="5">
-                <div class="qc-stat-card" data-stat="all" data-state-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">31</div></div>
+              <div class="qc-stat-grid" data-columns="4">
                 <div class="qc-stat-card active" data-stat="pending" data-state-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">14</div></div>
                 <div class="qc-stat-card" data-stat="rework" data-state-target="rework"><div class="qc-stat-name">返工整改</div><div class="qc-stat-num">5</div></div>
                 <div class="qc-stat-card" data-stat="in-pool" data-state-target="in-pool"><div class="qc-stat-name">入池</div><div class="qc-stat-num">8</div></div>
@@ -418,8 +363,7 @@
           <section class="state-view" data-state-group="round3" data-state-panel="rework">
             <section class="proto-list-shell">
               <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
-              <div class="qc-stat-grid" data-columns="5">
-                <div class="qc-stat-card" data-stat="all" data-state-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">31</div></div>
+              <div class="qc-stat-grid" data-columns="4">
                 <div class="qc-stat-card" data-stat="pending" data-state-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">14</div></div>
                 <div class="qc-stat-card active" data-stat="rework" data-state-target="rework"><div class="qc-stat-name">返工整改</div><div class="qc-stat-num">5</div></div>
                 <div class="qc-stat-card" data-stat="in-pool" data-state-target="in-pool"><div class="qc-stat-name">入池</div><div class="qc-stat-num">8</div></div>
@@ -442,8 +386,7 @@
           <section class="state-view" data-state-group="round3" data-state-panel="in-pool">
             <section class="proto-list-shell">
               <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
-              <div class="qc-stat-grid" data-columns="5">
-                <div class="qc-stat-card" data-stat="all" data-state-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">31</div></div>
+              <div class="qc-stat-grid" data-columns="4">
                 <div class="qc-stat-card" data-stat="pending" data-state-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">14</div></div>
                 <div class="qc-stat-card" data-stat="rework" data-state-target="rework"><div class="qc-stat-name">返工整改</div><div class="qc-stat-num">5</div></div>
                 <div class="qc-stat-card active" data-stat="in-pool" data-state-target="in-pool"><div class="qc-stat-name">入池</div><div class="qc-stat-num">8</div></div>
@@ -466,8 +409,7 @@
           <section class="state-view" data-state-group="round3" data-state-panel="no-pool">
             <section class="proto-list-shell">
               <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
-              <div class="qc-stat-grid" data-columns="5">
-                <div class="qc-stat-card" data-stat="all" data-state-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">31</div></div>
+              <div class="qc-stat-grid" data-columns="4">
                 <div class="qc-stat-card" data-stat="pending" data-state-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">14</div></div>
                 <div class="qc-stat-card" data-stat="rework" data-state-target="rework"><div class="qc-stat-name">返工整改</div><div class="qc-stat-num">5</div></div>
                 <div class="qc-stat-card" data-stat="in-pool" data-state-target="in-pool"><div class="qc-stat-name">入池</div><div class="qc-stat-num">8</div></div>
@@ -501,39 +443,10 @@
         <div class="crumb">☰ 标注质检 〉 质检任务列表</div>
         <section class="surface tabbar"><div class="tab">质检任务</div></section>
         <section class="page-panel active" data-page-panel="round3">
-          <section class="state-view active" data-state-group="round3" data-state-panel="all">
+          <section class="state-view active" data-state-group="round3" data-state-panel="pending">
             <section class="proto-list-shell">
             <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
-              <div class="qc-stat-grid" data-columns="5">
-                <div class="qc-stat-card active" data-stat="all" data-state-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">31</div></div>
-                <div class="qc-stat-card" data-stat="pending" data-state-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">14</div></div>
-                <div class="qc-stat-card" data-stat="rework" data-state-target="rework"><div class="qc-stat-name">返工整改</div><div class="qc-stat-num">5</div></div>
-                <div class="qc-stat-card" data-stat="in-pool" data-state-target="in-pool"><div class="qc-stat-name">入池</div><div class="qc-stat-num">8</div></div>
-                <div class="qc-stat-card" data-stat="no-pool" data-state-target="no-pool"><div class="qc-stat-name">不入池</div><div class="qc-stat-num">4</div></div>
-              </div>
-              <div class="proto-filter-bar">
-                <select class="control select-control"><option>项目类型</option><option>住宅装修</option><option>小型工程</option><option>零星作业</option></select>
-                <select class="control select-control"><option>草稿状态</option><option>有草稿</option><option>无草稿</option></select>
-                <button class="btn btn-primary" type="button">查询</button>
-                <button class="btn btn-ghost" type="button">重置</button>
-              </div>
-              <div class="image-task-grid">
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">三检</span><span class="qc-chip" data-variant="pending">待质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">住宅装修 / IMG_20260510_041</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 5 / 退回 0 / 无效 3</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>2 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>二检已裁决</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">三检</span><span class="qc-chip" data-variant="rework">返工整改</span></div><span class="draft-tag">返工未闭环</span></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">零星作业 / IMG_20260510_086</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 4 / 退回 2 / 无效 1</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>2 个</strong></div><div>是否存在返工：<strong>是</strong></div><div>前序回流：<strong>返工整改待提交</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">三检</span><span class="qc-chip" data-variant="in-pool">入池</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">零星作业 / IMG_20260510_071</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 10 / 退回 0 / 无效 0</div><div class="qc-meta"><div>来源标注人数：<strong>4 人</strong></div><div>待处理对象数：<strong>0 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>三检终局完成</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">三检</span><span class="qc-chip" data-variant="no-pool">不入池</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">住宅装修 / IMG_20260510_073</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 3 / 退回 0 / 无效 6</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>0 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>三检终局完成</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">三检</span><span class="qc-chip" data-variant="pending">待质检</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">小型工程 / IMG_20260510_081</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 6 / 退回 1 / 无效 2</div><div class="qc-meta"><div>来源标注人数：<strong>4 人</strong></div><div>待处理对象数：<strong>2 个</strong></div><div>是否存在返工：<strong>是</strong></div><div>前序回流：<strong>二检回流 1 次</strong></div></div></div></article>
-                <article class="image-card"><div class="image-thumb"><div class="qc-card-top"><div class="qc-tag-group"><span class="qc-chip">三检</span><span class="qc-chip" data-variant="in-pool">入池</span></div></div></div><div class="image-card-body"><div class="image-card-title"><span class="project-type">住宅装修 / IMG_20260510_072</span><span class="qc-link">查看摘要</span></div><div class="qc-summary">通过 9 / 退回 0 / 无效 0</div><div class="qc-meta"><div>来源标注人数：<strong>3 人</strong></div><div>待处理对象数：<strong>0 个</strong></div><div>是否存在返工：<strong>否</strong></div><div>前序回流：<strong>三检终局完成</strong></div></div></div></article>
-              </div>
-              <div class="proto-pagination"><span>共 31 张</span><span class="proto-page-size">24条/页</span><span>‹</span><span class="proto-page-current">1</span><span>2</span><span>›</span><span>前往</span><input class="proto-page-jump-input" value="1" /><span>页</span></div>
-            </section>
-          </section>
-
-          <section class="state-view" data-state-group="round3" data-state-panel="pending">
-            <section class="proto-list-shell">
-            <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
-              <div class="qc-stat-grid" data-columns="5">
-                <div class="qc-stat-card" data-stat="all" data-state-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">31</div></div>
+              <div class="qc-stat-grid" data-columns="4">
                 <div class="qc-stat-card active" data-stat="pending" data-state-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">14</div></div>
                 <div class="qc-stat-card" data-stat="rework" data-state-target="rework"><div class="qc-stat-name">返工整改</div><div class="qc-stat-num">5</div></div>
                 <div class="qc-stat-card" data-stat="in-pool" data-state-target="in-pool"><div class="qc-stat-name">入池</div><div class="qc-stat-num">8</div></div>
@@ -553,8 +466,7 @@
           <section class="state-view" data-state-group="round3" data-state-panel="rework">
             <section class="proto-list-shell">
             <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
-              <div class="qc-stat-grid" data-columns="5">
-                <div class="qc-stat-card" data-stat="all" data-state-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">31</div></div>
+              <div class="qc-stat-grid" data-columns="4">
                 <div class="qc-stat-card" data-stat="pending" data-state-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">14</div></div>
                 <div class="qc-stat-card active" data-stat="rework" data-state-target="rework"><div class="qc-stat-name">返工整改</div><div class="qc-stat-num">5</div></div>
                 <div class="qc-stat-card" data-stat="in-pool" data-state-target="in-pool"><div class="qc-stat-name">入池</div><div class="qc-stat-num">8</div></div>
@@ -572,8 +484,7 @@
           <section class="state-view" data-state-group="round3" data-state-panel="in-pool">
             <section class="proto-list-shell">
             <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
-              <div class="qc-stat-grid" data-columns="5">
-                <div class="qc-stat-card" data-stat="all" data-state-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">31</div></div>
+              <div class="qc-stat-grid" data-columns="4">
                 <div class="qc-stat-card" data-stat="pending" data-state-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">14</div></div>
                 <div class="qc-stat-card" data-stat="rework" data-state-target="rework"><div class="qc-stat-name">返工整改</div><div class="qc-stat-num">5</div></div>
                 <div class="qc-stat-card active" data-stat="in-pool" data-state-target="in-pool"><div class="qc-stat-name">入池</div><div class="qc-stat-num">8</div></div>
@@ -591,8 +502,7 @@
           <section class="state-view" data-state-group="round3" data-state-panel="no-pool">
             <section class="proto-list-shell">
             <div class="proto-list-head"><h3 class="proto-list-title">质检任务列表</h3></div>
-              <div class="qc-stat-grid" data-columns="5">
-                <div class="qc-stat-card" data-stat="all" data-state-target="all"><div class="qc-stat-name">全部</div><div class="qc-stat-num">31</div></div>
+              <div class="qc-stat-grid" data-columns="4">
                 <div class="qc-stat-card" data-stat="pending" data-state-target="pending"><div class="qc-stat-name">待质检</div><div class="qc-stat-num">14</div></div>
                 <div class="qc-stat-card" data-stat="rework" data-state-target="rework"><div class="qc-stat-name">返工整改</div><div class="qc-stat-num">5</div></div>
                 <div class="qc-stat-card" data-stat="in-pool" data-state-target="in-pool"><div class="qc-stat-name">入池</div><div class="qc-stat-num">8</div></div>
