@@ -10,6 +10,11 @@
       overflow: auto;
       padding-bottom: 24px;
     }
+    .detail-filter-board .filter-search {
+      width: 180px;
+      min-width: 180px;
+      flex: 0 0 180px;
+    }
     .prototype-stage {
       display: none;
     }
@@ -245,18 +250,8 @@
     .sample-count {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
       color: #28466b;
       font-weight: 700;
-    }
-    .sample-chip::before,
-    .sample-count::before {
-      content: "";
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--brand);
-      box-shadow: 0 0 0 4px rgba(47, 132, 231, 0.12);
     }
     .detail-board {
       background: #fff;
@@ -490,12 +485,6 @@
                   <option>2026年上半年</option>
                 </select>
                 <input class="control search-control filter-search" type="text" placeholder="标注人员姓名" />
-                <select class="control select-control filter-select">
-                  <option selected>项目类型</option>
-                  <option>住宅装修</option>
-                  <option>小型工程</option>
-                  <option>零星作业</option>
-                </select>
                 <button class="btn btn-primary" type="button">查询</button>
                 <button class="btn btn-ghost" type="button">重置</button>
               </section>
@@ -509,40 +498,34 @@
               <div class="detail-table-wrap">
                 <table class="detail-table">
                   <colgroup>
-                    <col style="width: 18%;" />
-                    <col style="width: 11%;" />
-                    <col style="width: 12%;" />
-                    <col style="width: 11%;" />
-                    <col style="width: 11%;" />
-                    <col style="width: 10%;" />
-                    <col style="width: 11%;" />
-                    <col style="width: 8%;" />
-                    <col style="width: 8%;" />
+                    <col style="width: 16.66%;" />
+                    <col style="width: 16.66%;" />
+                    <col style="width: 16.66%;" />
+                    <col style="width: 16.66%;" />
+                    <col style="width: 16.66%;" />
+                    <col style="width: 16.66%;" />
                   </colgroup>
                   <thead>
                     <tr>
+                      <th>排名</th>
                       <th>标注人员</th>
                       <th>统计周期</th>
+                      <th>对象数<span class="sort-hint">↕</span></th>
                       <th>总分<span class="sort-hint">↓</span></th>
-                      <th>提交质量分</th>
-                      <th>纳入统计对象数<span class="sort-hint">↕</span></th>
-                      <th>提交得分均值</th>
-                      <th>对象评分满分口径</th>
                       <th>最近评分时间<span class="sort-hint">↕</span></th>
-                      <th>备注</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank top-1">1</span><div class="person-cell"><span class="person-name">张晓岚</span><span class="person-sub">本周期纳入 42 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">92<small>/ 100</small></span></td><td><span class="metric-value">92<small>/ 100</small></span></td><td><span class="sample-count">42</span></td><td><span class="metric-value">9.2<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-10 18:42</td><td><span class="metric-sub">含 5 个返工新增对象。</span></td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank top-2">2</span><div class="person-cell"><span class="person-name">李文卓</span><span class="person-sub">本周期纳入 38 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">88<small>/ 100</small></span></td><td><span class="metric-value">88<small>/ 100</small></span></td><td><span class="sample-count">38</span></td><td><span class="metric-value">8.8<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-10 17:06</td><td><span class="metric-sub">后续返工不回算本次。</span></td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank top-3">3</span><div class="person-cell"><span class="person-name">陈艺宁</span><span class="person-sub">本周期纳入 31 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">84<small>/ 100</small></span></td><td><span class="metric-value">84<small>/ 100</small></span></td><td><span class="sample-count">31</span></td><td><span class="metric-value">8.4<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-10 15:28</td><td><span class="metric-sub">未评分对象未纳入。</span></td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank">4</span><div class="person-cell"><span class="person-name">周若清</span><span class="person-sub">本周期纳入 27 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">81<small>/ 100</small></span></td><td><span class="metric-value">81<small>/ 100</small></span></td><td><span class="sample-count">27</span></td><td><span class="metric-value">8.1<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-09 19:41</td><td><span class="metric-sub">不按图片平均。</span></td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank">5</span><div class="person-cell"><span class="person-name">林知远</span><span class="person-sub">本周期纳入 25 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">80<small>/ 100</small></span></td><td><span class="metric-value">80<small>/ 100</small></span></td><td><span class="sample-count">25</span></td><td><span class="metric-value">8.0<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-09 17:25</td><td><span class="metric-sub">新增对象独立记分。</span></td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank">6</span><div class="person-cell"><span class="person-name">赵明曦</span><span class="person-sub">本周期纳入 23 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">78<small>/ 100</small></span></td><td><span class="metric-value">78<small>/ 100</small></span></td><td><span class="sample-count">23</span></td><td><span class="metric-value">7.8<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-09 16:02</td><td><span class="metric-sub">样本量中等。</span></td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank">7</span><div class="person-cell"><span class="person-name">王雅静</span><span class="person-sub">本周期纳入 21 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">77<small>/ 100</small></span></td><td><span class="metric-value">77<small>/ 100</small></span></td><td><span class="sample-count">21</span></td><td><span class="metric-value">7.7<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-08 18:11</td><td><span class="metric-sub">责任链口径清晰。</span></td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank">8</span><div class="person-cell"><span class="person-name">许聿航</span><span class="person-sub">本周期纳入 20 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">75<small>/ 100</small></span></td><td><span class="metric-value">75<small>/ 100</small></span></td><td><span class="sample-count">20</span></td><td><span class="metric-value">7.5<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-08 16:48</td><td><span class="metric-sub">当前周期略有提升。</span></td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank">9</span><div class="person-cell"><span class="person-name">何清妍</span><span class="person-sub">本周期纳入 18 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">73<small>/ 100</small></span></td><td><span class="metric-value">73<small>/ 100</small></span></td><td><span class="sample-count">18</span></td><td><span class="metric-value">7.3<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-08 14:05</td><td><span class="metric-sub">仅统计已被一检评分对象。</span></td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank">10</span><div class="person-cell"><span class="person-name">宋亦晨</span><span class="person-sub">本周期纳入 17 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">71<small>/ 100</small></span></td><td><span class="metric-value">71<small>/ 100</small></span></td><td><span class="sample-count">17</span></td><td><span class="metric-value">7.1<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-08 11:52</td><td><span class="metric-sub">当前位于榜单尾部。</span></td></tr>
+                    <tr><td><span class="person-rank top-1">1</span></td><td><span class="person-name">张晓岚</span></td><td>2026年05月</td><td><span class="sample-count">42</span></td><td><span class="metric-value">92<small>/ 100</small></span></td><td>05-10 18:42</td></tr>
+                    <tr><td><span class="person-rank top-2">2</span></td><td><span class="person-name">李文卓</span></td><td>2026年05月</td><td><span class="sample-count">38</span></td><td><span class="metric-value">88<small>/ 100</small></span></td><td>05-10 17:06</td></tr>
+                    <tr><td><span class="person-rank top-3">3</span></td><td><span class="person-name">陈艺宁</span></td><td>2026年05月</td><td><span class="sample-count">31</span></td><td><span class="metric-value">84<small>/ 100</small></span></td><td>05-10 15:28</td></tr>
+                    <tr><td><span class="person-rank">4</span></td><td><span class="person-name">周若清</span></td><td>2026年05月</td><td><span class="sample-count">27</span></td><td><span class="metric-value">81<small>/ 100</small></span></td><td>05-09 19:41</td></tr>
+                    <tr><td><span class="person-rank">5</span></td><td><span class="person-name">林知远</span></td><td>2026年05月</td><td><span class="sample-count">25</span></td><td><span class="metric-value">80<small>/ 100</small></span></td><td>05-09 17:25</td></tr>
+                    <tr><td><span class="person-rank">6</span></td><td><span class="person-name">赵明曦</span></td><td>2026年05月</td><td><span class="sample-count">23</span></td><td><span class="metric-value">78<small>/ 100</small></span></td><td>05-09 16:02</td></tr>
+                    <tr><td><span class="person-rank">7</span></td><td><span class="person-name">王雅静</span></td><td>2026年05月</td><td><span class="sample-count">21</span></td><td><span class="metric-value">77<small>/ 100</small></span></td><td>05-08 18:11</td></tr>
+                    <tr><td><span class="person-rank">8</span></td><td><span class="person-name">许聿航</span></td><td>2026年05月</td><td><span class="sample-count">20</span></td><td><span class="metric-value">75<small>/ 100</small></span></td><td>05-08 16:48</td></tr>
+                    <tr><td><span class="person-rank">9</span></td><td><span class="person-name">何清妍</span></td><td>2026年05月</td><td><span class="sample-count">18</span></td><td><span class="metric-value">73<small>/ 100</small></span></td><td>05-08 14:05</td></tr>
+                    <tr><td><span class="person-rank">10</span></td><td><span class="person-name">宋亦晨</span></td><td>2026年05月</td><td><span class="sample-count">17</span></td><td><span class="metric-value">71<small>/ 100</small></span></td><td>05-08 11:52</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -586,12 +569,6 @@
                   <option>一检</option>
                   <option>二检</option>
                 </select>
-                <select class="control select-control filter-select">
-                  <option selected>项目类型</option>
-                  <option>住宅装修</option>
-                  <option>小型工程</option>
-                  <option>零星作业</option>
-                </select>
                 <button class="btn btn-primary" type="button">查询</button>
                 <button class="btn btn-ghost" type="button">重置</button>
               </section>
@@ -605,40 +582,36 @@
               <div class="detail-table-wrap">
                 <table class="detail-table">
                   <colgroup>
-                    <col style="width: 18%;" />
-                    <col style="width: 9%;" />
-                    <col style="width: 11%;" />
-                    <col style="width: 11%;" />
-                    <col style="width: 12%;" />
-                    <col style="width: 10%;" />
-                    <col style="width: 11%;" />
-                    <col style="width: 10%;" />
-                    <col style="width: 8%;" />
+                    <col style="width: 14.28%;" />
+                    <col style="width: 14.28%;" />
+                    <col style="width: 14.28%;" />
+                    <col style="width: 14.28%;" />
+                    <col style="width: 14.28%;" />
+                    <col style="width: 14.28%;" />
+                    <col style="width: 14.28%;" />
                   </colgroup>
                   <thead>
                     <tr>
+                      <th>排名</th>
                       <th>质检人员</th>
                       <th>质检角色</th>
                       <th>统计周期</th>
+                      <th>对象数<span class="sort-hint">↕</span></th>
                       <th>总分<span class="sort-hint">↓</span></th>
-                      <th>裁决准确分</th>
-                      <th>责任记录数<span class="sort-hint">↕</span></th>
-                      <th>平均下一轮复核标准化分</th>
-                      <th>平均裁决一致性系数</th>
-                      <th>最近复核时间<span class="sort-hint">↕</span></th>
+                      <th>最近评分时间<span class="sort-hint">↕</span></th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank top-1">1</span><div class="person-cell"><span class="person-name">周复核</span><span class="person-sub">当前责任链仅对下一轮复核结果负责</span></div></div></td><td><span class="proto-tag role-tag">二检</span></td><td>2026年第一季度</td><td><span class="metric-value">91<small>/ 100</small></span></td><td><span class="metric-value">91<small>/ 100</small></span></td><td><span class="sample-count">74</span></td><td><span class="metric-value">94<small>/ 100</small></span></td><td><span class="metric-value">0.97</span></td><td>05-10 18:58</td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank top-2">2</span><div class="person-cell"><span class="person-name">王质检</span><span class="person-sub">返工后新责任链不回算旧轮次</span></div></div></td><td><span class="proto-tag role-tag">一检</span></td><td>2026年第一季度</td><td><span class="metric-value">88<small>/ 100</small></span></td><td><span class="metric-value">88<small>/ 100</small></span></td><td><span class="sample-count">83</span></td><td><span class="metric-value">90<small>/ 100</small></span></td><td><span class="metric-value">0.96</span></td><td>05-10 17:21</td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank top-3">3</span><div class="person-cell"><span class="person-name">许明川</span><span class="person-sub">不含三检终审与抽检任务</span></div></div></td><td><span class="proto-tag role-tag">二检</span></td><td>2026年第一季度</td><td><span class="metric-value">84<small>/ 100</small></span></td><td><span class="metric-value">84<small>/ 100</small></span></td><td><span class="sample-count">61</span></td><td><span class="metric-value">86<small>/ 100</small></span></td><td><span class="metric-value">0.93</span></td><td>05-09 19:48</td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank">4</span><div class="person-cell"><span class="person-name">林宥衡</span><span class="person-sub">整改后进入新责任链</span></div></div></td><td><span class="proto-tag role-tag">一检</span></td><td>2026年第一季度</td><td><span class="metric-value">82<small>/ 100</small></span></td><td><span class="metric-value">82<small>/ 100</small></span></td><td><span class="sample-count">57</span></td><td><span class="metric-value">84<small>/ 100</small></span></td><td><span class="metric-value">0.92</span></td><td>05-09 18:26</td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank">5</span><div class="person-cell"><span class="person-name">沈嘉屹</span><span class="person-sub">一检责任链整体稳定</span></div></div></td><td><span class="proto-tag role-tag">一检</span></td><td>2026年第一季度</td><td><span class="metric-value">80<small>/ 100</small></span></td><td><span class="metric-value">80<small>/ 100</small></span></td><td><span class="sample-count">54</span></td><td><span class="metric-value">82<small>/ 100</small></span></td><td><span class="metric-value">0.90</span></td><td>05-09 17:03</td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank">6</span><div class="person-cell"><span class="person-name">赵复衡</span><span class="person-sub">样本量较大但波动略高</span></div></div></td><td><span class="proto-tag role-tag">二检</span></td><td>2026年第一季度</td><td><span class="metric-value">79<small>/ 100</small></span></td><td><span class="metric-value">79<small>/ 100</small></span></td><td><span class="sample-count">50</span></td><td><span class="metric-value">81<small>/ 100</small></span></td><td><span class="metric-value">0.89</span></td><td>05-09 15:48</td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank">7</span><div class="person-cell"><span class="person-name">高奕辰</span><span class="person-sub">当前周期进入前十</span></div></div></td><td><span class="proto-tag role-tag">二检</span></td><td>2026年第一季度</td><td><span class="metric-value">77<small>/ 100</small></span></td><td><span class="metric-value">77<small>/ 100</small></span></td><td><span class="sample-count">46</span></td><td><span class="metric-value">79<small>/ 100</small></span></td><td><span class="metric-value">0.88</span></td><td>05-08 18:36</td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank">8</span><div class="person-cell"><span class="person-name">卢文川</span><span class="person-sub">一致性系数较稳定</span></div></div></td><td><span class="proto-tag role-tag">一检</span></td><td>2026年第一季度</td><td><span class="metric-value">76<small>/ 100</small></span></td><td><span class="metric-value">76<small>/ 100</small></span></td><td><span class="sample-count">43</span></td><td><span class="metric-value">78<small>/ 100</small></span></td><td><span class="metric-value">0.87</span></td><td>05-08 16:19</td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank">9</span><div class="person-cell"><span class="person-name">顾晨皓</span><span class="person-sub">仅统计进入下一轮复核对象</span></div></div></td><td><span class="proto-tag role-tag">一检</span></td><td>2026年第一季度</td><td><span class="metric-value">74<small>/ 100</small></span></td><td><span class="metric-value">74<small>/ 100</small></span></td><td><span class="sample-count">39</span></td><td><span class="metric-value">75<small>/ 100</small></span></td><td><span class="metric-value">0.85</span></td><td>05-08 14:02</td></tr>
-                    <tr><td><div class="person-detail-cell"><span class="person-rank">10</span><div class="person-cell"><span class="person-name">姚晋川</span><span class="person-sub">当前位于榜单尾部</span></div></div></td><td><span class="proto-tag role-tag">二检</span></td><td>2026年第一季度</td><td><span class="metric-value">72<small>/ 100</small></span></td><td><span class="metric-value">72<small>/ 100</small></span></td><td><span class="sample-count">35</span></td><td><span class="metric-value">73<small>/ 100</small></span></td><td><span class="metric-value">0.83</span></td><td>05-08 11:44</td></tr>
+                    <tr><td><span class="person-rank top-1">1</span></td><td><span class="person-name">周复核</span></td><td><span class="proto-tag role-tag">二检</span></td><td>2026年05月</td><td><span class="sample-count">74</span></td><td><span class="metric-value">91<small>/ 100</small></span></td><td>2026-05-10</td></tr>
+                    <tr><td><span class="person-rank top-2">2</span></td><td><span class="person-name">王质检</span></td><td><span class="proto-tag role-tag">一检</span></td><td>2026年05月</td><td><span class="sample-count">83</span></td><td><span class="metric-value">88<small>/ 100</small></span></td><td>2026-05-10</td></tr>
+                    <tr><td><span class="person-rank top-3">3</span></td><td><span class="person-name">许明川</span></td><td><span class="proto-tag role-tag">二检</span></td><td>2026年05月</td><td><span class="sample-count">61</span></td><td><span class="metric-value">84<small>/ 100</small></span></td><td>2026-05-09</td></tr>
+                    <tr><td><span class="person-rank">4</span></td><td><span class="person-name">林宥衡</span></td><td><span class="proto-tag role-tag">一检</span></td><td>2026年05月</td><td><span class="sample-count">57</span></td><td><span class="metric-value">82<small>/ 100</small></span></td><td>2026-05-09</td></tr>
+                    <tr><td><span class="person-rank">5</span></td><td><span class="person-name">沈嘉屹</span></td><td><span class="proto-tag role-tag">一检</span></td><td>2026年05月</td><td><span class="sample-count">54</span></td><td><span class="metric-value">80<small>/ 100</small></span></td><td>2026-05-09</td></tr>
+                    <tr><td><span class="person-rank">6</span></td><td><span class="person-name">赵复衡</span></td><td><span class="proto-tag role-tag">二检</span></td><td>2026年05月</td><td><span class="sample-count">50</span></td><td><span class="metric-value">79<small>/ 100</small></span></td><td>2026-05-09</td></tr>
+                    <tr><td><span class="person-rank">7</span></td><td><span class="person-name">高奕辰</span></td><td><span class="proto-tag role-tag">二检</span></td><td>2026年05月</td><td><span class="sample-count">46</span></td><td><span class="metric-value">77<small>/ 100</small></span></td><td>2026-05-08</td></tr>
+                    <tr><td><span class="person-rank">8</span></td><td><span class="person-name">卢文川</span></td><td><span class="proto-tag role-tag">一检</span></td><td>2026年05月</td><td><span class="sample-count">43</span></td><td><span class="metric-value">76<small>/ 100</small></span></td><td>2026-05-08</td></tr>
+                    <tr><td><span class="person-rank">9</span></td><td><span class="person-name">顾晨皓</span></td><td><span class="proto-tag role-tag">一检</span></td><td>2026年05月</td><td><span class="sample-count">39</span></td><td><span class="metric-value">74<small>/ 100</small></span></td><td>2026-05-08</td></tr>
+                    <tr><td><span class="person-rank">10</span></td><td><span class="person-name">姚晋川</span></td><td><span class="proto-tag role-tag">二检</span></td><td>2026年05月</td><td><span class="sample-count">35</span></td><td><span class="metric-value">72<small>/ 100</small></span></td><td>2026-05-08</td></tr>
                   </tbody>
                 </table>
               </div>
