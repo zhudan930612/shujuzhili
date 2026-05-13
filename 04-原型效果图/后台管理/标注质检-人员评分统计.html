@@ -6,28 +6,38 @@
   <title>标注质检-人员评分统计</title>
   <link rel="stylesheet" href="./assets/prototype.css" />
   <style>
+    .workspace {
+      overflow: auto;
+      padding-bottom: 24px;
+    }
     .prototype-stage {
       display: none;
     }
     .prototype-stage.active {
       display: block;
     }
-    .leaderboard-page {
+    .score-page-shell {
       display: flex;
       flex-direction: column;
+      gap: 14px;
+    }
+    .leaderboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 14px;
     }
     .leaderboard-card {
       background: #fff;
       border: 1px solid #e2ebf4;
       box-shadow: var(--shadow);
+      min-width: 0;
     }
     .leaderboard-head {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 16px;
-      padding: 18px 22px 14px;
+      gap: 14px;
+      padding: 18px 20px 14px;
       border-bottom: 1px solid #edf2f7;
       background: linear-gradient(180deg, #fbfdff 0%, #f6faff 100%);
     }
@@ -35,6 +45,7 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
+      min-width: 0;
     }
     .leaderboard-title {
       margin: 0;
@@ -45,12 +56,83 @@
       font-size: 18px;
       font-weight: 700;
     }
-    .leaderboard-title::before {
+    .leaderboard-title::before,
+    .detail-title::before {
       content: "";
       width: 4px;
       height: 18px;
       border-radius: 999px;
       background: var(--brand);
+    }
+    .leaderboard-rule-tip {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border: 1px solid #c8d8ec;
+      border-radius: 50%;
+      background: #f7fbff;
+      color: #5a7695;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+      cursor: help;
+      flex-shrink: 0;
+    }
+    .leaderboard-rule-tip:hover,
+    .leaderboard-rule-tip:focus-visible {
+      border-color: #9fc0ea;
+      color: #1f5daa;
+      outline: none;
+    }
+    .leaderboard-rule-tip::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 12px);
+      transform: translateX(-50%);
+      width: 320px;
+      padding: 10px 12px;
+      border: 1px solid #d9e6f4;
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 12px 26px rgba(18, 51, 95, 0.12);
+      color: #51677f;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.7;
+      white-space: normal;
+      text-align: left;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 160ms ease;
+      z-index: 8;
+    }
+    .leaderboard-rule-tip::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 4px);
+      transform: translateX(-50%) rotate(45deg);
+      width: 10px;
+      height: 10px;
+      border-left: 1px solid #d9e6f4;
+      border-top: 1px solid #d9e6f4;
+      background: rgba(255, 255, 255, 0.98);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 160ms ease;
+      z-index: 9;
+    }
+    .leaderboard-rule-tip:hover::after,
+    .leaderboard-rule-tip:hover::before,
+    .leaderboard-rule-tip:focus-visible::after,
+    .leaderboard-rule-tip:focus-visible::before {
+      opacity: 1;
+      visibility: visible;
     }
     .leaderboard-note {
       color: #6f8297;
@@ -58,14 +140,16 @@
       line-height: 1.6;
     }
     .leaderboard-table-wrap {
-      padding: 0 22px 8px;
+      padding: 0 20px 8px;
     }
-    .leaderboard-table {
+    .leaderboard-table,
+    .detail-table {
       width: 100%;
-      border-collapse: collapse;
       table-layout: fixed;
+      border-collapse: collapse;
     }
-    .leaderboard-table th {
+    .leaderboard-table th,
+    .detail-table th {
       padding: 14px 12px;
       background: var(--table-head);
       color: #22344b;
@@ -74,17 +158,20 @@
       text-align: left;
       white-space: nowrap;
     }
-    .leaderboard-table td {
+    .leaderboard-table td,
+    .detail-table td {
       padding: 14px 12px;
       border-bottom: 1px solid #edf2f7;
       color: #405164;
       font-size: 14px;
       vertical-align: middle;
     }
-    .leaderboard-table tbody tr:nth-child(even) td {
+    .leaderboard-table tbody tr:nth-child(even) td,
+    .detail-table tbody tr:nth-child(even) td {
       background: #fafcff;
     }
-    .rank-badge {
+    .rank-badge,
+    .person-rank {
       width: 30px;
       height: 30px;
       border-radius: 50%;
@@ -95,16 +182,20 @@
       font-weight: 700;
       color: #47627d;
       background: #edf3fb;
+      flex-shrink: 0;
     }
-    .rank-badge.top-1 {
+    .rank-badge.top-1,
+    .person-rank.top-1 {
       background: linear-gradient(180deg, #fff7d8 0%, #f8e6a7 100%);
       color: #9f6a08;
     }
-    .rank-badge.top-2 {
+    .rank-badge.top-2,
+    .person-rank.top-2 {
       background: linear-gradient(180deg, #f4f8fd 0%, #dfe8f4 100%);
       color: #58708a;
     }
-    .rank-badge.top-3 {
+    .rank-badge.top-3,
+    .person-rank.top-3 {
       background: linear-gradient(180deg, #fff0e6 0%, #f4d1bb 100%);
       color: #a45c25;
     }
@@ -112,6 +203,12 @@
       display: flex;
       flex-direction: column;
       gap: 4px;
+      min-width: 0;
+    }
+    .person-detail-cell {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
       min-width: 0;
     }
     .person-name {
@@ -128,7 +225,8 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .score-value {
+    .score-value,
+    .metric-value {
       display: inline-flex;
       align-items: baseline;
       gap: 4px;
@@ -137,19 +235,22 @@
       font-weight: 700;
       white-space: nowrap;
     }
-    .score-value small {
+    .score-value small,
+    .metric-value small {
       color: #8092a7;
       font-size: 11px;
       font-weight: 700;
     }
-    .sample-chip {
+    .sample-chip,
+    .sample-count {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       color: #28466b;
       font-weight: 700;
     }
-    .sample-chip::before {
+    .sample-chip::before,
+    .sample-count::before {
       content: "";
       width: 8px;
       height: 8px;
@@ -157,43 +258,98 @@
       background: var(--brand);
       box-shadow: 0 0 0 4px rgba(47, 132, 231, 0.12);
     }
-    .leaderboard-foot {
+    .detail-board {
+      background: #fff;
+      border: 1px solid #e2ebf4;
+      box-shadow: var(--shadow);
+    }
+    .detail-filter-board {
+      background: #fff;
+      border: 1px solid #e2ebf4;
+      box-shadow: var(--shadow);
+    }
+    .detail-filter-board .proto-filter-bar {
+      margin: 0;
+      padding: 18px;
+      background: #f9fbfe;
+    }
+    .leaderboard-filter-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+    }
+    .leaderboard-filter-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      min-width: 0;
+      flex: 0 1 auto;
+    }
+    .leaderboard-filter-note {
+      margin-left: auto;
+      min-width: 360px;
+      max-width: 640px;
+      color: #6f8297;
+      font-size: 13px;
+      line-height: 1.6;
+      text-align: right;
+      flex: 1 1 auto;
+    }
+    .detail-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      padding: 14px 22px 18px;
-      color: #6d8095;
-      font-size: 13px;
+      gap: 14px;
+      padding: 18px 20px 14px;
     }
-    .empty-card {
-      padding: 86px 24px 96px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      color: #73869b;
-      text-align: center;
-    }
-    .empty-card strong {
-      color: #294462;
-      font-size: 16px;
-    }
-    .empty-card p {
+    .detail-title {
       margin: 0;
-      font-size: 13px;
-      line-height: 1.7;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #20334a;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .detail-table-wrap {
+      padding: 0 20px 8px;
+    }
+    .filter-search { width: 180px; }
+    .filter-select { width: 160px; }
+    .filter-cycle { width: 170px; }
+    .metric-sub {
+      display: block;
+      margin-top: 4px;
+      color: #7f90a3;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .metric-sub.nowrap {
+      white-space: nowrap;
+    }
+    .proto-tag.role-tag {
+      min-height: 28px;
+      padding: 0 12px;
+      font-size: 12px;
+    }
+    .sort-hint {
+      margin-left: 4px;
+      color: #8ca0b5;
+      font-size: 11px;
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
-  <div class="prototype-state-bar" data-prototype-switch data-prototype-default="filled">
-    <button class="active" type="button" data-prototype-button="filled">首页榜单</button>
-    <button type="button" data-prototype-button="empty">空状态</button>
+  <div class="prototype-state-bar" data-prototype-switch data-prototype-default="leaderboard-home">
+    <button class="active" type="button" data-prototype-button="leaderboard-home">排行榜页</button>
+    <button type="button" data-prototype-button="annotation-list">标注人员列表</button>
+    <button type="button" data-prototype-button="qc-list">质检人员列表</button>
   </div>
 
-  <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+  <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-score">
     <header class="topbar"></header>
     <div class="main">
       <aside class="sidebar"></aside>
@@ -203,155 +359,298 @@
           <div class="tab active">人员评分统计</div>
         </section>
 
-        <section class="prototype-stage active" data-prototype-panel="filled">
-          <div class="leaderboard-page">
-            <section class="leaderboard-card">
-              <div class="leaderboard-head">
-                <div class="leaderboard-title-wrap">
-                  <h3 class="leaderboard-title">标注人员排行榜</h3>
-                  <div class="leaderboard-note">当前周期内按提交质量分从高到低展示前 10 名，样本数为纳入统计的对象数。</div>
+        <section class="prototype-stage active" data-prototype-panel="leaderboard-home">
+          <div class="score-page-shell">
+            <section class="detail-filter-board">
+              <section class="proto-filter-bar">
+                <div class="leaderboard-filter-row">
+                  <div class="leaderboard-filter-controls">
+                    <select class="control select-control filter-select">
+                      <option selected>统计周期类型</option>
+                      <option>月度</option>
+                      <option>季度</option>
+                      <option>半年度</option>
+                      <option>年度</option>
+                    </select>
+                    <select class="control select-control filter-cycle">
+                      <option selected>统计周期</option>
+                      <option>2026年05月</option>
+                      <option>2026年04月</option>
+                      <option>2026年第一季度</option>
+                      <option>2026年上半年</option>
+                    </select>
+                    <button class="btn btn-primary" type="button">查询</button>
+                    <button class="btn btn-ghost" type="button">重置</button>
+                  </div>
+                  <div class="leaderboard-filter-note">当前周期内按总分排序展示前 10 名，点击“查看全部”进入明细列表。</div>
                 </div>
-                <button class="btn btn-ghost" type="button">查看全部</button>
-              </div>
-              <div class="leaderboard-table-wrap">
-                <table class="leaderboard-table">
-                  <colgroup>
-                    <col style="width: 12%;" />
-                    <col style="width: 40%;" />
-                    <col style="width: 24%;" />
-                    <col style="width: 24%;" />
-                  </colgroup>
-                  <thead>
-                    <tr>
-                      <th>排名</th>
-                      <th>标注人员</th>
-                      <th>总分</th>
-                      <th>样本数</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><span class="rank-badge top-1">1</span></td>
-                      <td><div class="person-cell"><span class="person-name">张晓岚</span><span class="person-sub">本期提交质量表现稳定领先</span></div></td>
-                      <td><span class="score-value">92<small>/ 100</small></span></td>
-                      <td><span class="sample-chip">42 个对象</span></td>
-                    </tr>
-                    <tr>
-                      <td><span class="rank-badge top-2">2</span></td>
-                      <td><div class="person-cell"><span class="person-name">李文卓</span><span class="person-sub">返工提交后仍保持较高通过率</span></div></td>
-                      <td><span class="score-value">88<small>/ 100</small></span></td>
-                      <td><span class="sample-chip">38 个对象</span></td>
-                    </tr>
-                    <tr>
-                      <td><span class="rank-badge top-3">3</span></td>
-                      <td><div class="person-cell"><span class="person-name">陈艺宁</span><span class="person-sub">当前周期未计入未评分对象</span></div></td>
-                      <td><span class="score-value">84<small>/ 100</small></span></td>
-                      <td><span class="sample-chip">31 个对象</span></td>
-                    </tr>
-                    <tr><td><span class="rank-badge">4</span></td><td><div class="person-cell"><span class="person-name">周若清</span><span class="person-sub">图片均值不纳入本榜单口径</span></div></td><td><span class="score-value">81<small>/ 100</small></span></td><td><span class="sample-chip">27 个对象</span></td></tr>
-                    <tr><td><span class="rank-badge">5</span></td><td><div class="person-cell"><span class="person-name">林知远</span><span class="person-sub">返工新增对象责任链独立计分</span></div></td><td><span class="score-value">80<small>/ 100</small></span></td><td><span class="sample-chip">25 个对象</span></td></tr>
-                    <tr><td><span class="rank-badge">6</span></td><td><div class="person-cell"><span class="person-name">赵明曦</span><span class="person-sub">本期样本量中等，分数稳定</span></div></td><td><span class="score-value">78<small>/ 100</small></span></td><td><span class="sample-chip">23 个对象</span></td></tr>
-                    <tr><td><span class="rank-badge">7</span></td><td><div class="person-cell"><span class="person-name">王雅静</span><span class="person-sub">新一轮整改结果不回算此前提交</span></div></td><td><span class="score-value">77<small>/ 100</small></span></td><td><span class="sample-chip">21 个对象</span></td></tr>
-                    <tr><td><span class="rank-badge">8</span></td><td><div class="person-cell"><span class="person-name">许聿航</span><span class="person-sub">提交版本平均分略有提升</span></div></td><td><span class="score-value">75<small>/ 100</small></span></td><td><span class="sample-chip">20 个对象</span></td></tr>
-                    <tr><td><span class="rank-badge">9</span></td><td><div class="person-cell"><span class="person-name">何清妍</span><span class="person-sub">本榜单仅统计已被一检评分对象</span></div></td><td><span class="score-value">73<small>/ 100</small></span></td><td><span class="sample-chip">18 个对象</span></td></tr>
-                    <tr><td><span class="rank-badge">10</span></td><td><div class="person-cell"><span class="person-name">宋亦晨</span><span class="person-sub">当前周期处于榜单尾部</span></div></td><td><span class="score-value">71<small>/ 100</small></span></td><td><span class="sample-chip">17 个对象</span></td></tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="leaderboard-foot">
-                <span>当前展示前 10 名，完整名单进入“标注人员排行榜”。</span>
-                <span>统计口径：提交质量分</span>
-              </div>
+              </section>
             </section>
 
-            <section class="leaderboard-card">
-              <div class="leaderboard-head">
-                <div class="leaderboard-title-wrap">
-                  <h3 class="leaderboard-title">质检人员排行榜</h3>
-                  <div class="leaderboard-note">当前周期内按裁决准确分从高到低展示前 10 名，仅统计一检和二检责任记录。</div>
+            <div class="leaderboard-grid">
+              <section class="leaderboard-card">
+                <div class="leaderboard-head">
+                  <div class="leaderboard-title-wrap">
+                    <h3 class="leaderboard-title">标注人员排行榜<span class="leaderboard-rule-tip" tabindex="0" data-tip="总分=提交质量分。提交质量分=（周期内对象提交得分均值 / 对象评分满分）×100；只统计已被下一轮质检评分的对象，不按图片平均。">?</span></h3>
+                  </div>
+                  <button class="btn btn-ghost" type="button" data-go-panel="annotation-list">查看全部</button>
                 </div>
-                <button class="btn btn-ghost" type="button">查看全部</button>
+                <div class="leaderboard-table-wrap">
+                  <table class="leaderboard-table">
+                    <colgroup>
+                      <col style="width: 12%;" />
+                      <col style="width: 40%;" />
+                      <col style="width: 24%;" />
+                      <col style="width: 24%;" />
+                    </colgroup>
+                    <thead>
+                      <tr>
+                        <th>排名</th>
+                        <th>标注人员</th>
+                        <th>总分</th>
+                        <th>样本数</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td><span class="rank-badge top-1">1</span></td><td><div class="person-cell"><span class="person-name">张晓岚</span><span class="person-sub">本期提交质量表现稳定领先</span></div></td><td><span class="score-value">92<small>/ 100</small></span></td><td><span class="sample-chip">42 个对象</span></td></tr>
+                      <tr><td><span class="rank-badge top-2">2</span></td><td><div class="person-cell"><span class="person-name">李文卓</span><span class="person-sub">返工提交后仍保持较高通过率</span></div></td><td><span class="score-value">88<small>/ 100</small></span></td><td><span class="sample-chip">38 个对象</span></td></tr>
+                      <tr><td><span class="rank-badge top-3">3</span></td><td><div class="person-cell"><span class="person-name">陈艺宁</span><span class="person-sub">当前周期未计入未评分对象</span></div></td><td><span class="score-value">84<small>/ 100</small></span></td><td><span class="sample-chip">31 个对象</span></td></tr>
+                      <tr><td><span class="rank-badge">4</span></td><td><div class="person-cell"><span class="person-name">周若清</span><span class="person-sub">图片均值不纳入本榜单口径</span></div></td><td><span class="score-value">81<small>/ 100</small></span></td><td><span class="sample-chip">27 个对象</span></td></tr>
+                      <tr><td><span class="rank-badge">5</span></td><td><div class="person-cell"><span class="person-name">林知远</span><span class="person-sub">返工新增对象责任链独立计分</span></div></td><td><span class="score-value">80<small>/ 100</small></span></td><td><span class="sample-chip">25 个对象</span></td></tr>
+                      <tr><td><span class="rank-badge">6</span></td><td><div class="person-cell"><span class="person-name">赵明曦</span><span class="person-sub">本期样本量中等，分数稳定</span></div></td><td><span class="score-value">78<small>/ 100</small></span></td><td><span class="sample-chip">23 个对象</span></td></tr>
+                      <tr><td><span class="rank-badge">7</span></td><td><div class="person-cell"><span class="person-name">王雅静</span><span class="person-sub">新一轮整改结果不回算此前提交</span></div></td><td><span class="score-value">77<small>/ 100</small></span></td><td><span class="sample-chip">21 个对象</span></td></tr>
+                      <tr><td><span class="rank-badge">8</span></td><td><div class="person-cell"><span class="person-name">许聿航</span><span class="person-sub">提交版本平均分略有提升</span></div></td><td><span class="score-value">75<small>/ 100</small></span></td><td><span class="sample-chip">20 个对象</span></td></tr>
+                      <tr><td><span class="rank-badge">9</span></td><td><div class="person-cell"><span class="person-name">何清妍</span><span class="person-sub">本榜单仅统计已被一检评分对象</span></div></td><td><span class="score-value">73<small>/ 100</small></span></td><td><span class="sample-chip">18 个对象</span></td></tr>
+                      <tr><td><span class="rank-badge">10</span></td><td><div class="person-cell"><span class="person-name">宋亦晨</span><span class="person-sub">当前周期处于榜单尾部</span></div></td><td><span class="score-value">71<small>/ 100</small></span></td><td><span class="sample-chip">17 个对象</span></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+
+              <section class="leaderboard-card">
+                <div class="leaderboard-head">
+                  <div class="leaderboard-title-wrap">
+                    <h3 class="leaderboard-title">质检人员排行榜<span class="leaderboard-rule-tip" tabindex="0" data-tip="总分=裁决准确分。裁决准确分=周期内单次质检质量值均值；单次质检质量值=下一轮复核评分标准化分×裁决一致性系数；当前仅统计一检和二检。">?</span></h3>
+                  </div>
+                  <button class="btn btn-ghost" type="button" data-go-panel="qc-list">查看全部</button>
+                </div>
+                <div class="leaderboard-table-wrap">
+                  <table class="leaderboard-table">
+                    <colgroup>
+                      <col style="width: 12%;" />
+                      <col style="width: 40%;" />
+                      <col style="width: 24%;" />
+                      <col style="width: 24%;" />
+                    </colgroup>
+                    <thead>
+                      <tr>
+                        <th>排名</th>
+                        <th>质检人员</th>
+                        <th>总分</th>
+                        <th>样本数</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td><span class="rank-badge top-1">1</span></td><td><div class="person-cell"><span class="person-name">周复核</span><span class="person-sub">二检责任链复核一致性最高</span></div></td><td><span class="score-value">91<small>/ 100</small></span></td><td><span class="sample-chip">74 条记录</span></td></tr>
+                      <tr><td><span class="rank-badge top-2">2</span></td><td><div class="person-cell"><span class="person-name">王质检</span><span class="person-sub">一检整体裁决准确性稳定</span></div></td><td><span class="score-value">88<small>/ 100</small></span></td><td><span class="sample-chip">83 条记录</span></td></tr>
+                      <tr><td><span class="rank-badge top-3">3</span></td><td><div class="person-cell"><span class="person-name">许明川</span><span class="person-sub">不含三检终审与抽检任务</span></div></td><td><span class="score-value">84<small>/ 100</small></span></td><td><span class="sample-chip">61 条记录</span></td></tr>
+                      <tr><td><span class="rank-badge">4</span></td><td><div class="person-cell"><span class="person-name">林宥衡</span><span class="person-sub">整改后新责任链不回算旧轮次</span></div></td><td><span class="score-value">82<small>/ 100</small></span></td><td><span class="sample-chip">57 条记录</span></td></tr>
+                      <tr><td><span class="rank-badge">5</span></td><td><div class="person-cell"><span class="person-name">沈嘉屹</span><span class="person-sub">一检复核偏差控制较好</span></div></td><td><span class="score-value">80<small>/ 100</small></span></td><td><span class="sample-chip">54 条记录</span></td></tr>
+                      <tr><td><span class="rank-badge">6</span></td><td><div class="person-cell"><span class="person-name">赵复衡</span><span class="person-sub">样本量较大但波动略高</span></div></td><td><span class="score-value">79<small>/ 100</small></span></td><td><span class="sample-chip">50 条记录</span></td></tr>
+                      <tr><td><span class="rank-badge">7</span></td><td><div class="person-cell"><span class="person-name">高奕辰</span><span class="person-sub">二检当前周期进入前十</span></div></td><td><span class="score-value">77<small>/ 100</small></span></td><td><span class="sample-chip">46 条记录</span></td></tr>
+                      <tr><td><span class="rank-badge">8</span></td><td><div class="person-cell"><span class="person-name">卢文川</span><span class="person-sub">一致性系数整体稳定</span></div></td><td><span class="score-value">76<small>/ 100</small></span></td><td><span class="sample-chip">43 条记录</span></td></tr>
+                      <tr><td><span class="rank-badge">9</span></td><td><div class="person-cell"><span class="person-name">顾晨皓</span><span class="person-sub">仅统计已进入下一轮复核对象</span></div></td><td><span class="score-value">74<small>/ 100</small></span></td><td><span class="sample-chip">39 条记录</span></td></tr>
+                      <tr><td><span class="rank-badge">10</span></td><td><div class="person-cell"><span class="person-name">姚晋川</span><span class="person-sub">当前周期位列榜单末位</span></div></td><td><span class="score-value">72<small>/ 100</small></span></td><td><span class="sample-chip">35 条记录</span></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section class="prototype-stage" data-prototype-panel="annotation-list">
+          <div class="score-page-shell">
+            <section class="detail-filter-board">
+              <section class="proto-filter-bar">
+                <select class="control select-control filter-select">
+                  <option selected>统计周期类型</option>
+                  <option>月度</option>
+                  <option>季度</option>
+                  <option>半年度</option>
+                  <option>年度</option>
+                </select>
+                <select class="control select-control filter-cycle">
+                  <option selected>统计周期</option>
+                  <option>2026年05月</option>
+                  <option>2026年04月</option>
+                  <option>2026年第一季度</option>
+                  <option>2026年上半年</option>
+                </select>
+                <input class="control search-control filter-search" type="text" placeholder="标注人员姓名" />
+                <select class="control select-control filter-select">
+                  <option selected>项目类型</option>
+                  <option>住宅装修</option>
+                  <option>小型工程</option>
+                  <option>零星作业</option>
+                </select>
+                <button class="btn btn-primary" type="button">查询</button>
+                <button class="btn btn-ghost" type="button">重置</button>
+              </section>
+            </section>
+
+            <section class="proto-list-shell detail-board">
+              <div class="detail-head">
+                <h3 class="detail-title">标注人员明细列表</h3>
+                <button class="btn btn-ghost" type="button" data-go-panel="leaderboard-home">返回排行榜</button>
               </div>
-              <div class="leaderboard-table-wrap">
-                <table class="leaderboard-table">
+              <div class="detail-table-wrap">
+                <table class="detail-table">
                   <colgroup>
+                    <col style="width: 18%;" />
+                    <col style="width: 11%;" />
                     <col style="width: 12%;" />
-                    <col style="width: 40%;" />
-                    <col style="width: 24%;" />
-                    <col style="width: 24%;" />
+                    <col style="width: 11%;" />
+                    <col style="width: 11%;" />
+                    <col style="width: 10%;" />
+                    <col style="width: 11%;" />
+                    <col style="width: 8%;" />
+                    <col style="width: 8%;" />
                   </colgroup>
                   <thead>
                     <tr>
-                      <th>排名</th>
-                      <th>质检人员</th>
-                      <th>总分</th>
-                      <th>样本数</th>
+                      <th>标注人员</th>
+                      <th>统计周期</th>
+                      <th>总分<span class="sort-hint">↓</span></th>
+                      <th>提交质量分</th>
+                      <th>纳入统计对象数<span class="sort-hint">↕</span></th>
+                      <th>提交得分均值</th>
+                      <th>对象评分满分口径</th>
+                      <th>最近评分时间<span class="sort-hint">↕</span></th>
+                      <th>备注</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td><span class="rank-badge top-1">1</span></td>
-                      <td><div class="person-cell"><span class="person-name">周复核</span><span class="person-sub">二检责任链复核一致性最高</span></div></td>
-                      <td><span class="score-value">91<small>/ 100</small></span></td>
-                      <td><span class="sample-chip">74 条记录</span></td>
-                    </tr>
-                    <tr>
-                      <td><span class="rank-badge top-2">2</span></td>
-                      <td><div class="person-cell"><span class="person-name">王质检</span><span class="person-sub">一检整体裁决准确性稳定</span></div></td>
-                      <td><span class="score-value">88<small>/ 100</small></span></td>
-                      <td><span class="sample-chip">83 条记录</span></td>
-                    </tr>
-                    <tr>
-                      <td><span class="rank-badge top-3">3</span></td>
-                      <td><div class="person-cell"><span class="person-name">许明川</span><span class="person-sub">不含三检终审与抽检任务</span></div></td>
-                      <td><span class="score-value">84<small>/ 100</small></span></td>
-                      <td><span class="sample-chip">61 条记录</span></td>
-                    </tr>
-                    <tr><td><span class="rank-badge">4</span></td><td><div class="person-cell"><span class="person-name">林宥衡</span><span class="person-sub">整改后新责任链不回算旧轮次</span></div></td><td><span class="score-value">82<small>/ 100</small></span></td><td><span class="sample-chip">57 条记录</span></td></tr>
-                    <tr><td><span class="rank-badge">5</span></td><td><div class="person-cell"><span class="person-name">沈嘉屹</span><span class="person-sub">一检复核偏差控制较好</span></div></td><td><span class="score-value">80<small>/ 100</small></span></td><td><span class="sample-chip">54 条记录</span></td></tr>
-                    <tr><td><span class="rank-badge">6</span></td><td><div class="person-cell"><span class="person-name">赵复衡</span><span class="person-sub">样本量较大但波动略高</span></div></td><td><span class="score-value">79<small>/ 100</small></span></td><td><span class="sample-chip">50 条记录</span></td></tr>
-                    <tr><td><span class="rank-badge">7</span></td><td><div class="person-cell"><span class="person-name">高奕辰</span><span class="person-sub">二检当前周期进入前十</span></div></td><td><span class="score-value">77<small>/ 100</small></span></td><td><span class="sample-chip">46 条记录</span></td></tr>
-                    <tr><td><span class="rank-badge">8</span></td><td><div class="person-cell"><span class="person-name">卢文川</span><span class="person-sub">一致性系数整体稳定</span></div></td><td><span class="score-value">76<small>/ 100</small></span></td><td><span class="sample-chip">43 条记录</span></td></tr>
-                    <tr><td><span class="rank-badge">9</span></td><td><div class="person-cell"><span class="person-name">顾晨皓</span><span class="person-sub">仅统计已进入下一轮复核对象</span></div></td><td><span class="score-value">74<small>/ 100</small></span></td><td><span class="sample-chip">39 条记录</span></td></tr>
-                    <tr><td><span class="rank-badge">10</span></td><td><div class="person-cell"><span class="person-name">姚晋川</span><span class="person-sub">当前周期位列榜单末位</span></div></td><td><span class="score-value">72<small>/ 100</small></span></td><td><span class="sample-chip">35 条记录</span></td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank top-1">1</span><div class="person-cell"><span class="person-name">张晓岚</span><span class="person-sub">本周期纳入 42 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">92<small>/ 100</small></span></td><td><span class="metric-value">92<small>/ 100</small></span></td><td><span class="sample-count">42</span></td><td><span class="metric-value">9.2<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-10 18:42</td><td><span class="metric-sub">含 5 个返工新增对象。</span></td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank top-2">2</span><div class="person-cell"><span class="person-name">李文卓</span><span class="person-sub">本周期纳入 38 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">88<small>/ 100</small></span></td><td><span class="metric-value">88<small>/ 100</small></span></td><td><span class="sample-count">38</span></td><td><span class="metric-value">8.8<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-10 17:06</td><td><span class="metric-sub">后续返工不回算本次。</span></td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank top-3">3</span><div class="person-cell"><span class="person-name">陈艺宁</span><span class="person-sub">本周期纳入 31 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">84<small>/ 100</small></span></td><td><span class="metric-value">84<small>/ 100</small></span></td><td><span class="sample-count">31</span></td><td><span class="metric-value">8.4<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-10 15:28</td><td><span class="metric-sub">未评分对象未纳入。</span></td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank">4</span><div class="person-cell"><span class="person-name">周若清</span><span class="person-sub">本周期纳入 27 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">81<small>/ 100</small></span></td><td><span class="metric-value">81<small>/ 100</small></span></td><td><span class="sample-count">27</span></td><td><span class="metric-value">8.1<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-09 19:41</td><td><span class="metric-sub">不按图片平均。</span></td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank">5</span><div class="person-cell"><span class="person-name">林知远</span><span class="person-sub">本周期纳入 25 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">80<small>/ 100</small></span></td><td><span class="metric-value">80<small>/ 100</small></span></td><td><span class="sample-count">25</span></td><td><span class="metric-value">8.0<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-09 17:25</td><td><span class="metric-sub">新增对象独立记分。</span></td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank">6</span><div class="person-cell"><span class="person-name">赵明曦</span><span class="person-sub">本周期纳入 23 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">78<small>/ 100</small></span></td><td><span class="metric-value">78<small>/ 100</small></span></td><td><span class="sample-count">23</span></td><td><span class="metric-value">7.8<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-09 16:02</td><td><span class="metric-sub">样本量中等。</span></td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank">7</span><div class="person-cell"><span class="person-name">王雅静</span><span class="person-sub">本周期纳入 21 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">77<small>/ 100</small></span></td><td><span class="metric-value">77<small>/ 100</small></span></td><td><span class="sample-count">21</span></td><td><span class="metric-value">7.7<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-08 18:11</td><td><span class="metric-sub">责任链口径清晰。</span></td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank">8</span><div class="person-cell"><span class="person-name">许聿航</span><span class="person-sub">本周期纳入 20 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">75<small>/ 100</small></span></td><td><span class="metric-value">75<small>/ 100</small></span></td><td><span class="sample-count">20</span></td><td><span class="metric-value">7.5<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-08 16:48</td><td><span class="metric-sub">当前周期略有提升。</span></td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank">9</span><div class="person-cell"><span class="person-name">何清妍</span><span class="person-sub">本周期纳入 18 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">73<small>/ 100</small></span></td><td><span class="metric-value">73<small>/ 100</small></span></td><td><span class="sample-count">18</span></td><td><span class="metric-value">7.3<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-08 14:05</td><td><span class="metric-sub">仅统计已被一检评分对象。</span></td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank">10</span><div class="person-cell"><span class="person-name">宋亦晨</span><span class="person-sub">本周期纳入 17 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">71<small>/ 100</small></span></td><td><span class="metric-value">71<small>/ 100</small></span></td><td><span class="sample-count">17</span></td><td><span class="metric-value">7.1<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-08 11:52</td><td><span class="metric-sub">当前位于榜单尾部。</span></td></tr>
                   </tbody>
                 </table>
               </div>
-              <div class="leaderboard-foot">
-                <span>当前展示前 10 名，完整名单进入“质检人员排行榜”。</span>
-                <span>统计口径：裁决准确分</span>
+              <div class="proto-pagination">
+                <span>共 24 人</span>
+                <select class="control select-control proto-page-size-select">
+                  <option selected>20条/页</option>
+                  <option>50条/页</option>
+                </select>
+                <span>·</span><span class="proto-page-current">1</span><span>前往</span>
+                <select class="control select-control proto-page-jump-select">
+                  <option selected>1页</option>
+                  <option>2页</option>
+                </select>
+                <span>页</span>
               </div>
             </section>
           </div>
         </section>
 
-        <section class="prototype-stage" data-prototype-panel="empty">
-          <div class="leaderboard-page">
-            <section class="leaderboard-card">
-              <div class="leaderboard-head">
-                <div class="leaderboard-title-wrap">
-                  <h3 class="leaderboard-title">标注人员排行榜</h3>
-                  <div class="leaderboard-note">当前周期暂无可展示的榜单结果。</div>
-                </div>
-                <button class="btn btn-ghost" type="button">查看全部</button>
-              </div>
-              <div class="empty-card">
-                <strong>暂无标注人员排行榜</strong>
-                <p>当前周期内尚未形成可用于排行的标注人员得分结果，请等待下一轮评分数据写入后再查看。</p>
-              </div>
+        <section class="prototype-stage" data-prototype-panel="qc-list">
+          <div class="score-page-shell">
+            <section class="detail-filter-board">
+              <section class="proto-filter-bar">
+                <select class="control select-control filter-select">
+                  <option selected>统计周期类型</option>
+                  <option>月度</option>
+                  <option>季度</option>
+                  <option>半年度</option>
+                  <option>年度</option>
+                </select>
+                <select class="control select-control filter-cycle">
+                  <option selected>统计周期</option>
+                  <option>2026年第一季度</option>
+                  <option>2026年第二季度</option>
+                  <option>2026年上半年</option>
+                </select>
+                <input class="control search-control filter-search" type="text" placeholder="质检人员姓名" />
+                <select class="control select-control filter-select">
+                  <option selected>全部角色</option>
+                  <option>一检</option>
+                  <option>二检</option>
+                </select>
+                <select class="control select-control filter-select">
+                  <option selected>项目类型</option>
+                  <option>住宅装修</option>
+                  <option>小型工程</option>
+                  <option>零星作业</option>
+                </select>
+                <button class="btn btn-primary" type="button">查询</button>
+                <button class="btn btn-ghost" type="button">重置</button>
+              </section>
             </section>
 
-            <section class="leaderboard-card">
-              <div class="leaderboard-head">
-                <div class="leaderboard-title-wrap">
-                  <h3 class="leaderboard-title">质检人员排行榜</h3>
-                  <div class="leaderboard-note">当前周期暂无可展示的榜单结果。</div>
-                </div>
-                <button class="btn btn-ghost" type="button">查看全部</button>
+            <section class="proto-list-shell detail-board">
+              <div class="detail-head">
+                <h3 class="detail-title">质检人员明细列表</h3>
+                <button class="btn btn-ghost" type="button" data-go-panel="leaderboard-home">返回排行榜</button>
               </div>
-              <div class="empty-card">
-                <strong>暂无质检人员排行榜</strong>
-                <p>当前周期内尚未形成可用于排行的质检人员得分结果，请等待下一轮复核数据写入后再查看。</p>
+              <div class="detail-table-wrap">
+                <table class="detail-table">
+                  <colgroup>
+                    <col style="width: 18%;" />
+                    <col style="width: 9%;" />
+                    <col style="width: 11%;" />
+                    <col style="width: 11%;" />
+                    <col style="width: 12%;" />
+                    <col style="width: 10%;" />
+                    <col style="width: 11%;" />
+                    <col style="width: 10%;" />
+                    <col style="width: 8%;" />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>质检人员</th>
+                      <th>质检角色</th>
+                      <th>统计周期</th>
+                      <th>总分<span class="sort-hint">↓</span></th>
+                      <th>裁决准确分</th>
+                      <th>责任记录数<span class="sort-hint">↕</span></th>
+                      <th>平均下一轮复核标准化分</th>
+                      <th>平均裁决一致性系数</th>
+                      <th>最近复核时间<span class="sort-hint">↕</span></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank top-1">1</span><div class="person-cell"><span class="person-name">周复核</span><span class="person-sub">当前责任链仅对下一轮复核结果负责</span></div></div></td><td><span class="proto-tag role-tag">二检</span></td><td>2026年第一季度</td><td><span class="metric-value">91<small>/ 100</small></span></td><td><span class="metric-value">91<small>/ 100</small></span></td><td><span class="sample-count">74</span></td><td><span class="metric-value">94<small>/ 100</small></span></td><td><span class="metric-value">0.97</span></td><td>05-10 18:58</td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank top-2">2</span><div class="person-cell"><span class="person-name">王质检</span><span class="person-sub">返工后新责任链不回算旧轮次</span></div></div></td><td><span class="proto-tag role-tag">一检</span></td><td>2026年第一季度</td><td><span class="metric-value">88<small>/ 100</small></span></td><td><span class="metric-value">88<small>/ 100</small></span></td><td><span class="sample-count">83</span></td><td><span class="metric-value">90<small>/ 100</small></span></td><td><span class="metric-value">0.96</span></td><td>05-10 17:21</td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank top-3">3</span><div class="person-cell"><span class="person-name">许明川</span><span class="person-sub">不含三检终审与抽检任务</span></div></div></td><td><span class="proto-tag role-tag">二检</span></td><td>2026年第一季度</td><td><span class="metric-value">84<small>/ 100</small></span></td><td><span class="metric-value">84<small>/ 100</small></span></td><td><span class="sample-count">61</span></td><td><span class="metric-value">86<small>/ 100</small></span></td><td><span class="metric-value">0.93</span></td><td>05-09 19:48</td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank">4</span><div class="person-cell"><span class="person-name">林宥衡</span><span class="person-sub">整改后进入新责任链</span></div></div></td><td><span class="proto-tag role-tag">一检</span></td><td>2026年第一季度</td><td><span class="metric-value">82<small>/ 100</small></span></td><td><span class="metric-value">82<small>/ 100</small></span></td><td><span class="sample-count">57</span></td><td><span class="metric-value">84<small>/ 100</small></span></td><td><span class="metric-value">0.92</span></td><td>05-09 18:26</td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank">5</span><div class="person-cell"><span class="person-name">沈嘉屹</span><span class="person-sub">一检责任链整体稳定</span></div></div></td><td><span class="proto-tag role-tag">一检</span></td><td>2026年第一季度</td><td><span class="metric-value">80<small>/ 100</small></span></td><td><span class="metric-value">80<small>/ 100</small></span></td><td><span class="sample-count">54</span></td><td><span class="metric-value">82<small>/ 100</small></span></td><td><span class="metric-value">0.90</span></td><td>05-09 17:03</td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank">6</span><div class="person-cell"><span class="person-name">赵复衡</span><span class="person-sub">样本量较大但波动略高</span></div></div></td><td><span class="proto-tag role-tag">二检</span></td><td>2026年第一季度</td><td><span class="metric-value">79<small>/ 100</small></span></td><td><span class="metric-value">79<small>/ 100</small></span></td><td><span class="sample-count">50</span></td><td><span class="metric-value">81<small>/ 100</small></span></td><td><span class="metric-value">0.89</span></td><td>05-09 15:48</td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank">7</span><div class="person-cell"><span class="person-name">高奕辰</span><span class="person-sub">当前周期进入前十</span></div></div></td><td><span class="proto-tag role-tag">二检</span></td><td>2026年第一季度</td><td><span class="metric-value">77<small>/ 100</small></span></td><td><span class="metric-value">77<small>/ 100</small></span></td><td><span class="sample-count">46</span></td><td><span class="metric-value">79<small>/ 100</small></span></td><td><span class="metric-value">0.88</span></td><td>05-08 18:36</td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank">8</span><div class="person-cell"><span class="person-name">卢文川</span><span class="person-sub">一致性系数较稳定</span></div></div></td><td><span class="proto-tag role-tag">一检</span></td><td>2026年第一季度</td><td><span class="metric-value">76<small>/ 100</small></span></td><td><span class="metric-value">76<small>/ 100</small></span></td><td><span class="sample-count">43</span></td><td><span class="metric-value">78<small>/ 100</small></span></td><td><span class="metric-value">0.87</span></td><td>05-08 16:19</td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank">9</span><div class="person-cell"><span class="person-name">顾晨皓</span><span class="person-sub">仅统计进入下一轮复核对象</span></div></div></td><td><span class="proto-tag role-tag">一检</span></td><td>2026年第一季度</td><td><span class="metric-value">74<small>/ 100</small></span></td><td><span class="metric-value">74<small>/ 100</small></span></td><td><span class="sample-count">39</span></td><td><span class="metric-value">75<small>/ 100</small></span></td><td><span class="metric-value">0.85</span></td><td>05-08 14:02</td></tr>
+                    <tr><td><div class="person-detail-cell"><span class="person-rank">10</span><div class="person-cell"><span class="person-name">姚晋川</span><span class="person-sub">当前位于榜单尾部</span></div></div></td><td><span class="proto-tag role-tag">二检</span></td><td>2026年第一季度</td><td><span class="metric-value">72<small>/ 100</small></span></td><td><span class="metric-value">72<small>/ 100</small></span></td><td><span class="sample-count">35</span></td><td><span class="metric-value">73<small>/ 100</small></span></td><td><span class="metric-value">0.83</span></td><td>05-08 11:44</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="proto-pagination">
+                <span>共 16 人</span>
+                <select class="control select-control proto-page-size-select">
+                  <option selected>20条/页</option>
+                  <option>50条/页</option>
+                </select>
+                <span>·</span><span class="proto-page-current">1</span><span>前往</span>
+                <select class="control select-control proto-page-jump-select">
+                  <option selected>1页</option>
+                </select>
+                <span>页</span>
               </div>
             </section>
           </div>
@@ -363,5 +662,30 @@
   <script src="./assets/prototype.js"></script>
   <script src="./assets/prototype-layout.js"></script>
   <script src="./assets/prototype-switcher.js"></script>
+  <script>
+    initProtoPagination();
+    initProtoRowActions();
+
+    (function () {
+      var stateButtons = document.querySelectorAll("[data-prototype-button]");
+      var statePanels = document.querySelectorAll("[data-prototype-panel]");
+      var jumpButtons = document.querySelectorAll("[data-go-panel]");
+
+      function switchPanel(target) {
+        stateButtons.forEach(function (button) {
+          button.classList.toggle("active", button.getAttribute("data-prototype-button") === target);
+        });
+        statePanels.forEach(function (panel) {
+          panel.classList.toggle("active", panel.getAttribute("data-prototype-panel") === target);
+        });
+      }
+
+      jumpButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          switchPanel(button.getAttribute("data-go-panel"));
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
