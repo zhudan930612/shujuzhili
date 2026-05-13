@@ -24,6 +24,7 @@
       { key: "annotation-assignment", label: "▥ 任务分配" },
       { key: "annotation-task", label: "▧ 标注任务" },
       { key: "annotation-qc", label: "▤ 质检任务" },
+      { key: "annotation-score", label: "◩ 人员评分统计" },
       { key: "quality-pool", label: "▣ 高质量数据池" },
       { key: "annotation-category", label: "◫ 标注类别库" },
     ],
