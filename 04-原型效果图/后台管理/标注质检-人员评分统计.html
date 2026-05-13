@@ -26,6 +26,69 @@
       flex-direction: column;
       gap: 14px;
     }
+    .prototype-stage[data-prototype-panel="leaderboard-home"] .score-page-shell {
+      gap: 8px;
+    }
+    .prototype-stage[data-prototype-panel="leaderboard-home"] .page-header-root {
+      margin-bottom: -2px;
+    }
+    .panel-page-header {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: -2px;
+    }
+    .panel-page-header .crumb {
+      margin-bottom: 0;
+    }
+    .panel-page-header .tabbar {
+      margin-bottom: 0;
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+    .subpage-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 4px 0 0;
+      color: #20334a;
+    }
+    .detail-filter-board {
+      margin-top: 0;
+    }
+    .subpage-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+      background: transparent;
+      color: #28558a;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 0;
+    }
+    .subpage-back:hover {
+      color: #1f5daa;
+    }
+    .subpage-title {
+      margin: 0;
+      color: #20334a;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .detail-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 56px;
+      padding: 0 20px;
+    }
+    .detail-title {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      min-height: 24px;
+    }
     .leaderboard-grid {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -98,7 +161,7 @@
       left: 50%;
       top: calc(100% + 12px);
       transform: translateX(-50%);
-      width: 320px;
+      width: 360px;
       padding: 10px 12px;
       border: 1px solid #d9e6f4;
       background: rgba(255, 255, 255, 0.98);
@@ -107,7 +170,7 @@
       font-size: 12px;
       font-weight: 400;
       line-height: 1.7;
-      white-space: normal;
+      white-space: pre-line;
       text-align: left;
       opacity: 0;
       visibility: hidden;
@@ -143,6 +206,27 @@
       color: #6f8297;
       font-size: 13px;
       line-height: 1.6;
+    }
+    .leaderboard-link {
+      border: none;
+      background: transparent;
+      padding: 0;
+      color: #7d8fa5;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .leaderboard-link::after {
+      content: "›";
+      font-size: 16px;
+      line-height: 1;
+    }
+    .leaderboard-link:hover {
+      color: #5f7389;
+      text-decoration: underline;
     }
     .leaderboard-table-wrap {
       padding: 0 20px 8px;
@@ -257,6 +341,7 @@
       background: #fff;
       border: 1px solid #e2ebf4;
       box-shadow: var(--shadow);
+      padding: 0 0 16px;
     }
     .detail-filter-board {
       background: #fff;
@@ -297,7 +382,8 @@
       align-items: center;
       justify-content: space-between;
       gap: 14px;
-      padding: 18px 20px 14px;
+      min-height: 56px;
+      padding: 0 20px;
     }
     .detail-title {
       margin: 0;
@@ -307,6 +393,7 @@
       color: #20334a;
       font-size: 18px;
       font-weight: 700;
+      min-height: 24px;
     }
     .detail-table-wrap {
       padding: 0 20px 8px;
@@ -349,13 +436,14 @@
     <div class="main">
       <aside class="sidebar"></aside>
       <main class="workspace">
-        <div class="crumb">☰ 标注质检 〉 人员评分统计</div>
-        <section class="surface tabbar">
-          <div class="tab active">人员评分统计</div>
-        </section>
-
         <section class="prototype-stage active" data-prototype-panel="leaderboard-home">
           <div class="score-page-shell">
+            <div class="page-header-root">
+              <div class="crumb">☰ 标注质检 〉 人员评分统计</div>
+              <section class="surface tabbar">
+                <div class="tab active">人员评分统计</div>
+              </section>
+            </div>
             <section class="detail-filter-board">
               <section class="proto-filter-bar">
                 <div class="leaderboard-filter-row">
@@ -386,9 +474,9 @@
               <section class="leaderboard-card">
                 <div class="leaderboard-head">
                   <div class="leaderboard-title-wrap">
-                    <h3 class="leaderboard-title">标注人员排行榜<span class="leaderboard-rule-tip" tabindex="0" data-tip="总分=提交质量分。提交质量分=（周期内对象提交得分均值 / 对象评分满分）×100；只统计已被下一轮质检评分的对象，不按图片平均。">?</span></h3>
+                    <h3 class="leaderboard-title">标注人员排行榜<span class="leaderboard-rule-tip" tabindex="0" data-tip="统计范围：当前周期内，由该标注人员提交且已被下一轮质检评分的对象。&#10;总分公式：标注人员总分 =（周期内对象提交得分均值 / 对象评分满分）× 100。&#10;计算口径：先取周期内全部对象提交得分均值，再按对象评分满分换算到100分制。&#10;举例计算：某标注人员本周期有4个对象被下一轮质检评分，提交得分分别为8、9、7、6；对象评分满分为10。&#10;1. 提交得分总和 = 8+9+7+6 = 30&#10;2. 对象数 = 4&#10;3. 周期内对象提交得分均值 = 30 / 4 = 7.5&#10;4. 标注人员总分 = 7.5 / 10 × 100 = 75分&#10;提交得分归属：按提交版本下的对象分别计分；返工后重新提交对象的得分记到本次返工提交人名下；后续整改结果不回算前一轮提交人。&#10;不计入范围：草稿对象、未进入质检链路对象、未被下一轮质检评分对象。">?</span></h3>
                   </div>
-                  <button class="btn btn-ghost" type="button" data-go-panel="annotation-list">查看全部</button>
+                  <button class="leaderboard-link" type="button" data-go-panel="annotation-list">查看全部</button>
                 </div>
                 <div class="leaderboard-table-wrap">
                   <table class="leaderboard-table">
@@ -425,9 +513,9 @@
               <section class="leaderboard-card">
                 <div class="leaderboard-head">
                   <div class="leaderboard-title-wrap">
-                    <h3 class="leaderboard-title">质检人员排行榜<span class="leaderboard-rule-tip" tabindex="0" data-tip="总分=裁决准确分。裁决准确分=周期内单次质检质量值均值；单次质检质量值=下一轮复核评分标准化分×裁决一致性系数；当前仅统计一检和二检。">?</span></h3>
+                    <h3 class="leaderboard-title">质检人员排行榜<span class="leaderboard-rule-tip" tabindex="0" data-tip="统计范围：当前周期内，由该质检人员在本轮形成裁决、且可与上一轮结果进行对比的当前提交版本下对象。&#10;对比口径：二检对比一检，三检对比二检。&#10;总分公式：质检人员总分 = 周期内单次裁决准确值均值。&#10;单次裁决准确值：基于裁决类型一致性和分差阈值分档计分。&#10;误差公式：误差百分比 = |本轮质检评分 - 上一轮质检评分| / 对象评分满分。&#10;分档规则：&#10;1. 裁决类型一致且误差≤10%，记100分&#10;2. 10%<误差≤20%，记90分&#10;3. 20%<误差≤30%，记80分&#10;4. 误差>30%，记60分&#10;5. 裁决类型不一致，记20分&#10;单条记录示例：本轮裁决为通过、评分8分；上一轮裁决也为通过、评分9分；对象评分满分10分。&#10;1. 误差百分比 = |8-9| / 10 = 10%&#10;2. 裁决类型一致，且误差≤10%&#10;3. 该条单次裁决准确值记100分&#10;三检说明：三检人员不纳入当前对象级质检总分规则，后续由抽检流程单独计算。&#10;不计入范围：三检终审、全员无效直达三检、后续抽检任务、无法与上一轮结果进行对比的对象；返工后的新一轮结果不回算上一轮质检责任。">?</span></h3>
                   </div>
-                  <button class="btn btn-ghost" type="button" data-go-panel="qc-list">查看全部</button>
+                  <button class="leaderboard-link" type="button" data-go-panel="qc-list">查看全部</button>
                 </div>
                 <div class="leaderboard-table-wrap">
                   <table class="leaderboard-table">
@@ -450,7 +538,7 @@
                     <tbody>
                       <tr><td><span class="rank-badge top-1">1</span></td><td><div class="person-cell"><span class="person-name">周复核</span></div></td><td><span class="proto-tag role-tag">二检</span></td><td><span class="sample-chip">74</span></td><td><span class="score-value">91<small>/ 100</small></span></td></tr>
                       <tr><td><span class="rank-badge top-2">2</span></td><td><div class="person-cell"><span class="person-name">王质检</span></div></td><td><span class="proto-tag role-tag">一检</span></td><td><span class="sample-chip">83</span></td><td><span class="score-value">88<small>/ 100</small></span></td></tr>
-                      <tr><td><span class="rank-badge top-3">3</span></td><td><div class="person-cell"><span class="person-name">许明川</span></div></td><td><span class="proto-tag role-tag">三检</span></td><td><span class="sample-chip">61</span></td><td><span class="score-value">84<small>/ 100</small></span></td></tr>
+                      <tr><td><span class="rank-badge top-3">3</span></td><td><div class="person-cell"><span class="person-name">许明川</span></div></td><td><span class="proto-tag role-tag">二检</span></td><td><span class="sample-chip">61</span></td><td><span class="score-value">84<small>/ 100</small></span></td></tr>
                       <tr><td><span class="rank-badge">4</span></td><td><div class="person-cell"><span class="person-name">林宥衡</span></div></td><td><span class="proto-tag role-tag">一检</span></td><td><span class="sample-chip">57</span></td><td><span class="score-value">82<small>/ 100</small></span></td></tr>
                       <tr><td><span class="rank-badge">5</span></td><td><div class="person-cell"><span class="person-name">沈嘉屹</span></div></td><td><span class="proto-tag role-tag">一检</span></td><td><span class="sample-chip">54</span></td><td><span class="score-value">80<small>/ 100</small></span></td></tr>
                       <tr><td><span class="rank-badge">6</span></td><td><div class="person-cell"><span class="person-name">赵复衡</span></div></td><td><span class="proto-tag role-tag">二检</span></td><td><span class="sample-chip">50</span></td><td><span class="score-value">79<small>/ 100</small></span></td></tr>
@@ -468,6 +556,16 @@
 
         <section class="prototype-stage" data-prototype-panel="annotation-list">
           <div class="score-page-shell">
+            <div class="panel-page-header">
+              <div class="crumb">☰ 标注质检 〉 人员评分统计 〉 标注人员列表</div>
+              <section class="surface tabbar">
+                <div class="tab active">标注人员列表</div>
+              </section>
+              <div class="subpage-titlebar">
+                <button class="subpage-back" type="button" data-go-panel="leaderboard-home">〈 返回</button>
+                <h2 class="subpage-title">标注人员统计明细</h2>
+              </div>
+            </div>
             <section class="detail-filter-board">
               <section class="proto-filter-bar">
                 <select class="control select-control filter-select">
@@ -484,6 +582,10 @@
                   <option>2026年第一季度</option>
                   <option>2026年上半年</option>
                 </select>
+                <select class="control select-control filter-select">
+                  <option selected>按总分排序</option>
+                  <option>按对象数排序</option>
+                </select>
                 <input class="control search-control filter-search" type="text" placeholder="标注人员姓名" />
                 <button class="btn btn-primary" type="button">查询</button>
                 <button class="btn btn-ghost" type="button">重置</button>
@@ -492,8 +594,14 @@
 
             <section class="proto-list-shell detail-board">
               <div class="detail-head">
-                <h3 class="detail-title">标注人员明细列表</h3>
-                <button class="btn btn-ghost" type="button" data-go-panel="leaderboard-home">返回排行榜</button>
+                <h3 class="detail-title">标注人员列表</h3>
+                <div class="proto-head-actions">
+                  <select class="control select-control" style="width: 110px;">
+                    <option selected>1 - 1</option>
+                    <option>1 - 2</option>
+                  </select>
+                  <button class="btn btn-ghost" type="button">导出</button>
+                </div>
               </div>
               <div class="detail-table-wrap">
                 <table class="detail-table">
@@ -548,6 +656,16 @@
 
         <section class="prototype-stage" data-prototype-panel="qc-list">
           <div class="score-page-shell">
+            <div class="panel-page-header">
+              <div class="crumb">☰ 标注质检 〉 人员评分统计 〉 质检人员列表</div>
+              <section class="surface tabbar">
+                <div class="tab active">质检人员列表</div>
+              </section>
+              <div class="subpage-titlebar">
+                <button class="subpage-back" type="button" data-go-panel="leaderboard-home">〈 返回</button>
+                <h2 class="subpage-title">质检人员统计明细</h2>
+              </div>
+            </div>
             <section class="detail-filter-board">
               <section class="proto-filter-bar">
                 <select class="control select-control filter-select">
@@ -563,12 +681,16 @@
                   <option>2026年第二季度</option>
                   <option>2026年上半年</option>
                 </select>
-                <input class="control search-control filter-search" type="text" placeholder="质检人员姓名" />
                 <select class="control select-control filter-select">
                   <option selected>全部角色</option>
                   <option>一检</option>
                   <option>二检</option>
                 </select>
+                <select class="control select-control filter-select">
+                  <option selected>按总分排序</option>
+                  <option>按对象数排序</option>
+                </select>
+                <input class="control search-control filter-search" type="text" placeholder="质检人员姓名" />
                 <button class="btn btn-primary" type="button">查询</button>
                 <button class="btn btn-ghost" type="button">重置</button>
               </section>
@@ -576,8 +698,14 @@
 
             <section class="proto-list-shell detail-board">
               <div class="detail-head">
-                <h3 class="detail-title">质检人员明细列表</h3>
-                <button class="btn btn-ghost" type="button" data-go-panel="leaderboard-home">返回排行榜</button>
+                <h3 class="detail-title">质检人员列表</h3>
+                <div class="proto-head-actions">
+                  <select class="control select-control" style="width: 110px;">
+                    <option selected>1 - 1</option>
+                    <option>1 - 1</option>
+                  </select>
+                  <button class="btn btn-ghost" type="button">导出</button>
+                </div>
               </div>
               <div class="detail-table-wrap">
                 <table class="detail-table">
