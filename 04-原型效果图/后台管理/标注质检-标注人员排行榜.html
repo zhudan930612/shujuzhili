@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>标注质检-标注人员排行榜</title>
+  <link rel="stylesheet" href="./assets/prototype.css" />
+  <style>
+    .prototype-stage {
+      display: none;
+    }
+    .prototype-stage.active {
+      display: block;
+    }
+    .ranking-list-shell {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .ranking-list-shell .proto-filter-bar {
+      margin-bottom: 0;
+    }
+    .filter-search { width: 180px; }
+    .filter-select { width: 160px; }
+    .filter-cycle { width: 170px; }
+    .ranking-table {
+      width: 100%;
+      min-width: 0;
+      table-layout: fixed;
+    }
+    .ranking-table th {
+      white-space: nowrap;
+    }
+    .ranking-table td {
+      vertical-align: top;
+      color: #435568;
+    }
+    .sort-hint {
+      margin-left: 4px;
+      color: #8ca0b5;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .person-cell {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      min-width: 0;
+    }
+    .person-rank {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #edf5ff;
+      color: #2f6fbd;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .person-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .person-name {
+      color: #20334a;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .person-sub {
+      color: #7f90a3;
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .metric-value {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 4px;
+      color: #183a65;
+      font-size: 18px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .metric-value small {
+      color: #8193a7;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .metric-sub {
+      display: block;
+      margin-top: 4px;
+      color: #7f90a3;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .metric-sub.nowrap {
+      white-space: nowrap;
+    }
+    .sample-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      color: #25466d;
+    }
+    .sample-count::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--brand);
+      box-shadow: 0 0 0 4px rgba(47, 132, 231, 0.12);
+    }
+    .score-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 72px 24px 86px;
+      color: #73869b;
+      text-align: center;
+    }
+    .score-empty strong {
+      color: #294462;
+      font-size: 16px;
+    }
+    .score-empty p {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="prototype-state-bar" data-prototype-switch data-prototype-default="filled">
+    <button class="active" type="button" data-prototype-button="filled">有榜单</button>
+    <button type="button" data-prototype-button="empty">空状态</button>
+  </div>
+
+  <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+    <header class="topbar"></header>
+    <div class="main">
+      <aside class="sidebar"></aside>
+      <main class="workspace">
+        <div class="crumb">☰ 标注质检 〉 人员评分统计 〉 标注人员排行榜</div>
+        <section class="surface tabbar">
+          <div class="tab active">标注人员排行榜</div>
+        </section>
+
+        <section class="prototype-stage active" data-prototype-panel="filled">
+          <div class="ranking-list-shell">
+            <section class="proto-filter-bar">
+              <select class="control select-control filter-select">
+                <option selected>统计周期类型</option>
+                <option>月度</option>
+                <option>季度</option>
+                <option>半年度</option>
+                <option>年度</option>
+              </select>
+              <select class="control select-control filter-cycle">
+                <option selected>统计周期</option>
+                <option>2026年05月</option>
+                <option>2026年04月</option>
+                <option>2026年第一季度</option>
+                <option>2026年上半年</option>
+              </select>
+              <input class="control search-control filter-search" type="text" placeholder="标注人员姓名" />
+              <select class="control select-control filter-select">
+                <option selected>项目类型</option>
+                <option>住宅装修</option>
+                <option>小型工程</option>
+                <option>零星作业</option>
+              </select>
+              <button class="btn btn-primary" type="button">查询</button>
+              <button class="btn btn-ghost" type="button">重置</button>
+            </section>
+
+            <section class="proto-list-shell">
+              <div class="proto-list-head">
+                <div class="proto-list-title-wrap">
+                  <h3 class="proto-list-title">标注人员完整排行榜</h3>
+                </div>
+              </div>
+              <div class="proto-table-wrap">
+                <table class="ranking-table">
+                  <colgroup>
+                    <col style="width: 18%;" />
+                    <col style="width: 11%;" />
+                    <col style="width: 12%;" />
+                    <col style="width: 11%;" />
+                    <col style="width: 11%;" />
+                    <col style="width: 10%;" />
+                    <col style="width: 11%;" />
+                    <col style="width: 8%;" />
+                    <col style="width: 8%;" />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>标注人员</th>
+                      <th>统计周期</th>
+                      <th>总分<span class="sort-hint">↓</span></th>
+                      <th>提交质量分</th>
+                      <th>纳入统计对象数<span class="sort-hint">↕</span></th>
+                      <th>提交得分均值</th>
+                      <th>对象评分满分口径</th>
+                      <th>最近评分时间<span class="sort-hint">↕</span></th>
+                      <th>备注</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><div class="person-cell"><span class="person-rank">1</span><div class="person-meta"><span class="person-name">张晓岚</span><span class="person-sub">本周期纳入 42 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">92<small>/ 100</small></span></td><td><span class="metric-value">92<small>/ 100</small></span></td><td><span class="sample-count">42</span></td><td><span class="metric-value">9.2<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-10 18:42</td><td><span class="metric-sub">含 5 个返工新增对象。</span></td></tr>
+                    <tr><td><div class="person-cell"><span class="person-rank">2</span><div class="person-meta"><span class="person-name">李文卓</span><span class="person-sub">本周期纳入 38 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">88<small>/ 100</small></span></td><td><span class="metric-value">88<small>/ 100</small></span></td><td><span class="sample-count">38</span></td><td><span class="metric-value">8.8<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-10 17:06</td><td><span class="metric-sub">后续返工不回算本次。</span></td></tr>
+                    <tr><td><div class="person-cell"><span class="person-rank">3</span><div class="person-meta"><span class="person-name">陈艺宁</span><span class="person-sub">本周期纳入 31 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">84<small>/ 100</small></span></td><td><span class="metric-value">84<small>/ 100</small></span></td><td><span class="sample-count">31</span></td><td><span class="metric-value">8.4<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-10 15:28</td><td><span class="metric-sub">未评分对象未纳入。</span></td></tr>
+                    <tr><td><div class="person-cell"><span class="person-rank">4</span><div class="person-meta"><span class="person-name">周若清</span><span class="person-sub">本周期纳入 27 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">81<small>/ 100</small></span></td><td><span class="metric-value">81<small>/ 100</small></span></td><td><span class="sample-count">27</span></td><td><span class="metric-value">8.1<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-09 19:41</td><td><span class="metric-sub">不按图片平均。</span></td></tr>
+                    <tr><td><div class="person-cell"><span class="person-rank">5</span><div class="person-meta"><span class="person-name">林知远</span><span class="person-sub">本周期纳入 25 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">80<small>/ 100</small></span></td><td><span class="metric-value">80<small>/ 100</small></span></td><td><span class="sample-count">25</span></td><td><span class="metric-value">8.0<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-09 17:25</td><td><span class="metric-sub">新增对象独立记分。</span></td></tr>
+                    <tr><td><div class="person-cell"><span class="person-rank">6</span><div class="person-meta"><span class="person-name">赵明曦</span><span class="person-sub">本周期纳入 23 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">78<small>/ 100</small></span></td><td><span class="metric-value">78<small>/ 100</small></span></td><td><span class="sample-count">23</span></td><td><span class="metric-value">7.8<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-09 16:02</td><td><span class="metric-sub">样本量中等。</span></td></tr>
+                    <tr><td><div class="person-cell"><span class="person-rank">7</span><div class="person-meta"><span class="person-name">王雅静</span><span class="person-sub">本周期纳入 21 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">77<small>/ 100</small></span></td><td><span class="metric-value">77<small>/ 100</small></span></td><td><span class="sample-count">21</span></td><td><span class="metric-value">7.7<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-08 18:11</td><td><span class="metric-sub">责任链口径清晰。</span></td></tr>
+                    <tr><td><div class="person-cell"><span class="person-rank">8</span><div class="person-meta"><span class="person-name">许聿航</span><span class="person-sub">本周期纳入 20 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">75<small>/ 100</small></span></td><td><span class="metric-value">75<small>/ 100</small></span></td><td><span class="sample-count">20</span></td><td><span class="metric-value">7.5<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-08 16:48</td><td><span class="metric-sub">当前周期略有提升。</span></td></tr>
+                    <tr><td><div class="person-cell"><span class="person-rank">9</span><div class="person-meta"><span class="person-name">何清妍</span><span class="person-sub">本周期纳入 18 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">73<small>/ 100</small></span></td><td><span class="metric-value">73<small>/ 100</small></span></td><td><span class="sample-count">18</span></td><td><span class="metric-value">7.3<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-08 14:05</td><td><span class="metric-sub">仅统计已被一检评分对象。</span></td></tr>
+                    <tr><td><div class="person-cell"><span class="person-rank">10</span><div class="person-meta"><span class="person-name">宋亦晨</span><span class="person-sub">本周期纳入 17 个对象提交版本</span></div></div></td><td>2026年05月</td><td><span class="metric-value">71<small>/ 100</small></span></td><td><span class="metric-value">71<small>/ 100</small></span></td><td><span class="sample-count">17</span></td><td><span class="metric-value">7.1<small>/ 10</small></span></td><td><span class="metric-sub nowrap">按 10 分制标准化</span></td><td>05-08 11:52</td><td><span class="metric-sub">当前位于榜单尾部。</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="proto-pagination">
+                <span>共 24 人</span>
+                <select class="control select-control proto-page-size-select">
+                  <option selected>20条/页</option>
+                  <option>50条/页</option>
+                </select>
+                <span>·</span><span class="proto-page-current">1</span><span>前往</span>
+                <select class="control select-control proto-page-jump-select">
+                  <option selected>1页</option>
+                  <option>2页</option>
+                </select>
+                <span>页</span>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="prototype-stage" data-prototype-panel="empty">
+          <div class="ranking-list-shell">
+            <section class="proto-filter-bar">
+              <select class="control select-control filter-select"><option selected>统计周期类型</option></select>
+              <select class="control select-control filter-cycle"><option selected>统计周期</option></select>
+              <input class="control search-control filter-search" type="text" placeholder="标注人员姓名" />
+              <select class="control select-control filter-select"><option selected>项目类型</option></select>
+              <button class="btn btn-primary" type="button">查询</button>
+              <button class="btn btn-ghost" type="button">重置</button>
+            </section>
+            <section class="proto-list-shell">
+              <div class="proto-list-head">
+                <div class="proto-list-title-wrap">
+                  <h3 class="proto-list-title">标注人员完整排行榜</h3>
+                </div>
+              </div>
+              <div class="proto-table-wrap">
+                <div class="score-empty">
+                  <strong>暂无标注人员排行榜</strong>
+                  <p>当前筛选条件下未查询到标注人员排行结果，请调整统计周期或项目类型后重试。</p>
+                </div>
+              </div>
+              <div class="proto-pagination">
+                <span>共 0 人</span>
+                <select class="control select-control proto-page-size-select"><option selected>20条/页</option></select>
+                <span>·</span><span class="proto-page-current">1</span><span>前往</span>
+                <select class="control select-control proto-page-jump-select"><option selected>1页</option></select>
+                <span>页</span>
+              </div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="./assets/prototype.js"></script>
+  <script src="./assets/prototype-layout.js"></script>
+  <script src="./assets/prototype-switcher.js"></script>
+  <script>
+    initProtoPagination();
+    initProtoRowActions();
+  </script>
+</body>
+</html>
