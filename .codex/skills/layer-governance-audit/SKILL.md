@@ -77,7 +77,7 @@ description: Use when the current repository needs an explicit governance-layer 
 
 - 顶层默认层：当前仓库默认优先 `AGENTS.md`，必要时才考虑 `CLAUDE.md`
 - path-scoped rules：各目录 `README.md`
-- skill：`.claude/skills/*/SKILL.md`
+- skill：全局技能文件夹，例如 `~/.agents/skills/<skill-name>/SKILL.md`
 - hook 候选：`.claude/settings.local.json`
 - 执行层：`06-工具脚本/*.py`
 - 过程暂存层：`03-工作台/*.md`
