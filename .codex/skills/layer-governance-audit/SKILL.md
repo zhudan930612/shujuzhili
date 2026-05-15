@@ -75,12 +75,12 @@ description: 用于审查当前仓库已有治理资产是否写乱层、放错�
 6. 先读取项目级 `.codex/rules/*.rules`；当前仓库相关 rules 默认应沉淀在这里，并优先在该目录下审计。
 7. 再查看用户级 `~/.codex/rules/*.rules` 是否存在；用户级 rules 不作为主审计对象，只用于提示是否可能覆盖项目级意图、是否存在重复 prefix_rule、以及是否把本应项目私有的规则错误放在用户层。
 8. 读取仓库级 `.codex/config.toml`，确认 hooks 配置是否与当前治理分层一致。
-9. 读取 `.codex/hooks/*.py`，查看当前 hooks 脚本是否承担了正确职责。
+9. 读取 `.codex/hooks/*.py`，查看当前 hooks 脚本是否承担了正确职责；如果当前仓库使用 dispatcher hook，还要确认它是否按路径映射把检查分流到 `repo / workbench / prd / prototypes`，而不是对所有 `Edit|Write` 一律跑同一类检查。
 10. 读取 `.codex/settings.json` 与 `.codex/settings.local.json`，查看当前 permissions 和本地 runtime 覆写是否合理。
 11. 汇总分层判断、写法问题和迁移建议。
 
 验证项目级 `.rules` 时，优先使用 `codex execpolicy check --rules .codex/rules/<file>.rules -- <command>` 查看命中结果。
-验证 `hooks` 时，先确认 `.codex/config.toml` 可正常解析，再确认 hook 脚本命中后是否返回预期的 `hookSpecificOutput.additionalContext`。
+验证 `hooks` 时，先确认 `.codex/config.toml` 可正常解析，再确认 hook 脚本命中后是否返回预期的 `hookSpecificOutput.additionalContext`；如果是 dispatcher hook，还要验证不同路径是否映射到正确 scope，以及多 scope 输出顺序是否稳定。
 
 不要默认运行 `python 06-工具脚本/run_checks.py --scope ...`。只有用户明确提到检查结果、结构告警或希望结合 Sensor 时，才按需参考脚本结果；且脚本结果只能作为辅助输入，不能代替分层判断。
 
@@ -101,7 +101,7 @@ description: 用于审查当前仓库已有治理资产是否写乱层、放错�
 检查哪些真实执行动作仍只是提醒；检查哪些内容应升级为脚本、CLI、MCP 或 checker，而不是继续停留在文档里。
 
 5. hook 层是否合理。
-检查哪些零例外动作仍没进入仓库级 hooks；检查现有 hooks 配置和 hooks 脚本是否承担了不该承担的事，或与文档规则冲突。
+检查哪些零例外动作仍没进入仓库级 hooks；检查现有 hooks 配置和 hooks 脚本是否承担了不该承担的事，是否按路径映射做了正确分流，或是否把所有 `Edit|Write` 都粗暴压到同一类检查。
 
 6. rules 层是否合理。
 检查项目相关命令控制是否优先写在项目级 `.codex/rules/`；检查是否把本应仓库私有的规则错误放到用户级；检查项目级与用户级是否存在重复、冲突或覆盖；检查 `.rules` 是否承担了不该承担的职责，例如本应进 `hooks`、`AGENTS.md`、`skill` 或 `settings*.json permissions` 的内容；检查是否存在过宽 prefix、规则漂移或职责串位。

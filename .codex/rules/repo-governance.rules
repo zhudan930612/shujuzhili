@@ -1,3 +1,6 @@
 prefix_rule(pattern=["C:\\Program Files\\PowerShell\\7\\pwsh.exe", "-Command", "python 06-工具脚本/run_checks.py --scope repo"], decision="allow")
+prefix_rule(pattern=["C:\\Program Files\\PowerShell\\7\\pwsh.exe", "-Command", "python 06-工具脚本/run_checks.py --scope workbench"], decision="allow")
+prefix_rule(pattern=["C:\\Program Files\\PowerShell\\7\\pwsh.exe", "-Command", "python 06-工具脚本/run_checks.py --scope prd"], decision="allow")
+prefix_rule(pattern=["C:\\Program Files\\PowerShell\\7\\pwsh.exe", "-Command", "python 06-工具脚本/run_checks.py --scope prototypes"], decision="allow")
 prefix_rule(pattern=["C:\\Program Files\\PowerShell\\7\\pwsh.exe", "-Command", "python 06-工具脚本/run_checks.py --scope all"], decision="allow")
 prefix_rule(pattern=["C:\\Program Files\\PowerShell\\7\\pwsh.exe", "-Command", "python 06-工具脚本/tests/check_repo_tests.py"], decision="allow")
