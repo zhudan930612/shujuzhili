@@ -72,7 +72,7 @@ description: 用于审查当前仓库已有治理资产是否写乱层、放错�
    - `06-工具脚本/README.md`
 4. 读取现有 `.codex/skills` 下技能，检查哪些本应上移、下沉或拆分。
 5. 读取 `06-工具脚本/README.md`，必要时再读相关 `.py` 脚本。
-6. 先读取项目级 `.codex/rules/*.rules`；当前仓库相关 rules 默认应沉淀在这里。即使当前目录为空，也要把它视为 rules 的默认主承载位。
+6. 先读取项目级 `.codex/rules/*.rules`；当前仓库相关 rules 默认应沉淀在这里，并优先在该目录下审计。
 7. 再查看用户级 `~/.codex/rules/*.rules` 是否存在；用户级 rules 不作为主审计对象，只用于提示是否可能覆盖项目级意图、是否存在重复 prefix_rule、以及是否把本应项目私有的规则错误放在用户层。
 8. 读取 `.codex/settings.json`，确认 runtime config 是否与当前治理分层一致。
 9. 读取 `.codex/settings.local.json`，查看当前 hooks、permissions 和本地覆写是否合理。

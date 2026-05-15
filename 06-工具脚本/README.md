@@ -10,6 +10,8 @@
 - Guide 是行动前引导，包括 [../AGENTS.md](../AGENTS.md)、目录 README、任务执行协议、PRD、业务上下文。
 - Sensor 是行动后反馈，包括 [run_checks.py](run_checks.py)、分脚本检查、对应测试、任务完成检查、AI 自查与人工复核。
 - [run_checks.py](run_checks.py) 是统一检查入口，按 scope 调度仓库级、工作台、PRD 和原型检查。
+- `python 06-工具脚本/run_checks.py --scope all` 是统一手动全量检查入口，不等于所有自动 hook 都应默认跑全量 scope。
+- 自动 hook 背压应优先按目标资产收窄范围；当前仓库默认优先使用 `python 06-工具脚本/run_checks.py --scope repo`。
 - [check_prototypes.py](check_prototypes.py) 属于原型类 Sensor，检查后台原型的共享组件复用和共享脚本接入。
 - 业务评审属于推理性 Sensor，不放入脚本硬编码。
 - 工具脚本只做结构性背压，不替代人工确认点。
