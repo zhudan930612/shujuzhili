@@ -83,7 +83,9 @@ description: 用于在一次任务、一次需求沟通或一次会话结束后�
 如果必须运行命令、读取仓库现状、调用脚本、查询数据或执行检查，进 `CLI / MCP / scripts / checker` 层，不要只写成提醒。
 
 7. 是否必须每次执行、不能靠模型自觉。
-如果零例外、每次都必须发生，进 `hook` 候选层。当前仓库优先参考 `.codex/settings.local.json` 或未来独立 hook 配置。
+如果零例外、每次都必须发生，且最适合由事件触发自动执行，进 `hook` 候选层。当前仓库优先参考 `.codex/settings.local.json` 或未来独立 hook 配置。
+如果它更适合执行前阻断，优先考虑 `PreToolUse / PermissionRequest` 类型 hook。
+如果它更适合执行后反馈或轻量背压，优先考虑 `PostToolUse` 类型 hook。
 
 8. 是否已从专题经验变成通用约束。
 如果当前在 `skill` 中，但已反复复用且所有相关任务都应遵守，建议从 `skill` 上移到顶层默认层。当前仓库优先上移到 `AGENTS.md`。

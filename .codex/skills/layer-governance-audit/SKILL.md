@@ -78,6 +78,9 @@ description: 用于审查当前仓库已有治理资产是否写乱层、放错�
 9. 读取 `.codex/settings.local.json`，查看当前 hooks、permissions 和本地覆写是否合理。
 10. 汇总分层判断、写法问题和迁移建议。
 
+验证项目级 `.rules` 时，优先使用 `codex execpolicy check --rules .codex/rules/<file>.rules -- <command>` 查看命中结果。
+验证 `hooks` 时，先确认 `.codex/settings*.json` 可正常解析，再确认命中后是否返回预期的 `hookSpecificOutput.additionalContext`。
+
 不要默认运行 `python 06-工具脚本/run_checks.py --scope ...`。只有用户明确提到检查结果、结构告警或希望结合 Sensor 时，才按需参考脚本结果；且脚本结果只能作为辅助输入，不能代替分层判断。
 
 ## 审计规则
