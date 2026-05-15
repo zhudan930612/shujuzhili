@@ -1,6 +1,6 @@
 ---
 name: data-governance-layer-triage
-description: Use when a completed task, discussion, new rule, repeated mistake, or newly learned workflow in this repository needs to be classified into the correct governance layer instead of being left in chat or placed by instinct.
+description: Use when a completed task, discussion, new rule, repeated mistake, or newly learned workflow in this repository needs a decision on whether to preserve it and where it belongs: AGENTS, directory README, skill, script, hook candidate, or formal definition docs.
 ---
 
 # Data Governance Layer Triage
@@ -9,21 +9,24 @@ description: Use when a completed task, discussion, new rule, repeated mistake, 
 
 用于在当前仓库每次完成一个任务、一次需求沟通轮次或一次重要对话后，对“这次学到的东西”做分层分诊。
 
-这个技能只处理单条对象，不做全仓普查。
-
-## 必读规则
-
-先读取 `../_shared/layer-governance-rules.md`，并严格按其中 6 条规则判断。
-
-如果共享规则文件与本技能正文出现冲突，以共享规则文件为准。
+这个技能只处理单条对象，不做全仓普查，不评价旧内容总体质量，也不直接改文件。
 
 ## 适用场景
 
 - “这条规则该写到哪里”
 - “这个坑该不该沉淀”
 - “这条流程该进 skill 还是脚本”
-- “这条经验是不是该上移到顶层默认层”
+- “这条经验是不是该上移到 AGENTS”
 - “这条稳定规则为什么不能继续放在 `03-工作台`”
+
+## 当前仓库落点
+
+- 顶层默认层：`AGENTS.md` 为主，`CLAUDE.md` 为兜底
+- 路径作用域层：各目录 `README.md`
+- skill 层：`.codex/skills/*/SKILL.md`
+- 执行层：`06-工具脚本/*.py`、`python 06-工具脚本/run_checks.py --scope ...`
+- hook 候选层：`.codex/settings.local.json`
+- 正式主定义层：`00-项目总览/`、`01-产品架构/`、`02-PRD文档/`、`90-归档记录/`
 
 ## 输入要求
 
@@ -35,15 +38,33 @@ description: Use when a completed task, discussion, new rule, repeated mistake, 
 - 它是否需要真实执行
 - 它是否只在某目录或某类文件生效
 
-## 分诊顺序
+## 分诊规则
 
 按以下顺序判断，不要跳步：
 
-1. 先检查共享规则中的 6 条是否有明确命中项。
-2. 命中后，给出当前仓库中的具体推荐位置。
-3. 如果对象本质上是稳定业务主定义，再根据共享规则文件里的“当前仓库补充出口”改判为正式主定义层。
-4. 如果 6 条都不命中，明确说明当前暂不沉淀，不要硬放到某层。
-5. 如果对象当前在 `skill` 中，但已反复复用，评估是否应按规则 6 上移到顶层默认层；当前仓库默认优先上移到 `AGENTS.md`。
+1. 是否值得长期沉淀。
+不值得时，明确“不升级”，保留在当前对话、本轮过程文档或现有位置。
+
+2. 是否属于稳定业务主定义。
+如果本质上是稳定业务规则、页面规则、字段规则、流程主定义或历史决策原因，不进入协作规则层，直接建议拆回正式主定义层。
+
+3. 是否每个会话都应该知道。
+如果所有相关任务都该默认知道，进顶层默认层。当前仓库优先 `AGENTS.md`；只有 `AGENTS.md` 没有合适承载位时才考虑 `CLAUDE.md`。
+
+4. 是否只对某目录或某类文件生效。
+如果只对局部目录、局部资产类型或局部文件生效，进路径作用域规则层。当前仓库默认写入对应目录 `README.md`。
+
+5. 是否多步流程、专题检查、分支决策。
+如果对象本质上是 workflow，进 `skill` 层，当前仓库落到 `.codex/skills/<skill-name>/SKILL.md`。
+
+6. 是否需要真实执行或查询。
+如果必须运行命令、读取仓库现状、调用脚本、查询数据或执行检查，进 `CLI / MCP / scripts / checker` 层，不要只写成提醒。
+
+7. 是否必须每次执行、不能靠模型自觉。
+如果零例外、每次都必须发生，进 `hook` 候选层。当前仓库优先参考 `.codex/settings.local.json` 或未来独立 hook 配置。
+
+8. 是否已从专题经验变成通用约束。
+如果当前在 `skill` 中，但已反复复用且所有相关任务都应遵守，建议从 `skill` 上移到顶层默认层。当前仓库优先上移到 `AGENTS.md`。
 
 ## 输出格式
 
@@ -52,8 +73,11 @@ description: Use when a completed task, discussion, new rule, repeated mistake, 
 `【分诊对象】`
 一句话说明当前要分诊的对象。
 
+`【是否沉淀】`
+写“沉淀”或“不沉淀”。
+
 `【命中规则】`
-写明命中共享规则中的第几条；若未命中，明确写“未命中 1-6 条，当前暂不沉淀”。
+写明命中上面第几条规则；若未命中，明确写“未命中规则 2-8，当前不沉淀”。
 
 `【推荐层级】`
 写明推荐进入哪一层：`顶层默认层`、`path-scoped rules`、`skill`、`hook`、`script/CLI/MCP/checker`、`正式主定义层`、或“暂不沉淀”。
@@ -67,19 +91,10 @@ description: Use when a completed task, discussion, new rule, repeated mistake, 
 `【上移提醒】`
 如果适用，说明是否应从 `skill` 上移到顶层默认层；当前仓库默认优先上移到 `AGENTS.md`。如果不适用，明确写“当前不涉及上移”。
 
-## 当前仓库默认落点
-
-- 顶层默认层：当前仓库默认优先 `AGENTS.md`，必要时才考虑 `CLAUDE.md`
-- path-scoped rules：各目录 `README.md`
-- skill：全局技能文件夹，例如 `~/.agents/skills/<skill-name>/SKILL.md`
-- hook 候选：`.claude/settings.local.json`
-- 执行层：`06-工具脚本/*.py`
-- 过程暂存层：`03-工作台/*.md`
-- 正式主定义层：`00-项目总览/`、`01-产品架构/`、`02-PRD文档/`、`90-归档记录/`
-
 ## 红线
 
 - 不要把只对局部目录生效的规则上移到顶层默认层
 - 不要把需要真实执行的动作写成只靠记忆的说明
 - 不要把稳定业务主定义继续留在 `03-工作台`
 - 不要把“暂不沉淀”的对象硬塞进某个层级
+- 不要把 `AGENTS.md` 和 `CLAUDE.md` 当成并列主承载位；当前仓库以 `AGENTS.md` 为主

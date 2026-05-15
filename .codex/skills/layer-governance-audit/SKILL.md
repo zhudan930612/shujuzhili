@@ -1,6 +1,6 @@
 ---
 name: layer-governance-audit
-description: Use when the current repository needs an explicit governance-layer audit to find which rules, workflows, scripts, and documents are sitting in the wrong layer and what should be moved, promoted, or split.
+description: Use when the current repository needs an explicit audit of existing rules, README files, skills, scripts, and process documents to judge whether they are written reasonably, sit in the right layer, or should be moved, split, deleted, or promoted.
 ---
 
 # Layer Governance Audit
@@ -9,52 +9,69 @@ description: Use when the current repository needs an explicit governance-layer 
 
 用于主动审查当前仓库的分层治理现状。
 
-这个技能处理的是“当前仓库整体状态”，不是单条经验分诊。它与 `data-governance-layer-triage` 使用同一套判断规则，只是输入粒度更大。
+这个技能处理的是“当前仓库整体状态”，不是单条经验分诊。它只审、不改，不负责新经验首次落点。
 
-## 必读规则
+## 审计对象
 
-先读取 `../_shared/layer-governance-rules.md`，并严格按其中 6 条规则审计。
-
-如果共享规则文件与本技能正文出现冲突，以共享规则文件为准。
-
-## 审计目标
-
-识别当前仓库中：
-
-- 哪些内容本应进入顶层默认层，当前仓库默认即 `AGENTS.md`，却还停留在 skill 或过程文档里
-- 哪些内容本应进入 path-scoped rules，却污染了全局
-- 哪些内容本应进入 `skill`，却仍停留在长 Markdown 里
-- 哪些内容本应进入 `hook`，却仍只是提醒
-- 哪些内容本应进入 `script/CLI/MCP/checker`，却仍写成口头说明
-- 哪些专题经验已反复出现，应从 `skill` 上移到顶层默认层
-- 哪些稳定业务主定义错误地滞留在 `03-工作台`
+- `AGENTS.md`
+- `CLAUDE.md`
+- 高价值目录 `README.md`
+- `.codex/skills` 下现有技能
+- `03-工作台` 关键文件
+- `06-工具脚本` 关键文件
+- 正式主定义层文档
 
 ## 审计顺序
 
 按以下顺序执行：
 
-1. 读取共享规则文件。
-2. 先读取 `AGENTS.md`；只有需要确认兜底入口时再读取 `CLAUDE.md`。
-3. 读取高价值 path-scoped rules；当前仓库默认先看：
+1. 先读取 `AGENTS.md`，确认顶层默认层是否承载了不该放在这里的内容。
+2. 再读取 `CLAUDE.md`，确认它是否仍然只是引用或兜底，而不是形成独立规则集。
+3. 读取高价值路径作用域规则；当前仓库默认先看：
    - `03-工作台/README.md`
    - `04-原型效果图/后台管理/README.md`
    - `04-原型效果图/后台管理/assets/README.md`
    - `06-工具脚本/README.md`
-4. 读取流程型文档：
+4. 读取现有 `.codex/skills` 下技能，检查哪些本应上移、下沉或拆分。
+5. 读取流程型文档：
    - `03-工作台/任务执行协议.md`
    - `03-工作台/任务完成检查.md`
    - `03-工作台/错误治理清单.md`
-5. 读取现有 repo-local skills。
-6. 读取 `.claude/settings.local.json`，查看当前 hooks 现状。
+6. 读取 `.codex/settings.local.json`，查看当前 hook 候选和现有确定性动作。
 7. 运行 `python 06-工具脚本/run_checks.py --scope all`。
-8. 汇总“脚本已发现的问题”和“脚本查不到但明显错层的问题”。
+8. 汇总脚本发现的问题，再补充分层判断、写法问题和迁移建议。
+
+## 审计规则
+
+按以下维度判断：
+
+1. 顶层默认层是否合理。
+检查 `AGENTS.md` 是否混入专题流程、实现细节、页面规则；是否遗漏了已经应该上移的通用约束。
+
+2. 路径作用域层是否合理。
+检查只对局部目录生效的规则是否被错误放到了全局；检查目录 `README.md` 是否承担了错误职责或重复顶层规则。
+
+3. skill 层是否合理。
+检查哪些多步流程仍停在长 Markdown 中；检查哪些技能经验已经反复复用，应上移到 `AGENTS.md`；检查技能正文是否承担了脚本或主定义职责。
+
+4. 执行层是否合理。
+检查哪些真实执行动作仍只是提醒；检查哪些内容应升级为脚本、CLI、MCP 或 checker，而不是继续停留在文档里。
+
+5. hook 候选层是否合理。
+检查哪些零例外动作仍靠模型自觉，没有进入确定性执行层。
+
+6. 过程层与正式主定义层关系是否合理。
+检查 `03-工作台` 是否长期承载稳定规则；检查稳定业务规则、页面规则、字段规则、流程主定义和历史决策原因是否已拆回 `00-项目总览/`、`01-产品架构/`、`02-PRD文档/`、`90-归档记录/`。
+
+7. 写法是否合理。
+检查重复、空话、过时、职责混杂、出口不清、长文档承载过重等问题。
 
 ## 输出格式
 
 必须使用以下格式输出：
 
-`【仓库映射】`
-简要说明当前仓库各层默认落点是否清晰。
+`【审计范围】`
+简要说明本轮读了哪些层和哪些关键文件。
 
 `【错层项清单】`
 逐条列出：
@@ -70,18 +87,11 @@ description: Use when the current repository needs an explicit governance-layer 
 - 哪些应升级为 `script/checker`
 - 哪些应上移到顶层默认层
 
+`【写法问题清单】`
+列出不是错层、但需要收紧写法或职责边界的问题。
+
 `【本轮建议动作】`
 只给 3 到 5 条本轮最值得做的动作，按优先级排序。
-
-## 当前仓库默认落点
-
-- 顶层默认层：当前仓库默认优先 `AGENTS.md`，必要时才考虑 `CLAUDE.md`
-- path-scoped rules：各目录 `README.md`
-- skill：全局技能文件夹，例如 `~/.agents/skills/<skill-name>/SKILL.md`
-- hook 候选：`.claude/settings.local.json`
-- 执行层：`06-工具脚本/*.py`
-- 过程暂存层：`03-工作台/*.md`
-- 正式主定义层：`00-项目总览/`、`01-产品架构/`、`02-PRD文档/`、`90-归档记录/`
 
 ## 红线
 
@@ -89,3 +99,4 @@ description: Use when the current repository needs an explicit governance-layer 
 - 不要把 `run_checks.py` 的结果原样复述成审计报告；必须补充分层判断
 - 不要把单条经验细化成模板写作；那是 `data-governance-layer-triage` 的职责
 - 不要把稳定业务主定义误审成协作规则层问题；必要时明确要求拆回正式主定义层
+- 不要把审计 skill 变成修改器；它只给建议，不直接改文件
