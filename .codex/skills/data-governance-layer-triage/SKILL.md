@@ -1,23 +1,38 @@
 ---
 name: data-governance-layer-triage
-description: Use when a completed task, discussion, new rule, repeated mistake, or newly learned workflow in this repository needs a decision on whether to preserve it and where it belongs: AGENTS, directory README, skill, script, hook candidate, or formal definition docs.
+description: 用于在一次任务、一次需求沟通或一次会话结束后，对刚产生的经验、错误、教训、规则或流程做分诊：判断这条内容是否值得沉淀、为什么会反复出现、应该放到哪一层，以及在当前仓库里应落到 AGENTS.md、目录 README、skill、脚本/checker、hook 候选，还是正式主定义文档。适用于“总结这次会话经验”“记住这个错误/教训”“为什么重复出错”“这个问题应该放到哪”“这条规则该写到哪里”“这个流程该做成什么”等场景。
 ---
 
 # Data Governance Layer Triage
 
 ## 概述
 
-用于在当前仓库每次完成一个任务、一次需求沟通轮次或一次重要对话后，对“这次学到的东西”做分层分诊。
+给一条新产生的经验、错误、教训、规则或流程找归宿：判断是否沉淀、该进哪一层、在当前仓库该写到哪里。
 
 这个技能只处理单条对象，不做全仓普查，不评价旧内容总体质量，也不直接改文件。
 
 ## 适用场景
 
+- “总结这次会话经验”
+- “记住这个错误/教训”
+- “为什么这个问题总是重复出错”
+- “这个问题应该放到哪”
+- “这个坑以后别再犯，应该怎么沉淀”
+- “这条东西该记到哪里”
 - “这条规则该写到哪里”
 - “这个坑该不该沉淀”
 - “这条流程该进 skill 还是脚本”
 - “这条经验是不是该上移到 AGENTS”
 - “这条稳定规则为什么不能继续放在 `03-工作台`”
+
+## 不适用场景
+
+- “检查当前仓库整体层级是否合理”
+- “审查现有 AGENTS、README、skill、脚本写得是否合适”
+- “看看哪些旧内容放错层了”
+- “给我全仓的分层整改建议”
+
+如果任务是检查当前仓库已有内容是否写得合理、放层是否合适，应改用 `layer-governance-audit`。
 
 ## 当前仓库落点
 
@@ -27,6 +42,13 @@ description: Use when a completed task, discussion, new rule, repeated mistake, 
 - 执行层：`06-工具脚本/*.py`、`python 06-工具脚本/run_checks.py --scope ...`
 - hook 候选层：`.codex/settings.local.json`
 - 正式主定义层：`00-项目总览/`、`01-产品架构/`、`02-PRD文档/`、`90-归档记录/`
+
+## 核心原则
+
+- 先判断“这条东西值不值得沉淀”，再判断“该放哪一层”
+- 先处理单条对象，不扩展成全仓审计
+- 先给归宿建议，不直接改文件
+- 涉及稳定业务主定义时，优先拆回正式主定义层，不滞留在协作层
 
 ## 输入要求
 
