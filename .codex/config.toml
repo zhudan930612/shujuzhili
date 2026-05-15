@@ -1,0 +1,10 @@
+[hooks]
+
+[[hooks.PostToolUse]]
+matcher = "Edit|Write"
+
+[[hooks.PostToolUse.hooks]]
+type = "command"
+command = 'python "$(git rev-parse --show-toplevel)/.codex/hooks/post_tool_use_repo_check.py"'
+timeout = 30
+statusMessage = "Running repository governance check"

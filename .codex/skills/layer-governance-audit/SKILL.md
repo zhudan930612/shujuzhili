@@ -46,7 +46,7 @@ description: 用于审查当前仓库已有治理资产是否写乱层、放错�
 - 路径作用域规则：高价值目录 `README.md`
 - skill 层：`.codex/skills/*/SKILL.md`
 - 执行层：`06-工具脚本/README.md` 与相关 `.py` 脚本
-- hook 层：`.codex/settings.local.json` 中的 `hooks`
+- hook 层：仓库级 `.codex/config.toml` 与 `.codex/hooks/*.py`
 - rules 层：项目级 `.codex/rules/*.rules`
 - runtime config 层：`.codex/settings.json`、`.codex/settings.local.json` 中的 `permissions` 等运行时规则
 
@@ -58,7 +58,7 @@ description: 用于审查当前仓库已有治理资产是否写乱层、放错�
 - `02-PRD文档/`
 - `90-归档记录/`
 
-原因：本技能只审协作治理资产、项目级 rules 和运行时治理配置，不审过程内容，也不审业务主定义本身。
+原因：本技能只审协作治理资产、项目级 rules、仓库级 hooks 和运行时治理配置，不审过程内容，也不审业务主定义本身。
 
 ## 审计顺序
 
@@ -74,12 +74,13 @@ description: 用于审查当前仓库已有治理资产是否写乱层、放错�
 5. 读取 `06-工具脚本/README.md`，必要时再读相关 `.py` 脚本。
 6. 先读取项目级 `.codex/rules/*.rules`；当前仓库相关 rules 默认应沉淀在这里，并优先在该目录下审计。
 7. 再查看用户级 `~/.codex/rules/*.rules` 是否存在；用户级 rules 不作为主审计对象，只用于提示是否可能覆盖项目级意图、是否存在重复 prefix_rule、以及是否把本应项目私有的规则错误放在用户层。
-8. 读取 `.codex/settings.json`，确认 runtime config 是否与当前治理分层一致。
-9. 读取 `.codex/settings.local.json`，查看当前 hooks、permissions 和本地覆写是否合理。
-10. 汇总分层判断、写法问题和迁移建议。
+8. 读取仓库级 `.codex/config.toml`，确认 hooks 配置是否与当前治理分层一致。
+9. 读取 `.codex/hooks/*.py`，查看当前 hooks 脚本是否承担了正确职责。
+10. 读取 `.codex/settings.json` 与 `.codex/settings.local.json`，查看当前 permissions 和本地 runtime 覆写是否合理。
+11. 汇总分层判断、写法问题和迁移建议。
 
 验证项目级 `.rules` 时，优先使用 `codex execpolicy check --rules .codex/rules/<file>.rules -- <command>` 查看命中结果。
-验证 `hooks` 时，先确认 `.codex/settings*.json` 可正常解析，再确认命中后是否返回预期的 `hookSpecificOutput.additionalContext`。
+验证 `hooks` 时，先确认 `.codex/config.toml` 可正常解析，再确认 hook 脚本命中后是否返回预期的 `hookSpecificOutput.additionalContext`。
 
 不要默认运行 `python 06-工具脚本/run_checks.py --scope ...`。只有用户明确提到检查结果、结构告警或希望结合 Sensor 时，才按需参考脚本结果；且脚本结果只能作为辅助输入，不能代替分层判断。
 
@@ -100,13 +101,13 @@ description: 用于审查当前仓库已有治理资产是否写乱层、放错�
 检查哪些真实执行动作仍只是提醒；检查哪些内容应升级为脚本、CLI、MCP 或 checker，而不是继续停留在文档里。
 
 5. hook 层是否合理。
-检查哪些零例外动作仍没进入 `hooks`；检查现有 `hooks` 是否承担了不该承担的事，或与文档规则冲突。
+检查哪些零例外动作仍没进入仓库级 hooks；检查现有 hooks 配置和 hooks 脚本是否承担了不该承担的事，或与文档规则冲突。
 
 6. rules 层是否合理。
 检查项目相关命令控制是否优先写在项目级 `.codex/rules/`；检查是否把本应仓库私有的规则错误放到用户级；检查项目级与用户级是否存在重复、冲突或覆盖；检查 `.rules` 是否承担了不该承担的职责，例如本应进 `hooks`、`AGENTS.md`、`skill` 或 `settings*.json permissions` 的内容；检查是否存在过宽 prefix、规则漂移或职责串位。
 
 7. runtime config 层是否合理。
-检查 `.codex/settings*.json` 中的 `permissions`、技能调用许可、运行时配置是否与当前治理分层一致；检查是否和 `rules` / `hooks` 职责重叠，或存在配置漂移。
+检查 `.codex/settings*.json` 中的 `permissions`、技能调用许可、运行时配置是否与当前治理分层一致；检查是否和 `rules` / 仓库级 hooks 职责重叠，或存在配置漂移。
 
 8. 写法是否合理。
 检查重复、空话、过时、职责混杂、出口不清、文档或配置承担过重等问题。

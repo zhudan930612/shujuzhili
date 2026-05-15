@@ -4,19 +4,5 @@
       "Bash(python:*)",
       "Read(//e/各产品线/数据治理/**)"
     ]
-  },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python -c \"import subprocess,json; r=subprocess.run(['python','06-工具脚本/run_checks.py','--scope','repo'],cwd='e:/各产品线/数据治理',capture_output=True,text=True); out=(r.stdout+r.stderr).strip(); print(json.dumps({'hookSpecificOutput':{'hookEventName':'PostToolUse','additionalContext':'[repo check] '+out[:2000]}}) if out else '{}')\"",
-            "shell": "bash"
-          }
-        ]
-      }
-    ]
   }
 }

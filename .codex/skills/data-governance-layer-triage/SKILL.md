@@ -40,7 +40,7 @@ description: 用于在一次任务、一次需求沟通或一次会话结束后�
 - 路径作用域层：各目录 `README.md`
 - skill 层：`.codex/skills/*/SKILL.md`
 - 执行层：`06-工具脚本/*.py`、`python 06-工具脚本/run_checks.py --scope ...`
-- hook 候选层：`.codex/settings.local.json`
+- hook 候选层：仓库级 `.codex/config.toml` 与 `.codex/hooks/`
 - 正式主定义层：`00-项目总览/`、`01-产品架构/`、`02-PRD文档/`、`90-归档记录/`
 
 ## 核心原则
@@ -83,7 +83,7 @@ description: 用于在一次任务、一次需求沟通或一次会话结束后�
 如果必须运行命令、读取仓库现状、调用脚本、查询数据或执行检查，进 `CLI / MCP / scripts / checker` 层，不要只写成提醒。
 
 7. 是否必须每次执行、不能靠模型自觉。
-如果零例外、每次都必须发生，且最适合由事件触发自动执行，进 `hook` 候选层。当前仓库优先参考 `.codex/settings.local.json` 或未来独立 hook 配置。
+如果零例外、每次都必须发生，且最适合由事件触发自动执行，进 `hook` 候选层。当前仓库优先参考仓库级 `.codex/config.toml` 与 `.codex/hooks/`。
 如果它更适合执行前阻断，优先考虑 `PreToolUse / PermissionRequest` 类型 hook。
 如果它更适合执行后反馈或轻量背压，优先考虑 `PostToolUse` 类型 hook。
 
