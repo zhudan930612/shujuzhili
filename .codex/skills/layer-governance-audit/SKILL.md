@@ -48,7 +48,7 @@ description: 用于审查当前仓库已有治理资产是否写乱层、放错�
 - 执行层：`06-工具脚本/README.md` 与相关 `.py` 脚本
 - hook 层：仓库级 `.codex/config.toml` 与 `.codex/hooks/*.py`
 - rules 层：项目级 `.codex/rules/*.rules`
-- runtime config 层：`.codex/settings.json`、`.codex/settings.local.json` 中的 `permissions` 等运行时规则
+- runtime config 层：当前仓库默认无项目级 runtime config；若后续新增项目级 `settings` 配置，再作为例外审计对象
 
 明确排除：
 
@@ -76,7 +76,7 @@ description: 用于审查当前仓库已有治理资产是否写乱层、放错�
 7. 再查看用户级 `~/.codex/rules/*.rules` 是否存在；用户级 rules 不作为主审计对象，只用于提示是否可能覆盖项目级意图、是否存在重复 prefix_rule、以及是否把本应项目私有的规则错误放在用户层。
 8. 读取仓库级 `.codex/config.toml`，确认 hooks 配置是否与当前治理分层一致。
 9. 读取 `.codex/hooks/*.py`，查看当前 hooks 脚本是否承担了正确职责；如果当前仓库使用 dispatcher hook，还要确认它是否按路径映射把检查分流到 `repo / workbench / prd / prototypes`，而不是对所有 `Edit|Write` 一律跑同一类检查。
-10. 读取 `.codex/settings.json` 与 `.codex/settings.local.json`，查看当前 permissions 和本地 runtime 覆写是否合理。
+10. 检查当前仓库是否额外引入了项目级 `settings` 配置；若存在，再判断这些 runtime config 是否真的必要、是否与 `rules` / hooks 职责重叠。
 11. 汇总分层判断、写法问题和迁移建议。
 
 验证项目级 `.rules` 时，优先使用 `codex execpolicy check --rules .codex/rules/<file>.rules -- <command>` 查看命中结果。
@@ -104,10 +104,10 @@ description: 用于审查当前仓库已有治理资产是否写乱层、放错�
 检查哪些零例外动作仍没进入仓库级 hooks；检查现有 hooks 配置和 hooks 脚本是否承担了不该承担的事，是否按路径映射做了正确分流，或是否把所有 `Edit|Write` 都粗暴压到同一类检查。
 
 6. rules 层是否合理。
-检查项目相关命令控制是否优先写在项目级 `.codex/rules/`；检查是否把本应仓库私有的规则错误放到用户级；检查项目级与用户级是否存在重复、冲突或覆盖；检查 `.rules` 是否承担了不该承担的职责，例如本应进 `hooks`、`AGENTS.md`、`skill` 或 `settings*.json permissions` 的内容；检查是否存在过宽 prefix、规则漂移或职责串位。
+检查项目相关命令控制是否优先写在项目级 `.codex/rules/`；检查是否把本应仓库私有的规则错误放到用户级；检查项目级与用户级是否存在重复、冲突或覆盖；检查 `.rules` 是否承担了不该承担的职责，例如本应进 `hooks`、`AGENTS.md`、`skill` 或项目级 runtime config 的内容；检查是否存在过宽 prefix、规则漂移或职责串位。
 
 7. runtime config 层是否合理。
-检查 `.codex/settings*.json` 中的 `permissions`、技能调用许可、运行时配置是否与当前治理分层一致；检查是否和 `rules` / 仓库级 hooks 职责重叠，或存在配置漂移。
+当前仓库默认不应存在项目级 runtime config；如果例外新增了 `settings` 配置，检查这些运行时配置是否真的必要，是否与 `rules` / 仓库级 hooks 职责重叠，或是否形成新的历史兼容层。
 
 8. 写法是否合理。
 检查重复、空话、过时、职责混杂、出口不清、文档或配置承担过重等问题。
@@ -136,7 +136,7 @@ description: 用于审查当前仓库已有治理资产是否写乱层、放错�
 - 哪些应升级为 `script/checker`
 - 哪些应迁入项目级 `.codex/rules/`
 - 哪些用户级 rules 仅提示冲突/覆盖风险
-- 哪些应迁入或收紧到 `.codex/settings*.json` 的 runtime config
+- 哪些应收紧到最小必要的项目级 runtime config，或继续保持“当前仓库无此层”
 
 `【写法问题清单】`
 列出不是错层、但需要收紧写法、配置方式或职责边界的问题。

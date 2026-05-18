@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(python:*)",
-      "Read(//e/各产品线/数据治理/**)"
-    ]
-  }
-}

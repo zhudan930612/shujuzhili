@@ -14,7 +14,7 @@
 - 自动 hook 背压应优先按目标资产收窄范围；当前仓库默认使用 dispatcher hook，按被修改文件路径自动分流到 `repo`、`workbench`、`prd`、`prototypes`。
 - 项目级 `.codex/rules/*.rules` 负责当前仓库私有命令规则；可用 `codex execpolicy check --rules .codex/rules/repo-governance.rules -- <command>` 验证命中结果。
 - 仓库级 `.codex/config.toml` 与 `.codex/hooks/*.py` 负责事件驱动的自动背压或自动反馈；当前 `PostToolUse` 会对治理相关 `Edit|Write` 事件按路径映射自动分流，不承接项目知识、多步 workflow 或业务规则。
-- `.codex/settings*.json` 中的 `permissions` 只负责 runtime allow，不替代 `.rules` 或 `hooks`。
+- 当前仓库默认不保留项目级 `settings` 运行时配置；`config.toml + hooks + rules` 已是主结构，除非后续验证明确证明客户端仍依赖例外配置，否则不再恢复仓库级 legacy settings 文件。
 - [check_prototypes.py](check_prototypes.py) 属于原型类 Sensor，检查后台原型的共享组件复用和共享脚本接入。
 - 业务评审属于推理性 Sensor，不放入脚本硬编码。
 - 工具脚本只做结构性背压，不替代人工确认点。

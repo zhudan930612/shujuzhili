@@ -19,6 +19,10 @@ class PostToolUseDispatchTests(unittest.TestCase):
         scopes = self.collect_scopes("Edit", {"file_path": "AGENTS.md"})
         self.assertEqual(scopes, ["repo"])
 
+    def test_apply_patch_tool_name_is_supported(self):
+        scopes = self.collect_scopes("apply_patch", {"file_path": "AGENTS.md"})
+        self.assertEqual(scopes, ["repo"])
+
     def test_readme_routes_to_repo_even_under_prd(self):
         scopes = self.collect_scopes("Write", {"path": "02-PRD文档/README.md"})
         self.assertEqual(scopes, ["repo"])

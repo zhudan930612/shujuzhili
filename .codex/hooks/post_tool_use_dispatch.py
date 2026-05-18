@@ -44,6 +44,7 @@ REPO_PREFIXES = (
 )
 EXCLUDED_PREFIXES = ("90-归档记录/",)
 MAX_CONTEXT_LEN = 4000
+SUPPORTED_TOOL_NAMES = {"apply_patch", "Edit", "Write"}
 
 
 def load_event() -> dict[str, Any]:
@@ -149,7 +150,7 @@ def resolve_scope(relative_path: str) -> str | None:
 
 def collect_scopes(event: dict[str, Any]) -> list[str]:
     tool_name = str(event.get("tool_name", "")).strip()
-    if tool_name not in {"Edit", "Write"}:
+    if tool_name not in SUPPORTED_TOOL_NAMES:
         return []
 
     paths = extract_paths(event.get("tool_input", {}))
