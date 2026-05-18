@@ -76,6 +76,7 @@ PERMISSION_MATRIX_DUPLICATION_TERMS = [
 ]
 PERMISSION_BEHAVIOR_RULE_PHRASES = [
     "权限相关行为",
+    "角色权限矩阵.xlsx",
     "系统管理.md",
 ]
 
@@ -382,7 +383,7 @@ def check_permission_definition_boundary(root: Path, result: CheckResult) -> Non
                         None,
                         f"任务执行协议.md missing permission-boundary rule: {phrase}",
                         "Without an explicit permission-boundary rule, page requirements may duplicate role-permission source-of-truth content in process docs.",
-                        "Add rules that pages keep only 权限相关行为 and reference 系统管理.md for role-permission source of truth.",
+                        "Add rules that pages keep only 权限相关行为, reference 角色权限矩阵.xlsx for role-permission values, and reference 系统管理.md for permission mechanism.",
                     )
                 )
 
@@ -401,7 +402,7 @@ def check_permission_definition_boundary(root: Path, result: CheckResult) -> Non
                         line_no,
                         f"Process doc appears to repeat permission source-of-truth content: {term}",
                         "Process documents should not become the long-term source of truth for role-to-page or role-to-operation permission matrices.",
-                        "Move the matrix definition back to 02-PRD文档/后台管理/系统管理.md and keep only 权限相关行为 in the process doc.",
+                        "Move the matrix definition back to 02-PRD文档/后台管理/角色权限矩阵.xlsx, keep permission mechanism in 系统管理.md, and keep only 权限相关行为 in the process doc.",
                     )
                 )
 

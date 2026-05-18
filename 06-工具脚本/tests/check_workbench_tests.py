@@ -29,7 +29,7 @@ class CheckWorkbenchTests(unittest.TestCase):
         workbench = root / "03-工作台"
         workbench.mkdir(parents=True)
         (workbench / "任务执行协议.md").write_text(
-            "## 需求沟通输出框架\n## 需求完备性检查清单\n权限相关行为\n系统管理.md\n",
+            "## 需求沟通输出框架\n## 需求完备性检查清单\n权限相关行为\n角色权限矩阵.xlsx\n系统管理.md\n",
             encoding="utf-8",
         )
         (workbench / "任务完成检查.md").write_text(
