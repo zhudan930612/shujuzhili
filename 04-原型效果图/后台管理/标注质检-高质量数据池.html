@@ -51,14 +51,18 @@
     .color-dot.blue { background: #2f84e7; }
     .object-meta { display: grid; gap: 8px; color: #52687f; }
     .readonly-field { min-height: 34px; padding: 8px 10px; border: 1px solid #e1e9f2; background: #f7fafd; color: #304962; font-weight: 700; }
+    .mini-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .mini-actions button { flex: 1; height: 28px; border: 1px solid #d8e3ee; background: #fff; color: #52677e; font-size: 14px; font-weight: 700; }
+    .score-title { margin-top: 10px; margin-bottom: 8px; color: #1f3e62; font-size: 13px; font-weight: 700; }
+    .score-scale { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; }
+    .score-mark { height: 28px; border: 1px solid #d9e2ef; display: flex; align-items: center; justify-content: center; background: #fff; color: #5f708a; font-size: 13px; }
+    .score-mark.active { background: #e8f0ff; color: #1f5fd6; border-color: #76a5ff; }
   </style>
 </head>
 <body>
   <div class="prototype-state-bar" data-prototype-switch data-prototype-default="list">
     <button class="active" type="button" data-prototype-button="list">列表</button>
     <button type="button" data-prototype-button="detail">详情子页面</button>
-    <button type="button" data-prototype-button="empty">无结果</button>
-    <button type="button" data-prototype-button="export-disabled">无导出权限</button>
   </div>
 
   <section class="prototype-stage active" data-prototype-panel="list">
@@ -103,43 +107,22 @@
           <div class="annotation-shell">
             <div class="canvas-area"><div class="box one"></div><div class="box two"></div><div class="poly"></div><span class="node n1"></span><span class="node n2"></span></div>
             <aside class="object-panel">
-              <div class="panel-title"><span>标准结果列表</span><span class="proto-tag proto-status-success">只读</span></div>
+              <div class="panel-title"><span>标准结果列表</span></div>
               <div class="project-line">项目类型：住宅装修</div>
-              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span></div><div class="object-meta"><div>形状：矩形</div><div class="readonly-field">安全帽 / 白色</div></div></div>
-              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot blue"></i>对象2</span></div><div class="object-meta"><div>形状：多边形</div><div class="readonly-field">灭火器 / 正常</div></div></div>
-              <section class="proto-detail-card"><h3 class="proto-detail-card-title">入池信息</h3><div class="proto-detail-card-body"><div class="proto-detail-grid"><div class="proto-detail-label">入池人/质检人</div><div class="proto-detail-value">质检员A</div><div class="proto-detail-label">入池时间</div><div class="proto-detail-value">2026-04-23 15:20</div></div></div></section>
+              <div class="object-card">
+                <div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span></div>
+                <div class="object-meta">
+                  <div>形状　　　　　　多边形</div>
+                  <div>对象类别　　　　安全帽 / 白色</div>
+                </div>
+                <div class="mini-actions"><button type="button">🔒</button><button type="button">👁</button><button type="button">📌</button></div>
+                <div class="score-title">标注评分</div>
+                <div class="score-scale">
+                  <span class="score-mark">1</span><span class="score-mark">2</span><span class="score-mark">3</span><span class="score-mark">4</span><span class="score-mark">5</span><span class="score-mark">6</span><span class="score-mark">7</span><span class="score-mark active">8</span><span class="score-mark">9</span><span class="score-mark">10</span>
+                </div>
+              </div>
             </aside>
           </div>
-        </section>
-      </main></div>
-    </div>
-  </section>
-
-  <section class="prototype-stage" data-prototype-panel="empty">
-    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="quality-pool">
-      <header class="topbar"></header>
-      <div class="main"><aside class="sidebar"></aside><main class="workspace">
-        <div class="crumb">☰ 标注质检 〉 高质量数据池</div>
-        <section class="surface tabbar"><div class="tab">高质量数据池</div></section>
-        <section class="proto-list-shell">
-          <div class="proto-list-head"><h3 class="proto-list-title">高质量数据池</h3><div class="proto-list-tools"><button class="btn btn-primary">导出当前筛选结果</button></div></div>
-          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><input class="control date-range-control" value="入池时间" /><select class="control select-control"><option>类别/属性</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
-          <div class="empty-panel">未找到符合条件的图片，请调整筛选条件</div>
-        </section>
-      </main></div>
-    </div>
-  </section>
-
-  <section class="prototype-stage" data-prototype-panel="export-disabled">
-    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="quality-pool">
-      <header class="topbar"></header>
-      <div class="main"><aside class="sidebar"></aside><main class="workspace">
-        <div class="crumb">☰ 标注质检 〉 高质量数据池</div>
-        <section class="surface tabbar"><div class="tab">高质量数据池</div></section>
-        <section class="proto-list-shell">
-          <div class="proto-list-head"><h3 class="proto-list-title">高质量数据池</h3><div class="proto-list-tools"><button class="btn btn-primary" disabled>导出当前筛选结果</button></div></div>
-          <div class="proto-filter-bar"><select class="control select-control"><option>项目类型</option></select><input class="control date-range-control" value="入池时间" /><select class="control select-control"><option>类别/属性</option></select><button class="btn btn-primary">查询</button><button class="btn btn-ghost">重置</button></div>
-          <div class="notice-panel"><div class="notice">当前账号无导出权限，导出按钮禁用。</div></div>
         </section>
       </main></div>
     </div>
