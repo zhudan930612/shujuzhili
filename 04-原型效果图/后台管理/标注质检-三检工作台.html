@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>标注质检-三检工作台</title>
+  <link rel="stylesheet" href="./assets/prototype.css" />
+  <style>
+    .prototype-stage { display: none; }
+    .prototype-stage.active { display: block; }
+    .worktop { height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; border-bottom: 1px solid var(--line); background: #fff; }
+    .worktop-title { display: flex; align-items: center; gap: 12px; font-weight: 700; color: #1f3e62; }
+    .worktop-actions { display: flex; gap: 10px; }
+    .qc-shell { height: calc(100% - 50px); display: grid; grid-template-columns: 1fr 340px; background: #edf2f8; }
+    .canvas-area { position: relative; margin: 16px; border: 1px solid #cfdbea; background: #d7e1eb url("./img/biaozhu_img.png") center center / cover no-repeat; overflow: hidden; }
+    .box { position: absolute; border: 3px solid #e85b73; background: rgba(232,91,115,0.08); }
+    .box.one { left: 210px; top: 160px; width: 220px; height: 122px; border-color: #58ba7d; background: rgba(88,186,125,0.08); }
+    .box.two { left: 470px; top: 144px; width: 208px; height: 134px; border-color: #2f84e7; background: rgba(47,132,231,0.08); }
+    .box.three { right: 198px; bottom: 206px; width: 180px; height: 142px; border-color: #f2a63e; background: rgba(242,166,62,0.12); }
+    .canvas-banner { position: absolute; left: 22px; top: 22px; max-width: 380px; padding: 12px 14px; border: 1px solid #d8e3ee; background: rgba(255,255,255,0.96); color: #38536f; line-height: 1.7; box-shadow: var(--shadow); }
+    .canvas-banner.large { top: 86px; max-width: 430px; }
+    .summary-strip { position: absolute; left: 18px; right: 18px; top: 18px; display: flex; justify-content: space-between; gap: 12px; }
+    .chip-group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip { height: 28px; padding: 0 10px; border: 1px solid #d7e2f0; background: rgba(255,255,255,0.92); color: #3a4a62; font-size: 13px; display: inline-flex; align-items: center; }
+    .chip.success { color: #159b5b; border-color: #b9e8d0; }
+    .chip.warning { color: #ba7d17; border-color: #edd39f; }
+    .chip.danger { color: #d75c67; border-color: #f0ccd0; }
+    .chip.selected { color: #225fd2; border-color: #aac5ff; }
+    .object-panel { border-left: 1px solid #dbe5f0; background: #fff; padding: 10px 12px; overflow-y: auto; }
+    .panel-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; color: #1f3e62; font-size: 16px; font-weight: 700; }
+    .project-line { margin-bottom: 10px; color: #65788d; font-size: 13px; }
+    .object-card { border: 1px solid #dce6f1; background: #fff; padding: 12px; margin-bottom: 10px; }
+    .object-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: 700; }
+    .object-title { display: inline-flex; align-items: center; font-size: 13px; }
+    .color-dot { width: 14px; height: 14px; display: inline-block; margin-right: 8px; background: #e85b73; vertical-align: -2px; }
+    .color-dot.blue { background: #2f84e7; }
+    .color-dot.green { background: #58ba7d; }
+    .color-dot.orange { background: #f2a63e; }
+    .object-meta { display: grid; gap: 6px; color: #52687f; font-size: 13px; }
+    .readonly-field { min-height: 32px; padding: 7px 10px; border: 1px solid #e1e9f2; background: #f7fafd; color: #304962; font-weight: 700; }
+    .score-title { margin-top: 10px; margin-bottom: 8px; color: #1f3e62; font-size: 13px; font-weight: 700; }
+    .score-scale { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; }
+    .score-mark { height: 28px; border: 1px solid #d9e2ef; display: flex; align-items: center; justify-content: center; background: #fff; color: #5f708a; font-size: 13px; }
+    .score-mark.active { background: #e8f0ff; color: #1f5fd6; border-color: #76a5ff; }
+    .judge-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+    .judge-btn { height: 34px; border: 1px solid; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; }
+    .judge-btn.pass { color: #159b5b; border-color: #b9e8d0; background: #eefbf4; }
+    .judge-btn.return { color: #d85b67; border-color: #f0ccd0; background: #fff4f5; }
+    .judge-btn.invalid { color: #b97813; border-color: #f2d7ad; background: #fff7ea; }
+    .reason-block { margin-top: 10px; padding-top: 10px; border-top: 1px dashed #d9e4ef; }
+    .reason-title { margin-bottom: 6px; color: #1f3e62; font-size: 12px; font-weight: 700; }
+    .reason-text { color: #40566f; font-size: 12px; line-height: 1.6; }
+    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .summary-item { border: 1px solid #d9e2ef; background: #f8fbff; padding: 12px; text-align: center; }
+    .summary-item strong { display: block; margin-top: 8px; font-size: 24px; color: #243447; }
+    .readonly-note { margin-top: 8px; color: #7b8da2; font-size: 12px; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div class="prototype-state-bar" data-prototype-switch data-prototype-default="pending">
+    <button class="active" type="button" data-prototype-button="pending">正常待质检</button>
+    <button type="button" data-prototype-button="all-invalid">无效图片待质检</button>
+    <button type="button" data-prototype-button="invalid-return">无效图片退回</button>
+    <button type="button" data-prototype-button="rework">返工整改</button>
+    <button type="button" data-prototype-button="processed">已处理</button>
+  </div>
+
+  <section class="prototype-stage active" data-prototype-panel="pending">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;">
+          <div class="worktop">
+            <div class="worktop-title">← 三检工作台</div>
+            <div class="worktop-actions">
+              <button class="btn btn-ghost">保存草稿</button>
+              <button class="btn btn-ghost">任务记录</button>
+              <button class="btn btn-primary">提交本轮质检</button>
+            </div>
+          </div>
+          <div class="qc-shell">
+            <div class="canvas-area">
+              <div class="summary-strip">
+                <div class="chip-group"><span class="chip selected">当前对象：脚手架 / 盘扣式</span><span class="chip">二检结果：通过</span><span class="chip">当前建议：通过</span></div>
+                <div class="chip-group"><span class="chip success">通过 5</span><span class="chip danger">无效 3</span><span class="chip warning">终局待确认</span></div>
+              </div>
+              <div class="canvas-banner large">当前为三检对象级裁决页。完成本轮对象裁决后，才能进入图片级终局判断。</div>
+              <div class="box one"></div>
+              <div class="box two"></div>
+              <div class="box three"></div>
+            </div>
+            <aside class="object-panel">
+              <div class="panel-title"><span>三检裁决与终局准备</span><span class="proto-status" data-variant="warning">终局前检查中</span></div>
+              <div class="project-line">项目类型：零星作业</div>
+              <div class="object-card">
+                <div class="object-head"><span class="object-title"><i class="color-dot blue"></i>当前对象</span></div>
+                <div class="object-meta">
+                  <div>对象类别：脚手架 / 盘扣式</div>
+                  <div>二检结果：通过，评分 8.0 分</div>
+                  <div class="readonly-field">三检意见：拟通过，可进入终局统计</div>
+                </div>
+                <div class="score-title">当前对象评分</div>
+                <div class="score-scale">
+                  <span class="score-mark">1</span><span class="score-mark">2</span><span class="score-mark">3</span><span class="score-mark">4</span><span class="score-mark">5</span><span class="score-mark">6</span><span class="score-mark">7</span><span class="score-mark">8</span><span class="score-mark active">9</span><span class="score-mark">10</span>
+                </div>
+                <div class="judge-row"><span class="judge-btn pass">通过</span><span class="judge-btn return">退回</span><span class="judge-btn invalid">无效</span></div>
+              </div>
+              <div class="object-card">
+                <div class="summary-grid">
+                  <div class="summary-item"><span>建议入池对象</span><strong>5</strong></div>
+                  <div class="summary-item"><span>无效对象</span><strong>3</strong></div>
+                  <div class="summary-item"><span>未闭环退回</span><strong>0</strong></div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="all-invalid">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;">
+          <div class="worktop">
+            <div class="worktop-title">← 三检工作台</div>
+            <div class="worktop-actions">
+              <button class="btn btn-ghost">上一张</button>
+              <button class="btn btn-ghost">下一张</button>
+              <button class="btn btn-primary">退回整改</button>
+              <button class="btn btn-danger">不入池</button>
+            </div>
+          </div>
+          <div class="qc-shell">
+            <div class="canvas-area">
+              <div class="summary-strip">
+                <div class="chip-group"><span class="chip selected">当前模式：无效图片终审</span><span class="chip">三检仅可执行退回整改或不入池</span></div>
+                <div class="chip-group"><span class="chip danger">无效提交 3</span><span class="chip warning">终审待确认</span></div>
+              </div>
+              <div class="canvas-banner large">当前图片的全部标注人员均提交了无效图片结果。三检不进入对象级裁决，直接对整张图片执行退回整改或不入池终审。</div>
+            </div>
+            <aside class="object-panel">
+              <div class="panel-title"><span>标注人员无效提交列表</span><span class="qc-status-pill">待质检</span></div>
+              <div class="project-line">项目类型：住宅装修</div>
+              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot"></i>张三</span></div><div class="reason-block"><div class="reason-title">无效原因</div><div class="reason-text">目标被遮挡无法判定；非业务关注对象；标注结果与图片事实不符。</div></div></div>
+              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot blue"></i>李四</span></div><div class="reason-block"><div class="reason-title">无效原因</div><div class="reason-text">目标被遮挡无法判定；非业务关注对象。</div></div></div>
+              <div class="object-card"><div class="object-head"><span class="object-title"><i class="color-dot green"></i>王五</span></div><div class="reason-block"><div class="reason-title">无效原因</div><div class="reason-text">目标被遮挡无法判定。</div></div></div>
+            </aside>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="invalid-return">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;">
+          <div class="worktop">
+            <div class="worktop-title">← 三检工作台</div>
+            <div class="worktop-actions">
+              <button class="btn btn-ghost">查看退回原因</button>
+              <button class="btn btn-ghost">上一张</button>
+              <button class="btn btn-ghost">下一张</button>
+              <button class="btn btn-ghost">任务记录</button>
+            </div>
+          </div>
+          <div class="qc-shell">
+            <div class="canvas-area">
+              <div class="canvas-banner large">退回人：质检员A<br />退回时间：2026-04-23 14:32<br />退回原因：图片中仍存在可标注对象 / 无效依据不足 / 结论不一致<br /><br />请根据退回原因补充说明后，重新进入三检复核链路。</div>
+            </div>
+            <aside class="object-panel">
+              <div class="panel-title"><span>无效图片退回说明</span><span class="qc-status-pill">返工整改</span></div>
+              <div class="project-line">项目类型：住宅装修</div>
+              <div class="object-card"><div class="reason-block"><div class="reason-title">退回原因</div><div class="reason-text">图片中仍存在可标注对象；当前“整图无效”依据不足；多名标注员结论不一致，需回标注侧重新确认。</div></div></div>
+              <div class="object-card"><div class="reason-block"><div class="reason-title">处理说明</div><div class="reason-text">该状态仅支持查看，不允许在三检侧继续做终局裁决；需等待标注侧重提后重新进入三检。</div></div></div>
+            </aside>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="rework">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;">
+          <div class="worktop">
+            <div class="worktop-title">← 三检工作台</div>
+            <div class="worktop-actions">
+              <button class="btn btn-ghost">上一张</button>
+              <button class="btn btn-ghost">下一张</button>
+              <button class="btn btn-ghost">任务记录</button>
+            </div>
+          </div>
+          <div class="qc-shell">
+            <div class="canvas-area">
+              <div class="canvas-banner">三检返工整改状态仅支持查看回流结果，不允许继续改分或重复裁决。</div>
+              <div class="box one"></div>
+              <div class="box two"></div>
+            </div>
+            <aside class="object-panel">
+              <div class="panel-title"><span>返工整改闭环信息</span><span class="proto-tag">只读查看</span></div>
+              <div class="project-line">项目类型：零星作业</div>
+              <div class="object-card"><div class="reason-block"><div class="reason-title">退回对象清单</div><div class="reason-text">对象04：关键属性选择错误；对象07：标准结果与图片事实不符。</div></div></div>
+              <div class="object-card"><div class="reason-block"><div class="reason-title">返工进度</div><div class="reason-text">返工子任务已下发，标注侧待补提 2 个对象；闭环后回到三检继续复核。</div></div><div class="readonly-note">当前轮暂不可继续裁决。</div></div>
+            </aside>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="processed">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;">
+          <div class="worktop">
+            <div class="worktop-title">← 三检工作台</div>
+            <div class="worktop-actions">
+              <button class="btn btn-ghost">上一张</button>
+              <button class="btn btn-ghost">下一张</button>
+              <button class="btn btn-ghost">任务记录</button>
+            </div>
+          </div>
+          <div class="qc-shell">
+            <div class="canvas-area">
+              <div class="canvas-banner">三检处理已完成。当前页面仅展示本轮终态结果，不再允许继续裁决或修改终局判断。</div>
+            </div>
+            <aside class="object-panel">
+              <div class="panel-title"><span>本轮结果汇总</span><span class="proto-status" data-variant="success">已处理</span></div>
+              <div class="project-line">项目类型：零星作业</div>
+              <div class="object-card">
+                <div class="summary-grid">
+                  <div class="summary-item"><span>通过对象</span><strong>10</strong></div>
+                  <div class="summary-item"><span>无效对象</span><strong>0</strong></div>
+                  <div class="summary-item"><span>返工整改</span><strong>0</strong></div>
+                </div>
+              </div>
+              <div class="object-card"><div class="reason-block"><div class="reason-title">处理结果说明</div><div class="reason-text">当前图片已完成三检处理，终局结果已写入，不存在未闭环退回对象。</div></div></div>
+            </aside>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <script src="./assets/prototype.js"></script>
+  <script src="./assets/prototype-layout.js"></script>
+  <script src="./assets/prototype-switcher.js"></script>
+</body>
+</html>

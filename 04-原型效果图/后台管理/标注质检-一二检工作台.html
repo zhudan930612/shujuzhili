@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>标注质检-一二检工作台</title>
+  <link rel="stylesheet" href="./assets/prototype.css" />
+  <style>
+    .prototype-stage { display: none; }
+    .prototype-stage.active { display: block; }
+    .worktop { height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; border-bottom: 1px solid var(--line); background: #fff; }
+    .worktop-title { display: flex; align-items: center; gap: 12px; font-weight: 700; color: #1f3e62; }
+    .worktop-actions { display: flex; gap: 10px; }
+    .qc-shell { height: calc(100% - 50px); display: grid; grid-template-columns: 1fr 340px; background: #edf2f8; }
+    .canvas-area { position: relative; margin: 16px; border: 1px solid #cfdbea; background: #d7e1eb url("./img/biaozhu_img.png") center center / cover no-repeat; overflow: hidden; }
+    .box { position: absolute; border: 3px solid #e85b73; background: rgba(232,91,115,0.08); }
+    .box.one { left: 210px; top: 160px; width: 260px; height: 110px; }
+    .box.two { right: 190px; bottom: 190px; width: 220px; height: 140px; border-color: #2f84e7; background: rgba(47,132,231,0.08); }
+    .box.pass { border-color: #58ba7d; background: rgba(88,186,125,0.08); }
+    .box.invalid { border-color: #f2a63e; background: rgba(242,166,62,0.12); }
+    .canvas-banner { position: absolute; left: 22px; top: 22px; max-width: 360px; padding: 12px 14px; border: 1px solid #d8e3ee; background: rgba(255,255,255,0.96); color: #38536f; line-height: 1.7; box-shadow: var(--shadow); }
+    .object-panel { border-left: 1px solid #dbe5f0; background: #fff; padding: 10px 12px; overflow-y: auto; }
+    .panel-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; color: #1f3e62; font-size: 16px; font-weight: 700; }
+    .project-line { margin-bottom: 10px; color: #65788d; font-size: 13px; }
+    .object-card { border: 1px solid #dce6f1; background: #fff; padding: 12px; margin-bottom: 10px; }
+    .object-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: 700; }
+    .object-title { display: inline-flex; align-items: center; font-size: 13px; }
+    .color-dot { width: 14px; height: 14px; display: inline-block; margin-right: 8px; background: #e85b73; vertical-align: -2px; }
+    .color-dot.blue { background: #2f84e7; }
+    .color-dot.green { background: #58ba7d; }
+    .color-dot.orange { background: #f2a63e; }
+    .object-meta { display: grid; gap: 6px; color: #52687f; font-size: 13px; }
+    .readonly-field { min-height: 32px; padding: 7px 10px; border: 1px solid #e1e9f2; background: #f7fafd; color: #304962; font-weight: 700; }
+    .mini-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .mini-actions button { flex: 1; height: 28px; border: 1px solid #d8e3ee; background: #fff; color: #52677e; font-size: 14px; font-weight: 700; }
+    .score-title { margin-top: 10px; margin-bottom: 8px; color: #1f3e62; font-size: 13px; font-weight: 700; }
+    .score-scale { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; }
+    .score-mark { height: 28px; border: 1px solid #d9e2ef; display: flex; align-items: center; justify-content: center; background: #fff; color: #5f708a; font-size: 13px; }
+    .score-mark.active { background: #e8f0ff; color: #1f5fd6; border-color: #76a5ff; }
+    .judge-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+    .judge-btn { height: 34px; border: 1px solid; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; }
+    .judge-btn.pass { color: #159b5b; border-color: #b9e8d0; background: #eefbf4; }
+    .judge-btn.return { color: #d85b67; border-color: #f0ccd0; background: #fff4f5; }
+    .judge-btn.invalid { color: #b97813; border-color: #f2d7ad; background: #fff7ea; }
+    .reason-block { margin-top: 10px; padding-top: 10px; border-top: 1px dashed #d9e4ef; }
+    .reason-title { margin-bottom: 6px; color: #1f3e62; font-size: 12px; font-weight: 700; }
+    .reason-text { color: #40566f; font-size: 12px; line-height: 1.6; }
+    .readonly-note { margin-top: 8px; color: #7b8da2; font-size: 12px; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div class="prototype-state-bar" data-prototype-switch data-prototype-default="pending">
+    <button class="active" type="button" data-prototype-button="pending">待质检</button>
+    <button type="button" data-prototype-button="rework">返工整改</button>
+    <button type="button" data-prototype-button="processed">已处理</button>
+  </div>
+
+  <section class="prototype-stage active" data-prototype-panel="pending">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;">
+          <div class="worktop">
+            <div class="worktop-title">← 质检工作台</div>
+            <div class="worktop-actions">
+              <button class="btn btn-ghost">上一张</button>
+              <button class="btn btn-ghost">下一张</button>
+              <button class="btn btn-ghost">保存草稿</button>
+              <button class="btn btn-primary">提交质检</button>
+              <button class="btn btn-ghost">任务记录</button>
+            </div>
+          </div>
+          <div class="qc-shell">
+            <div class="canvas-area">
+              <div class="box one"></div>
+              <div class="box two"></div>
+            </div>
+            <aside class="object-panel">
+              <div class="panel-title"><span>标注对象列表</span><span class="qc-status-pill">待质检</span></div>
+              <div class="project-line">项目类型：住宅装修</div>
+              <div class="object-card">
+                <div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span></div>
+                <div class="object-meta">
+                  <div>形状：矩形</div>
+                  <div class="readonly-field">安全帽 / 白色</div>
+                </div>
+                <div class="mini-actions"><button type="button">🔒</button><button type="button">👁</button><button type="button">📌</button></div>
+                <div class="score-title">标注评分</div>
+                <div class="score-scale">
+                  <span class="score-mark">1</span><span class="score-mark">2</span><span class="score-mark">3</span><span class="score-mark">4</span><span class="score-mark">5</span><span class="score-mark">6</span><span class="score-mark">7</span><span class="score-mark active">8</span><span class="score-mark">9</span><span class="score-mark">10</span>
+                </div>
+                <div class="judge-row"><span class="judge-btn pass">通过</span><span class="judge-btn return">退回</span><span class="judge-btn invalid">无效</span></div>
+              </div>
+              <div class="object-card">
+                <div class="object-head"><span class="object-title"><i class="color-dot blue"></i>对象2</span></div>
+                <div class="object-meta">
+                  <div>形状：多边形</div>
+                  <div class="readonly-field">灭火器 / 正常</div>
+                </div>
+                <div class="mini-actions"><button type="button">🔒</button><button type="button">👁</button><button type="button">📌</button></div>
+                <div class="score-title">标注评分</div>
+                <div class="score-scale">
+                  <span class="score-mark">1</span><span class="score-mark">2</span><span class="score-mark">3</span><span class="score-mark">4</span><span class="score-mark">5</span><span class="score-mark">6</span><span class="score-mark">7</span><span class="score-mark">8</span><span class="score-mark active">9</span><span class="score-mark">10</span>
+                </div>
+                <div class="judge-row"><span class="judge-btn pass">通过</span><span class="judge-btn return">退回</span><span class="judge-btn invalid">无效</span></div>
+                <div class="reason-block"><div class="reason-title">退回原因</div><div class="reason-text">框选位置不准确，需重新确认对象边界。</div></div>
+              </div>
+            </aside>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="rework">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;">
+          <div class="worktop">
+            <div class="worktop-title">← 质检工作台</div>
+            <div class="worktop-actions">
+              <button class="btn btn-ghost">上一张</button>
+              <button class="btn btn-ghost">下一张</button>
+              <button class="btn btn-ghost">任务记录</button>
+            </div>
+          </div>
+          <div class="qc-shell">
+            <div class="canvas-area">
+              <div class="canvas-banner">当前图片处于返工整改闭环阶段。返工对象仅供查看，不允许继续评分或重新裁决。</div>
+              <div class="box pass one"></div>
+              <div class="box two"></div>
+            </div>
+            <aside class="object-panel">
+              <div class="panel-title"><span>标注对象列表</span><span class="qc-status-pill">返工整改</span></div>
+              <div class="project-line">项目类型：住宅装修</div>
+              <div class="object-card">
+                <div class="object-head"><span class="object-title"><i class="color-dot"></i>对象1</span><span class="proto-status" data-variant="warning">返工整改中</span></div>
+                <div class="object-meta">
+                  <div>形状：矩形</div>
+                  <div class="readonly-field">安全帽 / 白色</div>
+                </div>
+                <div class="score-title">标注评分</div>
+                <div class="score-scale">
+                  <span class="score-mark">1</span><span class="score-mark">2</span><span class="score-mark">3</span><span class="score-mark">4</span><span class="score-mark">5</span><span class="score-mark">6</span><span class="score-mark">7</span><span class="score-mark active">8</span><span class="score-mark">9</span><span class="score-mark">10</span>
+                </div>
+                <div class="reason-block"><div class="reason-title">退回原因</div><div class="reason-text">框选位置不准确 / 类别冲突。</div></div>
+                <div class="readonly-note">只读查看，等待标注侧返工提交后回流复核。</div>
+              </div>
+              <div class="object-card">
+                <div class="object-head"><span class="object-title"><i class="color-dot green"></i>对象2</span><span class="proto-status" data-variant="success">已通过</span></div>
+                <div class="object-meta">
+                  <div>形状：多边形</div>
+                  <div class="readonly-field">灭火器 / 正常</div>
+                </div>
+                <div class="readonly-note">当前轮暂不可继续改分或再次裁决。</div>
+              </div>
+            </aside>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <section class="prototype-stage" data-prototype-panel="processed">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
+      <header class="topbar"></header>
+      <div class="main"><aside class="sidebar"></aside><main class="workspace">
+        <section class="content-panel" style="height:982px; padding:0; overflow:hidden;">
+          <div class="worktop">
+            <div class="worktop-title">← 质检工作台</div>
+            <div class="worktop-actions">
+              <button class="btn btn-ghost">上一张</button>
+              <button class="btn btn-ghost">下一张</button>
+              <button class="btn btn-ghost">任务记录</button>
+            </div>
+          </div>
+          <div class="qc-shell">
+            <div class="canvas-area">
+              <div class="canvas-banner">当前轮次已处理完成，仅支持查看本轮结果，不允许继续修改。</div>
+              <div class="box pass one"></div>
+              <div class="box invalid two"></div>
+            </div>
+            <aside class="object-panel">
+              <div class="panel-title"><span>标注对象列表</span><span class="proto-status" data-variant="success">已处理</span></div>
+              <div class="project-line">项目类型：住宅装修</div>
+              <div class="object-card">
+                <div class="object-head"><span class="object-title"><i class="color-dot green"></i>对象1</span><span class="proto-status" data-variant="success">通过</span></div>
+                <div class="object-meta">
+                  <div>形状：矩形</div>
+                  <div class="readonly-field">安全帽 / 白色</div>
+                </div>
+                <div class="score-title">最终评分</div>
+                <div class="score-scale">
+                  <span class="score-mark">1</span><span class="score-mark">2</span><span class="score-mark">3</span><span class="score-mark">4</span><span class="score-mark">5</span><span class="score-mark">6</span><span class="score-mark">7</span><span class="score-mark">8</span><span class="score-mark active">9</span><span class="score-mark">10</span>
+                </div>
+              </div>
+              <div class="object-card">
+                <div class="object-head"><span class="object-title"><i class="color-dot orange"></i>对象2</span><span class="proto-status" data-variant="error">无效</span></div>
+                <div class="reason-block"><div class="reason-title">无效原因</div><div class="reason-text">目标被遮挡无法判定；非业务关注对象。</div></div>
+              </div>
+            </aside>
+          </div>
+        </section>
+      </main></div>
+    </div>
+  </section>
+
+  <script src="./assets/prototype.js"></script>
+  <script src="./assets/prototype-layout.js"></script>
+  <script src="./assets/prototype-switcher.js"></script>
+</body>
+</html>
