@@ -602,6 +602,185 @@
     .qc-modal-stat .qc-terminal-card strong {
       font-size: 16px;
     }
+    .round12-pending-stage {
+      height: 982px;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #edf2f8;
+    }
+    .round12-pending-stage .qc-worktop {
+      height: 50px;
+      padding: 0 18px;
+    }
+    .round12-pending-stage .qc-worktop strong {
+      font-size: 16px;
+      color: #1f3e62;
+    }
+    .round12-pending-body {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 58px 1fr 340px;
+      background: #edf2f8;
+    }
+    .round12-toolrail {
+      padding: 10px 8px;
+      border-right: 1px solid #dbe5f0;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .round12-canvas {
+      position: relative;
+      margin: 16px;
+      border: 1px solid #cfdbea;
+      background: #d7e1eb url("./img/biaozhu_img.png") center center / cover no-repeat;
+      overflow: hidden;
+    }
+    .round12-note {
+      position: absolute;
+      left: 220px;
+      top: 292px;
+      min-height: 44px;
+      padding: 0 18px;
+      display: inline-flex;
+      align-items: center;
+      background: #ffd83f;
+      color: #4f4400;
+      font-size: 13px;
+      box-shadow: var(--shadow);
+    }
+    .round12-side {
+      border-left: 1px solid #dbe5f0;
+      background: #fff;
+      padding: 14px;
+      overflow: auto;
+    }
+    .round12-side-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      color: #1f3e62;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .round12-side-head .qc-status-pill {
+      min-height: 32px;
+      padding: 0 14px;
+      background: #f7fbff;
+      border-color: #d6e4f3;
+      color: #5b7290;
+    }
+    .round12-project-line {
+      margin-bottom: 12px;
+      color: #65788d;
+      font-size: 13px;
+    }
+    .round12-object-card {
+      border: 1px solid #dce6f1;
+      background: #fff;
+      padding: 12px 12px 14px;
+      margin-bottom: 10px;
+    }
+    .round12-object-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-weight: 700;
+      color: #23384d;
+    }
+    .round12-object-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: #23384d;
+    }
+    .round12-object-card .color-dot {
+      margin-right: 0;
+    }
+    .round12-object-fields {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 8px 10px;
+      color: #516880;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .round12-object-fields .label {
+      color: #7a8b9d;
+    }
+    .round12-object-tools {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 10px 0 12px;
+    }
+    .round12-object-tools button {
+      height: 28px;
+      border: 1px solid #d8e3ee;
+      background: #fff;
+      color: #52677e;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .round12-score-title {
+      margin-bottom: 8px;
+      color: #1f3e62;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .round12-score-scale {
+      margin-bottom: 12px;
+    }
+    .round12-reason-block {
+      margin-top: 12px;
+    }
+    .round12-reason-label {
+      margin-bottom: 8px;
+      color: #1f3e62;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .round12-reason-input {
+      width: 100%;
+      height: 34px;
+      border: 1px solid #d8e3ee;
+      background: #fff;
+      padding: 0 10px;
+      color: #42566b;
+      font-size: 13px;
+    }
+    .round12-checklist {
+      display: grid;
+      gap: 8px;
+      color: #42566b;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .round12-checklist label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .round12-checklist .other {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+    .round12-checklist .other input[type="text"] {
+      height: 30px;
+      border: 1px solid #d8e3ee;
+      padding: 0 8px;
+      font-size: 13px;
+      color: #42566b;
+    }
   </style>
 </head>
 <body>
@@ -620,230 +799,181 @@
   </div>
 
   <section class="prototype-stage active" data-prototype-panel="round12-pending">
-    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
+    <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-task">
       <header class="topbar"></header>
       <div class="main">
         <aside class="sidebar"></aside>
         <main class="workspace">
-          <section class="qc-shell">
+          <section class="round12-pending-stage">
             <div class="qc-worktop">
               <strong>← 质检工作台</strong>
               <div class="qc-actions">
+                <button class="btn btn-ghost" type="button">上一张</button>
+                <button class="btn btn-ghost" type="button">下一张</button>
                 <button class="btn btn-ghost" type="button">保存草稿</button>
+                <button class="btn btn-primary" type="button">提交质检</button>
                 <button class="btn btn-ghost" type="button">任务记录</button>
-                <button class="btn btn-primary" type="button">提交本轮质检</button>
               </div>
             </div>
-            <div class="qc-summary-bar">
-              <div class="qc-summary-left">
-                <span class="qc-status-pill" data-variant="pending">一检 · 待质检</span>
-                <span class="proto-tag">图片任务：IMG_20260510_018</span>
-                <span class="proto-tag">项目类型：住宅装修</span>
-                <span class="proto-tag">来源标注人数：3 人</span>
+            <div class="round12-pending-body">
+              <div class="round12-toolrail">
+                <div class="toolbtn active" data-tip="指针"><span class="tool-icon">↖</span></div>
+                <div class="toolbtn" data-tip="旋转"><span class="tool-icon">↻</span></div>
+                <div class="toolbtn" data-tip="魔术棒"><span class="tool-icon wand"></span></div>
+                <div class="toolbtn" data-tip="自动识别"><span class="tool-icon">AI</span></div>
+                <div class="toolbtn" data-tip="矩形"><span class="tool-icon rect"></span></div>
+                <div class="toolbtn" data-tip="多边形"><span class="tool-icon poly-icon"></span></div>
+                <div class="toolbtn" data-tip="点标注"><span class="tool-icon">●</span></div>
               </div>
-              <div class="qc-summary-right">
-                <span class="qc-meta-line">当前图片共 8 个对象</span>
-                <span class="qc-meta-line">已裁决 5 个</span>
-                <span class="qc-meta-line">待裁决 3 个</span>
+              <div class="round12-canvas">
+                <div class="qc-object-box" data-variant="return" style="left: 210px; top: 160px; width: 260px; height: 110px;"></div>
+                <div class="qc-object-box" data-variant="selected" style="right: 190px; bottom: 190px; width: 220px; height: 140px;"></div>
+                <div class="round12-note">无法拖到，无法修改节点，默认显示节点状态</div>
               </div>
-            </div>
-            <div class="qc-workspace">
-              <div class="qc-main">
-                <section class="qc-card">
-                  <div class="qc-card-head">
-                    <div class="qc-card-title">当前任务摘要</div>
-                    <span class="proto-status" data-variant="warning">评分待确认</span>
+              <aside class="round12-side">
+                <div class="round12-side-head">
+                  <span>标注对象列表</span>
+                  <span class="qc-status-pill">待质检</span>
+                </div>
+                <div class="round12-project-line">项目类型：住宅装修</div>
+
+                <div class="round12-object-card">
+                  <div class="round12-object-head">
+                    <span class="round12-object-title"><i class="color-dot"></i>对象1</span>
                   </div>
-                  <div class="qc-card-body">
-                    <div class="qc-overview-grid">
-                      <div class="qc-overview-item">
-                        <div class="qc-overview-label">当前轮次</div>
-                        <div class="qc-overview-value">一检</div>
-                      </div>
-                      <div class="qc-overview-item">
-                        <div class="qc-overview-label">对象摘要</div>
-                        <div class="qc-overview-value">通过 4 / 退回 1 / 无效 0</div>
-                      </div>
-                      <div class="qc-overview-item">
-                        <div class="qc-overview-label">当前评分</div>
-                        <div class="qc-overview-value">7.5 分</div>
-                      </div>
-                      <div class="qc-overview-item">
-                        <div class="qc-overview-label">前序回流</div>
-                        <div class="qc-overview-value">首次进入质检</div>
-                      </div>
-                    </div>
+                  <div class="round12-object-fields">
+                    <div class="label">形状</div><div>多边形</div>
+                    <div class="label">对象类别</div><div>安全帽 / 白色</div>
                   </div>
-                </section>
-                <section class="qc-card qc-canvas-card">
-                  <div class="qc-toolbar">
-                    <div class="qc-toolbar-left">
-                      <span class="qc-chip" data-variant="selected">当前对象：安全帽 / 白色</span>
-                      <span class="qc-chip">标注员：李四</span>
-                      <span class="qc-chip">对象编号：OBJ-03</span>
-                    </div>
-                    <div class="qc-toolbar-right">
-                      <span class="qc-chip" data-variant="success">已通过 4</span>
-                      <span class="qc-chip" data-variant="warning">待裁决 3</span>
-                      <span class="qc-chip" data-variant="danger">已退回 1</span>
-                    </div>
+                  <div class="round12-object-tools">
+                    <button type="button">🔒</button>
+                    <button type="button">👁</button>
+                    <button type="button">📌</button>
                   </div>
-                  <div class="qc-canvas">
-                    <div class="qc-focus-panel">
-                      当前选中对象：李四｜安全帽 / 白色<br />
-                      当前位置与类别存在疑义，请完成本轮裁决。
-                    </div>
-                    <div class="qc-object-box" data-variant="pass" style="left: 186px; top: 172px; width: 180px; height: 112px;">
-                      <span class="qc-box-label">对象 01 · 已通过</span>
-                    </div>
-                    <div class="qc-object-box" data-variant="selected" style="left: 418px; top: 154px; width: 222px; height: 146px;">
-                      <span class="qc-box-label">对象 03 · 待质检</span>
-                    </div>
-                    <div class="qc-object-box" data-variant="return" style="right: 188px; bottom: 210px; width: 174px; height: 136px;">
-                      <span class="qc-box-label">对象 06 · 已退回</span>
-                    </div>
-                    <div class="qc-object-box" data-variant="invalid" style="left: 238px; bottom: 160px; width: 160px; height: 118px;">
-                      <span class="qc-box-label">对象 08 · 候选无效</span>
-                    </div>
+                  <div class="round12-score-title">标注评分</div>
+                  <div class="qc-score-scale round12-score-scale">
+                    <span class="qc-score-mark">1</span><span class="qc-score-mark">2</span><span class="qc-score-mark">3</span><span class="qc-score-mark">4</span><span class="qc-score-mark">5</span><span class="qc-score-mark">6</span><span class="qc-score-mark">7</span><span class="qc-score-mark active">8</span><span class="qc-score-mark">9</span><span class="qc-score-mark">10</span>
                   </div>
-                </section>
-              </div>
-              <aside class="qc-side">
-                <section class="qc-card qc-side-scroll">
-                  <div class="qc-card-head">
-                    <div class="qc-card-title">对象裁决与来源辅助</div>
-                    <span class="proto-tag">当前选中 1 个对象</span>
+                  <div class="qc-judge-row">
+                    <span class="qc-judge-btn" data-variant="pass">通过</span>
+                    <span class="qc-judge-btn" data-variant="return">退回</span>
+                    <span class="qc-judge-btn" data-variant="invalid">无效</span>
                   </div>
-                  <div class="qc-card-body">
-                    <div class="qc-side-card">
-                      <div class="qc-side-card-head">当前对象裁决</div>
-                      <div class="qc-side-card-body">
-                        <div class="qc-detail-grid">
-                          <div class="qc-detail-label">对象类别</div>
-                          <div>安全帽 / 白色</div>
-                          <div class="qc-detail-label">来源标注</div>
-                          <div>李四，矩形框，置信度 0.83</div>
-                          <div class="qc-detail-label">前序结果</div>
-                          <div>当前为一检首次裁决</div>
-                        </div>
-                        <div class="qc-score-entry">
-                          <div class="qc-score-entry-head">
-                            <span>当前对象评分（10 分制）</span>
-                            <strong>7.5 分</strong>
-                          </div>
-                          <div class="qc-score-scale">
-                            <span class="qc-score-mark">1</span>
-                            <span class="qc-score-mark">2</span>
-                            <span class="qc-score-mark">3</span>
-                            <span class="qc-score-mark">4</span>
-                            <span class="qc-score-mark">5</span>
-                            <span class="qc-score-mark">6</span>
-                            <span class="qc-score-mark">7</span>
-                            <span class="qc-score-mark active">8</span>
-                            <span class="qc-score-mark">9</span>
-                            <span class="qc-score-mark">10</span>
-                          </div>
-                        </div>
-                        <div class="qc-judge-row" style="margin-top:12px;">
-                          <span class="qc-judge-btn" data-variant="pass">通过</span>
-                          <span class="qc-judge-btn" data-variant="return">退回</span>
-                          <span class="qc-judge-btn" data-variant="invalid">无效</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="qc-side-card">
-                      <div class="qc-side-card-head">对象列表</div>
-                      <div class="qc-side-card-body">
-                        <div class="qc-object-list">
-                          <div class="qc-object-item active">
-                            <div class="qc-object-top">
-                              <span class="qc-object-name">对象 03</span>
-                              <span class="proto-status" data-variant="warning">待质检</span>
-                            </div>
-                            <div class="qc-object-meta">安全帽 / 白色 · 标注员 李四 · 候选 2 条</div>
-                            <div class="qc-object-score">
-                              <span>对象评分（10 分制）</span>
-                              <strong>7.5</strong>
-                            </div>
-                            <div class="qc-judge-row">
-                              <span class="qc-judge-btn" data-variant="pass">通过</span>
-                              <span class="qc-judge-btn" data-variant="return">退回</span>
-                              <span class="qc-judge-btn" data-variant="invalid">无效</span>
-                            </div>
-                          </div>
-                          <div class="qc-object-item">
-                            <div class="qc-object-top">
-                              <span class="qc-object-name">对象 05</span>
-                              <span class="proto-status" data-variant="muted">待质检</span>
-                            </div>
-                            <div class="qc-object-meta">脚手架 / 盘扣式 · 标注员 张三 · 候选 1 条</div>
-                            <div class="qc-object-score">
-                              <span>对象评分（10 分制）</span>
-                              <strong>8.0</strong>
-                            </div>
-                            <div class="qc-judge-row">
-                              <span class="qc-judge-btn" data-variant="pass">通过</span>
-                              <span class="qc-judge-btn" data-variant="return">退回</span>
-                              <span class="qc-judge-btn" data-variant="invalid">无效</span>
-                            </div>
-                          </div>
-                          <div class="qc-object-item">
-                            <div class="qc-object-top">
-                              <span class="qc-object-name">对象 08</span>
-                              <span class="proto-status" data-variant="muted">待质检</span>
-                            </div>
-                            <div class="qc-object-meta">灭火器 / 损坏 · 标注员 王五 · 候选 1 条</div>
-                            <div class="qc-object-score">
-                              <span>对象评分（10 分制）</span>
-                              <strong>6.5</strong>
-                            </div>
-                            <div class="qc-judge-row">
-                              <span class="qc-judge-btn" data-variant="pass">通过</span>
-                              <span class="qc-judge-btn" data-variant="return">退回</span>
-                              <span class="qc-judge-btn" data-variant="invalid">无效</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="qc-side-card">
-                      <div class="qc-side-card-head">当前轮评分摘要</div>
-                      <div class="qc-side-card-body">
-                        <div class="qc-score-box">
-                          <div class="qc-score-item">
-                            <div class="qc-overview-label">当前评分</div>
-                            <strong>7.5</strong>
-                          </div>
-                          <div class="qc-score-item">
-                            <div class="qc-overview-label">阈值命中</div>
-                            <strong>低于 8 分</strong>
-                          </div>
-                        </div>
-                        <div class="qc-modal-note">
-                          当前分数与“对象 03 计划退回”一致；若后续裁决与分数明显不一致，提交时将触发评分说明弹窗。
-                        </div>
-                      </div>
-                    </div>
-                    <div class="qc-side-card">
-                      <div class="qc-side-card-head">来源结果与前序记录</div>
-                      <div class="qc-side-card-body">
-                        <div class="qc-source-list">
-                          <div class="qc-source-item">
-                            <strong>李四</strong>：共标注 7 个对象，当前对象来自该记录。<br />
-                            <span class="proto-tag">候选：安全帽 / 白色</span>
-                          </div>
-                          <div class="qc-source-item">
-                            <strong>张三</strong>：共标注 5 个对象，当前对象存在近似候选。<br />
-                            <span class="proto-tag">候选：安全帽 / 红色</span>
-                          </div>
-                          <div class="qc-source-item">
-                            <strong>前序记录</strong>：首次进入一检，无历史返工。
-                          </div>
-                        </div>
-                      </div>
+                </div>
+
+                <div class="round12-object-card">
+                  <div class="round12-object-head">
+                    <span class="round12-object-title"><i class="color-dot"></i>对象1</span>
+                  </div>
+                  <div class="round12-object-fields">
+                    <div class="label">形状</div><div>多边形</div>
+                    <div class="label">对象类别</div><div>安全帽 / 白色</div>
+                  </div>
+                  <div class="round12-object-tools">
+                    <button type="button">🔒</button>
+                    <button type="button">👁</button>
+                    <button type="button">📌</button>
+                  </div>
+                  <div class="round12-score-title">标注评分</div>
+                  <div class="qc-score-scale round12-score-scale">
+                    <span class="qc-score-mark">1</span><span class="qc-score-mark">2</span><span class="qc-score-mark">3</span><span class="qc-score-mark">4</span><span class="qc-score-mark">5</span><span class="qc-score-mark">6</span><span class="qc-score-mark">7</span><span class="qc-score-mark">8</span><span class="qc-score-mark active">9</span><span class="qc-score-mark">10</span>
+                  </div>
+                  <div class="qc-judge-row">
+                    <span class="qc-judge-btn" data-variant="pass">通过</span>
+                    <span class="qc-judge-btn" data-variant="return">退回</span>
+                    <span class="qc-judge-btn" data-variant="invalid">无效</span>
+                  </div>
+                  <div class="round12-reason-block">
+                    <div class="round12-reason-label">退回原因</div>
+                    <input class="round12-reason-input" type="text" value="" />
+                  </div>
+                </div>
+
+                <div class="round12-object-card">
+                  <div class="round12-object-head">
+                    <span class="round12-object-title"><i class="color-dot"></i>对象1</span>
+                  </div>
+                  <div class="round12-object-fields">
+                    <div class="label">形状</div><div>多边形</div>
+                    <div class="label">对象类别</div><div>安全帽 / 白色</div>
+                  </div>
+                  <div class="round12-object-tools">
+                    <button type="button">🔒</button>
+                    <button type="button">👁</button>
+                    <button type="button">📌</button>
+                  </div>
+                  <div class="round12-score-title">标注评分</div>
+                  <div class="qc-score-scale round12-score-scale">
+                    <span class="qc-score-mark">1</span><span class="qc-score-mark">2</span><span class="qc-score-mark">3</span><span class="qc-score-mark">4</span><span class="qc-score-mark">5</span><span class="qc-score-mark">6</span><span class="qc-score-mark">7</span><span class="qc-score-mark active">8</span><span class="qc-score-mark">9</span><span class="qc-score-mark">10</span>
+                  </div>
+                  <div class="qc-judge-row">
+                    <span class="qc-judge-btn" data-variant="pass">通过</span>
+                    <span class="qc-judge-btn" data-variant="return">退回</span>
+                    <span class="qc-judge-btn" data-variant="invalid">无效</span>
+                  </div>
+                  <div class="round12-reason-block">
+                    <div class="round12-reason-label">无效原因</div>
+                    <div class="round12-checklist">
+                      <label><input type="checkbox" /> 目标设施挡无法判定</label>
+                      <label><input type="checkbox" /> 非业务关注对象</label>
+                      <label><input type="checkbox" /> 标注结果与图片事实不符</label>
+                      <label class="other"><input type="checkbox" /> <input type="text" value="其他" /></label>
                     </div>
                   </div>
-                </section>
+                </div>
+
+                <div class="round12-object-card">
+                  <div class="round12-object-head">
+                    <span class="round12-object-title"><i class="color-dot"></i>对象1</span>
+                    <span class="proto-status" data-variant="success">已通过</span>
+                  </div>
+                  <div class="round12-object-fields">
+                    <div class="label">形状</div><div>多边形</div>
+                    <div class="label">对象类别</div><div>安全帽 / 白色</div>
+                  </div>
+                  <div class="round12-object-tools">
+                    <button type="button">🔒</button>
+                    <button type="button">👁</button>
+                    <button type="button">📌</button>
+                  </div>
+                  <div class="round12-score-title">标注评分</div>
+                  <div class="qc-score-scale round12-score-scale">
+                    <span class="qc-score-mark">1</span><span class="qc-score-mark">2</span><span class="qc-score-mark">3</span><span class="qc-score-mark">4</span><span class="qc-score-mark">5</span><span class="qc-score-mark">6</span><span class="qc-score-mark">7</span><span class="qc-score-mark active">8</span><span class="qc-score-mark">9</span><span class="qc-score-mark">10</span>
+                  </div>
+                </div>
+
+                <div class="round12-object-card">
+                  <div class="round12-object-head">
+                    <span class="round12-object-title"><i class="color-dot"></i>对象1</span>
+                  </div>
+                  <div class="round12-object-fields">
+                    <div class="label">标注人员</div><div>李四</div>
+                  </div>
+                  <div class="round12-reason-block">
+                    <div class="round12-reason-label">无效原因</div>
+                    <div class="round12-checklist">
+                      <label><input type="checkbox" /> 目标设施挡无法判定</label>
+                      <label><input type="checkbox" /> 非业务关注对象</label>
+                    </div>
+                  </div>
+                  <div class="qc-judge-row" style="margin-top:12px;">
+                    <span class="qc-judge-btn" data-variant="pass">通过</span>
+                    <span class="qc-judge-btn" data-variant="return">退回</span>
+                    <span class="qc-judge-btn" data-variant="invalid">无效</span>
+                  </div>
+                  <div class="round12-reason-block">
+                    <div class="round12-reason-label">退回原因</div>
+                    <div class="round12-checklist">
+                      <label><input type="checkbox" /> 图片中仍存在可标注对象</label>
+                      <label><input type="checkbox" /> 无效原因判断不准确</label>
+                      <label><input type="checkbox" /> 多名标注员结论不一致</label>
+                      <label><input type="checkbox" /> 需要重新确认标注范围</label>
+                      <label><input type="checkbox" /> 当前无效依据不足</label>
+                      <label><input type="checkbox" /> 需补充属性类别判断</label>
+                      <label class="other"><input type="checkbox" /> <input type="text" value="其他" /></label>
+                    </div>
+                  </div>
+                </div>
               </aside>
             </div>
           </section>
