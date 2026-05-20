@@ -67,6 +67,9 @@ MODULE_PRD_COMMON_RULES_PAGE_TRIGGER_TERMS = [
     "弹窗",
     "抽屉",
     "面板",
+    "顶部操作区",
+    "列表区",
+    "页面阻断",
     "状态入口",
     "筛选查看",
     "查看",
@@ -338,8 +341,8 @@ def check_module_prd_common_rules(rel_path: Path, lines: list[str], result: Chec
                     rel_path,
                     line_no,
                     "module common rules may mix in page-triggered behavior.",
-                    "Rules that depend on buttons, clicks, popups, list actions, page display areas, or page-level blocking conditions should usually live in the specific page section instead of the module-level common rules.",
-                    "Check whether this rule should be moved down to the corresponding page section. Keep it at module level only if it is a truly cross-page unique definition.",
+                    "Rules that mention page-triggered signals such as 点击, 按钮, 弹窗, 抽屉, 顶部操作区, 列表区, or 页面阻断 should usually live in the specific page section instead of the module-level common rules.",
+                    "Move this rule to the corresponding page section, usually 操作规则, 页面弹窗 / 抽屉, or 异常与边界. Keep it at module level only if it is a truly cross-page unique definition.",
                 )
             )
 
