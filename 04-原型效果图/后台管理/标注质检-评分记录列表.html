@@ -145,33 +145,9 @@
       border-color: #f1d1cb;
       color: #c05c52;
     }
-    .score-empty {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 72px 24px 86px;
-      color: #73869b;
-      text-align: center;
-    }
-    .score-empty strong {
-      color: #294462;
-      font-size: 16px;
-    }
-    .score-empty p {
-      margin: 0;
-      font-size: 13px;
-      line-height: 1.6;
-    }
   </style>
 </head>
 <body>
-  <div class="prototype-state-bar" data-prototype-switch data-prototype-default="filled">
-    <button class="active" type="button" data-prototype-button="filled">有评分记录</button>
-    <button type="button" data-prototype-button="empty">无评分记录</button>
-  </div>
-
   <div class="frame" data-layout-module="annotation" data-layout-top-active="annotation" data-layout-side-preset="annotation" data-layout-side-active="annotation-qc">
     <header class="topbar"></header>
     <div class="main">
@@ -181,8 +157,7 @@
         <section class="surface tabbar">
           <div class="tab active">评分记录</div>
         </section>
-
-        <section class="prototype-stage active" data-prototype-panel="filled">
+        <section class="prototype-stage active">
           <div class="score-list-shell">
             <section class="proto-filter-bar score-filter-guide">
               <select class="control select-control">
@@ -399,30 +374,6 @@
               <button class="btn btn-ghost" type="button">重置</button>
             </section>
 
-            <section class="proto-list-shell">
-              <div class="proto-list-head">
-                <div class="proto-list-title-wrap">
-                  <h3 class="proto-list-title">评分记录列表</h3>
-                </div>
-              </div>
-              <div class="proto-table-wrap">
-                <div class="score-empty">
-                  <strong>暂无评分记录</strong>
-                  <p>当前筛选条件下未查询到评分记录，请调整评分阶段、评分人或时间范围后重试。</p>
-                </div>
-              </div>
-              <div class="proto-pagination">
-                <span>共 0 条</span>
-                <select class="control select-control proto-page-size-select">
-                  <option selected>20条/页</option>
-                </select>
-                <span>·</span><span class="proto-page-current">1</span><span>前往</span>
-                <select class="control select-control proto-page-jump-select">
-                  <option selected>1页</option>
-                </select>
-                <span>页</span>
-              </div>
-            </section>
           </div>
         </section>
       </main>

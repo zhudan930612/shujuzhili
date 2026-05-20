@@ -5,7 +5,8 @@
       "Bash(gh repo *)",
       "Bash(git -C \"e:/各产品线/数据治理\" log --oneline -10)",
       "Bash(python 06-工具脚本/check_triage_patterns.py)",
-      "Bash(python 06-工具脚本/check_triage_patterns.py --json)"
+      "Bash(python 06-工具脚本/check_triage_patterns.py --json)",
+      "WebFetch(domain:www.anthropic.com)"
     ]
   }
 }
