@@ -1,6 +1,6 @@
 ---
 name: layer-governance-audit
-description: 用于审查当前仓库已有治理资产是否写乱层、放错位置或职责串位，尤其适合“检查当前规则是不是写乱层了”“审查 AGENTS、skills、scripts、hooks、rules 放得对不对”“看看哪些治理内容放错位置了”“给我当前仓库的分层整改建议”“检查运行时规则、hooks 和 rules 是否配置在合适的位置”这类场景。
+description: "审查数据治理项目的规则、技能、脚本与文档是否放在正确层级。"
 ---
 
 # Layer Governance Audit

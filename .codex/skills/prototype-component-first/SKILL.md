@@ -1,6 +1,6 @@
 ---
 name: prototype-component-first
-description: 用于在本仓库生成或修改后台原型效果图，尤其是 04-原型效果图/后台管理 下的 HTML 页面，并要求优先复用已有公共组件。适用于“生成原型效果图”“新建原型页”“调整原型页面”“补一个页面状态”“统一原型样式”“组件化原型”“替换为公共组件”等场景。
+description: "生成或修改数据治理后台 HTML 原型时，复用已有公共组件。"
 ---
 
 # Prototype Component First
